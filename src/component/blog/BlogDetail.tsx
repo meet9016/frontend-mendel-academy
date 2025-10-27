@@ -5,8 +5,31 @@ import Footer from "../auth/Footer";
 import Header from "../auth/Header";
 import { motion } from "framer-motion";
 import { FiCalendar, FiClock, FiTag } from "react-icons/fi";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import endPointApi from "@/utils/endPointApi";
+import { api } from "@/utils/axiosInstance";
 
 const BlogDetail = () => {
+    const { id } = useParams();
+    const [blog, setBlog] = useState<any>(null);
+
+
+    const getBlogDetail = async () => {
+        try {
+            const res = await api.get(`${endPointApi.getBlogById}/${id}`);
+            console.log("reaaa",res);
+            
+            setBlog(res.data);
+        } catch (err) {
+            console.error("Error fetching blog:", err);
+        }
+    };
+    useEffect(() => {
+        if (id) getBlogDetail();
+    }, [id]);
+    console.log("sas", blog);
+
     return (
         <>
             <Header />
@@ -35,6 +58,7 @@ const BlogDetail = () => {
             {/* ✅ Article Section */}
             <section className="max-w-4xl mx-auto px-6 md:px-10 -mt-32 relative z-10">
                 {/* Article Card */}
+                {/* {blog} */}
                 <motion.div
                     className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-16"
                     initial={{ y: 50, opacity: 0 }}
@@ -52,7 +76,7 @@ const BlogDetail = () => {
                     >
                         <FiTag className="w-4 h-4 text-yellow-600" />
                         <span className="text-sm font-semibold text-yellow-600">
-                            NEET PG • USMLE • PLAB
+                           {blog?.exam_name}
                         </span>
                     </motion.div>
 
@@ -64,7 +88,7 @@ const BlogDetail = () => {
                         transition={{ delay: 0.4, duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        Global Medical Entrance Exam Coaching with Mendel Academy
+                        {blog?.title}
                     </motion.h1>
 
                     {/* Paragraph */}
@@ -75,8 +99,7 @@ const BlogDetail = () => {
                         transition={{ delay: 0.6, duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        Discover how Mendel Academy's cutting-edge AI-powered platform is
-                        revolutionizing medical entrance exam preparation worldwide.
+                        {blog?.sort_description}
                     </motion.p>
 
                     {/* Author Info */}
@@ -95,7 +118,7 @@ const BlogDetail = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <FiCalendar className="w-4 h-4" />
-                            <span>March 5, 2025</span>
+                            <span>{blog?.date}5</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <FiClock className="w-4 h-4" />
@@ -113,7 +136,7 @@ const BlogDetail = () => {
                     viewport={{ once: true }}
                 >
                     <div className="prose max-w-none prose-p:text-gray-700 prose-headings:text-gray-900">
-                        <motion.h2
+                        {/* <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
@@ -138,7 +161,8 @@ const BlogDetail = () => {
                         <h2>Expert Faculty & Support</h2>
                         <p>
                             Our experienced medical educators and toppers guide you with strategies, live sessions, and peer discussions.
-                        </p>
+                        </p> */}
+                        {blog?.long_description}
                     </div>
 
                     {/* ✅ Share Section Animation */}

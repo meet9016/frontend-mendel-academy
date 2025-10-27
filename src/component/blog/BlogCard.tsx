@@ -1,126 +1,60 @@
-'use client'
-import { useState } from "react";
+'use client';
+
+import { useEffect, useState } from "react";
 import Header from "../auth/Header";
+import Footer from "../auth/Footer";
 import { motion } from "framer-motion";
 import ReactPaginate from "react-paginate";
-import Footer from "../auth/Footer";
 import { useRouter } from "next/navigation";
+import endPointApi from "@/utils/endPointApi";
+import { api } from "@/utils/axiosInstance";
+
+type BlogType = {
+    id?: number;
+    title: string;
+    category?: string;
+    date?: string;
+    excerpt?: string;
+    exam_name?: string;
+    author?: string;
+    createdAt?: string;
+    sort_description?: string;
+};
 
 const BlogCard = () => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [data, setData] = useState<BlogType[]>([]);
+    const router = useRouter();
     const itemsPerPage = 6;
-    const router = useRouter()
-
-    // ✅ Blog Data
-    const blogPosts = [
-        {
-            category: "global-medical-prep",
-            date: "March 5, 2025",
-            title: "Global Medical Entrance Exam Coaching with Mendel Academy",
-            excerpt:
-                "Explore how Mendel Academy's AI-powered platform offers personalized preparation for global medical entrance exams.",
-        },
-        {
-            category: "exam-preparation",
-            date: "March 3, 2025",
-            title: "Top 10 Study Strategies for NEET PG Success",
-            excerpt:
-                "Discover proven study techniques and time management strategies for NEET PG success.",
-        },
-        {
-            category: "pathology",
-            date: "March 1, 2025",
-            title: "Understanding Clinical Pathology: A Complete Guide",
-            excerpt:
-                "Deep dive into clinical pathology concepts with notes, diagrams, and practical case studies.",
-        },
-        {
-            category: "career-guidance",
-            date: "February 28, 2025",
-            title: "Medical Career Paths After MBBS: Complete Guide",
-            excerpt:
-                "Explore specialization options, entrance exams, and opportunities for medical graduates.",
-        },
-        {
-            category: "study-tips",
-            date: "February 25, 2025",
-            title: "Effective Revision Techniques for Medical Exams",
-            excerpt:
-                "Learn memory and revision techniques to retain complex medical concepts longer.",
-        },
-        {
-            category: "exam-updates",
-            date: "February 22, 2025",
-            title: "Latest Updates on PG Medical Entrance Exams 2025",
-            excerpt:
-                "Stay updated with notifications, exam dates, and eligibility criteria.",
-        },
-        {
-            category: "global-medical-prep",
-            date: "February 20, 2025",
-            title: "USMLE Preparation Guide: Step by Step Approach",
-            excerpt:
-                "Complete roadmap for USMLE preparation including resources and strategies.",
-        },
-    ];
-
-    // ✅ Single Card Component - Simple & Professional Animation
-    const BlogCard = ({ post, index }: { post: any; index: number }) => (
-        <motion.article
-            key={index}
-            className="group bg-white rounded-xl overflow-hidden shadow-md cursor-pointer hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-            whileHover={{
-                scale: 1.03,
-                y: -5,
-                transition: { duration: 0.3, ease: "easeOut" },
-            }}
-        >
-            {/* Image */}
-            <div className="relative w-full h-56 overflow-hidden bg-gray-100 rounded-t-xl flex-shrink-0">
-                <motion.img
-                    src="https://static.vecteezy.com/system/resources/thumbnails/054/880/166/small/thriving-tree-in-lush-green-environment-nature-conservation-and-protection-concept-free-photo.jpeg"
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1.05 }}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                />
-            </div>
-
-            {/* Content */}
-            <div className="p-6 space-y-4 flex flex-col flex-grow">
-                <div className="flex items-center justify-between">
-                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full">
-                        {post.category}
-                    </span>
-                    <span className="text-sm text-gray-500">{post.date}</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-300">
-                    {post.title}
-                </h3>
-                <p className="text-gray-600 text-sm line-clamp-3 flex-grow">{post.excerpt}</p>
-            </div>
-        </motion.article>
-    );
-
-    const pageCount = Math.ceil(blogPosts.length / itemsPerPage);
-    const offset = currentPage * itemsPerPage;
-    const currentPosts = blogPosts.slice(offset, offset + itemsPerPage);
 
     const handlePageClick = (event: any) => {
         setCurrentPage(event.selected);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
+    const getBlogData = async () => {
+        try {
+            const res = await api.get(`${endPointApi.getAllBlogs}`);
+            if (res?.data?.length) {
+                setData(res.data);
+            }
+        } catch (err) {
+            console.error("Error fetching blogs:", err);
+        }
+    };
+
+    useEffect(() => {
+        getBlogData();
+    }, []);
+
+    const postsToRender = data.length ? data : '';
+    const pageCount = Math.ceil(postsToRender.length / itemsPerPage);
+
     return (
         <>
             <Header />
 
-            {/* ✅ Blog Data */}
+            {/* ✅ Hero Section */}
             <section className="relative w-full bg-gradient-to-br from-[#FFD95A] via-[#fbba2d] to-[#f8a300] py-24 lg:py-36 overflow-hidden">
                 <motion.div
                     className="absolute inset-0"
@@ -144,9 +78,11 @@ const BlogCard = () => {
                             Articles and <br className="hidden sm:block" /> Insights
                         </h1>
                         <p className="text-lg sm:text-xl text-gray-800 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                            Stay updated with expert insights, medical exam strategies, and the latest in healthcare education.
+                            Stay updated with expert insights, medical exam strategies, and the
+                            latest in healthcare education.
                         </p>
                     </motion.div>
+
                     <motion.div
                         className="flex justify-center lg:justify-end"
                         initial={{ opacity: 0, x: 60 }}
@@ -164,7 +100,7 @@ const BlogCard = () => {
                 </div>
             </section>
 
-            {/* ✅ Blog Section */}
+            {/* ✅ Blog Grid Section */}
             <section className="py-20 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 md:px-10">
                     <div className="text-center mb-16">
@@ -172,19 +108,23 @@ const BlogCard = () => {
                             Latest Articles
                         </h2>
                         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                            Expert insights and guidance to help you excel in your medical career
+                            Expert insights and guidance to help you excel in your medical
+                            career
                         </p>
                     </div>
 
-                    {/* Blog Cards via Map */}
+                    {/* ✅ Blog Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                        {currentPosts.map((post, index) => (
-                            <div key={index} className="w-full lg:max-w-[380px]" onClick={() => router.push('/blog/blogdetail')}>
-                                <BlogCard post={post} index={index} />
+                        {data?.map((post: any, index) => (
+                            <div
+                                key={index}
+                                className="w-full lg:max-w-[380px]"
+                                onClick={() => router.push(`/blog/${post.id}`)}
+                            >
+                                <MultipleCard post={post} index={index} />
                             </div>
                         ))}
                     </div>
-
 
                     {/* ✅ Pagination */}
                     <div className="mt-12 flex justify-center">
@@ -212,9 +152,57 @@ const BlogCard = () => {
                     </div>
                 </div>
             </section>
+
             <Footer />
         </>
-    )
-}
+    );
+};
+
+// ✅ Single Blog Card Component
+const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
+    <motion.article
+        key={index}
+        className="group bg-white rounded-xl overflow-hidden shadow-md cursor-pointer hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+        whileHover={{
+            scale: 1.03,
+            y: -5,
+            transition: { duration: 0.3, ease: "easeOut" },
+        }}
+    >
+        {/* Image */}
+        <div className="relative w-full h-56 overflow-hidden bg-gray-100 rounded-t-xl flex-shrink-0">
+            <motion.img
+                src="https://static.vecteezy.com/system/resources/thumbnails/054/880/166/small/thriving-tree-in-lush-green-environment-nature-conservation-and-protection-concept-free-photo.jpeg"
+                alt={post.title}
+                className="w-full h-full object-cover"
+                initial={{ scale: 1.05 }}
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+            />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-4 flex flex-col flex-grow">
+            <div className="flex items-center justify-between">
+                <span className="inline-block px-3 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full capitalize">
+                    {post.exam_name || "general"}
+                </span>
+                <span className="text-sm text-gray-500">
+                    {post.date || new Date().toDateString()}
+                </span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-300">
+                {post.title}
+            </h3>
+            <p className="text-gray-600 text-sm line-clamp-3 flex-grow">
+                {post.sort_description || "Click to read more about this article."}
+            </p>
+        </div>
+    </motion.article>
+);
 
 export default BlogCard;

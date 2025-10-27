@@ -58,7 +58,7 @@ export default function Header() {
                             Home
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
                         </button>
-                        <button className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer">
+                        <button  className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer">
                             Pathology
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
                         </button>
