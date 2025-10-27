@@ -3,6 +3,9 @@ import { FiSearch, FiFileText, FiActivity, FiHeart, FiBookOpen, FiCpu, FiChevron
 import Header from "../auth/Header";
 import Footer from "../auth/Footer";
 import CourseCard from "../cousercard/CourseCard";
+import AdvancedPathologyPrograms from "./AdvancedPathologyPrograms";
+import TrustedMedical from "./TrustedMedical";
+import MedicalChooseMendelAcademy from "./MedicalChooseMendelAcademy";
 
 
 const Home = () => {
@@ -27,9 +30,8 @@ const Home = () => {
     return (
         <>
             <Header />
-
             {/* Hero Section */}
-            <main className="flex flex-col items-center justify-center min-h-screen bg-white px-4 md:px-8 lg:px-16 text-center space-y-6 py-16">
+            <main className="flex flex-col items-center justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center space-y-8 py-24">
                 <p className="text-sm md:text-base text-gray-500 bg-gray-50 px-4 py-2 rounded-full shadow-md inline-block">
                     Trusted by 10,000+ Medical Students
                 </p>
@@ -119,6 +121,11 @@ const Home = () => {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
+
+
+            <AdvancedPathologyPrograms />
+            <TrustedMedical />
+            <MedicalChooseMendelAcademy />
             <Footer />
         </>
     );

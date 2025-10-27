@@ -18,8 +18,8 @@ const BlogDetail = () => {
     const getBlogDetail = async () => {
         try {
             const res = await api.get(`${endPointApi.getBlogById}/${id}`);
-            console.log("reaaa",res);
-            
+            console.log("reaaa", res);
+
             setBlog(res.data);
         } catch (err) {
             console.error("Error fetching blog:", err);
@@ -30,6 +30,12 @@ const BlogDetail = () => {
     }, [id]);
     console.log("sas", blog);
 
+    const decodeHtml = (html: string): string => {
+        if (typeof window === "undefined") return html;
+        const txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    };
     return (
         <>
             <Header />
@@ -76,7 +82,7 @@ const BlogDetail = () => {
                     >
                         <FiTag className="w-4 h-4 text-yellow-600" />
                         <span className="text-sm font-semibold text-yellow-600">
-                           {blog?.exam_name}
+                            {blog?.exam_name}
                         </span>
                     </motion.div>
 
@@ -162,7 +168,14 @@ const BlogDetail = () => {
                         <p>
                             Our experienced medical educators and toppers guide you with strategies, live sessions, and peer discussions.
                         </p> */}
-                        {blog?.long_description}
+                        {/* {blog?.long_description} */}
+                        {blog?.long_description && (
+                            <div
+                                className="prose prose-lg font-sans text-gray-800 max-w-none"
+                                dangerouslySetInnerHTML={{ __html: decodeHtml(blog.long_description) }}
+                            />
+                        )}
+
                     </div>
 
                     {/* ✅ Share Section Animation */}

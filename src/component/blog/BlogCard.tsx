@@ -26,6 +26,7 @@ const BlogCard = () => {
     const [data, setData] = useState<BlogType[]>([]);
     const router = useRouter();
     const itemsPerPage = 6;
+    console.log(data, 'aa');
 
     const handlePageClick = (event: any) => {
         setCurrentPage(event.selected);
@@ -35,8 +36,8 @@ const BlogCard = () => {
     const getBlogData = async () => {
         try {
             const res = await api.get(`${endPointApi.getAllBlogs}`);
-            if (res?.data?.length) {
-                setData(res.data);
+            if (res?.data?.data.length) {
+                setData(res.data.data);
             }
         } catch (err) {
             console.error("Error fetching blogs:", err);
