@@ -52,7 +52,7 @@ export default function Header() {
                     {/* ✅ Links (Desktop) */}
                     <nav className="hidden lg:flex items-center gap-12">
                         <button
-                            onClick={() => router.push("/home")}
+                            onClick={() => router.push("/")}
                             className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer"
                         >
                             Home
