@@ -1,10 +1,13 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiMenu, FiShoppingCart, FiX } from "react-icons/fi";
 
 export default function Header() {
+    const authToken =
+        typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isExamDropdownOpen, setIsExamDropdownOpen] = useState<boolean>(false);
 
@@ -25,7 +28,10 @@ export default function Header() {
         ],
     };
 
-
+    const handleLogout = () => {
+        localStorage.removeItem("auth_token");
+        router.push("/auth/login")
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -58,7 +64,7 @@ export default function Header() {
                             Home
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
                         </button>
-                        <button  className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer">
+                        <button className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer">
                             Pathology
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
                         </button>
@@ -99,10 +105,7 @@ export default function Header() {
                                                 <ul className="space-y-2">
                                                     {exams.map((exam) => (
                                                         <li key={exam.name}>
-                                                            <button
-
-                                                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md transition-all"
-                                                            >
+                                                            <button className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md transition-all">
                                                                 {exam.name}
                                                             </button>
                                                         </li>
@@ -131,12 +134,29 @@ export default function Header() {
                         <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
                             <FiShoppingCart className="w-5 h-5 text-gray-700" />
                         </button>
-                        <button onClick={() => router.push('/auth/login')} className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
-                            Login
-                        </button>
-                        <button onClick={() => router.push('/auth/register')} className="px-4 py-2 cursor-pointer rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600">
-                            Sign Up
-                        </button>
+                        {authToken ? (
+                            <button
+                                onClick={() => handleLogout()}
+                                className="px-4 py-2 cursor-pointer rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600"
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={() => router.push("/auth/login")}
+                                    className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                                >
+                                    Login
+                                </button>
+                                <button
+                                    onClick={() => router.push("/auth/register")}
+                                    className="px-4 py-2 cursor-pointer rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600"
+                                >
+                                    Sign Up
+                                </button>
+                            </>
+                        )}
                     </div>
 
                     {/* ✅ Mobile Menu Button */}
@@ -188,9 +208,7 @@ export default function Header() {
                                                 <ul className="space-y-1">
                                                     {exams.map((exam) => (
                                                         <li key={exam.name}>
-                                                            <button
-                                                                className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left"
-                                                            >
+                                                            <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
                                                                 {exam.name}
                                                             </button>
                                                         </li>

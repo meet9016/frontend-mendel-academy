@@ -1,122 +1,221 @@
-'use client'
+"use client";
+import InputField from "@/comman/InputField";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
+import { saveToken } from "@/utils/tokenManager";
+import { loginSchema } from "@/validationSchema/validationSchema";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { CiLock, CiMail } from "react-icons/ci";
 import { FaApple, FaArrowRight } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { toast } from "react-toastify";
+
+interface RegisterFormData {
+  email: string;
+  password: string;
+}
+
+interface SocialButtonProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  className?: string;
+}
 
 const Login = () => {
-    return (
-        <div className="min-h-screen w-full flex overflow-hidden bg-gradient-to-br from-yellow-50 to-white">
-            {/* Left Side - White Background with Branding */}
-            <div className="hidden lg:flex w-1/2 bg-white relative flex-col items-center justify-center p-8 md:p-16">
-                {/* Top decorative yellow shape */}
-                <div className="absolute top-0 left-0 w-2/3 h-24 md:h-32 bg-[#f5b73d] rounded-br-[80px] md:rounded-br-[100px]" />
+  const router = useRouter();
 
-                <div className="relative z-10 flex flex-col items-center justify-center h-full max-w-lg">
-                    <div className="text-center mb-6 md:mb-8">
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">
-                            Welcome to <span className="italic font-serif">Waitly</span>
-                        </h1>
-                    </div>
+  const [formData, setFormData] = useState<RegisterFormData>({
+    email: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
 
-                    <div className="relative mb-8 md:mb-12">
-                        {/* Yellow brushstroke background */}
-                        <div className="absolute inset-0 -left-6 -right-6 -top-6 -bottom-6 md:-left-8 md:-right-8 md:-top-8 md:-bottom-8">
-                            <div className="w-full h-full bg-[#f5b73d] rounded-[60px] md:rounded-[80px] rotate-[-5deg]" />
-                        </div>
-                        <img
-                            src='https://i.pinimg.com/736x/63/77/36/63773689c5405621be6336d5e91b5b61.jpg'
-                            alt="Food Illustration"
-                            className="relative z-10 w-64 h-48 md:w-80 md:h-64 object-contain drop-shadow-2xl"
-                        />
-                    </div>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "", // remove error message for that field
+    }));
+  };
 
-                    <div className="text-center mt-6 md:mt-8">
-                        <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-1">
-                            Unlock your dineline
-                        </p>
-                        <p className="text-base md:text-lg text-gray-600">Sign in now!</p>
-                    </div>
-                </div>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = loginSchema.validate(formData, { abortEarly: false });
 
-                {/* Bottom decorative arrow button - hidden on mobile */}
-                <div className="hidden lg:block absolute bottom-8 right-8">
-                    <div className="w-20 h-20 bg-[#f5b73d] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:bg-yellow-500 transition-all duration-300 hover:scale-110">
-                        <FaArrowRight className="w-8 h-8 text-white" />
-                    </div>
-                </div>
+    if (error) {
+      const newErrors: Record<string, string> = {};
+      error.details.forEach((detail) => {
+        newErrors[detail.path[0]] = detail.message;
+      });
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    const body = {
+      email: formData.email,
+      password: formData.password,
+    };
+    api
+      .post(`${endPointApi.login}`, body)
+      .then((response) => {
+        router.push("/");
+        saveToken(response.data.token.access);
+        toast.success(response.data.message || "User login successfully!");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+  return (
+    <div className="min-h-screen w-full flex overflow-hidden bg-gradient-to-br from-yellow-50 to-white">
+      {/* Left Side - White Background with Branding */}
+      <div className="hidden lg:flex w-1/2 bg-white relative flex-col items-center justify-center p-8 md:p-16">
+        {/* Top decorative yellow shape */}
+        <div className="absolute top-0 left-0 w-2/3 h-24 md:h-32 bg-[#f5b73d] rounded-br-[80px] md:rounded-br-[100px]" />
+
+        <div className="relative z-10 flex flex-col items-center justify-center h-full max-w-lg">
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2">
+              Welcome to <span className="italic font-serif">Waitly</span>
+            </h1>
+          </div>
+
+          <div className="relative mb-8 md:mb-12">
+            {/* Yellow brushstroke background */}
+            <div className="absolute inset-0 -left-6 -right-6 -top-6 -bottom-6 md:-left-8 md:-right-8 md:-top-8 md:-bottom-8">
+              <div className="w-full h-full bg-[#f5b73d] rounded-[60px] md:rounded-[80px] rotate-[-5deg]" />
+            </div>
+            <img
+              src="https://i.pinimg.com/736x/63/77/36/63773689c5405621be6336d5e91b5b61.jpg"
+              alt="Food Illustration"
+              className="relative z-10 w-64 h-48 md:w-80 md:h-64 object-contain drop-shadow-2xl"
+            />
+          </div>
+
+          <div className="text-center mt-6 md:mt-8">
+            <p className="text-xl md:text-2xl font-semibold text-gray-800 mb-1">
+              Unlock your dineline
+            </p>
+            <p className="text-base md:text-lg text-gray-600">Sign in now!</p>
+          </div>
+        </div>
+
+        {/* Bottom decorative arrow button - hidden on mobile */}
+        <div className="hidden lg:block absolute bottom-8 right-8">
+          <div className="w-20 h-20 bg-[#f5b73d] rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:bg-yellow-500 transition-all duration-300 hover:scale-110">
+            <FaArrowRight className="w-8 h-8 text-white" />
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Yellow Background with Form */}
+      <div className="w-full lg:w-1/2 bg-[#f5b73d] relative flex items-center justify-center p-8 md:p-16">
+        {/* Decorative brushstroke shapes */}
+        <div className="hidden lg:block absolute top-32 right-0 w-80 h-40 bg-white/20 rounded-l-[100px]" />
+        <div className="hidden lg:block absolute bottom-24 left-0 w-72 h-32 bg-white/20 rounded-r-[100px]" />
+        <div className="w-full max-w-md relative z-10">
+          {/* Header */}
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+              Log In here!
+            </h2>
+            <p className="text-gray-600 text-sm md:text-base">
+              Please enter your details to login
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <div className="space-y-4 md:space-y-5">
+            <div className="relative flex flex-col">
+              <div className="relative">
+                <InputField
+                  name="email"
+                  placeholder="Email*"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                  icon={
+                    <CiMail
+                      className={`w-5 h-5 ${
+                        errors.email ? "text-red-500" : "text-gray-400"
+                      }`}
+                    />
+                  }
+                />
+              </div>
             </div>
 
-            {/* Right Side - Yellow Background with Form */}
-            <div className="w-full lg:w-1/2 bg-[#f5b73d] relative flex items-center justify-center p-8 md:p-16">
-                {/* Decorative brushstroke shapes */}
-                <div className="hidden lg:block absolute top-32 right-0 w-80 h-40 bg-white/20 rounded-l-[100px]" />
-                <div className="hidden lg:block absolute bottom-24 left-0 w-72 h-32 bg-white/20 rounded-r-[100px]" />
-                <div className="w-full max-w-md relative z-10">
-                    {/* Header */}
-                    <div className="text-center mb-6 md:mb-8">
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Log In here!</h2>
-                        <p className="text-gray-600 text-sm md:text-base">Please enter your details to login</p>
-                    </div>
+            <div className="relative flex flex-col">
+              <div className="relative">
+                <InputField
+                  name="password"
+                  placeholder="Create Password*"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={errors.password}
+                  icon={
+                    <CiLock
+                      className={`w-5 h-5 ${
+                        errors.password ? "text-red-500" : "text-gray-400"
+                      }`}
+                    />
+                  }
+                />
 
-                    {/* Login Form */}
-                    <div className="space-y-4 md:space-y-5">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  {showPassword ? (
+                    <FiEye className="w-5 h-5" />
+                  ) : (
+                    <FiEyeOff className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+            </div>
 
-                        <div className="relative">
-                            <CiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Email or Username"
-                                required
-                                className="w-full pl-12 pr-4 py-3 md:py-4 rounded-lg bg-white border border-gray-200 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
-                            />
-                        </div>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                />
+                <label
+                  htmlFor="remember"
+                  className="text-gray-700 cursor-pointer select-none"
+                >
+                  Remember me
+                </label>
+              </div>
+              <a
+                href="#"
+                className="text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Forgot Password?
+              </a>
+            </div>
 
-                        <div className="relative">
-                            <CiLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                required
-                                className="w-full pl-12 pr-12 py-3 md:py-4 rounded-lg bg-white border border-gray-200 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200"
-                            />
-                            <button
-                                type="button"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
-                            >
-                                <FiEyeOff className="w-5 h-5" />
-                            </button>
-                        </div>
+            <button
+              type="submit"
+              className="w-full py-3 md:py-4 rounded-lg cursor-pointer bg-black hover:bg-gray-800 text-white font-semibold shadow-md transition-all duration-300 active:scale-95"
+              onClick={(e) => handleSubmit(e)}
+            >
+              Continue
+            </button>
 
-
-                        <div className="flex items-center justify-between text-sm">
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    id="remember"
-
-                                    className="w-4 h-4 rounded border-gray-300 cursor-pointer"
-                                />
-                                <label
-                                    htmlFor="remember"
-                                    className="text-gray-700 cursor-pointer select-none"
-                                >
-                                    Remember me
-                                </label>
-                            </div>
-                            <a href="#" className="text-gray-600 hover:text-gray-800 transition-colors">
-                                Forgot Password?
-                            </a>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full py-3 md:py-4 rounded-lg cursor-pointer bg-black hover:bg-gray-800 text-white font-semibold shadow-md transition-all duration-300 active:scale-95"
-                        >
-                            Continue
-                        </button>
-
-                        {/* <div className="space-y-3 pt-2">
+            {/* <div className="space-y-3 pt-2">
               <button
                 type="button"
                 className="w-full py-3 md:py-4 rounded-lg bg-white border border-gray-300 text-gray-800 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200"
@@ -149,56 +248,56 @@ const Login = () => {
               </button>
             </div> */}
 
-
-                        <div className="flex gap-3 pt-4">
-                            {/* Google */}
-                            <button
-                                type="button"
-                                className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 cursor-pointer rounded-lg 
-               bg-white border border-gray-300 text-gray-800 font-medium 
-               hover:bg-gray-100 hover:shadow-md hover:scale-105 
-               transition-all duration-300 ease-in-out"
-                            >
-                                <FcGoogle className="w-7 h-7" />
-                                <span>Google</span>
-                            </button>
-
-                            {/* Apple */}
-                            <button
-                                type="button"
-                                className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 cursor-pointer rounded-lg 
-               bg-white border border-gray-300 text-gray-800 font-medium 
-               hover:bg-gray-100 hover:shadow-md hover:scale-105 
-               transition-all duration-300 ease-in-out"
-                            >
-                                <FaApple className="w-7 h-7" />
-                                <span>Apple</span>
-                            </button>
-
-                            {/* Email */}
-                            <button
-                                type="button"
-                                className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 cursor-pointer rounded-lg 
-               bg-white border border-gray-300 text-gray-800 font-medium 
-               hover:bg-gray-100 hover:shadow-md hover:scale-105 
-               transition-all duration-300 ease-in-out"
-                            >
-                                <CiMail className="w-7 h-7 text-gray-700" />
-                                <span>Email</span>
-                            </button>
-                        </div>
-
-
-
-
-                        <p className="text-center text-sm text-gray-600 pt-2">
-                            Don't have an account? <a href="#" className="text-gray-900 font-semibold hover:underline">Sign up</a>
-                        </p>
-                    </div>
-                </div>
+            {/* Social row */}
+            <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">
+              <SocialButton
+                icon={<FcGoogle className="w-7 h-7" />}
+                label="Google"
+              />
+              <SocialButton
+                icon={<FaApple className="w-7 h-7" />}
+                label="Apple"
+              />
+              <SocialButton
+                icon={<CiMail className="w-7 h-7 text-gray-700" />}
+                label="Email"
+              />
             </div>
+            <p className="text-center text-sm text-gray-600 pt-2">
+              Don't have an account?{" "}
+              <a
+                href="/auth/register"
+                className="text-gray-900 font-semibold hover:underline"
+              >
+                Sign up
+              </a>
+            </p>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Login;
+
+const SocialButton: React.FC<SocialButtonProps> = ({
+  icon,
+  label,
+  onClick,
+  className = "",
+}) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 
+               cursor-pointer rounded-lg bg-white border border-gray-300 text-gray-800 
+               font-medium hover:bg-gray-100 hover:shadow-md hover:scale-105 
+               transition-all duration-300 ease-in-out"
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+};
