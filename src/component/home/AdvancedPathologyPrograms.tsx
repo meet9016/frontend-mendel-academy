@@ -10,8 +10,7 @@ import { GiSparkles } from "react-icons/gi";
 function AdvancedPathologyPrograms() {
   // Sample Data (used for 3 repeated cards)
   const [programs, setPrograms] = React.useState<any[]>([]);
-  console.log("programs",programs);
-  
+
   const recordedProgram = {
     title: "MENDEL MASTERY SERIES™: LYMPHOMAS",
     description: "Curriculum aligned with WHO 5th Ed. Blue Book",
@@ -34,7 +33,7 @@ function AdvancedPathologyPrograms() {
   const getBlogData = async () => {
     try {
       const res = await api.get(`${endPointApi.getAllPreRecorded}`);
-      
+
       if (res?.data?.data.length) {
         setPrograms(res.data.data);
       }
@@ -135,44 +134,51 @@ function AdvancedPathologyPrograms() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
-          {[...Array(4)]?.map((_, index) => (
+          {programs?.map((item, index) => (
             <div
-              ke y={index}
+              key={index}
               className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
             >
               {/* 🖼️ IMAGE REPLACING CATEGORY */}
               <div className="relative h-32">
                 <img
-                  src={recordedProgram?.category}
-                  alt={recordedProgram?.title}
+                  src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
+                  alt={item?.title}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   <FaStar className="text-yellow-400 w-3 h-3 mr-1" />
+                  <span className="text-xs font-semibold">{item?.rating}</span>
+                </div>
+                <div className="absolute bottom-2 right-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
+                  {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
                   <span className="text-xs font-semibold">
-                    {recordedProgram?.rating}
+                    {item?.total_reviews}+ learners
                   </span>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="font-bold text-sm mb-1">
-                  {recordedProgram?.title}
-                </h3>
-                <p className="text-xs text-gray-500 mb-3">
-                  {recordedProgram?.description}
+                <h3 className="font-bold text-sm mb-1">{item?.title}</h3>
+                <p
+                  className="text-xs text-gray-500 mb-3"
+                >
+                  {item?.subtitle?.length > 70
+                    ? item.subtitle.slice(0, 70) + "..."
+                    : item.subtitle}
                 </p>
+
                 <div className="flex items-end justify-between">
                   <div>
-                    {/* <p className="text-xs text-gray-400 line-through">
-                      ${recordedProgram?.originalPrice}
-                    </p> */}
-                    <p className="text-lg font-bold text-gray-900">
-                      ${recordedProgram?.price}
+                    <p className="text-xs text-gray-400">
+                      {item?.duration} month access
+                    </p>
+                    <p className="text-sm font-bold text-gray-900">
+                      ${item?.price}
                     </p>
                   </div>
-                  <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-3 py-2 rounded-md">
+                  <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
                     Add to cart
                   </button>
                 </div>

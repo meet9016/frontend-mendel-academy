@@ -16,79 +16,35 @@ import Footer from "../auth/Footer";
 import AdvancedPathologyPrograms from "./AdvancedPathologyPrograms";
 import TrustedMedical from "./TrustedMedical";
 import MedicalChooseMendelAcademy from "./MedicalChooseMendelAcademy";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
+import { use, useEffect, useState } from "react";
 // import CourseCard from "../cousercard/CourseCard";
 
 interface CourseCardProps {
   icon: React.ReactNode;
-  title: string;
   subtitle?: string;
-  badge?: string;
+  title: string;
+  badge: string;
+  badgeVariant: "primary" | "secondary";
+  total_reviews: number;
   rating: number;
-  students: number;
   tags: string[];
-  moreFeatures?: number;
+  moreFeatures: number;
   description: string;
-  badgeVariant?: "default" | "secondary" | "outline";
 }
+
+const badgeColors: Record<"primary" | "secondary" | "outline" | "default", string> = {
+  default: "gray",
+  primary: "green", // added
+  secondary: "blue",
+  outline: "transparent",
+};
+
 const Home = () => {
-  const courses = [
-    {
-      icon: <FiFileText className="w-7 h-7" />,
-      title: "USMLE Step 1",
-      badge: "POPULAR",
-      rating: 4.9,
-      students: 1300,
-      tags: ["Adaptive AI", "Analytics"],
-      moreFeatures: 1,
-      description:
-        "Master the exam prep with our adaptive AI powered techniques",
-      badgeVariant: "default",
-    },
-    {
-      icon: <FiActivity className="w-7 h-7" />,
-      title: "USMLE Step 2",
-      badge: "UPDATED",
-      rating: 4.8,
-      students: 940,
-      tags: ["Patient Cases", "Dx Trainer"],
-      moreFeatures: 1,
-      description: "Excel in clinical knowledge and patient care scenarios",
-      badgeVariant: "secondary",
-    },
-    {
-      icon: <FiHeart className="w-7 h-7" />,
-      title: "USMLE Step 3",
-      badge: "NEW",
-      rating: 4.7,
-      students: 610,
-      tags: ["EMR Training", "Residency Cases"],
-      moreFeatures: 1,
-      description: "Complete your USMLE journey with confidence and success",
-      badgeVariant: "outline",
-    },
-    {
-      icon: <FiBookOpen className="w-7 h-7" />,
-      title: "INI CET",
-      badge: "POPULAR",
-      rating: 4.8,
-      students: 820,
-      tags: ["AIIMS Faculty", "Topper Strategy"],
-      moreFeatures: 1,
-      description: "Secure your AIIMS seat with our comprehensive program",
-      badgeVariant: "default",
-    },
-    {
-      icon: <FiCpu className="w-7 h-7" />,
-      title: "NEET PG",
-      badge: "TRENDING",
-      rating: 4.9,
-      students: 1520,
-      tags: ["Weak Areas AI", "Smart Notes"],
-      moreFeatures: 1,
-      description: "Achieve your dream with proven strategies",
-      badgeVariant: "secondary",
-    },
-  ];
+ 
+  const [questionBank, setQuestionBank] = useState([]);
+  
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById("course-scroll-container");
     if (container) {
@@ -102,6 +58,18 @@ const Home = () => {
       });
     }
   };
+
+  const getQuestionBank = () => {
+    api.get(`${endPointApi.getAllQuestion}`).then((response) => {
+      setQuestionBank(response.data.data);
+    }).catch((error) => {
+      console.error("Error fetching question bank data:", error);
+    });
+  }
+
+  useEffect(() => {
+    getQuestionBank();
+  }, []);
   return (
     <>
       <Header />
@@ -182,17 +150,17 @@ const Home = () => {
               id="course-scroll-container"
               className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
             >
-              {courses.map((course, index) => (
+              {questionBank.map((course:any) => (
                 <CourseCard
-                  icon={course.icon}
-                  title="React Basics"
-                  badge="New"
-                  badgeVariant="secondary" // ✅ Works
-                  rating={4.5}
-                  students={1200}
-                  tags={["React", "Frontend"]}
+                  icon={<FiFileText className="w-7 h-7" />}
+                  title={course.title}
+                  badge={course.tag}
+                  badgeVariant="secondary"
+                  rating={course.rating}
+                  total_reviews={course.total_reviews}
+                  tags={course.features}
                   moreFeatures={3}
-                  description="Learn the basics of React in this beginner course."
+                  description={course.sort_description}
                 />
               ))}
             </div>
@@ -230,17 +198,23 @@ const CourseCard = ({
   subtitle = "",
   badge,
   rating,
-  students,
+  total_reviews,
   tags,
   moreFeatures = 0,
   description,
   badgeVariant = "secondary",
 }: CourseCardProps) => {
-  const badgeClasses = {
-    default: "bg-black text-white",
-    secondary: "bg-gray-100 text-gray-800",
-    outline: "border border-gray-300 text-gray-800",
-  };
+  // const badgeClasses = {
+    // default: "bg-black text-white",
+    // secondary: "bg-gray-100 text-gray-800",
+    // outline: "border border-gray-300 text-gray-800",
+  // };
+  const badgeClasses: Record<"primary" | "secondary" | "outline" | "default", string> = {
+  default: "gray",
+  primary: "green", // added
+  secondary: "blue",
+  outline: "transparent",
+};
 
   return (
     <div className="group flex-shrink-0 w-[340px] cursor-pointer bg-gradient-to-br from-white via-gray-50 to-yellow-50 border-2 border-gray-200 rounded-3xl p-6 hover:shadow-2xl hover:shadow-yellow-300/20 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] flex flex-col relative overflow-hidden">
@@ -279,7 +253,7 @@ const CourseCard = ({
           <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
             <FiUsers />
             <span className="text-sm font-medium">
-              {students.toLocaleString()}
+              {total_reviews.toLocaleString()}
             </span>
           </div>
         </div>
