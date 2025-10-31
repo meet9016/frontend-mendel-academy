@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
+import { data } from "react-router-dom";
+import { formatDateWithDayjs, formatDateWithMonthNameDayjs } from "@/utils/helper";
 
 const BlogDetail = () => {
     const { id } = useParams();
@@ -18,9 +20,7 @@ const BlogDetail = () => {
     const getBlogDetail = async () => {
         try {
             const res = await api.get(`${endPointApi.getBlogById}/${id}`);
-            console.log("reaaa", res);
-
-            setBlog(res.data);
+            setBlog(res?.data);
         } catch (err) {
             console.error("Error fetching blog:", err);
         }
@@ -44,7 +44,8 @@ const BlogDetail = () => {
             <section className="relative w-full h-[80vh] overflow-hidden">
                 {/* Hero Image */}
                 <motion.img
-                    src="https://t3.ftcdn.net/jpg/06/45/68/94/360_F_645689490_Fzwptjq0YLCW8JZpC6lASo1KJcAgzZPj.jpg"
+                    src={blog?.image}
+                    // src="https://t3.ftcdn.net/jpg/06/45/68/94/360_F_645689490_Fzwptjq0YLCW8JZpC6lASo1KJcAgzZPj.jpg"
                     alt="Blog Hero"
                     className="w-full h-full object-cover object-center"
                     initial={{ scale: 1.2, opacity: 0 }}
@@ -124,7 +125,7 @@ const BlogDetail = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <FiCalendar className="w-4 h-4" />
-                            <span>{blog?.date}5</span>
+                            <span>{formatDateWithMonthNameDayjs(blog?.date)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <FiClock className="w-4 h-4" />

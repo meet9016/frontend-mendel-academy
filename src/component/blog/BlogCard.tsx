@@ -8,10 +8,12 @@ import ReactPaginate from "react-paginate";
 import { useRouter } from "next/navigation";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
+import { formatDateWithDayjs } from "@/utils/helper";
 
 type BlogType = {
     id?: number;
     title: string;
+    image: string;
     category?: string;
     date?: string;
     excerpt?: string;
@@ -26,7 +28,6 @@ const BlogCard = () => {
     const [data, setData] = useState<BlogType[]>([]);
     const router = useRouter();
     const itemsPerPage = 6;
-    console.log(data, 'aa');
 
     const handlePageClick = (event: any) => {
         setCurrentPage(event.selected);
@@ -36,7 +37,7 @@ const BlogCard = () => {
     const getBlogData = async () => {
         try {
             const res = await api.get(`${endPointApi.getAllBlogs}`);
-            if (res?.data?.data.length) {
+            if (res?.data?.data?.length) {
                 setData(res.data.data);
             }
         } catch (err) {
@@ -177,7 +178,7 @@ const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
         {/* Image */}
         <div className="relative w-full h-56 overflow-hidden bg-gray-100 rounded-t-xl flex-shrink-0">
             <motion.img
-                src="https://static.vecteezy.com/system/resources/thumbnails/054/880/166/small/thriving-tree-in-lush-green-environment-nature-conservation-and-protection-concept-free-photo.jpeg"
+                src={post?.image}
                 alt={post.title}
                 className="w-full h-full object-cover"
                 initial={{ scale: 1.05 }}
@@ -193,7 +194,7 @@ const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
                     {post.exam_name || "general"}
                 </span>
                 <span className="text-sm text-gray-500">
-                    {post.date || new Date().toDateString()}
+                    {formatDateWithDayjs(post.date) || "-"}
                 </span>
             </div>
             <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-300">
