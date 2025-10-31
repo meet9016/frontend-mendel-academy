@@ -146,7 +146,7 @@ const PathologyMasterySeries = () => {
 
                                                     {/* Features */}
                                                     <div className="flex items-center justify-center text-xs text-gray-600 mt-3 gap-5">
-                                                        {course.features.map((f) => (
+                                                        {course.features.map((f: any) => (
                                                             <div key={f.name} className="flex flex-col items-center text-center my-1">
                                                                 <span className="py-1">{f.name}</span>
                                                             </div>
