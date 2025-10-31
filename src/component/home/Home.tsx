@@ -42,9 +42,9 @@ const badgeColors: Record<"primary" | "secondary" | "outline" | "default", strin
 };
 
 const Home = () => {
- 
+
   const [questionBank, setQuestionBank] = useState([]);
-  
+
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById("course-scroll-container");
     if (container) {
@@ -150,7 +150,7 @@ const Home = () => {
               id="course-scroll-container"
               className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
             >
-              {questionBank.map((course:any) => (
+              {questionBank.map((course: any) => (
                 <CourseCard
                   icon={<FiFileText className="w-7 h-7" />}
                   title={course.title}
@@ -205,70 +205,112 @@ const CourseCard = ({
   badgeVariant = "secondary",
 }: CourseCardProps) => {
   // const badgeClasses = {
-    // default: "bg-black text-white",
-    // secondary: "bg-gray-100 text-gray-800",
-    // outline: "border border-gray-300 text-gray-800",
+  // default: "bg-black text-white",
+  // secondary: "bg-gray-100 text-gray-800",
+  // outline: "border border-gray-300 text-gray-800",
   // };
   const badgeClasses: Record<"primary" | "secondary" | "outline" | "default", string> = {
-  default: "gray",
-  primary: "green", // added
-  secondary: "blue",
-  outline: "transparent",
-};
+    default: "gray",
+    primary: "green", // added
+    secondary: "blue",
+    outline: "transparent",
+  };
 
   return (
-    <div className="group flex-shrink-0 w-[340px] cursor-pointer bg-gradient-to-br from-white via-gray-50 to-yellow-50 border-2 border-gray-200 rounded-3xl p-6 hover:shadow-2xl hover:shadow-yellow-300/20 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] flex flex-col relative overflow-hidden">
+    <div className="group flex-shrink-0 w-[340px] cursor-pointer bg-gradient-to-br from-white via-gray-50 to-yellow-50 border-2 border-gray-200 rounded-3xl p-6 hover:shadow-2xl hover:shadow-yellow-300/20 transition-all duration-500 hover:-translate-y-0 flex flex-col relative overflow-hidden">
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-transparent to-yellow-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
 
+      {/* Badge - top edge */}
+      {badge && (
+        <div className="absolute top-0 right-0 bg-gradient-to-r from-[#f0b100] to-yellow-600 text-white text-xs font-semibold px-6 py-1 rounded-bl-2xl shadow-md">
+          {badge}
+        </div>
+      )}
+
       <div className="relative z-10">
-        {/* Icon & Badge */}
-        <div className="flex justify-between items-start mb-5">
-          <div className="w-13 h-13 bg-[#353c4c] rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+        {/* Icon + Title Row */}
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-15 h-15 bg-[#353c4c] rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
             {icon}
           </div>
-          {badge && (
-            <span
-              className={`text-xs font-semibold px-2 py-1 rounded-full shadow-md ${badgeClasses[badgeVariant]}`}
-            >
-              {badge}
-            </span>
-          )}
-        </div>
 
-        {/* Title & Subtitle */}
-        <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-yellow-500 transition-colors duration-300">
-            {title}
-          </h3>
-          {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
-        </div>
+          {/* Title beside icon (expand for up to 2 lines) */}
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-gray-900 group-hover:text-yellow-500 transition-colors duration-300 leading-snug min-h-[1rem] line-clamp-1">
+              {title}
+            </h3>
+            {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
 
-        {/* Rating & Students */}
-        <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-200">
-          <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-1.5 rounded-full">
-            <FiStar className="text-yellow-400" />
-            <span className="text-sm font-bold">{rating}</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
-            <FiUsers />
-            <span className="text-sm font-medium">
-              {total_reviews.toLocaleString()}
-            </span>
+            {/* Rating & Students just below title */}
+            <div className="flex items-center gap-3 mt-2">
+              <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-1.5 rounded-md">
+                <FiStar className="text-yellow-400" />
+                <span className="text-sm font-bold">{rating}</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
+                <FiUsers />
+                <span className="text-sm font-medium">
+                  {total_reviews.toLocaleString()}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          {tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="text-xs px-3 py-1.5 bg-[#f3f6fa] text-black rounded-full font-medium shadow-sm hover:shadow-md transition-shadow"
+        <div className="relative mb-3 group/tags">
+          {/* Left Arrow */}
+          {tags.length > 3 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const container = document.getElementById(`tag-scroll-${title}`);
+                if (container) container.scrollBy({ left: -100, behavior: "smooth" });
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-full shadow-md p-1 z-10 hidden group-hover/tags:flex hover:bg-gray-100 transition"
             >
-              {tag}
-            </span>
-          ))}
+              <FiChevronLeft className="text-gray-700 w-4 h-4 cursor-pointer" />
+            </button>
+          )}
+
+          {/* Scrollable Tag Container */}
+          <div className="relative mb-3 group/tags ">
+            <div
+              id={`tag-scroll-${title}`}
+              className="flex gap-2 overflow-x-auto scrollbar-hide scroll-smooth px-1"
+              style={{
+                scrollSnapType: "x mandatory",
+                maxWidth: "100%",
+              }}
+            >
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="flex-shrink-0 text-xs px-3 py-1.5 bg-[#f3f6fa] text-black rounded-full font-medium shadow-sm hover:shadow-md transition-shadow scroll-snap-align-start"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+
+          {/* Right Arrow */}
+          {tags.length > 3 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const container = document.getElementById(`tag-scroll-${title}`);
+                if (container) container.scrollBy({ left: 100, behavior: "smooth" });
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-full shadow-md p-1 z-10 hidden group-hover/tags:flex hover:bg-gray-100 transition"
+            >
+              <FiChevronRight className="text-gray-700 w-4 h-4 cursor-pointer" />
+            </button>
+          )}
         </div>
+
 
         {/* More Features */}
         {moreFeatures > 0 && (
@@ -280,9 +322,9 @@ const CourseCard = ({
           </button>
         )}
 
-        {/* Description */}
-        <p className="text-sm text-gray-500 mb-6 flex-grow leading-relaxed">
-          {description}
+        {/* Description (2-line limit + fixed height) */}
+        <p className="text-sm text-gray-500 mb-6 flex-grow leading-relaxed line-clamp-2 min-h-[3.2rem]">
+          {description && description.trim() !== "" ? description : ""}
         </p>
 
         {/* Enroll Button */}
@@ -295,5 +337,6 @@ const CourseCard = ({
         </p>
       </div>
     </div>
+
   );
 };

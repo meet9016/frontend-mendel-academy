@@ -42,7 +42,7 @@ const MeetYourMentor = () => {
 
 
                                     {/* Profile Card */}
-                                    <div className="relative bg-white/80 backdrop-blur-lg rounded-[2rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
+                                    <div className="relative bg-white/80 backdrop-blur-lg rounded-[1rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
                                         {/* Profile Image with Geometric Frame */}
                                         <div className="relative mb-6">
                                             <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100]/30 to-yellow-600/30 rounded-full blur-2xl" />

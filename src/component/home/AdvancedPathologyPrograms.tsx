@@ -1,6 +1,7 @@
 "use client";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
@@ -10,6 +11,7 @@ import { GiSparkles } from "react-icons/gi";
 function AdvancedPathologyPrograms() {
   // Sample Data (used for 3 repeated cards)
   const [programs, setPrograms] = React.useState<any[]>([]);
+  const router = useRouter();
 
   const recordedProgram = {
     title: "MENDEL MASTERY SERIES™: LYMPHOMAS",
@@ -116,7 +118,9 @@ function AdvancedPathologyPrograms() {
         </div>
 
         {/* CTA Button */}
-        <button className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition">
+        <button
+          onClick={() => router.push("/subscription")}
+          className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition cursor-pointer">
           Learn More
           <BsArrowRight className="w-5 h-5" />
         </button>
@@ -139,7 +143,7 @@ function AdvancedPathologyPrograms() {
               key={index}
               className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
             >
-              {/* 🖼️ IMAGE REPLACING CATEGORY */}
+              {/*  IMAGE REPLACING CATEGORY */}
               <div className="relative h-32">
                 <img
                   src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
@@ -160,14 +164,31 @@ function AdvancedPathologyPrograms() {
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="font-bold text-sm mb-1">{item?.title}</h3>
-                <p
-                  className="text-xs text-gray-500 mb-3"
+                <h3
+                  className="font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    lineHeight: "1.4rem",
+                    height: "2.8rem",
+                  }}
                 >
-                  {item?.subtitle?.length > 70
-                    ? item.subtitle.slice(0, 70) + "..."
-                    : item.subtitle}
+                  {item?.title}
+                </h3>
+                <p
+                  className="text-xs text-gray-500 mb-3 overflow-hidden text-ellipsis line-clamp-2"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    lineHeight: "1.2rem",
+                    height: "2.4rem",
+                  }}
+                >
+                  {item?.subtitle}
                 </p>
+
 
                 <div className="flex items-end justify-between">
                   <div>
