@@ -174,7 +174,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+                  className="absolute right-4 top-7 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
                 >
                   {showPassword ? (
                     <FiEye className="w-5 h-5" />
