@@ -21,6 +21,10 @@ function AdvancedPathologyPrograms() {
     rating: 4.9,
     price: 59.99,
     originalPrice: 79.99,
+    total_reviews: 78,
+    duration: 3,
+    subtitle:
+      "Comprehensive training on lymphoma pathology, diagnosis, and molecular markers.",
   };
 
   const upcomingProgram = {
@@ -138,7 +142,7 @@ function AdvancedPathologyPrograms() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
-          {programs?.map((item, index) => (
+          {[...Array(4)]?.map((_, index) => (
             <div
               key={index}
               className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
@@ -147,17 +151,17 @@ function AdvancedPathologyPrograms() {
               <div className="relative h-32">
                 <img
                   src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
-                  alt={item?.title}
+                  alt={recordedProgram?.title}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   <FaStar className="text-yellow-400 w-3 h-3 mr-1" />
-                  <span className="text-xs font-semibold">{item?.rating}</span>
+                  <span className="text-xs font-semibold">{recordedProgram?.rating}</span>
                 </div>
                 <div className="absolute bottom-2 right-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
                   <span className="text-xs font-semibold">
-                    {item?.total_reviews}+ learners
+                    {recordedProgram?.total_reviews}+ learners
                   </span>
                 </div>
               </div>
@@ -174,7 +178,7 @@ function AdvancedPathologyPrograms() {
                     height: "2.8rem",
                   }}
                 >
-                  {item?.title}
+                  {recordedProgram?.title}
                 </h3>
                 <p
                   className="text-xs text-gray-500 mb-3 overflow-hidden text-ellipsis line-clamp-2"
@@ -186,17 +190,17 @@ function AdvancedPathologyPrograms() {
                     height: "2.4rem",
                   }}
                 >
-                  {item?.subtitle}
+                  {recordedProgram?.subtitle}
                 </p>
 
 
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-xs text-gray-400">
-                      {item?.duration} month access
+                      {recordedProgram?.duration} month access
                     </p>
                     <p className="text-sm font-bold text-gray-900">
-                      ${item?.price}
+                      ${recordedProgram?.price}
                     </p>
                   </div>
                   <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">

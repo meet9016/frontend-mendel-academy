@@ -47,7 +47,7 @@ const BlogCard = () => {
   {
     id: 3,
     title: "Mastering English Vocabulary for Banking Exams",
-    image: "https://images.unsplash.com/photo-1581093588401-22d0e5f5f3c3",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
     exam_name: "Bank PO",
     date: "2025-08-15",
     sort_description:
@@ -56,7 +56,7 @@ const BlogCard = () => {
   {
     id: 4,
     title: "Daily Current Affairs: November 2025",
-    image: "https://images.unsplash.com/photo-1526378722370-2b3c2413b3f1",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
     exam_name: "General",
     date: "2025-11-01",
     sort_description:
