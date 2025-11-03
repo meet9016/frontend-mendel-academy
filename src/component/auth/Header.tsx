@@ -140,7 +140,9 @@ export default function Header() {
 
           {/* ✅ Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
-            <button className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
+            <button
+              onClick={() => router.push('mycart')}
+              className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
               <FiShoppingCart className="w-5 h-5 text-gray-700" />
             </button>
             {authToken ? (
@@ -160,7 +162,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600"
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffcb04] text-white font-semibold hover:bg-yellow"
                 >
                   Sign Up
                 </button>
