@@ -23,7 +23,56 @@ type BlogType = {
     sort_description?: string;
 };
 
+
 const BlogCard = () => {
+    const datas = [
+  {
+    id: 1,
+    title: "Understanding Motion Animations in React",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+    exam_name: "ReactJS",
+    date: "2025-10-10",
+    sort_description:
+      "Learn how to add smooth animations using Framer Motion in your React projects to enhance user experience.",
+  },
+  {
+    id: 2,
+    title: "Top 10 Tips to Crack SSC CGL 2025",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
+    exam_name: "SSC CGL",
+    date: "2025-09-25",
+    sort_description:
+      "A complete guide with study tips, best books, and time management strategies for SSC CGL aspirants.",
+  },
+  {
+    id: 3,
+    title: "Mastering English Vocabulary for Banking Exams",
+    image: "https://images.unsplash.com/photo-1581093588401-22d0e5f5f3c3",
+    exam_name: "Bank PO",
+    date: "2025-08-15",
+    sort_description:
+      "Boost your English vocabulary with these powerful tricks and word lists tailored for banking exams.",
+  },
+  {
+    id: 4,
+    title: "Daily Current Affairs: November 2025",
+    image: "https://images.unsplash.com/photo-1526378722370-2b3c2413b3f1",
+    exam_name: "General",
+    date: "2025-11-01",
+    sort_description:
+      "Stay updated with the latest current affairs that can help you score higher in your upcoming government exams.",
+  },
+  {
+    id: 5,
+    title: "Time Management Strategies for UPSC Aspirants",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
+    exam_name: "UPSC",
+    date: "2025-07-30",
+    sort_description:
+      "Learn how to balance study hours, revision, and rest effectively to stay consistent throughout UPSC preparation.",
+  },
+];
+
     const [currentPage, setCurrentPage] = useState(0);
     const [data, setData] = useState<BlogType[]>([]);
     const router = useRouter();
@@ -117,7 +166,7 @@ const BlogCard = () => {
 
                     {/* ✅ Blog Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                        {data?.map((post: any, index) => (
+                        {datas?.map((post: any, index) => (
                             <div
                                 key={index}
                                 className="w-full lg:max-w-[380px]"
