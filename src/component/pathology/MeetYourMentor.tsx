@@ -1,6 +1,5 @@
 import React from 'react'
 import { FaBriefcase, FaCertificate, FaFlask, FaSearch } from 'react-icons/fa'
-import '../../../public/images/Dr.jpg'
 const MeetYourMentor = () => {
     return (
         <>
