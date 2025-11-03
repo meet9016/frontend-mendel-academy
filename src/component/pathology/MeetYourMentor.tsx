@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaBriefcase, FaCertificate, FaFlask, FaSearch } from 'react-icons/fa'
-
+import '../../../public/images/Dr.jpg'
 const MeetYourMentor = () => {
     return (
         <>
@@ -50,7 +50,7 @@ const MeetYourMentor = () => {
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-full animate-spin-slow opacity-20" />
                                                 <div className="absolute inset-2 bg-white rounded-full" />
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop"
+                                                    src={'../../../images/11.jpg'}
                                                     alt="Dr. Kishor Managoli"
                                                     className="absolute inset-3 w-[168px] h-[168px] rounded-full object-cover border-4 border-[#f0b100]/30"
                                                 />
