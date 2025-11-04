@@ -139,9 +139,9 @@ export default function Header() {
           </nav>
 
           {/* ✅ Buttons (Desktop) */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4"> 
             <button
-              // onClick={() => router.push('mycart')}
+              onClick={() => router.push('mycart')}
               className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
               <FiShoppingCart className="w-5 h-5 text-gray-700" />
             </button>

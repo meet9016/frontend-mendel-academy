@@ -108,6 +108,7 @@ const Home = () => {
 
   const [questionBank, setQuestionBank] = useState([]);
 
+
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById("course-scroll-container");
     if (container) {

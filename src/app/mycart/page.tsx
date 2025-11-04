@@ -1,6 +1,5 @@
-// import MyCart from "@/component/mycart/MyCart";
+import MyCart from "@/component/mycart/MyCart";
 
 export default function page() {
-    return 
-    // <MyCart />
+    return <MyCart />
 }
