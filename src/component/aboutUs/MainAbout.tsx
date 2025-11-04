@@ -72,6 +72,7 @@ const MainAbout = () => {
                             </div>
 
 
+
                             {/* Text Content */}
                             <div className="md:col-span-8 space-y-6 animate-slide-in-right">
                                 {/* Paragraph 1 */}
