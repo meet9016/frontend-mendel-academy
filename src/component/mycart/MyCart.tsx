@@ -4,14 +4,19 @@ import Header from '../auth/Header';
 import { FiMinus, FiPlus, FiX, FiArrowRight, FiShield, FiTruck, FiPercent } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import Footer from '../auth/Footer';
+import { BiMinus, BiPlus, BiShield } from 'react-icons/bi';
+import { BsPercent, BsTruck } from 'react-icons/bs';
+import { CgClose } from 'react-icons/cg';
+import { FaShoppingCart } from 'react-icons/fa';
 
 
 interface CartItem {
     id: number;
     image: string;
     title: string;
-    price: number;
+    basePrice: number;
     quantity: number;
+    period: '30' | '60' | '90';
 }
 
 const MyCart = () => {
@@ -21,163 +26,209 @@ const MyCart = () => {
             id: 1,
             image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
             title: 'Premium Wireless Headphones',
-            price: 2800,
-            quantity: 2,
+            basePrice: 800,
+            quantity: 1,
+            period: '30',
         },
         {
             id: 2,
             image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
             title: 'Smart Watch Pro Series',
-            price: 1900,
+            basePrice: 1200,
             quantity: 1,
+            period: '30',
         },
         {
             id: 3,
             image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=500&fit=crop',
             title: 'Designer Sunglasses',
-            price: 3700,
+            basePrice: 600,
             quantity: 1,
+            period: '30',
         },
     ]);
     console.log(cartItems, 'cartI')
 
-    const updateQuantity = (id: number, delta: number) => {
+
+
+    const updatePeriod = (id: number, period: '30' | '60' | '90') => {
         setCartItems(items =>
             items.map(item =>
-                item.id === id
-                    ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-                    : item
+                item.id === id ? { ...item, period } : item
             )
         );
     };
 
     const removeItem = (id: number) => {
-        console.log('oooooo')
         setCartItems(items => items.filter(item => item.id !== id));
     };
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const calculateItemPrice = (item: CartItem) => {
+        const multiplier = item.period === '30' ? 1 : item.period === '60' ? 2 : 3;
+        return item.basePrice * multiplier * item.quantity;
+    };
+
+    const subtotal = cartItems.reduce((sum, item) => sum + calculateItemPrice(item), 0);
     const total = subtotal;
 
     return (
         <>
             <Header />
 
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50">
-                <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10 max-w-7xl">
+            <div className="min-h-screen bg-gray-50">
+                <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
                     {/* Page Header */}
                     <div className="mb-8">
-                        <h1 className="text-3xl lg:text-4xl font-black text-gray-900 mb-2 tracking-tight">
+                        <h1 className="text-3xl font-black text-gray-900 mb-2">
                             Shopping Cart
                         </h1>
-                        <p className="text-gray-600">
-                            {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} ready for checkout
+                        <p className="text-gray-500">
+                            {cartItems.length} {cartItems.length === 1 ? "item" : "items"} ready
+                            for checkout
                         </p>
                     </div>
 
-                    <div className="grid lg:grid-cols-12 gap-6 lg:gap-8">
-                        {/* Cart Items Column */}
-                        <div className="lg:col-span-7 xl:col-span-8 space-y-4">
-                            {cartItems.map((item, index) => (
+                    <div className="grid lg:grid-cols-12 gap-8">
+                        {/* Cart Items */}
+                        <div className="lg:col-span-8 space-y-6">
+                            {cartItems.map((item: any, index: number) => (
                                 <div
                                     key={item.id}
-                                    className="group bg-white rounded-2xl cursor-pointer overflow-hidden border border-gray-200 hover:border-yellow-400 transition-all duration-300 animate-fade-in"
+                                    className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5"
                                     style={{ animationDelay: `${index * 100}ms` }}
                                 >
-                                    <div className="p-5 flex gap-5">
-                                        {/* Product Image */}
-                                        <div className="relative flex-shrink-0">
-                                            <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200">
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                />
-                                            </div>
-                                        </div>
+                                    {/* Product Image */}
+                                    <div className="w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
 
-                                        {/* Product Info */}
-                                        <div className="flex-1 min-w-0 flex flex-col justify-between">
-                                            {/* Title & Remove */}
-                                            <div className="flex justify-between items-start gap-4 mb-3">
-                                                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight">
+                                    {/* Product Info */}
+                                    <div className="flex-1 flex flex-col justify-between">
+                                        {/* Top Row */}
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-gray-900 mb-1">
                                                     {item.title}
                                                 </h3>
-                                                <button
-                                                    onClick={() => removeItem(item.id)}
-                                                    className="flex-shrink-0 p-1.5 rounded-lg text-gray-400 cursor-pointer hover:text-red-600 hover:bg-red-50 transition-colors"
-                                                >
-                                                    <FiX className="h-5 w-5" />
-                                                </button>
+                                                <p className="text-sm text-gray-500">
+                                                    Base price: ₹{item.basePrice.toLocaleString()}/30 days
+                                                </p>
                                             </div>
+                                            <button
+                                                onClick={() => removeItem(item.id)}
+                                                className="p-2 rounded-full hover:bg-red-100 hover:text-red-600 transition"
+                                            >
+                                                <CgClose className="h-5 w-5" />
+                                            </button>
+                                        </div>
 
-                                            {/* Bottom Row - Price & Quantity */}
-                                            <div className="flex items-end justify-between gap-4">
-                                                {/* Quantity Controls */}
-                                                <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1.5 border border-gray-200">
-                                                    <button
-                                                        onClick={() => updateQuantity(item.id, -1)}
-                                                        className="h-9 w-9 flex cursor-pointer items-center justify-center rounded-lg hover:bg-gray-200 transition-colors"
-                                                    >
-                                                        <FiMinus className="h-4 w-4 text-gray-700" />
-                                                    </button>
-                                                    <span className="w-12 text-center font-bold text-gray-900 text-lg">
-                                                        {item.quantity}
-                                                    </span>
-                                                    <button
-                                                        onClick={() => updateQuantity(item.id, 1)}
-                                                        className="h-9 w-9 cursor-pointer flex items-center justify-center rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-500 text-white transition-all hover:scale-105 hover:shadow-md"
-                                                    >
-                                                        <FiPlus className="h-4 w-4" />
-                                                    </button>
+                                        {/* Subscription Period */}
+                                        <div className="mb-3">
+                                            <label className="text-sm font-semibold text-gray-800 mb-2 block">
+                                                Subscription Period
+                                            </label>
+
+                                            <div className="flex items-center justify-between">
+                                                {/* Radio Buttons */}
+                                                <div className="flex gap-4 flex-wrap">
+                                                    {/* 30 Days */}
+                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            name={`period-${item.id}`}
+                                                            value="30"
+                                                            checked={item.period === "30"}
+                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
+                                                            className="w-4 h-4 accent-yellow-500"
+                                                        />
+                                                        30 Days
+                                                    </label>
+
+                                                    {/* 60 Days */}
+                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            name={`period-${item.id}`}
+                                                            value="60"
+                                                            checked={item.period === "60"}
+                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
+                                                            className="w-4 h-4 accent-yellow-500"
+                                                        />
+                                                        60 Days
+                                                        <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
+                                                            2x
+                                                        </span>
+                                                    </label>
+
+                                                    {/* 90 Days */}
+                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            name={`period-${item.id}`}
+                                                            value="90"
+                                                            checked={item.period === "90"}
+                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
+                                                            className="w-4 h-4 accent-yellow-500"
+                                                        />
+                                                        90 Days
+                                                        <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
+                                                            3x
+                                                        </span>
+                                                    </label>
                                                 </div>
 
-                                                {/* Price */}
-                                                <div className="text-right">
-                                                    <div className="text-2xl lg:text-3xl font-black text-gray-900">
-                                                        ₹{(item.price * item.quantity).toLocaleString()}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500 mt-0.5">
-                                                        ₹{item.price.toLocaleString()} each
-                                                    </div>
-                                                </div>
+                                                {/* Price on the right */}
+                                                <p className="text-xl font-bold text-gray-900 whitespace-nowrap">
+                                                    ₹{calculateItemPrice(item).toLocaleString()}
+                                                </p>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             ))}
 
                             {/* Trust Badges */}
                             <div className="grid grid-cols-3 gap-3 pt-4">
-                                <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
-                                    <FiShield className="h-6 w-6 text-yellow-500 mx-auto mb-2" />
-                                    <p className="text-xs font-semibold text-gray-700">Secure Payment</p>
+                                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
+                                    <BiShield className="h-6 w-6 text-yellow-500 mb-2" />
+                                    <p className="text-xs font-semibold text-gray-800">
+                                        Secure Payment
+                                    </p>
                                 </div>
-                                <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
-                                    <FiTruck className="h-6 w-6 text-yellow-500 mx-auto mb-2" />
-                                    <p className="text-xs font-semibold text-gray-700">Free Delivery</p>
+                                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
+                                    <BsTruck className="h-6 w-6 text-yellow-500 mb-2" />
+                                    <p className="text-xs font-semibold text-gray-800">
+                                        Free Delivery
+                                    </p>
                                 </div>
-                                <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
-                                    <FiPercent className="h-6 w-6 text-yellow-500 mx-auto mb-2" />
-                                    <p className="text-xs font-semibold text-gray-700">Best Prices</p>
+                                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
+                                    <BsPercent className="h-6 w-6 text-yellow-500 mb-2" />
+                                    <p className="text-xs font-semibold text-gray-800">Best Prices</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Summary Sidebar */}
-                        <div className="lg:col-span-5 xl:col-span-4">
-                            <div className="lg:sticky lg:top-24 space-y-4">
-                                {/* Order Summary */}
-                                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-                                    <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-6">
-                                        <h2 className="text-xl font-black text-white">Order Summary</h2>
+                        <div className="lg:col-span-4">
+                            <div className="sticky top-24 space-y-4">
+                                <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-t-2xl flex items-center gap-2">
+                                        <FaShoppingCart className="text-white text-xl" />
+                                        <h2 className="text-white font-bold text-xl">Order Summary</h2>
                                     </div>
+
 
                                     <div className="p-6 space-y-5">
                                         {/* Subtotal */}
                                         <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                                             <span className="text-base text-gray-600 font-medium">
-                                                Subtotal ({cartItems.length} {cartItems.length === 1 ? 'item' : 'items'})
+                                                Subtotal ({cartItems.length}{" "}
+                                                {cartItems.length === 1 ? "item" : "items"})
                                             </span>
                                             <span className="text-xl font-bold text-gray-900">
                                                 ₹{subtotal.toLocaleString()}
@@ -185,31 +236,23 @@ const MyCart = () => {
                                         </div>
 
                                         {/* Total */}
-                                        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-5 border-2 border-yellow-300">
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <p className="text-sm text-gray-500 mb-1">Total Amount</p>
-                                                    <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-400">
-                                                        ₹{total.toLocaleString()}
-                                                    </p>
-                                                </div>
-                                            </div>
+                                        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                                            <p className="text-sm text-gray-500 mb-1">Total Amount</p>
+                                            <p className="text-3xl font-extrabold text-yellow-600">
+                                                ₹{total.toLocaleString()}
+                                            </p>
                                         </div>
 
                                         {/* Checkout Button */}
                                         <button
-                                        onClick={() => router.push('/checkout')}
-                                            className="w-full h-14 flex items-center cursor-pointer justify-center bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-bold rounded-xl text-lg shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 group"
-                                        >
+                                            onClick={() => router.push('/checkout')}
+                                            className="w-full h-12 flex items-center cursor-pointer justify-center rounded-lg bg-gradient-to-r from-yellow-500 to-amber-400 text-white font-semibold hover:opacity-90 transition">
                                             Proceed to Checkout
-                                            <FiArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                            <FiArrowRight className="ml-2 h-5 w-5" />
                                         </button>
 
-
                                         {/* Continue Shopping */}
-                                        <button
-                                            className="w-full h-12 border-2 border-gray-300 cursor-pointer  rounded-xl font-semibold text-gray-800 hover:bg-gray-100 active:scale-[0.98] transition-all duration-300"
-                                        >
+                                        <button className="w-full h-12 font-semibold border border-gray-300 rounded-lg text-gray-800 hover:bg-gray-100 transition">
                                             Continue Shopping
                                         </button>
                                     </div>
@@ -219,9 +262,10 @@ const MyCart = () => {
                     </div>
                 </main>
             </div>
-            <Footer/>
+            <Footer />
         </>
     );
 };
 
 export default MyCart;
+

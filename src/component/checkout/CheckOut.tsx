@@ -50,11 +50,9 @@ const CheckOut = () => {
 
     ];
 
-    const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const subtotal = orderItems.reduce((sum, item) => sum + item.price, 0);
     const discount = 0;
-    const shippingCharge = 0;
-    const gstAmount = Math.round(subtotal * 0.18);
-    const finalTotal = subtotal - discount + shippingCharge + gstAmount;
+    const finalTotal = subtotal
 
     return (
         <>
@@ -124,7 +122,7 @@ const CheckOut = () => {
                                 </div>
 
                                 {/* Country, State, City, Postal */}
-                                <div className="grid md:grid-cols-2 gap-4">
+                                {/* <div className="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                                             Country *
@@ -154,9 +152,9 @@ const CheckOut = () => {
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
-                                <div className="grid md:grid-cols-2 gap-4">
+                                {/* <div className="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                                             City *
@@ -184,7 +182,7 @@ const CheckOut = () => {
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -458,7 +456,8 @@ const CheckOut = () => {
                                             <h3 className="font-semibold text-sm">{item.name}</h3>
                                             <p className="text-xs text-gray-500">Size: {item.size}</p>
                                             <p className="text-sm font-bold text-gray-500">
-                                                ₹{item.price} x {item.quantity}
+                                                {/* ₹{item.price} x {item.quantity} */}
+                                                ₹{item.price}
                                             </p>
                                         </div>
                                     </div>
@@ -475,10 +474,10 @@ const CheckOut = () => {
                                     <span className="text-gray-600">Discount:</span>
                                     <span className="font-medium text-green-600">-₹{discount}</span>
                                 </div>
-                                <div className="flex justify-between">
+                                {/* <div className="flex justify-between">
                                     <span className="text-gray-600">Shipping:</span>
                                     <span className="font-medium">₹{shippingCharge}</span>
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Final Total */}
