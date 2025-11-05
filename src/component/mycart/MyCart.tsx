@@ -135,50 +135,53 @@ const MyCart = () => {
                                             <div className="flex items-center justify-between">
                                                 {/* Radio Buttons */}
                                                 <div className="flex gap-4 flex-wrap">
-                                                    {/* 30 Days */}
-                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                                                        <input
-                                                            type="radio"
-                                                            name={`period-${item.id}`}
-                                                            value="30"
-                                                            checked={item.period === "30"}
-                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
-                                                            className="w-4 h-4 accent-yellow-500"
-                                                        />
-                                                        30 Days
-                                                    </label>
+                                                    {[
+                                                        { value: "30", label: "30 Days" },
+                                                        { value: "60", label: "60 Days", badge: "2x" },
+                                                        { value: "90", label: "90 Days", badge: "3x" },
+                                                    ].map(({ value, label, badge }) => (
+                                                        <label
+                                                            key={value}
+                                                            className="flex items-center gap-2 text-sm font-medium cursor-pointer select-none"
+                                                        >
+                                                            <div className="relative flex items-center justify-center">
+                                                                <input
+                                                                    type="radio"
+                                                                    name={`period-${item.id}`}
+                                                                    value={value}
+                                                                    checked={item.period === value}
+                                                                    onChange={(e) =>
+                                                                        updatePeriod(item.id, e.target.value as "30" | "60" | "90")
+                                                                    }
+                                                                    className="
+                appearance-none
+                w-5 h-5
+                rounded-full
+                border-2 border-gray-300
+                checked:border-yellow-500
+                checked:bg-yellow-500
+                transition-all duration-200
+              "
+                                                                />
+                                                                {/* White inner circle (perfectly centered) */}
+                                                                <span
+                                                                    className={`
+                pointer-events-none absolute
+                h-2.5 w-2.5 rounded-full bg-white
+                transition-all duration-200
+                ${item.period === value ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
+              `}
+                                                                ></span>
+                                                            </div>
 
-                                                    {/* 60 Days */}
-                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                                                        <input
-                                                            type="radio"
-                                                            name={`period-${item.id}`}
-                                                            value="60"
-                                                            checked={item.period === "60"}
-                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
-                                                            className="w-4 h-4 accent-yellow-500"
-                                                        />
-                                                        60 Days
-                                                        <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
-                                                            2x
-                                                        </span>
-                                                    </label>
-
-                                                    {/* 90 Days */}
-                                                    <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-                                                        <input
-                                                            type="radio"
-                                                            name={`period-${item.id}`}
-                                                            value="90"
-                                                            checked={item.period === "90"}
-                                                            onChange={(e) => updatePeriod(item.id, e.target.value as "30" | "60" | "90")}
-                                                            className="w-4 h-4 accent-yellow-500"
-                                                        />
-                                                        90 Days
-                                                        <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
-                                                            3x
-                                                        </span>
-                                                    </label>
+                                                            {label}
+                                                            {badge && (
+                                                                <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
+                                                                    {badge}
+                                                                </span>
+                                                            )}
+                                                        </label>
+                                                    ))}
                                                 </div>
 
                                                 {/* Price on the right */}
@@ -187,6 +190,9 @@ const MyCart = () => {
                                                 </p>
                                             </div>
                                         </div>
+
+
+
 
                                     </div>
                                 </div>

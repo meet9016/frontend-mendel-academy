@@ -1,14 +1,16 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaPinterestP, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa";
 const navLinks = [
-    "Home",
-    "Pathology",
-    "Blog",
-    "About Us",
-    "PG Medical Entrance Exams",
+    { name: "Home", path: "/" },
+    { name: "Pathology", path: "/pathology" },
+    { name: "Blog", path: "/blog" },
+    { name: "About Us", path: "/aboutUs" },
+    { name: "PG Medical Entrance Exams", path: "/" },
 ];
 const Footer = () => {
+    const router = useRouter();
     return (
         <footer className="bg-gray-900 text-gray-200 ">
             <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 grid lg:grid-cols-3 gap-10">
@@ -44,7 +46,7 @@ const Footer = () => {
                     <h4 className="text-white font-semibold mb-4">Quick Links</h4>
                     <ul className="space-y-2 text-gray-400 text-sm">
                         {navLinks.map((link, index) => (
-                            <li key={index} className="hover:text-yellow-500 transition-colors cursor-pointer">{link}</li>
+                            <li key={index} onClick={() => router.push(link.path)} className="hover:text-yellow-500 transition-colors cursor-pointer">{link.name}</li>
                         ))}
                     </ul>
                 </div>
