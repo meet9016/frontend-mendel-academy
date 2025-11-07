@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../auth/Header";
 import {
   FiMinus,
@@ -10,12 +10,14 @@ import {
   FiTruck,
   FiPercent,
 } from "react-icons/fi";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Footer from "../auth/Footer";
 import { BiMinus, BiPlus, BiShield } from "react-icons/bi";
 import { BsPercent, BsTruck } from "react-icons/bs";
 import { CgClose } from "react-icons/cg";
 import { FaShoppingCart } from "react-icons/fa";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
 
 interface CartItem {
   id: number;
@@ -28,6 +30,33 @@ interface CartItem {
 
 const MyCart = () => {
   const router = useRouter();
+  const [plan, setPlan] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { id } = useParams();
+
+  console.log(plan, 'opppp');
+
+
+  useEffect(() => {
+    if (id) fetchPlan();
+  }, [id]);
+
+  const fetchPlan = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`${endPointApi.getPlan}/${id}`)
+      if (res.data) {
+        setPlan(res?.data?.data)
+      } else {
+        console.log("DATA FAILED")
+      }
+    } catch (error) {
+      console.error("Error fetching exam data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       id: 1,
@@ -92,7 +121,7 @@ const MyCart = () => {
               Shopping Cart
             </h1>
             <p className="text-gray-500">
-              {cartItems.length} {cartItems.length === 1 ? "item" : "items"}{" "}
+              {/* {cartItems.length} {cartItems.length === 1 ? "item" : "items"}{" "} */}
               ready for checkout
             </p>
           </div>
@@ -100,13 +129,12 @@ const MyCart = () => {
           <div className="grid lg:grid-cols-12 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-8 space-y-6">
-              {cartItems.map((item: any, index: number) => (
+              {/* {cartItems.map((item: any, index: number) => (
                 <div
                   key={item.id}
                   className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {/* Product Image */}
                   <div className="w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
                     <img
                       src={item.image}
@@ -115,9 +143,7 @@ const MyCart = () => {
                     />
                   </div>
 
-                  {/* Product Info */}
                   <div className="flex-1 flex flex-col justify-between">
-                    {/* Top Row */}
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -135,14 +161,12 @@ const MyCart = () => {
                       </button>
                     </div>
 
-                    {/* Subscription Period */}
                     <div className="mb-3">
                       <label className="text-sm font-semibold text-gray-800 mb-2 block">
                         Subscription Period
                       </label>
 
                       <div className="flex items-center justify-between">
-                        {/* Radio Buttons */}
                         <div className="flex gap-4 flex-wrap">
                           {[
                             { value: "30", label: "30 Days" },
@@ -175,17 +199,15 @@ const MyCart = () => {
                 transition-all duration-200
               "
                                 />
-                                {/* White inner circle (perfectly centered) */}
                                 <span
                                   className={`
                 pointer-events-none absolute
                 h-2.5 w-2.5 rounded-full bg-white
                 transition-all duration-200
-                ${
-                  item.period === value
-                    ? "opacity-100 scale-100"
-                    : "opacity-0 scale-0"
-                }
+                ${item.period === value
+                                      ? "opacity-100 scale-100"
+                                      : "opacity-0 scale-0"
+                                    }
               `}
                                 ></span>
                               </div>
@@ -200,7 +222,15 @@ const MyCart = () => {
                           ))}
                         </div>
 
-                        {/* Price on the right */}
+                        <p className="text-sm text-gray-600">
+                          Price: <span className="font-semibold">₹{plan?.plan_pricing}</span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Duration: <span className="font-semibold">{plan?.plan_day} Days</span>
+                        </p>
+
+
+                      
                         <p className="text-xl font-bold text-gray-900 whitespace-nowrap">
                           ₹{calculateItemPrice(item).toLocaleString()}
                         </p>
@@ -208,7 +238,51 @@ const MyCart = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
+
+
+
+              {plan && (
+                <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5 relative">
+                  {/*  Close Button */}
+                  <button
+                    onClick={() => setPlan(null)} // clears plan from state
+                    className="absolute top-3 right-3 p-2 rounded-full hover:bg-red-100 hover:text-red-600 transition"
+                  >
+                    <CgClose className="h-5 w-5" />
+                  </button>
+
+                  {/* 🖼️ Static Image */}
+                  <div className="w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                    <img
+                      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop"
+                      alt="Plan Image"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* 📄 Plan Details */}
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                          {plan?.plan_type || "Plan"}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <p className="text-sm text-gray-600">
+                        Price: <span className="font-semibold">₹{plan?.plan_pricing}</span>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Duration: <span className="font-semibold">{plan?.plan_day} Days</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
 
               {/* Trust Badges */}
               <div className="grid grid-cols-3 gap-3 pt-4">
@@ -248,11 +322,13 @@ const MyCart = () => {
                     {/* Subtotal */}
                     <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                       <span className="text-base text-gray-600 font-medium">
-                        Subtotal ({cartItems.length}{" "}
-                        {cartItems.length === 1 ? "item" : "items"})
+                        Subtotal
+                        {/* ({cartItems.length}{" "}
+                        {cartItems.length === 1 ? "item" : "items"}) */}
                       </span>
                       <span className="text-xl font-bold text-gray-900">
-                        ₹{subtotal.toLocaleString()}
+                        {/* ₹{subtotal.toLocaleString()}a */}
+                        ₹{plan?.plan_pricing ? Number(plan.plan_pricing).toLocaleString() : "0"}
                       </span>
                     </div>
 
@@ -260,13 +336,14 @@ const MyCart = () => {
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
                       <p className="text-sm text-gray-500 mb-1">Total Amount</p>
                       <p className="text-3xl font-extrabold text-yellow-600">
-                        ₹{total.toLocaleString()}
+                        {/* ₹{total.toLocaleString()} */}
+                        ₹{plan?.plan_pricing ? Number(plan.plan_pricing).toLocaleString() : "0"}
                       </p>
                     </div>
 
                     {/* Checkout Button */}
                     <button
-                      onClick={() => router.push("/checkout")}
+                      onClick={() => router.push(`/checkout/${id}`)}
                       className="w-full h-12 flex items-center cursor-pointer justify-center rounded-lg bg-gradient-to-r from-yellow-500 to-amber-400 text-white font-semibold hover:opacity-90 transition"
                     >
                       Proceed to Checkout

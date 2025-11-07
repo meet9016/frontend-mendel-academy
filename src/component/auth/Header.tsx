@@ -1,8 +1,21 @@
 "use client";
 
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiMenu, FiShoppingCart, FiX } from "react-icons/fi";
+
+type Exam = {
+  exam_name: string;
+  link: string;
+};
+
+type ExamCategory = {
+  category_name: string;
+  exams: Exam[];
+};
+
 
 export default function Header() {
   const authToken =
@@ -10,28 +23,52 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isExamDropdownOpen, setIsExamDropdownOpen] = useState<boolean>(false);
+  const [examCategories, setExamCategories] = useState<ExamCategory[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  console.log(examCategories, 'examCategories');
+
 
   const router = useRouter();
 
-  const examCategories = {
-    "USMLE Program": [
-      { name: "USMLE Step 1", link: "/exams/usmle-step-1" },
-      { name: "USMLE Step 2", link: "/exams/usmle-step-2" },
-      { name: "USMLE Step 3", link: "/exams/usmle-step-3" },
-    ],
-    "International Exams": [
-      { name: "PLAB (UK)", link: "/exams/plab" },
-      { name: "NExT (India)", link: "/exams/next" },
-      { name: "FMGE (India)", link: "/exams/fmge" },
-      { name: "INI-CET (India)", link: "/exams/ini-cet" },
-      { name: "AMC (Australia)", link: "/exams/amc" },
-    ],
-  };
+  // const examCategories = {
+  //   "USMLE Program": [
+  //     { name: "USMLE Step 1", link: "/exams/usmle-step-1" },
+  //     { name: "USMLE Step 2", link: "/exams/usmle-step-2" },
+  //     { name: "USMLE Step 3", link: "/exams/usmle-step-3" },
+  //   ],
+  //   "International Exams": [
+  //     { name: "PLAB (UK)", link: "/exams/plab" },
+  //     { name: "NExT (India)", link: "/exams/next" },
+  //     { name: "FMGE (India)", link: "/exams/fmge" },
+  //     { name: "INI-CET (India)", link: "/exams/ini-cet" },
+  //     { name: "AMC (Australia)", link: "/exams/amc" },
+  //   ],
+  // };
+
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get(`${endPointApi.getAppMedicalExam}`)
+        if (res.data.data) {
+          setExamCategories(res.data.data)
+        }
+      } catch (error) {
+        console.error("Error fetching exam data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExams()
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
     router.push("/auth/login");
   };
+
+
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -103,7 +140,7 @@ export default function Header() {
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[600px] bg-white border border-gray-200 rounded-lg shadow-xl p-6 animate-fadeIn"
                 >
                   <div className="grid grid-cols-2 gap-6">
-                    {Object.entries(examCategories).map(([category, exams]) => (
+                    {/* {Object.entries(examCategories).map(([category, exams]) => (
                       <div key={category}>
                         <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
                           {category}
@@ -116,6 +153,27 @@ export default function Header() {
                                 onClick={() => router.push("/medicalexam")}
                               >
                                 {exam.name}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))} */}
+                    {examCategories.map((category) => (
+                      <div key={category.category_name}>
+                        <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
+                          {category.category_name}
+                        </h3>
+
+                        <ul className="space-y-2">
+                          {category?.exams?.map((exam: any) => (
+                            <li key={exam?._id}>
+                              <button
+                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md transition-all"
+                                // onClick={() => router.push("/medicalexam")}
+                                onClick={() => router.push(`/medicalexam/${exam?.exam_id}`)}
+                              >
+                                {exam.exam_name}
                               </button>
                             </li>
                           ))}
@@ -139,7 +197,7 @@ export default function Header() {
           </nav>
 
           {/* ✅ Buttons (Desktop) */}
-          <div className="hidden lg:flex items-center gap-4"> 
+          <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={() => router.push('mycart')}
               className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
@@ -211,16 +269,16 @@ export default function Header() {
                 </button>
                 {isExamDropdownOpen && (
                   <div className="mt-2 pl-4 space-y-3">
-                    {Object.entries(examCategories).map(([category, exams]) => (
-                      <div key={category}>
+                    {Object.entries(examCategories)?.map((category: any) => (
+                      <div key={category?.category_name}>
                         <h4 className="text-xs font-semibold text-gray-500 mb-1 uppercase">
-                          {category}
+                          {category?.category_name}
                         </h4>
                         <ul className="space-y-1">
-                          {exams.map((exam) => (
+                          {category?.exams?.map((exam: any) => (
                             <li key={exam.name}>
                               <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
-                                {exam.name}
+                                {exam.exam_name}
                               </button>
                             </li>
                           ))}

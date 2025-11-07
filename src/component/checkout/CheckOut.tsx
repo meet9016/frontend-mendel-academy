@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../auth/Header";
 import {
   FaUser,
@@ -17,10 +17,11 @@ import { MdPayment, MdLocalShipping } from "react-icons/md";
 import Footer from "../auth/Footer";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
+import { useParams } from "next/navigation";
 
 const CheckOut = () => {
   const [sameAsShipping, setSameAsShipping] = useState<boolean>(false);
-  const [selectedPayment, setSelectedPayment] = useState<string>("phonepay");
+  const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [discountCode, setDiscountCode] = useState<string>("");
 
   const orderItems = [
@@ -55,6 +56,30 @@ const CheckOut = () => {
   const finalTotal = subtotal;
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [plan, setPlan] = useState<any>(null);
+  const { id } = useParams()
+
+  console.log(plan, 'plannn');
+
+  const fetchPlan = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`${endPointApi.getPlan}/${id}`)
+      if (res.data) {
+        setPlan(res?.data?.data)
+      } else {
+        console.log("DATA FAILED")
+      }
+    } catch (error) {
+      console.error("Error fetching exam data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    fetchPlan()
+  }, [])
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -71,99 +96,104 @@ const CheckOut = () => {
     });
   };
 
- const handlePayment = async () => {
-  setIsProcessing(true);
+  const handlePayment = async () => {
+    setIsProcessing(true);
 
-  try {
-    // 🔹 Step 1: Create order on your backend
-    const body = {
-      plan_id: "672c9cccf91c1f4bc15a4fab", // your plan id
-      amount: 3000,
-      payment_method: "Razorpay",
-    };
+    try {
+      // 🔹 Step 1: Create order on your backend
+      const body = {
+        plan_id: id, // your plan id
+        amount: plan?.plan_pricing,
+        payment_method:
+          selectedPayment === "stripe"
+            ? "Stripe"
+            : selectedPayment === "razorpay"
+              ? "Razorpay"
+              : "Unknown",
+      };
 
-    const response = await api.post(`${endPointApi.postPaymentCreate}`, body);
-    const data = response.data;
-    console.log("Payment record created:", data);
+      const response = await api.post(`${endPointApi.postPaymentCreate}`, body);
+      const data = response.data;
+      console.log("Payment record created:", data);
 
-    // 🔹 Step 2: Load Razorpay SDK
-    const res = await loadRazorpayScript();
-    if (!res) {
-      alert("Failed to load Razorpay SDK. Check your internet connection.");
-      setIsProcessing(false);
-      return;
-    }
+      // 🔹 Step 2: Load Razorpay SDK
+      const res = await loadRazorpayScript();
+      if (!res) {
+        alert("Failed to load Razorpay SDK. Check your internet connection.");
+        setIsProcessing(false);
+        return;
+      }
 
-    let hasFailedBeenHandled = false;
+      let hasFailedBeenHandled = false;
 
-    // 🔹 Step 3: Setup Razorpay options
-    const options = {
-      key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
-      amount: data.amount,
-      currency: data.currency,
-      name: "Mendel Academy",
-      description: `Payment for Plan: ${body.plan_id}`,
-      order_id: data.order_id, // ensure this matches backend response
-      handler: async function (response: any) {
-        console.log("✅ Payment Success:", response);
+      // 🔹 Step 3: Setup Razorpay options
+      const options = {
+        key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
+        amount: data.amount,
+        currency: data.currency,
+        name: "Mendel Academy",
+        description: `Payment for Plan: ${body.plan_id}`,
+        order_id: data.order_id, // ensure this matches backend response
+        handler: async function (response: any) {
+          console.log("✅ Payment Success:", response);
 
-        const verifyBody = {
-          ...response,
-          amount: data.amount / 100,
-          status: "captured", // for backend
-          plan_id: body.plan_id, // ✅ send plan_id here too
-        };
+          const verifyBody = {
+            ...response,
+            amount: data.amount / 100,
+            status: "captured", // for backend
+            plan_id: body.plan_id, // ✅ send plan_id here too
+          };
+
+          try {
+            const verifyRes = await api.post(
+              `${endPointApi.postPaymentVerify}`,
+              verifyBody
+            );
+            if (verifyRes.data.success) {
+              alert("✅ Payment Successful!");
+            } else {
+              alert("⚠️ Payment verified but marked as failed.");
+            }
+          } catch (error) {
+            console.error("Verification Error:", error);
+            alert("Verification failed — please contact support.");
+          } finally {
+            setIsProcessing(false);
+          }
+        },
+      };
+
+      const paymentObject = new (window as any).Razorpay(options);
+
+      // 🔹 Step 4: Handle payment failure
+      paymentObject.on("payment.failed", async (response: any) => {
+        if (hasFailedBeenHandled) return;
+        hasFailedBeenHandled = true;
 
         try {
-          const verifyRes = await api.post(
-            `${endPointApi.postPaymentVerify}`,
-            verifyBody
-          );
-          if (verifyRes.data.success) {
-            alert("✅ Payment Successful!");
-          } else {
-            alert("⚠️ Payment verified but marked as failed.");
-          }
-        } catch (error) {
-          console.error("Verification Error:", error);
-          alert("Verification failed — please contact support.");
+          await api.post(`${endPointApi.postPaymentVerify}`, {
+            razorpay_order_id: response.error.metadata.order_id,
+            razorpay_payment_id: response.error.metadata.payment_id,
+            razorpay_signature: response.error.metadata.signature || "",
+            amount: data.amount / 100,
+            status: "failed",
+            plan_id: body.plan_id, // ✅ include plan_id even on failure
+          });
+        } catch (err) {
+          console.error("Failed to save failed payment:", err);
         } finally {
           setIsProcessing(false);
         }
-      },
-    };
+      });
 
-    const paymentObject = new (window as any).Razorpay(options);
-
-    // 🔹 Step 4: Handle payment failure
-    paymentObject.on("payment.failed", async (response: any) => {
-      if (hasFailedBeenHandled) return;
-      hasFailedBeenHandled = true;
-
-      try {
-        await api.post(`${endPointApi.postPaymentVerify}`, {
-          razorpay_order_id: response.error.metadata.order_id,
-          razorpay_payment_id: response.error.metadata.payment_id,
-          razorpay_signature: response.error.metadata.signature || "",
-          amount: data.amount / 100,
-          status: "failed",
-          plan_id: body.plan_id, // ✅ include plan_id even on failure
-        });
-      } catch (err) {
-        console.error("Failed to save failed payment:", err);
-      } finally {
-        setIsProcessing(false);
-      }
-    });
-
-    // 🔹 Step 5: Open Razorpay
-    paymentObject.open();
-  } catch (error) {
-    console.error("Error creating payment:", error);
-    alert("Payment creation failed. Please try again.");
-    setIsProcessing(false);
-  }
-};
+      // 🔹 Step 5: Open Razorpay
+      paymentObject.open();
+    } catch (error) {
+      console.error("Error creating payment:", error);
+      alert("Payment creation failed. Please try again.");
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <>
@@ -454,11 +484,10 @@ const CheckOut = () => {
                 {/* Stripe Payment Option */}
                 <div
                   onClick={() => setSelectedPayment("stripe")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
-                    selectedPayment === "stripe"
-                      ? "border-[#feda4c] bg-[#fffbea]"
-                      : "border-gray-200 hover:border-[#feda4c]"
-                  } flex flex-col justify-center items-center text-center`}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === "stripe"
+                    ? "border-[#feda4c] bg-[#fffbea]"
+                    : "border-gray-200 hover:border-[#feda4c]"
+                    } flex flex-col justify-center items-center text-center`}
                 >
                   <div className="text-[#feda4c] text-3xl mb-3">
                     <FaWallet />
@@ -469,11 +498,10 @@ const CheckOut = () => {
                 {/* Razor Pay Option */}
                 <div
                   onClick={() => setSelectedPayment("razorpay")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
-                    selectedPayment === "razorpay"
-                      ? "border-[#feda4c] bg-[#fffbea]"
-                      : "border-gray-200 hover:border-[#feda4c]"
-                  } flex flex-col justify-center items-center text-center`}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === "razorpay"
+                    ? "border-[#feda4c] bg-[#fffbea]"
+                    : "border-gray-200 hover:border-[#feda4c]"
+                    } flex flex-col justify-center items-center text-center`}
                 >
                   <div className="text-[#feda4c] text-3xl mb-3">
                     <FaCreditCard />
@@ -560,7 +588,7 @@ const CheckOut = () => {
 
               {/* Scrollable Order Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#feda4c] scrollbar-track-gray-100">
-                {orderItems.map((item) => (
+                {/* {orderItems.map((item) => (
                   <div
                     key={item.id}
                     className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
@@ -574,18 +602,46 @@ const CheckOut = () => {
                       <h3 className="font-semibold text-sm">{item.name}</h3>
                       <p className="text-xs text-gray-500">Size: {item.size}</p>
                       <p className="text-sm font-bold text-gray-500">
-                        {/* ₹{item.price} x {item.quantity} */}₹{item.price}
+                        ₹{item.price} x {item.quantity}₹{item.price}
                       </p>
                     </div>
                   </div>
-                ))}
+                ))} */}
+
+                {/* Dynamic Plan Details */}
+                {plan && (
+                  <div
+                    key={plan._id}
+                    className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
+                  >
+                    {/* Optional Plan Image */}
+                    <img
+                      src={
+                        plan?.plan_image ||
+                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop"
+                      }
+                      alt={plan.plan_type}
+                      className="w-16 h-16 object-cover rounded-md border border-gray-200"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-sm capitalize">{plan.plan_type}</h3>
+                      <p className="text-xs text-gray-500">
+                        Duration: {plan.plan_day} days
+                      </p>
+                      <p className="text-sm font-bold text-gray-600">
+                        ₹{plan.plan_pricing}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
               </div>
 
               {/* Totals */}
               <div className="space-y-2 text-sm mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-medium">₹{subtotal}</span>
+                  <span className="font-medium"> ₹{plan?.plan_pricing ? plan.plan_pricing : 0}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Discount:</span>
@@ -603,7 +659,7 @@ const CheckOut = () => {
               <div className="flex justify-between items-center bg-yellow-50 p-4 rounded-xl mb-6">
                 <span className="font-semibold text-lg">Final Total:</span>
                 <span className="font-bold text-2xl text-[#feda4c]">
-                  ₹{finalTotal}
+                  ₹{plan?.plan_pricing ? plan.plan_pricing : 0}
                 </span>
               </div>
 

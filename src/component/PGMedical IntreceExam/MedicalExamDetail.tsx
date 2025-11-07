@@ -5,7 +5,8 @@ import {
     FaChartLine,
     FaUsers,
     FaClipboardCheck,
-    FaPhone
+    FaPhone,
+    FaLongArrowAltRight
 } from 'react-icons/fa';
 import Header from '../auth/Header';
 import Footer from '../auth/Footer';
@@ -13,8 +14,12 @@ import CourseDes from './CourseDes';
 import Faq from './Faq';
 import WhoEnroll from './WhoEnroll';
 import RegisterSec from './RegisterSec';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { api } from '@/utils/axiosInstance';
+import endPointApi from '@/utils/endPointApi';
 
-const USMLEStep1 = () => {
+const MedicalExamDetail = () => {
 
     const features = [
         { icon: FaBookOpen, text: "High-yield MCQ based active learning" },
@@ -24,6 +29,36 @@ const USMLEStep1 = () => {
         { icon: FaChartLine, text: "Self-Assessment Tests with performance analytics" },
         { icon: FaUsers, text: "Closed Telegram group for student interactions" }
     ];
+
+    const { id } = useParams();
+    const [examData, setExamData] = useState<any>(null);
+
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!id) return;
+        fetcgExamData();
+    }, [])
+
+    console.log(examData, 'examData')
+
+    const fetcgExamData = async () => {
+        try {
+            setLoading(true)
+            const res = await api.get(`${endPointApi.getMedicalById}/${id}`)
+            if (res.data) {
+                console.log(res.data, 'uuuuu');
+
+                setExamData(res?.data)
+            } else {
+                console.log("DATA FAILED")
+            }
+        } catch (error) {
+            console.log("ERROR", error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -43,10 +78,11 @@ const USMLEStep1 = () => {
                                     </span>
                                 </div>
                                 <h1 className="text-5xl font-bold leading-tight text-gray-900 md:text-6xl">
-                                    USMLE Step 1
+                                    {examData?.exams[0]?.exam_name}
                                 </h1>
                                 <p className="text-xl text-gray-600">
-                                    Master your medical knowledge with expert-led comprehensive preparation
+                                    {/* Master your medical knowledge with expert-led comprehensive preparation */}
+                                    {examData?.exams[0]?.description}
                                 </p>
                                 <div>
                                     <p className="text-lg font-semibold text-gray-900">
@@ -57,15 +93,16 @@ const USMLEStep1 = () => {
 
                             <div className="space-y-4">
                                 <div className="grid gap-3">
-                                    {features.map((feature, index) => (
+                                    {examData?.exams[0]?.sub_titles?.map((feature :any, index: number) => (
                                         <div
                                             key={index}
                                             className="group cursor-pointer flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 transition-all duration-300 hover:border-yellow-400 hover:shadow-md"
                                         >
                                             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-yellow-100 transition-colors group-hover:bg-yellow-200">
-                                                <feature.icon className="text-sm text-yellow-500" />
+                                                {/* <feature.icon className="text-sm text-yellow-500" /> */}
+                                                <FaLongArrowAltRight className="text-sm text-yellow-500" />
                                             </div>
-                                            <span className="text-gray-900 text-[15px]">{feature.text}</span>
+                                            <span className="text-gray-900 text-[15px]">{feature}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -111,7 +148,8 @@ const USMLEStep1 = () => {
             <Faq />
 
             {/* Who Can Enroll */}
-            <WhoEnroll />
+            <WhoEnroll plans={examData?.choose_plan_list || []} />
+
 
             {/* REGISTER SECTION */}
             <RegisterSec />
@@ -121,4 +159,4 @@ const USMLEStep1 = () => {
     );
 };
 
-export default USMLEStep1;
+export default MedicalExamDetail;

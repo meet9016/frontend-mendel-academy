@@ -16,7 +16,11 @@ export interface EndPointApi {
     postPaymentVerify?: string;
 
     //medical exam
-    
+    getAppMedicalExam?: string;
+    getMedicalById?: string;
+
+    //my cart
+    getPlan?: string;
 }
 
 // Define and export the API endpoint object
@@ -38,6 +42,13 @@ const endPointApi: EndPointApi = {
     //Add to cart
     postPaymentCreate: 'payment/create',
     postPaymentVerify: 'payment/verify-payment',
+
+    //medical exam
+    getAppMedicalExam: 'examlist/exam-category-list',
+    getMedicalById: 'examlist/getById',
+
+    //my cart
+    getPlan: 'examlist/get-plan'
 
 };
 
