@@ -14,6 +14,9 @@ export interface EndPointApi {
     getAllPreRecorded?: string;
     postPaymentCreate?: string;
     postPaymentVerify?: string;
+
+    //medical exam
+    
 }
 
 // Define and export the API endpoint object
