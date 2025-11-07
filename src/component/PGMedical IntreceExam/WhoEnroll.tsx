@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaCheckCircle } from 'react-icons/fa'
+import { useRouter } from "next/navigation";
 
 const WhoEnroll = () => {
     const pricingFeatures = [
@@ -12,6 +13,7 @@ const WhoEnroll = () => {
         "1:1 Mentorship",
         "Access to private WhatsApp group"
     ];
+      const router = useRouter();
     return (
         <div>
             <section className="py-15 bg-gradient-to-br from-white to-gray-50">
@@ -94,7 +96,10 @@ const WhoEnroll = () => {
                                             ))}
                                         </ul>
                                     </div>
-                                    <button className="w-full bg-[#ffcb04] hover:bg-yellow-500 text-white font-bold py-3 rounded-lg transition-all duration-300 transform group-hover:scale-105 mt-auto">
+                                    <button 
+                                        className="w-full bg-[#ffcb04] hover:bg-yellow-500 text-white font-bold py-3 rounded-lg transition-all duration-300 transform group-hover:scale-105 mt-auto"
+                                        onClick={() => router.push("/mycart")}
+                                    >
                                         Enroll Now
                                     </button>
                                 </div>

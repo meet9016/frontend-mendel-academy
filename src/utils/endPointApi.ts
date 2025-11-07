@@ -12,6 +12,8 @@ export interface EndPointApi {
 
     //Pre-Recorded
     getAllPreRecorded?: string;
+    postPaymentCreate?: string;
+    postPaymentVerify?: string;
 }
 
 // Define and export the API endpoint object
@@ -29,6 +31,10 @@ const endPointApi: EndPointApi = {
 
     //Pre-Recorded
     getAllPreRecorded: 'prerecorded/getall',
+
+    //Add to cart
+    postPaymentCreate: 'payment/create',
+    postPaymentVerify: 'payment/verify-payment',
 
 };
 

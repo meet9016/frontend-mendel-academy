@@ -1,128 +1,244 @@
-'use client';
-import React, { useState } from 'react';
-import Header from '../auth/Header';
+"use client";
+import React, { useState } from "react";
+import Header from "../auth/Header";
 import {
-    FaUser,
-    FaEnvelope,
-    FaPhone,
-    FaGlobe,
-    FaCity,
-    FaMapPin,
-    FaShoppingCart,
-    FaCreditCard,
-    FaWallet,
-    FaMoneyBillWave,
-} from 'react-icons/fa';
-import { MdPayment, MdLocalShipping } from 'react-icons/md';
-import Footer from '../auth/Footer';
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaGlobe,
+  FaCity,
+  FaMapPin,
+  FaShoppingCart,
+  FaCreditCard,
+  FaWallet,
+  FaMoneyBillWave,
+} from "react-icons/fa";
+import { MdPayment, MdLocalShipping } from "react-icons/md";
+import Footer from "../auth/Footer";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
 
 const CheckOut = () => {
-    const [sameAsShipping, setSameAsShipping] = useState<boolean>(false);
-    const [selectedPayment, setSelectedPayment] = useState<string>('phonepay');
-    const [discountCode, setDiscountCode] = useState<string>('');
+  const [sameAsShipping, setSameAsShipping] = useState<boolean>(false);
+  const [selectedPayment, setSelectedPayment] = useState<string>("phonepay");
+  const [discountCode, setDiscountCode] = useState<string>("");
 
+  const orderItems = [
+    {
+      id: 1,
+      name: "FOSTER STAND",
+      size: "A4 SIZE",
+      quantity: 2,
+      price: 2800,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
+    },
+    {
+      id: 2,
+      name: "TABLE TOP LEG FRAME STAND",
+      size: "A4 SIZE",
+      quantity: 1,
+      price: 1900,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
+    },
+    {
+      id: 3,
+      name: "HEXAGON DOUBLE SIDE ROLLUP STAND",
+      size: "2M5 FEET",
+      quantity: 1,
+      price: 3700,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
+    },
+  ];
 
-    const orderItems = [
-        {
-            id: 1,
-            name: 'FOSTER STAND',
-            size: 'A4 SIZE',
-            quantity: 2,
-            price: 2800,
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200',
-        },
-        {
-            id: 2,
-            name: 'TABLE TOP LEG FRAME STAND',
-            size: 'A4 SIZE',
-            quantity: 1,
-            price: 1900,
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200',
-        },
-        {
-            id: 3,
-            name: 'HEXAGON DOUBLE SIDE ROLLUP STAND',
-            size: '2M5 FEET',
-            quantity: 1,
-            price: 3700,
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200',
-        },
+  const subtotal = orderItems.reduce((sum, item) => sum + item.price, 0);
+  const discount = 0;
+  const finalTotal = subtotal;
+  const [amount, setAmount] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
-    ];
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (document.getElementById("razorpay-script")) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.id = "razorpay-script";
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
-    const subtotal = orderItems.reduce((sum, item) => sum + item.price, 0);
-    const discount = 0;
-    const finalTotal = subtotal
+ const handlePayment = async () => {
+  setIsProcessing(true);
 
-    return (
-        <>
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-                <Header />
-                {/* Top Bar */}
-                <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col items-center justify-between text-center">
-                    <h1 className="text-4xl font-extrabold text-gray-800">Checkout</h1>
-                    <p className="text-lg text-gray-500 mt-2">Complete your order in just a few steps</p>
+  try {
+    // 🔹 Step 1: Create order on your backend
+    const body = {
+      plan_id: "672c9cccf91c1f4bc15a4fab", // your plan id
+      amount: 3000,
+      payment_method: "Razorpay",
+    };
+
+    const response = await api.post(`${endPointApi.postPaymentCreate}`, body);
+    const data = response.data;
+    console.log("Payment record created:", data);
+
+    // 🔹 Step 2: Load Razorpay SDK
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert("Failed to load Razorpay SDK. Check your internet connection.");
+      setIsProcessing(false);
+      return;
+    }
+
+    let hasFailedBeenHandled = false;
+
+    // 🔹 Step 3: Setup Razorpay options
+    const options = {
+      key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
+      amount: data.amount,
+      currency: data.currency,
+      name: "Mendel Academy",
+      description: `Payment for Plan: ${body.plan_id}`,
+      order_id: data.order_id, // ensure this matches backend response
+      handler: async function (response: any) {
+        console.log("✅ Payment Success:", response);
+
+        const verifyBody = {
+          ...response,
+          amount: data.amount / 100,
+          status: "captured", // for backend
+          plan_id: body.plan_id, // ✅ send plan_id here too
+        };
+
+        try {
+          const verifyRes = await api.post(
+            `${endPointApi.postPaymentVerify}`,
+            verifyBody
+          );
+          if (verifyRes.data.success) {
+            alert("✅ Payment Successful!");
+          } else {
+            alert("⚠️ Payment verified but marked as failed.");
+          }
+        } catch (error) {
+          console.error("Verification Error:", error);
+          alert("Verification failed — please contact support.");
+        } finally {
+          setIsProcessing(false);
+        }
+      },
+    };
+
+    const paymentObject = new (window as any).Razorpay(options);
+
+    // 🔹 Step 4: Handle payment failure
+    paymentObject.on("payment.failed", async (response: any) => {
+      if (hasFailedBeenHandled) return;
+      hasFailedBeenHandled = true;
+
+      try {
+        await api.post(`${endPointApi.postPaymentVerify}`, {
+          razorpay_order_id: response.error.metadata.order_id,
+          razorpay_payment_id: response.error.metadata.payment_id,
+          razorpay_signature: response.error.metadata.signature || "",
+          amount: data.amount / 100,
+          status: "failed",
+          plan_id: body.plan_id, // ✅ include plan_id even on failure
+        });
+      } catch (err) {
+        console.error("Failed to save failed payment:", err);
+      } finally {
+        setIsProcessing(false);
+      }
+    });
+
+    // 🔹 Step 5: Open Razorpay
+    paymentObject.open();
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    alert("Payment creation failed. Please try again.");
+    setIsProcessing(false);
+  }
+};
+
+  return (
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        <Header />
+        {/* Top Bar */}
+        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col items-center justify-between text-center">
+          <h1 className="text-4xl font-extrabold text-gray-800">Checkout</h1>
+          <p className="text-lg text-gray-500 mt-2">
+            Complete your order in just a few steps
+          </p>
+        </div>
+
+        {/* Main Layout */}
+        <div className="max-w-7xl mx-auto px-4 py-3 grid lg:grid-cols-3 gap-6">
+          {/* LEFT SIDE */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* BILLING INFORMATION */}
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
+                <MdPayment className="text-white text-2xl" />
+                <h2 className="text-white font-bold text-xl">
+                  Billing Information
+                </h2>
+              </div>
+
+              <div className="p-6 space-y-4">
+                {/* Full Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Full Name *
+                  </label>
+                  <div className="relative">
+                    <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                    <input
+                      type="text"
+                      placeholder="Enter your full name"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    />
+                  </div>
                 </div>
-                {/* Main Layout */}
-                <div className="max-w-7xl mx-auto px-4 py-3 grid lg:grid-cols-3 gap-6">
-                    {/* LEFT SIDE */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* BILLING INFORMATION */}
-                        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-                            <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
-                                <MdPayment className="text-white text-2xl" />
-                                <h2 className="text-white font-bold text-xl">Billing Information</h2>
-                            </div>
 
-                            <div className="p-6 space-y-4">
-                                {/* Full Name */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Full Name *
-                                    </label>
-                                    <div className="relative">
-                                        <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                        <input
-                                            type="text"
-                                            placeholder="Enter your full name"
-                                            className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                        />
-                                    </div>
-                                </div>
+                {/* Email & Phone */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <div className="relative">
+                      <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                      <input
+                        type="email"
+                        placeholder="your@email.com"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      />
+                    </div>
+                  </div>
 
-                                {/* Email & Phone */}
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Email Address *
-                                        </label>
-                                        <div className="relative">
-                                            <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <input
-                                                type="email"
-                                                placeholder="your@email.com"
-                                                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                    </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Phone Number *
+                    </label>
+                    <div className="relative">
+                      <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                      <input
+                        type="tel"
+                        placeholder="+91 1234567890"
+                        className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Phone Number *
-                                        </label>
-                                        <div className="relative">
-                                            <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <input
-                                                type="tel"
-                                                placeholder="+91 1234567890"
-                                                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Country, State, City, Postal */}
-                                {/* <div className="grid md:grid-cols-2 gap-4">
+                {/* Country, State, City, Postal */}
+                {/* <div className="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                                             Country *
@@ -154,7 +270,7 @@ const CheckOut = () => {
                                     </div>
                                 </div> */}
 
-                                {/* <div className="grid md:grid-cols-2 gap-4">
+                {/* <div className="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                                             City *
@@ -184,7 +300,7 @@ const CheckOut = () => {
                                     </div>
                                 </div> */}
 
-                                {/* <div>
+                {/* <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                                     Full Address *
                                 </label>
@@ -194,11 +310,11 @@ const CheckOut = () => {
                                     className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none resize-none"
                                 />
                             </div> */}
-                            </div>
-                        </div>
+              </div>
+            </div>
 
-                        {/* SHIPPING INFORMATION */}
-                        {/* <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+            {/* SHIPPING INFORMATION */}
+            {/* <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
                             <div className="bg-[#feda4c] p-4 flex items-center gap-3">
                                 <MdLocalShipping className="text-white text-2xl" />
                                 <h2 className="text-white font-bold text-xl">Shipping Address</h2>
@@ -327,179 +443,187 @@ const CheckOut = () => {
                             )}
                         </div> */}
 
+            {/* PAYMENT METHOD */}
+            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
+                <MdPayment className="text-white text-2xl" />
+                <h2 className="text-white font-bold text-xl">Payment Method</h2>
+              </div>
 
-                        {/* PAYMENT METHOD */}
-                        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-                            <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
-                                <MdPayment className="text-white text-2xl" />
-                                <h2 className="text-white font-bold text-xl">Payment Method</h2>
-                            </div>
+              <div className="p-6 grid md:grid-cols-2 gap-4">
+                {/* Stripe Payment Option */}
+                <div
+                  onClick={() => setSelectedPayment("stripe")}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
+                    selectedPayment === "stripe"
+                      ? "border-[#feda4c] bg-[#fffbea]"
+                      : "border-gray-200 hover:border-[#feda4c]"
+                  } flex flex-col justify-center items-center text-center`}
+                >
+                  <div className="text-[#feda4c] text-3xl mb-3">
+                    <FaWallet />
+                  </div>
+                  <span className="font-semibold text-lg">Stripe Payment</span>
+                </div>
 
-                            <div className="p-6 grid md:grid-cols-2 gap-4">
-                                {/* Stripe Payment Option */}
-                                <div
-                                    onClick={() => setSelectedPayment('stripe')}
-                                    className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === 'stripe'
-                                        ? 'border-[#feda4c] bg-[#fffbea]'
-                                        : 'border-gray-200 hover:border-[#feda4c]'
-                                        } flex flex-col justify-center items-center text-center`}
-                                >
-                                    <div className="text-[#feda4c] text-3xl mb-3">
-                                        <FaWallet />
-                                    </div>
-                                    <span className="font-semibold text-lg">Stripe Payment</span>
-                                </div>
+                {/* Razor Pay Option */}
+                <div
+                  onClick={() => setSelectedPayment("razorpay")}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
+                    selectedPayment === "razorpay"
+                      ? "border-[#feda4c] bg-[#fffbea]"
+                      : "border-gray-200 hover:border-[#feda4c]"
+                  } flex flex-col justify-center items-center text-center`}
+                >
+                  <div className="text-[#feda4c] text-3xl mb-3">
+                    <FaCreditCard />
+                  </div>
+                  <span className="font-semibold text-lg">Razor Pay</span>
+                </div>
+              </div>
 
-                                {/* Razor Pay Option */}
-                                <div
-                                    onClick={() => setSelectedPayment('razorpay')}
-                                    className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === 'razorpay'
-                                        ? 'border-[#feda4c] bg-[#fffbea]'
-                                        : 'border-gray-200 hover:border-[#feda4c]'
-                                        } flex flex-col justify-center items-center text-center`}
-                                >
-                                    <div className="text-[#feda4c] text-3xl mb-3">
-                                        <FaCreditCard />
-                                    </div>
-                                    <span className="font-semibold text-lg">Razor Pay</span>
-                                </div>
-                            </div>
+              {/* SHOW CARD INPUT FIELDS IF STRIPE SELECTED */}
+              {/* {selectedPayment === 'stripe' && ( */}
+              <div className="px-6 pb-6 space-y-4 mt-2 border-t border-gray-200">
+                {/* Card Number */}
+                {/* <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">
+                      Card Number *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="1234 5678 9012 3456"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    />
+                  </div>
 
-                            {/* SHOW CARD INPUT FIELDS IF STRIPE SELECTED */}
-                            {selectedPayment === 'stripe' && (
-                                <div className="px-6 pb-6 space-y-4 mt-2 border-t border-gray-200">
-                                    {/* Card Number */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">Card Number *</label>
-                                            <input
-                                                type="text"
-                                                placeholder="1234 5678 9012 3456"
-                                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">
+                      Cardholder Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Name on card"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Expiry Date *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="MM/YY"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      CVV *
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="123"
+                      maxLength={3}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    />
+                  </div>
+                </div> */}
+              </div>
+              {/* )} */}
+            </div>
+          </div>
+          {/* RIGHT SIDE — ORDER SUMMARY */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 h-fit sticky top-24">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-t-2xl flex items-center gap-2">
+              <FaShoppingCart className="text-white text-xl" />
+              <h2 className="text-white font-bold text-xl">Order Summary</h2>
+            </div>
 
-                                        {/* Cardholder Name */}
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">Cardholder Name *</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Name on card"
-                                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                    </div>
+            <div className="p-6">
+              {/* Discount Code Section */}
+              <div className="flex gap-2 mb-6">
+                <input
+                  placeholder="Enter discount code"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                  className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-[#feda4c] outline-none"
+                />
+                <button className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold hover:bg-[#ffd329] transition">
+                  Apply
+                </button>
+              </div>
 
-                                    {/* Expiry and CVV */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">Expiry Date *</label>
-                                            <input
-                                                type="text"
-                                                placeholder="MM/YY"
-                                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">CVV *</label>
-                                            <input
-                                                type="password"
-                                                placeholder="123"
-                                                maxLength={3}
-                                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-
-
+              {/* Scrollable Order Items */}
+              <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#feda4c] scrollbar-track-gray-100">
+                {orderItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-md border border-gray-200"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-sm">{item.name}</h3>
+                      <p className="text-xs text-gray-500">Size: {item.size}</p>
+                      <p className="text-sm font-bold text-gray-500">
+                        {/* ₹{item.price} x {item.quantity} */}₹{item.price}
+                      </p>
                     </div>
-                    {/* RIGHT SIDE — ORDER SUMMARY */}
-                    <div className="bg-white rounded-2xl shadow-md border border-gray-100 h-fit sticky top-24">
-                        {/* Header */}
-                        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-t-2xl flex items-center gap-2">
-                            <FaShoppingCart className="text-white text-xl" />
-                            <h2 className="text-white font-bold text-xl">Order Summary</h2>
-                        </div>
+                  </div>
+                ))}
+              </div>
 
-                        <div className="p-6">
-                            {/* Discount Code Section */}
-                            <div className="flex gap-2 mb-6">
-                                <input
-                                    placeholder="Enter discount code"
-                                    value={discountCode}
-                                    onChange={(e) => setDiscountCode(e.target.value)}
-                                    className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-[#feda4c] outline-none"
-                                />
-                                <button className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold hover:bg-[#ffd329] transition">
-                                    Apply
-                                </button>
-                            </div>
-
-
-                            {/* Scrollable Order Items */}
-                            <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#feda4c] scrollbar-track-gray-100">
-                                {orderItems.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
-                                    >
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="w-16 h-16 object-cover rounded-md border border-gray-200"
-                                        />
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-sm">{item.name}</h3>
-                                            <p className="text-xs text-gray-500">Size: {item.size}</p>
-                                            <p className="text-sm font-bold text-gray-500">
-                                                {/* ₹{item.price} x {item.quantity} */}
-                                                ₹{item.price}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Totals */}
-                            <div className="space-y-2 text-sm mb-6">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Subtotal:</span>
-                                    <span className="font-medium">₹{subtotal}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Discount:</span>
-                                    <span className="font-medium text-green-600">-₹{discount}</span>
-                                </div>
-                                {/* <div className="flex justify-between">
+              {/* Totals */}
+              <div className="space-y-2 text-sm mb-6">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal:</span>
+                  <span className="font-medium">₹{subtotal}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Discount:</span>
+                  <span className="font-medium text-green-600">
+                    -₹{discount}
+                  </span>
+                </div>
+                {/* <div className="flex justify-between">
                                     <span className="text-gray-600">Shipping:</span>
                                     <span className="font-medium">₹{shippingCharge}</span>
                                 </div> */}
-                            </div>
+              </div>
 
-                            {/* Final Total */}
-                            <div className="flex justify-between items-center bg-yellow-50 p-4 rounded-xl mb-6">
-                                <span className="font-semibold text-lg">Final Total:</span>
-                                <span className="font-bold text-2xl text-[#feda4c]">₹{finalTotal}</span>
-                            </div>
+              {/* Final Total */}
+              <div className="flex justify-between items-center bg-yellow-50 p-4 rounded-xl mb-6">
+                <span className="font-semibold text-lg">Final Total:</span>
+                <span className="font-bold text-2xl text-[#feda4c]">
+                  ₹{finalTotal}
+                </span>
+              </div>
 
-                            {/* Buttons */}
-                            <button className="w-full h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold rounded-xl hover:opacity-90">
-                                Place Order
-                            </button>
-                            <button className="w-full h-12 mt-3 border border-gray-300 rounded-xl hover:bg-gray-100">
-                                ← Continue Shopping
-                            </button>
-                        </div>
-                    </div>
-                </div>
+              {/* Buttons */}
+              <button
+                className="w-full h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold rounded-xl hover:opacity-90"
+                onClick={handlePayment}
+              >
+                Place Order
+              </button>
+              <button className="w-full h-12 mt-3 border border-gray-300 rounded-xl hover:bg-gray-100">
+                ← Continue Shopping
+              </button>
             </div>
-            <Footer />
-        </>
-    );
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default CheckOut;

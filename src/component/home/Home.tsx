@@ -34,7 +34,10 @@ interface CourseCardProps {
   description: string;
 }
 
-const badgeColors: Record<"primary" | "secondary" | "outline" | "default", string> = {
+const badgeColors: Record<
+  "primary" | "secondary" | "outline" | "default",
+  string
+> = {
   default: "gray",
   primary: "green", // added
   secondary: "blue",
@@ -42,7 +45,6 @@ const badgeColors: Record<"primary" | "secondary" | "outline" | "default", strin
 };
 
 const Home = () => {
-
   const courses = [
     {
       icon: <FiFileText className="w-7 h-7" />,
@@ -64,7 +66,8 @@ const Home = () => {
       students: 940,
       features: ["Patient Cases", "Dx Trainer"],
       moreFeatures: 1,
-      sort_description: "Excel in clinical knowledge and patient care scenarios",
+      sort_description:
+        "Excel in clinical knowledge and patient care scenarios",
       badgeVariant: "secondary",
       total_reviews: 2400,
     },
@@ -76,7 +79,8 @@ const Home = () => {
       students: 610,
       features: ["EMR Training", "Residency Cases"],
       moreFeatures: 1,
-      sort_description: "Complete your USMLE journey with confidence and success",
+      sort_description:
+        "Complete your USMLE journey with confidence and success",
       badgeVariant: "outline",
       total_reviews: 2400,
     },
@@ -108,7 +112,6 @@ const Home = () => {
 
   const [questionBank, setQuestionBank] = useState([]);
 
-
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById("course-scroll-container");
     if (container) {
@@ -124,12 +127,15 @@ const Home = () => {
   };
 
   const getQuestionBank = () => {
-    api.get(`${endPointApi.getAllQuestion}`).then((response) => {
-      setQuestionBank(response.data.data);
-    }).catch((error) => {
-      console.error("Error fetching question bank data:", error);
-    });
-  }
+    api
+      .get(`${endPointApi.getAllQuestion}`)
+      .then((response) => {
+        setQuestionBank(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching question bank data:", error);
+      });
+  };
 
   useEffect(() => {
     getQuestionBank();
@@ -214,8 +220,9 @@ const Home = () => {
               id="course-scroll-container"
               className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
             >
-              {courses.map((course: any) => (
+              {courses?.map((course: any, index) => (
                 <CourseCard
+                  key={index}
                   icon={<FiFileText className="w-7 h-7" />}
                   title={course.title}
                   badge={course.tag}
@@ -273,7 +280,10 @@ const CourseCard = ({
   // secondary: "bg-gray-100 text-gray-800",
   // outline: "border border-gray-300 text-gray-800",
   // };
-  const badgeClasses: Record<"primary" | "secondary" | "outline" | "default", string> = {
+  const badgeClasses: Record<
+    "primary" | "secondary" | "outline" | "default",
+    string
+  > = {
     default: "gray",
     primary: "green", // added
     secondary: "blue",
@@ -314,9 +324,7 @@ const CourseCard = ({
               </div>
               <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
                 <FiUsers />
-                <span className="text-sm font-medium">
-                  {total_reviews}
-                </span>
+                <span className="text-sm font-medium">{total_reviews}</span>
               </div>
             </div>
           </div>
@@ -329,8 +337,11 @@ const CourseCard = ({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                const container = document.getElementById(`tag-scroll-${title}`);
-                if (container) container.scrollBy({ left: -100, behavior: "smooth" });
+                const container = document.getElementById(
+                  `tag-scroll-${title}`
+                );
+                if (container)
+                  container.scrollBy({ left: -100, behavior: "smooth" });
               }}
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-full shadow-md p-1 z-10 hidden group-hover/tags:flex hover:bg-gray-100 transition"
             >
@@ -359,14 +370,16 @@ const CourseCard = ({
             </div>
           </div>
 
-
           {/* Right Arrow */}
           {tags.length > 3 && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                const container = document.getElementById(`tag-scroll-${title}`);
-                if (container) container.scrollBy({ left: 100, behavior: "smooth" });
+                const container = document.getElementById(
+                  `tag-scroll-${title}`
+                );
+                if (container)
+                  container.scrollBy({ left: 100, behavior: "smooth" });
               }}
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-gray-300 rounded-full shadow-md p-1 z-10 hidden group-hover/tags:flex hover:bg-gray-100 transition"
             >
@@ -374,7 +387,6 @@ const CourseCard = ({
             </button>
           )}
         </div>
-
 
         {/* More Features */}
         {moreFeatures > 0 && (
@@ -401,6 +413,5 @@ const CourseCard = ({
         </p>
       </div>
     </div>
-
   );
 };
