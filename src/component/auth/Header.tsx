@@ -26,9 +26,6 @@ export default function Header() {
   const [examCategories, setExamCategories] = useState<ExamCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  console.log(examCategories, 'examCategories');
-
-
   const router = useRouter();
 
   // const examCategories = {

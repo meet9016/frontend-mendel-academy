@@ -3,14 +3,11 @@ import axios from 'axios'
 const baseURL = process.env.NEXT_PUBLIC_APP_URL;
 
 const apiAdminInstance = axios.create({
-  baseURL: `https://christeen-unmaidenlike-bloomingly.ngrok-free.dev/api/v1/`,
+  baseURL,
   // headers: {
   //   'Content-Type': 'multipart/form-data'
   // }
 })
-console.log("baseURL",baseURL);
-
-
 
 export const api = apiAdminInstance;
 

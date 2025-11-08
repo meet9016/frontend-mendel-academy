@@ -17,11 +17,29 @@ import { MdPayment, MdLocalShipping } from "react-icons/md";
 import Footer from "../auth/Footer";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import PaymentSuccess from "@/comman/PaymentSuccess";
+
+interface BillingInformation {
+  fullName: string;
+  email: string;
+  phone: string;
+  selectedPayment: string;
+}
 
 const CheckOut = () => {
+  const router = useRouter();
+const baseURL = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+console.log("baseURL*****",baseURL);
+
   const [sameAsShipping, setSameAsShipping] = useState<boolean>(false);
-  const [selectedPayment, setSelectedPayment] = useState<string>("");
+  const [billingInformation, setBillingInformation] =
+    useState<BillingInformation>({
+      fullName: "",
+      email: "",
+      phone: "",
+      selectedPayment: "Razorpay",
+    });
   const [discountCode, setDiscountCode] = useState<string>("");
 
   const orderItems = [
@@ -58,28 +76,28 @@ const CheckOut = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [plan, setPlan] = useState<any>(null);
-  const { id } = useParams()
+  const { id } = useParams();
 
-  console.log(plan, 'plannn');
+  console.log(plan, "plannn");
 
   const fetchPlan = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`${endPointApi.getPlan}/${id}`)
+      const res = await api.get(`${endPointApi.getPlan}/${id}`);
       if (res.data) {
-        setPlan(res?.data?.data)
+        setPlan(res?.data?.data);
       } else {
-        console.log("DATA FAILED")
+        console.log("DATA FAILED");
       }
     } catch (error) {
       console.error("Error fetching exam data:", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
   useEffect(() => {
-    fetchPlan()
-  }, [])
+    fetchPlan();
+  }, []);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -102,14 +120,12 @@ const CheckOut = () => {
     try {
       // 🔹 Step 1: Create order on your backend
       const body = {
+        full_name: billingInformation.fullName,
+        email: billingInformation.email,
+        phone: billingInformation.phone,
         plan_id: id, // your plan id
         amount: plan?.plan_pricing,
-        payment_method:
-          selectedPayment === "stripe"
-            ? "Stripe"
-            : selectedPayment === "razorpay"
-              ? "Razorpay"
-              : "Unknown",
+        payment_method: billingInformation?.selectedPayment
       };
 
       const response = await api.post(`${endPointApi.postPaymentCreate}`, body);
@@ -128,7 +144,8 @@ const CheckOut = () => {
 
       // 🔹 Step 3: Setup Razorpay options
       const options = {
-        key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // use env key in prod
+        // key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
         amount: data.amount,
         currency: data.currency,
         name: "Mendel Academy",
@@ -149,8 +166,12 @@ const CheckOut = () => {
               `${endPointApi.postPaymentVerify}`,
               verifyBody
             );
+            console.log("11110/----*", verifyRes);
+
             if (verifyRes.data.success) {
-              alert("✅ Payment Successful!");
+              // alert("✅ Payment Successful!");
+              console.log("********99999");
+              router.push(`/paymentsuccess`);
             } else {
               alert("⚠️ Payment verified but marked as failed.");
             }
@@ -179,6 +200,8 @@ const CheckOut = () => {
             status: "failed",
             plan_id: body.plan_id, // ✅ include plan_id even on failure
           });
+          <PaymentSuccess />;
+          console.log("************");
         } catch (err) {
           console.error("Failed to save failed payment:", err);
         } finally {
@@ -194,6 +217,17 @@ const CheckOut = () => {
       setIsProcessing(false);
     }
   };
+
+  const handleBillingChange = (field: keyof BillingInformation, value: string) => {
+  setBillingInformation((prev) => ({
+    ...prev,
+    [field]: value,
+  }));
+};
+
+const handlePaymentSelect = (method: string) => {
+  setBillingInformation((prev) => ({ ...prev, selectedPayment: method }));
+};
 
   return (
     <>
@@ -232,6 +266,10 @@ const CheckOut = () => {
                       type="text"
                       placeholder="Enter your full name"
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      value={billingInformation.fullName}
+                      onChange={(e) =>
+                        handleBillingChange("fullName", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -248,6 +286,10 @@ const CheckOut = () => {
                         type="email"
                         placeholder="your@email.com"
                         className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                        value={billingInformation.email}
+                        onChange={(e) =>
+                          handleBillingChange("email", e.target.value)
+                        }
                       />
                     </div>
                   </div>
@@ -262,6 +304,10 @@ const CheckOut = () => {
                         type="tel"
                         placeholder="+91 1234567890"
                         className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                        value={billingInformation.phone}
+                        onChange={(e) =>
+                          handleBillingChange("phone", e.target.value)
+                        }
                       />
                     </div>
                   </div>
@@ -483,11 +529,12 @@ const CheckOut = () => {
               <div className="p-6 grid md:grid-cols-2 gap-4">
                 {/* Stripe Payment Option */}
                 <div
-                  onClick={() => setSelectedPayment("stripe")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === "stripe"
-                    ? "border-[#feda4c] bg-[#fffbea]"
-                    : "border-gray-200 hover:border-[#feda4c]"
-                    } flex flex-col justify-center items-center text-center`}
+                  onClick={() => handlePaymentSelect("Stripe")}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
+                   billingInformation?.selectedPayment === "Stripe"
+                      ? "border-[#feda4c] bg-[#fffbea]"
+                      : "border-gray-200 hover:border-[#feda4c]"
+                  } flex flex-col justify-center items-center text-center`}
                 >
                   <div className="text-[#feda4c] text-3xl mb-3">
                     <FaWallet />
@@ -497,11 +544,12 @@ const CheckOut = () => {
 
                 {/* Razor Pay Option */}
                 <div
-                  onClick={() => setSelectedPayment("razorpay")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${selectedPayment === "razorpay"
-                    ? "border-[#feda4c] bg-[#fffbea]"
-                    : "border-gray-200 hover:border-[#feda4c]"
-                    } flex flex-col justify-center items-center text-center`}
+                  onClick={() => handlePaymentSelect("Razorpay")}
+                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
+                    billingInformation?.selectedPayment === "Razorpay"
+                      ? "border-[#feda4c] bg-[#fffbea]"
+                      : "border-gray-200 hover:border-[#feda4c]"
+                  } flex flex-col justify-center items-center text-center`}
                 >
                   <div className="text-[#feda4c] text-3xl mb-3">
                     <FaCreditCard />
@@ -512,7 +560,7 @@ const CheckOut = () => {
 
               {/* SHOW CARD INPUT FIELDS IF STRIPE SELECTED */}
               {/* {selectedPayment === 'stripe' && ( */}
-              <div className="px-6 pb-6 space-y-4 mt-2 border-t border-gray-200">
+              {/* <div className="px-6 pb-6 space-y-4 mt-2 border-t border-gray-200"> */}
                 {/* Card Number */}
                 {/* <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -560,7 +608,7 @@ const CheckOut = () => {
                     />
                   </div>
                 </div> */}
-              </div>
+              {/* </div> */}
               {/* )} */}
             </div>
           </div>
@@ -624,7 +672,9 @@ const CheckOut = () => {
                       className="w-16 h-16 object-cover rounded-md border border-gray-200"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-sm capitalize">{plan.plan_type}</h3>
+                      <h3 className="font-semibold text-sm capitalize">
+                        {plan.plan_type}
+                      </h3>
                       <p className="text-xs text-gray-500">
                         Duration: {plan.plan_day} days
                       </p>
@@ -634,14 +684,16 @@ const CheckOut = () => {
                     </div>
                   </div>
                 )}
-
               </div>
 
               {/* Totals */}
               <div className="space-y-2 text-sm mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-medium"> ₹{plan?.plan_pricing ? plan.plan_pricing : 0}</span>
+                  <span className="font-medium">
+                    {" "}
+                    ₹{plan?.plan_pricing ? plan.plan_pricing : 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Discount:</span>
@@ -671,7 +723,7 @@ const CheckOut = () => {
                 Place Order
               </button>
               <button className="w-full h-12 mt-3 border border-gray-300 rounded-xl hover:bg-gray-100">
-                ← Continue Shopping
+                ← Continue
               </button>
             </div>
           </div>

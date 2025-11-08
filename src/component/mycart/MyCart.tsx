@@ -34,9 +34,6 @@ const MyCart = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
 
-  console.log(plan, 'opppp');
-
-
   useEffect(() => {
     if (id) fetchPlan();
   }, [id]);
