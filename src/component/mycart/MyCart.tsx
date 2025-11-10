@@ -2,13 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../auth/Header";
 import {
-  FiMinus,
-  FiPlus,
-  FiX,
   FiArrowRight,
-  FiShield,
-  FiTruck,
-  FiPercent,
 } from "react-icons/fi";
 import { useParams, useRouter } from "next/navigation";
 import Footer from "../auth/Footer";
@@ -18,6 +12,7 @@ import { CgClose } from "react-icons/cg";
 import { FaShoppingCart } from "react-icons/fa";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
+import { toast } from "react-toastify";
 
 interface CartItem {
   id: number;
@@ -84,6 +79,33 @@ const MyCart = () => {
     },
   ]);
   console.log(cartItems, "cartI");
+
+
+  const handleProceedToCheckout = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get(`${endPointApi.getPlan}/${id}`);
+
+      if (res.data) {
+        setPlan(res.data.data);
+        if (res.data.message) {
+          toast.success(res.data.message);
+        } else {
+          toast.success("Plan details fetched successfully!");
+        }
+        setTimeout(() => {
+          router.push(`/checkout/${id}`);
+        }, 500);
+      } else {
+        toast.error("Failed to fetch plan details!");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Server error!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const updatePeriod = (id: number, period: "30" | "60" | "90") => {
     setCartItems((items) =>
@@ -340,7 +362,9 @@ const MyCart = () => {
 
                     {/* Checkout Button */}
                     <button
-                      onClick={() => router.push(`/checkout/${id}`)}
+                      // onClick={() => router.push(`/checkout/${id}`)}
+                      onClick={handleProceedToCheckout}
+
                       className="w-full h-12 flex items-center cursor-pointer justify-center rounded-lg bg-gradient-to-r from-yellow-500 to-amber-400 text-white font-semibold hover:opacity-90 transition"
                     >
                       Proceed to Checkout

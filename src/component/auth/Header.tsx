@@ -166,7 +166,7 @@ export default function Header() {
                           {category?.exams?.map((exam: any) => (
                             <li key={exam?._id}>
                               <button
-                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md transition-all"
+                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md cursor-pointer transition-all"
                                 // onClick={() => router.push("/medicalexam")}
                                 onClick={() => router.push(`/medicalexam/${exam?.exam_id}`)}
                               >

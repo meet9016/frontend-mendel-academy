@@ -282,7 +282,7 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
                     </div>
 
                     <button
-                      className="w-full bg-gradient-to-r from-[#ffcb04] to-amber-400 hover:shadow-lg text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 mt-auto"
+                      className="w-full cursor-pointer bg-gradient-to-r from-[#ffcb04] to-amber-400 hover:shadow-lg text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 mt-auto"
                       onClick={() => router.push(`/mycart/${plan._id}`)}
                     >
                       Enroll Now
