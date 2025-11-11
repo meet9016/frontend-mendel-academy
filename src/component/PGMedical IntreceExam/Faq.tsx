@@ -1,5 +1,13 @@
-import React, { useState } from 'react'
+import { api } from '@/utils/axiosInstance';
+import endPointApi from '@/utils/endPointApi';
+import React, { useCallback, useEffect, useState } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+
+type QuestionType = {
+    id: number;
+    title: string;
+    description?: string;
+};
 
 const Faq = () => {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -13,6 +21,25 @@ const Faq = () => {
         { question: "How can I join the Telegram study group for Mendal Academy?" }
     ];
 
+    const [data, setData] = useState<QuestionType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+
+    const getFaqData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const res = await api.get(`${endPointApi.getAllFaq}`);
+            setData(res.data || [])
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        getFaqData();
+    }, [getFaqData]);
 
     return (
         <div>
@@ -29,7 +56,7 @@ const Faq = () => {
 
                         {/* FAQ Items */}
                         <div className="space-y-4">
-                            {faqs.map((faq, index) => (
+                            {data.map((faq, index) => (
                                 <div
                                     key={index}
                                     className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
@@ -39,7 +66,7 @@ const Faq = () => {
                                         className="w-full p-6 flex items-center justify-between text-left hover:bg-yellow-50 transition-colors"
                                     >
                                         <span className="text-lg font-medium text-gray-900 pr-4">
-                                            {faq.question}
+                                            {faq.title}
                                         </span>
                                         <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
                                             {openFaq === index ? (
@@ -54,7 +81,8 @@ const Faq = () => {
                                         <div className="px-6 pb-6">
                                             <div className="pt-4 border-t border-gray-200">
                                                 <p className="text-gray-600">
-                                                    Our comprehensive program addresses this through structured learning and expert guidance.
+                                                    {/* Our comprehensive program addresses this through structured learning and expert guidance. */}
+                                                    {faq.description}
                                                 </p>
                                             </div>
                                         </div>

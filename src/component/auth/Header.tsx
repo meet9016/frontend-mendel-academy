@@ -4,7 +4,11 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiMenu, FiShoppingCart, FiX } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
+import { BiCalendar, BiShoppingBag } from "react-icons/bi";
+import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
+import { GiSparkles } from "react-icons/gi";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Exam = {
   exam_name: string;
@@ -16,6 +20,14 @@ type ExamCategory = {
   exams: Exam[];
 };
 
+type CartItem = {
+  id: string;
+  title: string;
+  price: number;
+  days: number;
+  image: string;
+};
+
 
 export default function Header() {
   const authToken =
@@ -25,6 +37,7 @@ export default function Header() {
   const [isExamDropdownOpen, setIsExamDropdownOpen] = useState<boolean>(false);
   const [examCategories, setExamCategories] = useState<ExamCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -65,7 +78,61 @@ export default function Header() {
     router.push("/auth/login");
   };
 
+  const cartItems: CartItem[] = [
+    {
+      id: "1",
+      title: "USMLE Step 1 Complete Course",
+      price: 299.99,
+      days: 90,
+      image:
+        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80",
+    },
+    {
+      id: "2",
+      title: "Pathology Master Class",
+      price: 199.99,
+      days: 60,
+      image:
+        "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80",
+    },
+    {
+      id: "3",
+      title: "PLAB Preparation Bundle",
+      price: 349.99,
+      days: 120,
+      image:
+        "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&q=80",
+    },
+    {
+      id: "4",
+      title: "Medical Anatomy Essentials",
+      price: 179.99,
+      days: 45,
+      image:
+        "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=400&q=80",
+    },
 
+  ];
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.95, rotateX: -10 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotateX: 0,
+      transition: { type: "spring", stiffness: 120, damping: 12 },
+    },
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -196,10 +263,18 @@ export default function Header() {
           {/* ✅ Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             <button
-              onClick={() => router.push('mycart')}
-              className="p-2 cursor-pointer hover:bg-gray-100 rounded-lg">
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200"
+            >
+              {/* Cart Icon */}
               <FiShoppingCart className="w-5 h-5 text-gray-700" />
+
+              {/* Count Badge */}
+              <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
+                {cartItems.length}
+              </span>
             </button>
+
             {authToken ? (
               <button
                 onClick={() => handleLogout()}
@@ -305,6 +380,193 @@ export default function Header() {
           </div>
         )}
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <AnimatePresence>
+        {isCartOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              animate={{ opacity: 1, backdropFilter: "blur(6px)" }}
+              exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsCartOpen(false)}
+            />
+
+            {/* Sidebar */}
+            <motion.div
+              key="cart-sidebar"
+              initial={{ x: "100%", opacity: 0, rotateY: -25, scale: 0.95 }}
+              animate={{ x: 0, opacity: 1, rotateY: 0, scale: 1 }}
+              exit={{ x: "100%", opacity: 0, rotateY: -25, scale: 0.95 }}
+              transition={{
+                type: "spring",
+                stiffness: 80,
+                damping: 14,
+                duration: 0.7,
+              }}
+              className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-gradient-to-br from-white via-yellow-50 to-yellow-100 shadow-2xl z-50 rounded-l-3xl overflow-hidden perspective-1000"
+            >
+              <motion.div
+                className="flex flex-col h-full relative overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {/* Header */}
+                <div className="relative flex items-center justify-between p-6 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-3 rounded-xl shadow-lg">
+                        <BiShoppingBag className="w-6 h-6 text-black" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-white">
+                          {cartItems.length}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        My Cart
+                        <GiSparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
+                      </h2>
+                      <p className="text-sm text-gray-500">
+                        {cartItems.length} courses selected
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsCartOpen(false)}
+                    className="p-2 hover:bg-yellow-50 rounded-xl cursor-pointer transition-all duration-200 hover:scale-110"
+                  >
+                    <AiOutlineClose className="w-6 h-6 text-gray-700" />
+                  </button>
+                </div>
+
+                {/* Animated Cart Items */}
+                <motion.div
+                  className="flex-1 overflow-y-auto p-4 space-y-2"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {cartItems.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      variants={itemVariants}
+                      whileHover={{ scale: 1.02, rotateX: 1 }}
+                      className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                    >
+                      {/* Delete Icon */}
+                      <button
+                        onClick={() => console.log('Delete:', item.id)}
+                        className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+
+                      <div className="flex gap-3 p-3">
+                        <div className="relative flex-shrink-0">
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-20 h-20 rounded-lg object-cover ring-2 ring-yellow-200 group-hover:ring-yellow-400 transition-all duration-300"
+                          />
+                          <div className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-yellow-400 to-yellow-500 text-black px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow">
+                            {/* <BiCalendar className="w-3 h-3" /> */}
+                            {item.days} Day
+                          </div>
+                        </div>
+
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-semibold text-gray-900 mb-0.5 line-clamp-2 group-hover:text-yellow-500 transition-colors">
+                              {item.title}
+                            </h3>
+                            <span className="text-[11px] bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded-full font-medium">
+                              Full Access
+                            </span>
+                          </div>
+                          <div className="text-lg font-bold text-yellow-500">
+                            ${item.price.toFixed(2)}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {/* Footer */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 30 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="border-t border-gray-200 p-6 bg-gradient-to-t from-yellow-50 to-white space-y-4"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 font-medium">Subtotal</span>
+                    <span className="font-bold text-gray-900 text-lg">
+                      ${subtotal.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-500 font-medium">Discount</span>
+                    <span className="font-bold text-green-600 text-lg">
+                      -${(subtotal * 0.1).toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center bg-yellow-50 rounded-xl p-4 border-2 border-yellow-100">
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Total Amount</p>
+                      <span className="text-3xl font-bold text-yellow-500">
+                        ${(subtotal * 0.9).toFixed(2)}
+                      </span>
+                    </div>
+                    <GiSparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
+                  </div>
+                  <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
+                    Checkout Now
+                  </button>
+                  <button
+                    className="w-full border border-yellow-300 hover:bg-yellow-50 rounded-xl py-4 font-semibold"
+                    onClick={() => setIsCartOpen(false)}
+                  >
+                    Continue Shopping
+                  </button>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+
+
+
+
+
+
+
+
+
+
+
     </header>
   );
 }

@@ -21,6 +21,9 @@ export interface EndPointApi {
 
     //my cart
     getPlan?: string;
+
+    //faq
+    getAllFaq?: string;
 }
 
 // Define and export the API endpoint object
@@ -48,7 +51,10 @@ const endPointApi: EndPointApi = {
     getMedicalById: 'examlist/getById',
 
     //my cart
-    getPlan: 'examlist/get-plan'
+    getPlan: 'examlist/get-plan',
+
+    //faq
+    getAllFaq: 'faq/getall',
 
 };
 

@@ -24,132 +24,105 @@ const RegisterSec = () => {
                             <div className="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div>
                         </div>
 
-                        <div className="grid items-start gap-12 lg:grid-cols-2">
+                        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
                             {/* Form Section */}
-                            <div className="rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
-                                <form className="space-y-6">
-                                    {/* Name Fields */}
-                                    <div className="grid gap-4 md:grid-cols-2">
+                            <div className="h-full flex flex-col justify-between rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
+                                <form className="flex flex-col justify-between h-full space-y-6">
+                                    <div className="space-y-6 flex-1">
+                                        {/* Name Fields */}
+                                        <div className="grid gap-4 md:grid-cols-2">
+                                            <div className="space-y-2">
+                                                <label htmlFor="firstName" className="flex items-center gap-2 font-semibold text-gray-800">
+                                                    <FaUser className="text-yellow-600" />
+                                                    First Name
+                                                </label>
+                                                <input
+                                                    name="firstName"
+                                                    type="text"
+                                                    placeholder="John"
+                                                    className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="lastName" className="flex items-center gap-2 font-semibold text-gray-800">
+                                                    <FaUser className="text-yellow-600" />
+                                                    Last Name
+                                                </label>
+                                                <input
+                                                    
+                                                    name="lastName"
+                                                    type="text"
+                                                    placeholder="Doe"
+                                                    className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Email */}
                                         <div className="space-y-2">
-                                            <label htmlFor="firstName" className="flex items-center gap-2 font-semibold text-gray-800">
-                                                <FaUser className="text-yellow-600" />
-                                                First Name
+                                            <label htmlFor="email" className="flex items-center gap-2 font-semibold text-gray-800">
+                                                <FaEnvelope className="text-yellow-600" />
+                                                Email Address
                                             </label>
                                             <input
-                                                id="firstName"
-                                                name="firstName"
-                                                type="text"
-                                                placeholder="John"
+                                              
+                                                name="email"
+                                                type="email"
+                                                placeholder="john.doe@example.com"
                                                 className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                                             />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="lastName" className="flex items-center gap-2 font-semibold text-gray-800">
-                                                <FaUser className="text-yellow-600" />
-                                                Last Name
-                                            </label>
-                                            <input
-                                                id="lastName"
-                                                name="lastName"
-                                                type="text"
-                                                placeholder="Doe"
-                                                className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                            />
+
+                                        {/* Medical School & Graduation Year */}
+                                        <div className="grid gap-4 md:grid-cols-2">
+                                            <div className="space-y-2">
+                                                <label htmlFor="medicalSchool" className="flex items-center gap-2 font-semibold text-gray-800">
+                                                    <FaGraduationCap className="text-yellow-600" />
+                                                    Medical School
+                                                </label>
+                                                <input
+                                                   
+                                                    name="medicalSchool"
+                                                    type="text"
+                                                    placeholder="Your school name"
+                                                    className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="graduationYear" className="flex items-center gap-2 font-semibold text-gray-800">
+                                                    <FaCalendar className="text-yellow-600" />
+                                                    Graduation Year
+                                                </label>
+                                                <input
+                                                  
+                                                    name="graduationYear"
+                                                    type="text"
+                                                    placeholder="2024"
+                                                    className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Email */}
-                                    <div className="space-y-2">
-                                        <label htmlFor="email" className="flex items-center gap-2 font-semibold text-gray-800">
-                                            <FaEnvelope className="text-yellow-600" />
-                                            Email Address
-                                        </label>
-                                        <input
-                                            id="email"
-                                            name="email"
-                                            type="email"
-                                            placeholder="john.doe@example.com"
-                                            className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                        />
+                                    {/* Button at bottom */}
+                                    <div>
+                                        <button
+                                            type="submit"
+                                            className="group flex w-full h-14 items-center justify-center gap-2 rounded-xl bg-yellow-500 text-lg font-bold text-white shadow-lg hover:bg-yellow-600 transition-all"
+                                        >
+                                            Register Now
+                                            <FaArrowRight className="transition-transform group-hover:translate-x-1" />
+                                        </button>
+
+                                        <p className="text-center text-sm text-gray-500 mt-3">
+                                            By registering, you agree to our terms and conditions
+                                        </p>
                                     </div>
-
-                                    {/* Phone */}
-                                    <div className="space-y-2">
-                                        <label htmlFor="phone" className="flex items-center gap-2 font-semibold text-gray-800">
-                                            <FaPhone className="text-yellow-600" />
-                                            Phone Number
-                                        </label>
-                                        <input
-                                            id="phone"
-                                            name="phone"
-                                            type="tel"
-                                            placeholder="+91 99255 11631"
-                                            className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                        />
-                                    </div>
-
-                                    {/* Address */}
-                                    <div className="space-y-2">
-                                        <label htmlFor="address" className="flex items-center gap-2 font-semibold text-gray-800">
-                                            <FaMapMarkerAlt className="text-yellow-600" />
-                                            Address
-                                        </label>
-                                        <input
-                                            id="address"
-                                            name="address"
-                                            type="text"
-                                            placeholder="Your address"
-                                            className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                        />
-                                    </div>
-
-                                    {/* Medical School & Graduation Year */}
-                                    <div className="grid gap-4 md:grid-cols-2">
-                                        <div className="space-y-2">
-                                            <label htmlFor="medicalSchool" className="flex items-center gap-2 font-semibold text-gray-800">
-                                                <FaGraduationCap className="text-yellow-600" />
-                                                Medical School
-                                            </label>
-                                            <input
-                                                id="medicalSchool"
-                                                name="medicalSchool"
-                                                type="text"
-                                                placeholder="Your school name"
-                                                className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="graduationYear" className="flex items-center gap-2 font-semibold text-gray-800">
-                                                <FaCalendar className="text-yellow-600" />
-                                                Graduation Year
-                                            </label>
-                                            <input
-                                                id="graduationYear"
-                                                name="graduationYear"
-                                                type="text"
-                                                placeholder="2024"
-                                                className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Submit */}
-                                    <button
-                                        type="submit"
-                                        className="group flex w-full h-14 items-center justify-center gap-2 rounded-xl bg-yellow-500 text-lg font-bold text-white shadow-lg hover:bg-yellow-600 transition-all"
-                                    >
-                                        Register Now
-                                        <FaArrowRight className="transition-transform group-hover:translate-x-1" />
-                                    </button>
-
-                                    <p className="text-center text-sm text-gray-500">
-                                        By registering, you agree to our terms and conditions
-                                    </p>
                                 </form>
                             </div>
 
                             {/* Info Section */}
-                            <div className="space-y-8">
+                            <div className="h-full space-y-8 flex flex-col justify-between">
                                 {/* Contact */}
                                 <div className="rounded-3xl border border-yellow-200 bg-white p-8 shadow-lg">
                                     <h3 className="mb-6 text-2xl font-bold text-gray-900">Need Help?</h3>
@@ -205,6 +178,7 @@ const RegisterSec = () => {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </section>

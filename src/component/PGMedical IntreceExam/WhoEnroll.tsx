@@ -226,16 +226,22 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
                             </div>
                         </div> */}
 
+
+
+
+
+
+
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {plans?.map((plan, index) => (
                 <div
                   key={index}
                   className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 hover:shadow-xl hover:border-[#ffcb04]
-        ${
-          index === 1
-            ? "border-[#ffcb04] shadow-xl bg-gradient-to-br from-yellow-50 via-white to-amber-50"
-            : "border-gray-200"
-        }
+        ${index === 1
+                      ? "border-[#ffcb04] shadow-xl bg-gradient-to-br from-yellow-50 via-white to-amber-50"
+                      : "border-gray-200"
+                    }
       `}
                 >
                   {/* Optional POPULAR badge for middle plan */}
@@ -248,7 +254,7 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
                   )}
 
                   <div className="flex flex-col justify-between h-full space-y-6 mt-2">
-                    <div className="space-y-6">
+                    <div className="space-y-2">
                       <div className="text-center">
                         <div className="inline-block px-4 py-2 bg-yellow-50 rounded-full">
                           <span className="text-sm font-bold text-[#ffcb04] uppercase">
@@ -265,10 +271,10 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
                         <p className="text-4xl font-bold text-[#ffcb04]">
                           {plan.plan_pricing}
                         </p>
-                        <p className="text-xs text-gray-500">(Plus 18% GST)</p>
+                        {/* <p className="text-xs text-gray-500">(Plus 18% GST)</p> */}
                       </div>
 
-                      <ul className="space-y-3">
+                      <ul className="space-y-3 mt-8">
                         {plan.plan_sub_title?.map((feature, i) => (
                           <li
                             key={i}
@@ -283,7 +289,7 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
 
                     <button
                       className="w-full cursor-pointer bg-gradient-to-r from-[#ffcb04] to-amber-400 hover:shadow-lg text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 mt-auto"
-                      onClick={() => router.push(`/mycart/${plan._id}`)}
+                      onClick={() => router.push(`/checkout/${plan._id}`)}
                     >
                       Enroll Now
                     </button>
@@ -291,6 +297,7 @@ const WhoEnroll = ({ plans }: WhoEnrollProps) => {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </section>
