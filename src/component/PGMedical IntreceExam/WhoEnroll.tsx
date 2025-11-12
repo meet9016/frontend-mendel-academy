@@ -92,7 +92,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
             {loading ? skeletonPlanCards :
               (
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {plans?.map((plan, index) => (
+                  {plans?.choose_plan_list.map((plan, index) => (
                     <div
                       key={index}
                       className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 hover:shadow-xl hover:border-[#ffcb04]

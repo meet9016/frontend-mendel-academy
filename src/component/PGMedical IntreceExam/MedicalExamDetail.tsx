@@ -104,23 +104,6 @@ const MedicalExamDetail = () => {
                                     </button>
                                 </div>
                             </div>
-
-
-                            <div className="space-y-5 rounded-2xl border border-yellow-400/40 bg-gradient-to-br from-yellow-100 to-amber-50 p-7 md:p-8">
-                                <p className="flex items-center gap-2 text-[15px] text-gray-700">
-                                    <FaPhone className="text-yellow-500" />
-                                    For payment and more information, call{" "}
-                                    <a
-                                        href="tel:+919925511631"
-                                        className="font-semibold text-yellow-600 hover:underline"
-                                    >
-                                        +91-99255-11631
-                                    </a>
-                                </p>
-                                <button className="w-full transform rounded-xl bg-gradient-to-r from-yellow-400 to-amber-400 px-10 py-3 text-lg font-bold text-white shadow-md shadow-yellow-400/25 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                                    Enroll Now
-                                </button>
-                            </div>
                         </div>
 
                         {/* Right Image */}
