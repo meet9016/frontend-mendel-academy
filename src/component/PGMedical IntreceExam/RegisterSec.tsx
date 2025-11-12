@@ -1,16 +1,111 @@
-import React from "react";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
+import React, { ChangeEvent, useState } from "react";
 import {
   FaArrowRight,
   FaCalendar,
   FaCheckCircle,
   FaEnvelope,
-  FaGraduationCap,
-  FaMapMarkerAlt,
   FaPhone,
   FaUser,
 } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-const RegisterSec = () => {
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  medicalSchool: string;
+  graduationYear: string;
+}
+
+interface FormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  medicalSchool?: string;
+  graduationYear?: string;
+}
+
+
+const RegisterSec: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    medicalSchool: "",
+    graduationYear: "",
+  });
+
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState<boolean>(false);
+
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    if (formData.firstName === "") newErrors.firstName = "First name is required";
+    if (formData.lastName === "") newErrors.lastName = "Last name is required";
+    if (formData.email === "") {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (formData.medicalSchool === "")
+      newErrors.medicalSchool = "Medical school is required";
+    if (formData.graduationYear === "") {
+      newErrors.graduationYear = "Graduation year is required";
+    } else if (!/^\d{4}$/.test(formData.graduationYear)) {
+      newErrors.graduationYear = "Enter a valid year (e.g. 2025)";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleRagisterNow = async () => {
+    try {
+      if (!validateForm) return
+      setLoading(true)
+      const body = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        medical_school: formData.medicalSchool,
+        graduation_year: formData.graduationYear
+      }
+      const res = await api.post(`${endPointApi.userRagisterCreate}`, body)
+      if (res.data) {
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          medicalSchool: "",
+          graduationYear: "",
+        });
+        toast.success(res.data.message)
+      } else {
+        console.log('error')
+      }
+    } catch (error) {
+      console.log("DATA Failed", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
   return (
     <div>
       <section className="relative overflow-hidden py-15 bg-gradient-to-br from-amber-100 via-white to-yellow-50">
@@ -35,9 +130,17 @@ const RegisterSec = () => {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+
+
+
+
+
+
+
+
               {/* Form Section */}
               <div className="h-full flex flex-col justify-between rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
-                <form className="flex flex-col justify-between h-full space-y-6">
+                <div className="flex flex-col justify-between h-full space-y-6">
                   <div className="space-y-6 flex-1">
                     {/* Name Fields */}
                     <div className="grid gap-4 md:grid-cols-2">
@@ -51,10 +154,15 @@ const RegisterSec = () => {
                         </label>
                         <input
                           name="firstName"
+                          value={formData.firstName}
+                          onChange={handleChange}
                           type="text"
                           placeholder="John"
                           className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
+                        {errors.firstName && (
+                          <p className="text-red-500 text-sm">{errors.firstName}</p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label
@@ -66,10 +174,15 @@ const RegisterSec = () => {
                         </label>
                         <input
                           name="lastName"
+                          value={formData.lastName}
+                          onChange={handleChange}
                           type="text"
                           placeholder="Doe"
                           className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
+                        {errors.lastName && (
+                          <p className="text-red-500 text-sm">{errors.lastName}</p>
+                        )}
                       </div>
                     </div>
 
@@ -84,10 +197,15 @@ const RegisterSec = () => {
                       </label>
                       <input
                         name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         type="email"
                         placeholder="john.doe@example.com"
                         className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
+                      {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label
@@ -100,33 +218,44 @@ const RegisterSec = () => {
                       <input
                         name="medicalSchool"
                         type="text"
+                        value={formData.medicalSchool}
+                        onChange={handleChange}
                         placeholder="Your school name"
                         className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
+                      {errors.medicalSchool && (
+                        <p className="text-red-500 text-sm">{errors.medicalSchool}</p>
+                      )}
                     </div>
 
                     {/* Medical School & Graduation Year */}
-                      <div className="space-y-2">
-                        <label
-                          htmlFor="graduationYear"
-                          className="flex items-center gap-2 font-semibold text-gray-800"
-                        >
-                          <FaCalendar className="text-yellow-600" />
-                          Graduation Year
-                        </label>
-                        <input
-                          name="graduationYear"
-                          type="text"
-                          placeholder="2024"
-                          className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="graduationYear"
+                        className="flex items-center gap-2 font-semibold text-gray-800"
+                      >
+                        <FaCalendar className="text-yellow-600" />
+                        Graduation Year
+                      </label>
+                      <input
+                        name="graduationYear"
+                        value={formData.graduationYear}
+                        onChange={handleChange}
+                        type="text"
+                        placeholder="2024"
+                        className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                      />
+                      {errors.graduationYear && (
+                        <p className="text-red-500 text-sm">{errors.graduationYear}</p>
+                      )}
                     </div>
+                  </div>
 
                   {/* Button at bottom */}
                   <div>
                     <button
                       type="submit"
+                      onClick={handleRagisterNow}
                       className="group flex w-full h-14 items-center justify-center gap-2 rounded-xl bg-yellow-500 text-lg font-bold text-white shadow-lg hover:bg-yellow-600 transition-all"
                     >
                       Register Now
@@ -137,8 +266,24 @@ const RegisterSec = () => {
                       By registering, you agree to our terms and conditions
                     </p>
                   </div>
-                </form>
+                </div>
               </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
               {/* Info Section */}
               <div className="h-full space-y-8 flex flex-col justify-between">

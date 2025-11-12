@@ -8,7 +8,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiCalendar, BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { GiSparkles } from "react-icons/gi";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 type Exam = {
   exam_name: string;
@@ -123,7 +123,7 @@ export default function Header() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 40, scale: 0.95, rotateX: -10 },
     show: {
       opacity: 1,
@@ -324,6 +324,8 @@ export default function Header() {
                     setIsMenuOpen(false);
                     if (item === "Home") router.push("/");
                     if (item === "Blog") router.push("/blog");
+                    if (item === "Pathology") router.push("/pathology");
+                    if (item === "About Us") router.push("/aboutUs");
                   }}
                   className="text-gray-800 hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
                 >
@@ -341,14 +343,14 @@ export default function Header() {
                 </button>
                 {isExamDropdownOpen && (
                   <div className="mt-2 pl-4 space-y-3">
-                    {Object.entries(examCategories)?.map((category: any) => (
+                    {examCategories?.map((category) => (
                       <div key={category?.category_name}>
-                        <h4 className="text-xs font-semibold text-gray-500 mb-1 uppercase">
+                        <h4 className="text-xs font-extrabold text-gray-500 mb-1 uppercase">
                           {category?.category_name}
                         </h4>
                         <ul className="space-y-1">
                           {category?.exams?.map((exam: any) => (
-                            <li key={exam.name}>
+                            <li key={exam?._id}>
                               <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
                                 {exam.exam_name}
                               </button>
@@ -371,7 +373,12 @@ export default function Header() {
                 <button className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600">
                   Sign Up
                 </button>
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+                <button
+                  onClick={() => {
+                    setIsCartOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
                   <FiShoppingCart className="w-5 h-5" />
                   Cart
                 </button>

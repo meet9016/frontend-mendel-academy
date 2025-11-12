@@ -24,6 +24,9 @@ export interface EndPointApi {
 
     //faq
     getAllFaq?: string;
+
+    //User Reagister
+    userRagisterCreate?: string
 }
 
 // Define and export the API endpoint object
@@ -55,6 +58,9 @@ const endPointApi: EndPointApi = {
 
     //faq
     getAllFaq: 'faq/getall',
+
+    //User Reagister
+    userRagisterCreate: 'contactus/create',
 
 };
 

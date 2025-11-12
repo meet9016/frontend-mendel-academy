@@ -2,7 +2,10 @@ import { api } from '@/utils/axiosInstance';
 import endPointApi from '@/utils/endPointApi';
 import React, { useCallback, useEffect, useState } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
+;
 type QuestionType = {
     id: number;
     title: string;
@@ -11,16 +14,6 @@ type QuestionType = {
 
 const Faq = () => {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
-    const faqs = [
-        { question: "What are the benefits of high yield MCQ based learning?" },
-        { question: "How can mnemonics help in mastering complex medical concepts?" },
-        { question: "What are Mendal SketchNotes, and how do they help in medical exam prep?" },
-        { question: "What are Mendal Flowcharts, and how do they help in medical exam prep?" },
-        { question: "How do self-assessment tests with performance analytics help in exam preparation?" },
-        { question: "How do tests and discussions benefit medical students?" },
-        { question: "How can I join the Telegram study group for Mendal Academy?" }
-    ];
-
     const [data, setData] = useState<QuestionType[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -33,7 +26,9 @@ const Faq = () => {
         } catch (err) {
             console.error(err);
         } finally {
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 100);
         }
     }, []);
 
@@ -56,39 +51,43 @@ const Faq = () => {
 
                         {/* FAQ Items */}
                         <div className="space-y-4">
-                            {data.map((faq, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
-                                >
-                                    <button
-                                        onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                                        className="w-full p-6 flex items-center justify-between text-left hover:bg-yellow-50 transition-colors"
-                                    >
-                                        <span className="text-lg font-medium text-gray-900 pr-4">
-                                            {faq.title}
-                                        </span>
-                                        <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                            {openFaq === index ? (
-                                                <FaChevronUp className="text-[#ffcb04]" />
-                                            ) : (
-                                                <FaChevronDown className="text-[#ffcb04]" />
+                            {
+                                loading ? skeletonFaq :
+                                    data.map((faq, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                                        >
+                                            <button
+                                                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                                                className="w-full p-6 flex items-center justify-between text-left hover:bg-yellow-50 transition-colors"
+                                            >
+                                                <span className="text-lg font-medium text-gray-900 pr-4">
+                                                    {faq.title}
+                                                </span>
+                                                <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                                    {openFaq === index ? (
+                                                        <FaChevronUp className="text-[#ffcb04]" />
+                                                    ) : (
+                                                        <FaChevronDown className="text-[#ffcb04]" />
+                                                    )}
+                                                </div>
+                                            </button>
+
+                                            {openFaq === index && (
+                                                <div className="px-6 pb-6">
+                                                    <div className="pt-4 border-t border-gray-200">
+                                                        <div
+                                                            className="text-gray-600"
+                                                            dangerouslySetInnerHTML={{ __html: faq.description || "" }}
+                                                        >
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
-                                    </button>
-
-                                    {openFaq === index && (
-                                        <div className="px-6 pb-6">
-                                            <div className="pt-4 border-t border-gray-200">
-                                                <p className="text-gray-600">
-                                                    {/* Our comprehensive program addresses this through structured learning and expert guidance. */}
-                                                    {faq.description}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                                    ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -96,5 +95,30 @@ const Faq = () => {
         </div>
     )
 }
+
+
+
+
+const skeletonFaq = (
+    <div className="space-y-4">
+        {[1, 2, 3].map((_, i) => (
+            <div
+                key={i}
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex items-center justify-between"
+            >
+                {/* Left: Fake Skeleton Line */}
+                <div className="h-[30px] w-[95%] bg-gray-200 rounded-md animate-pulse"></div>
+
+                {/* Right: Small Box Placeholder */}
+                <div className="w-8 h-8 bg-gray-200 rounded-lg animate-pulse"></div>
+            </div>
+        ))}
+    </div>
+);
+
+
+
+
+
 
 export default Faq
