@@ -3,6 +3,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import DOMPurify from 'dompurify';
+import { formatPrice } from "@/utils/helper";
 
 interface Plan {
   _id: string;
@@ -117,7 +118,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
 
                           <div className="space-y-2 text-center">
                             <p className="text-4xl font-bold text-[#ffcb04]">
-                              {plan.plan_pricing}
+                              INR {formatPrice(plan.plan_pricing)}
                             </p>
                             {/* <p className="text-xs text-gray-500">(Plus 18% GST)</p> */}
                           </div>
