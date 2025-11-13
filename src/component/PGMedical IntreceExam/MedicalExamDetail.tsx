@@ -1,7 +1,9 @@
 'use client'
 import {
     FaPhone,
-    FaLongArrowAltRight
+    FaLongArrowAltRight,
+    FaStar,
+    FaCheckCircle
 } from 'react-icons/fa';
 import Header from '../auth/Header';
 import Footer from '../auth/Footer';
@@ -15,6 +17,9 @@ import { api } from '@/utils/axiosInstance';
 import endPointApi from '@/utils/endPointApi';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton from 'react-loading-skeleton';
+import { HiSparkles } from 'react-icons/hi';
+import { motion } from 'framer-motion';
+import { IoMdCall } from 'react-icons/io';
 
 const MedicalExamDetail = () => {
     const { id } = useParams();
@@ -46,81 +51,137 @@ const MedicalExamDetail = () => {
         }
     }
 
-    console.log("examData?.choose_plan_list",examData);
-    
+    console.log("examData?.choose_plan_list", examData);
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Header />
 
             {/* Hero Section */}
-            <section className="relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-amber-50 to-gray-50 pointer-events-none"></div>
-                <div className="relative mx-auto max-w-7xl px-6 py-15 md:py-0">
-                    <div className="grid items-center gap-16 md:grid-cols-2">
+            <motion.section
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2, ease: 'easeOut' }} // smooth transition
+                className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100"
+            >
+                {/* Decorative background elements */}
+                <div className="absolute top-20 right-20 h-72 w-72 rounded-full bg-yellow-200/30 blur-3xl"></div>
+                <div className="absolute bottom-20 left-20 h-96 w-96 rounded-full bg-yellow-300/30 blur-3xl"></div>
+
+                <div className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
+                    <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
                         {/* Left Content */}
-                        <div className="order-2 space-y-8 md:order-1">
-                            <div className="space-y-4">
-                                {/* <div className="inline-block rounded-full bg-yellow-100 px-5 py-2">
-                                    <span className="text-sm font-semibold text-yellow-600">
-                                        Premium Medical Education
-                                    </span>
-                                </div> */}
-                                <h1 className="text-5xl font-bold leading-tight text-gray-900 md:text-6xl">
+                        <div className="space-y-5">
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 border border-yellow-300/40">
+                                <HiSparkles className="text-yellow-500 text-lg" />
+                                <span className="text-sm font-semibold text-gray-900">
+                                    Medical Entrance Exam
+                                </span>
+                            </div>
+
+                            {/* Main Title */}
+                            <div className="space-y-2">
+                                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
                                     {examData?.exams[0]?.exam_name}
                                 </h1>
-                                <div>
-                                    <p className="text-lg font-semibold text-gray-900">
-                                         {examData?.exams[0]?.title}
-                                    </p>
-                                    <div className="grid gap-3">
-                                        {examData?.exams[0]?.sub_titles?.map((feature: any, index: number) => (
-                                            <div
-                                                key={index}
-                                                className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 transition-all duration-300 hover:border-yellow-400 hover:shadow-md"
-                                            >
-                                                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-yellow-100 transition-colors group-hover:bg-yellow-200">
-                                                    <FaLongArrowAltRight className="text-sm text-yellow-500" />
-                                                </div>
-                                                <span className="text-gray-900 text-[15px]">{feature}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="h-1 w-20 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full"></div>
+                                    <FaStar className="text-yellow-500 text-xl" />
                                 </div>
+                            </div>
 
-                                {/* Contact + Button */}
-                                <div className="space-y-5 rounded-2xl border border-yellow-400/40 bg-gradient-to-br from-yellow-100 to-amber-50 p-6 lg:p-8 shadow-sm">
-                                    <p className="flex items-center gap-2 text-[15px] text-gray-700">
-                                        <FaPhone className="text-yellow-500" />
-                                        For payment and more information, call{" "}
+                            {/* Subtitle */}
+                            <p className="text-xl md:text-2xl font-medium text-gray-700">
+                                {examData?.exams[0]?.title}
+                            </p>
+
+                            {/* Features List */}
+                            <div className="space-y-3">
+                                {examData?.exams[0]?.sub_titles?.map((feature: any, index: number) => (
+                                    <div
+                                        key={index}
+                                        className="group flex items-start gap-4 p-4 rounded-2xl bg-white border border-gray-200 hover:border-yellow-400 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-200/40"
+                                    >
+                                        <div className="flex-shrink-0 mt-1">
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600">
+                                                <FaCheckCircle className="text-white text-sm" />
+                                            </div>
+                                        </div>
+                                        <span className="text-base md:text-lg text-gray-900 font-medium leading-relaxed">
+                                            {feature}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* CTA Section */}
+                            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-500 p-[2px]">
+                                <div className="bg-white rounded-[22px] p-6 md:p-8 space-y-6">
+                                    {/* Contact Info */}
+                                    <div className="flex flex-col md:flex-row md:items-center gap-3 text-gray-700">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100">
+                                                <IoMdCall className="text-yellow-500 text-lg" />
+                                            </div>
+                                            <span className="text-sm md:text-base font-medium">
+                                                For more information, call
+                                            </span>
+                                        </div>
                                         <a
                                             href="tel:+919925511631"
-                                            className="font-semibold text-yellow-600 hover:underline"
+                                            className="text-lg md:text-xl font-bold text-yellow-700 hover:text-yellow-500 transition-colors"
                                         >
                                             +91-99255-11631
                                         </a>
-                                    </p>
-                                    <button className="w-full transform rounded-xl bg-gradient-to-r from-yellow-400 to-amber-400 px-10 py-4 text-lg font-bold text-white shadow-md shadow-yellow-400/25 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                                        Enroll Now
+                                    </div>
+
+                                    {/* Enroll Button */}
+                                    <button className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-yellow-400 to-yellow-600 px-8 py-5 text-lg md:text-xl font-bold text-white shadow-lg shadow-yellow-300/40 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/50 hover:scale-[1.02]">
+                                        <span className="relative z-10">Enroll Now</span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Image */}
-                        <div className="order-1 flex justify-center mt-0 md:mt-[18rem] md:order-2">
+                        <div className="relative order-first lg:order-last">
                             <div className="relative">
-                                {/* <div className="absolute -inset-3 rounded-3xl bg-gradient-to-r from-yellow-200 to-amber-100 blur-2xl"></div> */}
-                                <img
-                                    src={examData?.exams[0]?.image}
-                                    // src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
-                                    alt="Medical professional"
-                                    className="relative h-auto w-[85%] rounded-3xl mb-8 object-cover border border-[#ffcb04] shadow-2xl md:w-[95%] lg:w-[100%]"
-                                />
+                                {/* Glow effect */}
+                                {/* <div className="absolute -inset-4 bg-gradient-to-r from-yellow-300/30 to-yellow-200/30 rounded-[2.5rem] blur-2xl"></div> */}
+
+                                {/* Main image container */}
+                                <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2">
+                                    <img
+                                        src={
+                                            examData?.exams[0]?.image ||
+                                            'https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg'
+                                        }
+                                        alt={examData?.exams[0]?.exam_name || 'Medical professional'}
+                                        className="w-full h-auto rounded-[1.5rem] object-cover shadow-2xl"
+                                    />
+                                </div>
+
+                                {/* Floating badge */}
+                                <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 md:p-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600">
+                                            <FaStar className="text-white text-xl" />
+                                        </div>
+                                        <div>
+                                            <p className="text-2xl font-bold text-gray-900">100%</p>
+                                            <p className="text-sm text-gray-600">Success Rate</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    </div>
-                </section>
+                </div>
+            </motion.section>
+
+
 
 
             {/* Course Description */}
@@ -145,47 +206,7 @@ const MedicalExamDetail = () => {
 };
 
 
-const skeleton = (
-    <section className="relative bg-gradient-to-br from-indigo-50 via-amber-50 to-gray-50 overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-6 py-8 lg:py-18">
-            <div className="grid items-center gap-12 lg:grid-cols-2">
-                {/* Left Column */}
-                <div className="order-2 space-y-8 lg:order-1">
-                    {/* Heading & Description Skeleton */}
-                    <div className="space-y-5">
-                        <Skeleton height={120} borderRadius={16} />
-                    </div>
-                    {/* Subtitle / Feature List Skeleton */}
-                    <div className="space-y-3">
-                        <div className="rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-200 p-6 shadow-sm">
-                            {/* Title skeleton */}
-                            <Skeleton height={25} width="50%" borderRadius={10} />
-                            {/* 3 inner feature lines */}
-                            <div className="mt-4 space-y-3">
-                                {[1, 2, 3].map((_, i) => (
-                                    <Skeleton
-                                        key={i}
-                                        height={25}
-                                        width="100%"
-                                        borderRadius={8}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    {/* Contact + Button Skeleton */}
-                    <div className="space-y-5 rounded-2xl bg-white/60 backdrop-blur-sm border border-gray-200 p-6 lg:p-8 shadow-sm">
-                        <Skeleton height={20} width="70%" />
-                        <Skeleton height={45} borderRadius={12} />
-                    </div>
-                </div>
-                {/* Right Column (Image Area) */}
-                <div className="order-1 flex justify-center lg:order-2">
-                    <Skeleton height={450} width={450} borderRadius={20} />
-                </div>
-            </div>
-        </div>
-    </section>
-);
+
+
 
 export default MedicalExamDetail;

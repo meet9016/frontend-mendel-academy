@@ -2,6 +2,7 @@ import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
+import DOMPurify from 'dompurify';
 
 interface Plan {
   _id: string;
@@ -22,6 +23,10 @@ interface WhoEnrollProps {
 
 const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
   const router = useRouter();
+  const cleanHtml = DOMPurify.sanitize(plans?.who_can_enroll_description || '', {
+    USE_PROFILES: { html: true },
+  });
+
   return (
     <div>
       <section className="py-15 bg-gradient-to-br from-white to-gray-50">
@@ -29,16 +34,19 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
           <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
             {/* Image Section */}
             <div className="order-2 flex justify-center md:order-1">
-              <div className="relative">
-                {/* <div className="absolute -inset-3 rounded-3xl bg-gradient-to-r from-yellow-200 to-amber-100 blur-2xl"></div> */}
+              <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2">
                 <img
-                  src={plans?.who_can_enroll_image}
-                  // src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
+                  src={
+                    plans?.who_can_enroll_image ||
+                    "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"
+                  }
                   alt="Medical professional"
-                  className="relative h-auto w-[85%] rounded-3xl object-cover border border-[#ffcb04] shadow-2xl md:w-[90%] lg:w-[95%]"
+                  className="w-full h-auto rounded-[1.5rem] object-cover shadow-2xl"
                 />
               </div>
             </div>
+
+
 
             {/* Text Section */}
             <div className="order-1 space-y-8 md:order-2">
@@ -50,31 +58,11 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
               </div>
 
               <div className="space-y-5">
-                {plans?.who_can_enroll_description}
-                {/* <p className="text-lg text-gray-700">
-                  Our courses are designed for students who are preparing for
-                  the{" "}
-                  <span className="font-bold text-yellow-500">
-                    USMLE Step 1 exam
-                  </span>
-                  .
-                </p>
-                <p className="text-lg text-gray-700">
-                  We recommend that students have a basic understanding of the
-                  topics covered in the exam and are comfortable with the test
-                  format.
-                </p>
-                <p className="text-lg text-gray-700">
-                  If you have any questions about whether our courses are right
-                  for you, please feel free to{" "}
-                  <a
-                    href="#contact"
-                    className="font-bold text-yellow-500 hover:underline"
-                  >
-                    contact us
-                  </a>
-                  .
-                </p> */}
+                {/* <div dangerouslySetInnerHTML={{ __html: cleanHtml }} /> */}
+                <div
+                  className="prose max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:marker:text-[#ffcb04] text-gray-800"
+                  dangerouslySetInnerHTML={{ __html: cleanHtml }}
+                />
               </div>
             </div>
           </div>
@@ -95,12 +83,12 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
                   {plans?.choose_plan_list.map((plan, index) => (
                     <div
                       key={index}
-                      className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 hover:shadow-xl hover:border-[#ffcb04]
-        ${index === 1
+                      className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 
+  ${plan.most_popular
                           ? "border-[#ffcb04] shadow-xl bg-gradient-to-br from-yellow-50 via-white to-amber-50"
-                          : "border-gray-200"
+                          : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffcb04]"
                         }
-      `}
+  `}
                     >
                       {/* Optional POPULAR badge for middle plan */}
                       {plan.most_popular && (
