@@ -1,5 +1,6 @@
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
+import { newsLatterSchema } from "@/validationSchema/validationSchema";
 import React, { ChangeEvent, useState } from "react";
 import {
   FaArrowRight,
@@ -21,14 +22,14 @@ interface FormData {
 
 interface FormErrors {
   firstName?: string;
-  lastName?: string;
+  lastName: string;
   email?: string;
   medicalSchool?: string;
   graduationYear?: string;
 }
 
 
-const RegisterSec: React.FC = () => {
+const NewsLetter: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -39,7 +40,6 @@ const RegisterSec: React.FC = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState<boolean>(false);
-
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,29 +54,24 @@ const RegisterSec: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    if (formData.firstName === "") newErrors.firstName = "First name is required";
-    if (formData.lastName === "") newErrors.lastName = "Last name is required";
-    if (formData.email === "") {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-    if (formData.medicalSchool === "")
-      newErrors.medicalSchool = "Medical school is required";
-    if (formData.graduationYear === "") {
-      newErrors.graduationYear = "Graduation year is required";
-    } else if (!/^\d{4}$/.test(formData.graduationYear)) {
-      newErrors.graduationYear = "Enter a valid year (e.g. 2025)";
-    }
+  const { error } = newsLatterSchema.validate(formData, { abortEarly: false });
+  if (!error) {
+    setErrors({});
+    return true;
+  }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const newErrors: any = {};
+  error.details.forEach((detail) => {
+    newErrors[detail.path[0]] = detail.message;
+  });
+  setErrors(newErrors);
+  return false;
+};
+
 
   const handleRagisterNow = async () => {
     try {
-      if (!validateForm) return
+      if (!validateForm()) return;
       setLoading(true)
       const body = {
         first_name: formData.firstName,
@@ -96,15 +91,15 @@ const RegisterSec: React.FC = () => {
         });
         toast.success(res.data.message)
       } else {
-        console.log('error')
+        toast.error(res.data.message)
+
       }
-    } catch (error) {
-      console.log("DATA Failed", error)
+    } catch (error: any) {
+      toast.error(error.response.data.message)
     } finally {
       setLoading(false)
     }
   }
-
 
   return (
     <div>
@@ -130,13 +125,6 @@ const RegisterSec: React.FC = () => {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-stretch">
-
-
-
-
-
-
-
 
               {/* Form Section */}
               <div className="h-full flex flex-col justify-between rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
@@ -180,7 +168,7 @@ const RegisterSec: React.FC = () => {
                           placeholder="Doe"
                           className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
-                        {errors.lastName && (
+                          {errors.lastName && (
                           <p className="text-red-500 text-sm">{errors.lastName}</p>
                         )}
                       </div>
@@ -356,4 +344,4 @@ const RegisterSec: React.FC = () => {
   );
 };
 
-export default RegisterSec;
+export default NewsLetter;

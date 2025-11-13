@@ -10,7 +10,6 @@ import Footer from '../auth/Footer';
 import CourseDes from './CourseDes';
 import Faq from './Faq';
 import WhoEnroll from './WhoEnroll';
-import RegisterSec from './RegisterSec';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { api } from '@/utils/axiosInstance';
@@ -20,6 +19,7 @@ import Skeleton from 'react-loading-skeleton';
 import { HiSparkles } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { IoMdCall } from 'react-icons/io';
+import NewsLetter from './NewsLetter';
 
 const MedicalExamDetail = () => {
     const { id } = useParams();
@@ -198,7 +198,7 @@ const MedicalExamDetail = () => {
 
 
             {/* REGISTER SECTION */}
-            <RegisterSec />
+            <NewsLetter />
 
             <Footer />
         </div>
