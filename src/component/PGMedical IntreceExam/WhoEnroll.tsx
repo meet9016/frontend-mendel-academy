@@ -34,17 +34,19 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
           <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
             {/* Image Section */}
             <div className="order-2 flex justify-center md:order-1">
-              <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2">
+              <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2 w-[320px] h-[300px] md:w-[500px] md:h-[500px]">
                 <img
                   src={
-                    plans?.who_can_enroll_image ||
-                    "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"
+                    plans?.who_can_enroll_image
+                      ? plans.who_can_enroll_image
+                      : "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"
                   }
                   alt="Medical professional"
-                  className="w-full h-auto rounded-[1.5rem] object-cover shadow-2xl"
+                  className="w-full h-full rounded-[1.5rem] object-cover shadow-2xl"
                 />
               </div>
             </div>
+
 
 
 
