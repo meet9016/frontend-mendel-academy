@@ -28,7 +28,6 @@ interface FormErrors {
   graduationYear?: string;
 }
 
-
 const NewsLetter: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -38,7 +37,13 @@ const NewsLetter: React.FC = () => {
     graduationYear: "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<FormErrors>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    medicalSchool: "",
+    graduationYear: "",
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -54,33 +59,40 @@ const NewsLetter: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-  const { error } = newsLatterSchema.validate(formData, { abortEarly: false });
-  if (!error) {
-    setErrors({});
-    return true;
-  }
+    const { error } = newsLatterSchema.validate(formData, {
+      abortEarly: false,
+    });
+    if (!error) {
+      setErrors({
+         firstName: "",
+    lastName: "",
+    email: "",
+    medicalSchool: "",
+    graduationYear: "",
+      });
+      return true;
+    }
 
-  const newErrors: any = {};
-  error.details.forEach((detail) => {
-    newErrors[detail.path[0]] = detail.message;
-  });
-  setErrors(newErrors);
-  return false;
-};
-
+    const newErrors: any = {};
+    error.details.forEach((detail) => {
+      newErrors[detail.path[0]] = detail.message;
+    });
+    setErrors(newErrors);
+    return false;
+  };
 
   const handleRagisterNow = async () => {
     try {
       if (!validateForm()) return;
-      setLoading(true)
+      setLoading(true);
       const body = {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
         medical_school: formData.medicalSchool,
-        graduation_year: formData.graduationYear
-      }
-      const res = await api.post(`${endPointApi.userRagisterCreate}`, body)
+        graduation_year: formData.graduationYear,
+      };
+      const res = await api.post(`${endPointApi.userRagisterCreate}`, body);
       if (res.data) {
         setFormData({
           firstName: "",
@@ -89,17 +101,16 @@ const NewsLetter: React.FC = () => {
           medicalSchool: "",
           graduationYear: "",
         });
-        toast.success(res.data.message)
+        toast.success(res.data.message);
       } else {
-        toast.error(res.data.message)
-
+        toast.error(res.data.message);
       }
     } catch (error: any) {
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
@@ -125,7 +136,6 @@ const NewsLetter: React.FC = () => {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-stretch">
-
               {/* Form Section */}
               <div className="h-full flex flex-col justify-between rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
                 <div className="flex flex-col justify-between h-full space-y-6">
@@ -149,7 +159,9 @@ const NewsLetter: React.FC = () => {
                           className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
                         {errors.firstName && (
-                          <p className="text-red-500 text-sm">{errors.firstName}</p>
+                          <p className="text-red-500 text-sm">
+                            {errors.firstName}
+                          </p>
                         )}
                       </div>
                       <div className="space-y-2">
@@ -168,8 +180,10 @@ const NewsLetter: React.FC = () => {
                           placeholder="Doe"
                           className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
-                          {errors.lastName && (
-                          <p className="text-red-500 text-sm">{errors.lastName}</p>
+                        {errors.lastName && (
+                          <p className="text-red-500 text-sm">
+                            {errors.lastName}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -212,7 +226,9 @@ const NewsLetter: React.FC = () => {
                         className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
                       {errors.medicalSchool && (
-                        <p className="text-red-500 text-sm">{errors.medicalSchool}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.medicalSchool}
+                        </p>
                       )}
                     </div>
 
@@ -234,7 +250,9 @@ const NewsLetter: React.FC = () => {
                         className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
                       {errors.graduationYear && (
-                        <p className="text-red-500 text-sm">{errors.graduationYear}</p>
+                        <p className="text-red-500 text-sm">
+                          {errors.graduationYear}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -256,22 +274,6 @@ const NewsLetter: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
               {/* Info Section */}
               <div className="h-full space-y-8 flex flex-col justify-between">
