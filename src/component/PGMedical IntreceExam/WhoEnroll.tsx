@@ -32,7 +32,8 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
               <div className="relative">
                 {/* <div className="absolute -inset-3 rounded-3xl bg-gradient-to-r from-yellow-200 to-amber-100 blur-2xl"></div> */}
                 <img
-                  src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
+                  src={plans?.who_can_enroll_image}
+                  // src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
                   alt="Medical professional"
                   className="relative h-auto w-[85%] rounded-3xl object-cover border border-[#ffcb04] shadow-2xl md:w-[90%] lg:w-[95%]"
                 />
@@ -43,13 +44,14 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
             <div className="order-1 space-y-8 md:order-2">
               <div>
                 <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
-                  Who Can Enroll?
+                  {plans?.who_can_enroll_title}
                 </h2>
                 <div className="h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div>
               </div>
 
               <div className="space-y-5">
-                <p className="text-lg text-gray-700">
+                {plans?.who_can_enroll_description}
+                {/* <p className="text-lg text-gray-700">
                   Our courses are designed for students who are preparing for
                   the{" "}
                   <span className="font-bold text-yellow-500">
@@ -72,7 +74,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
                     contact us
                   </a>
                   .
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -90,7 +92,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
             {loading ? skeletonPlanCards :
               (
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {plans?.map((plan, index) => (
+                  {plans?.choose_plan_list.map((plan, index) => (
                     <div
                       key={index}
                       className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 hover:shadow-xl hover:border-[#ffcb04]

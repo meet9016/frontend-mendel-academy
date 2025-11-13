@@ -26,6 +26,8 @@ const MedicalExamDetail = () => {
         fetcgExamData();
     }, [])
 
+    console.log("examData*****", examData)
+
     const fetcgExamData = async () => {
         try {
             setLoading(true)
@@ -44,33 +46,31 @@ const MedicalExamDetail = () => {
         }
     }
 
+    console.log("examData?.choose_plan_list",examData);
+    
     return (
         <div className="min-h-screen bg-gray-50">
             <Header />
 
             {/* Hero Section */}
-
-            {loading ? skeleton : (
-                <section className="relative bg-gradient-to-br from-indigo-50 via-amber-50 to-gray-50 overflow-hidden">
-                    <div className="relative mx-auto max-w-7xl px-6 py-8 lg:py-18">
-                        <div className="grid items-center gap-12 lg:grid-cols-2">
-
-                            {/* Left Content */}
-                            <div className="order-2 space-y-8 lg:order-1">
-                                {/* Heading & Description */}
-                                <div className="space-y-5">
-                                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
-                                        {examData?.exams[0]?.exam_name}
-                                    </h1>
-                                    <p className="text-lg text-gray-600 leading-relaxed">
-                                        {examData?.exams[0]?.description}
-                                    </p>
-                                </div>
-
-                                {/* Subtitle / Feature List */}
-                                <div className="space-y-3">
+            <section className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-amber-50 to-gray-50 pointer-events-none"></div>
+                <div className="relative mx-auto max-w-7xl px-6 py-15 md:py-0">
+                    <div className="grid items-center gap-16 md:grid-cols-2">
+                        {/* Left Content */}
+                        <div className="order-2 space-y-8 md:order-1">
+                            <div className="space-y-4">
+                                {/* <div className="inline-block rounded-full bg-yellow-100 px-5 py-2">
+                                    <span className="text-sm font-semibold text-yellow-600">
+                                        Premium Medical Education
+                                    </span>
+                                </div> */}
+                                <h1 className="text-5xl font-bold leading-tight text-gray-900 md:text-6xl">
+                                    {examData?.exams[0]?.exam_name}
+                                </h1>
+                                <div>
                                     <p className="text-lg font-semibold text-gray-900">
-                                        With Mendal Academy, you will get:
+                                         {examData?.exams[0]?.title}
                                     </p>
                                     <div className="grid gap-3">
                                         {examData?.exams[0]?.sub_titles?.map((feature: any, index: number) => (
@@ -104,33 +104,34 @@ const MedicalExamDetail = () => {
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Right Image */}
-                            <div className="order-1 flex justify-center lg:order-2">
-                                <div className="relative">
-                                    <div className="absolute -inset-4 rounded-3xl bg-yellow-200/40 blur-2xl"></div>
-                                    <img
-                                        src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
-                                        alt="Medical professional"
-                                        className="relative z-10 h-auto w-[85%] md:w-[95%] lg:w-[100%] rounded-3xl border border-[#ffcb04] object-cover shadow-xl"
-                                    />
-                                </div>
+                        {/* Right Image */}
+                        <div className="order-1 flex justify-center mt-0 md:mt-[18rem] md:order-2">
+                            <div className="relative">
+                                {/* <div className="absolute -inset-3 rounded-3xl bg-gradient-to-r from-yellow-200 to-amber-100 blur-2xl"></div> */}
+                                <img
+                                    src={examData?.exams[0]?.image}
+                                    // src="https://static.vecteezy.com/system/resources/previews/021/518/002/non_2x/a-woman-doctor-with-a-tablet-and-a-stethoscope-an-image-on-a-blue-background-a-doctor-in-a-medical-uniform-cartoon-style-family-doctor-medical-worker-paramedic-vector.jpg"
+                                    alt="Medical professional"
+                                    className="relative h-auto w-[85%] rounded-3xl mb-8 object-cover border border-[#ffcb04] shadow-2xl md:w-[95%] lg:w-[100%]"
+                                />
                             </div>
                         </div>
                     </div>
+                    </div>
                 </section>
-            )}
 
 
             {/* Course Description */}
-            <CourseDes />
+            <CourseDes data={examData?.exams[0]?.description} />
 
             {/* FAQs */}
             <Faq />
 
             {/* Who Can Enroll */}
             <WhoEnroll
-                plans={examData?.choose_plan_list || []}
+                plans={examData}
                 loading={loading}
             />
 
