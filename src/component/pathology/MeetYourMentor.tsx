@@ -3,7 +3,7 @@ import { FaBriefcase, FaCertificate, FaFlask, FaSearch } from 'react-icons/fa'
 const MeetYourMentor = () => {
     return (
         <>
-            <section className="relative py-24 overflow-hidden bg-gradient-to-br from-[#fff8e1] via-white to-[#fffdf5]">
+            <section className="relative py-15 overflow-hidden bg-white">
                 {/* Decorative Elements */}
                 <div className="absolute top-10 right-10 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl animate-pulse" />
                 <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
@@ -11,13 +11,11 @@ const MeetYourMentor = () => {
                 <div className="max-w-7xl mx-auto px-6">
                     {/* Section Title */}
                     <div className="text-center mb-16 animate-fade-in-down">
-                        <h2 className="text-5xl md:text-6xl font-bold mb-4">
-                            <span className="bg-gradient-to-r from-[#f0b100] to-yellow-600 bg-clip-text text-transparent">
-                                Meet Your
-                            </span>{' '}
+                        <h2 className="text-5xl ff-font-bold md:text-6xl font-bold mb-4">
+                            Meet Your
                             <span className="text-foreground">Mentor</span>
                         </h2>
-                        <div className="w-24 h-1 bg-gradient-to-r from-[#f0b100] to-yellow-600 mx-auto rounded-full" />
+
                     </div>
 
                     {/* Main Content */}
@@ -38,13 +36,11 @@ const MeetYourMentor = () => {
                             {/* Left Side - Profile */}
                             <div className="relative animate-fade-in-left">
                                 <div className="relative inline-block">
-
-
                                     {/* Profile Card */}
-                                    <div className="relative bg-white/80 backdrop-blur-lg rounded-[1rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
+                                    <div className="relative bg-white backdrop-blur-lg rounded-[1rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
                                         {/* Profile Image with Geometric Frame */}
                                         <div className="relative mb-6">
-                                            <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100]/30 to-yellow-600/30 rounded-full blur-2xl" />
+                                            {/* <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100]/30 to-yellow-600/30 rounded-full blur-2xl" /> */}
                                             <div className="relative w-48 h-48 mx-auto">
                                                 <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-full animate-spin-slow opacity-20" />
                                                 <div className="absolute inset-2 bg-white rounded-full" />
@@ -55,7 +51,7 @@ const MeetYourMentor = () => {
                                                 />
                                             </div>
                                             {/* Floating Badge (Jump Animation) */}
-                                            <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-[#f0b100] to-yellow-600 text-white px-4 py-2 rounded-full shadow-lg animate-jump">
+                                            <div className="absolute -bottom-2 -right-2 bg-[#FACC00] text-black  ff-font px-4 py-2 rounded-full shadow-lg animate-jump">
                                                 <span className="text-sm font-bold">MD</span>
                                             </div>
 
@@ -63,20 +59,20 @@ const MeetYourMentor = () => {
 
                                         {/* Name and Title */}
                                         <div className="text-center mb-6">
-                                            <h3 className="text-3xl font-bold mb-2 bg-gradient-to-r from-[#f0b100] to-yellow-600 bg-clip-text text-transparent">
+                                            <h3 className="text-3xl font-bold mb-2 ff-font-bold text-primary">
                                                 Dr. Kishor Managoli, MD
                                             </h3>
-                                            <p className="text-lg text-muted-foreground font-medium mb-1">
+                                            <p className="text-lg ff-font-bold font-bold mb-1">
                                                 Senior Surgical & Digital Pathologist
                                             </p>
-                                            <p className="text-md text-muted-foreground">
+                                            <p className="text-md ff-font">
                                                 Founder & Chief Educator, Mendel Academy
                                             </p>
                                         </div>
 
                                         {/* Description */}
-                                        <div className="bg-gradient-to-br from-[#f0b100]/5 to-yellow-600/5 rounded-2xl p-6 border border-[#f0b100]/10">
-                                            <p className="text-muted-foreground leading-relaxed text-center">
+                                        <div className="bg-white ff-font p-6 border border-primary">
+                                            <p className="text-center">
                                                 Dr. Managoli is popular for providing his students a transformational experience.
                                                 His mentorship is deeply interactive and case-based, designed to help you think
                                                 critically, diagnose confidently, and connect pathology to real clinical decisions.
@@ -107,12 +103,12 @@ const MeetYourMentor = () => {
                                         <div className="absolute -inset-1 bg-gradient-to-r from-[#f0b100]/0 via-[#f0b100]/50 to-[#f0b100]/0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
                                         {/* Achievement Card */}
-                                        <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-[#f0b100]/20 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2">
+                                        <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-primary shadow-lg transition-all duration-500 hover:-translate-y-2">
                                             <div className="flex items-center gap-6">
                                                 {/* Icon Container */}
                                                 <div className="relative">
-                                                    <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-                                                    <div className="relative bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-2xl p-4 transform group-hover:rotate-6 transition-transform duration-500">
+                                                    <div className="absolute inset-0 bg-[#FACC00] rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
+                                                    <div className="relative bg-[#FACC00] rounded-2xl p-4 transform group-hover:rotate-6 transition-transform duration-500">
                                                         <achievement.icon className="w-8 h-8 text-white" />
                                                     </div>
                                                 </div>
@@ -124,7 +120,7 @@ const MeetYourMentor = () => {
                                             </div>
 
                                             {/* Decorative Line */}
-                                            <div className="absolute bottom-0 left-6 right-6 h-1 bg-gradient-to-r from-transparent via-[#f0b100]/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                                            <div className="absolute bottom-0 left-6 right-6 h-1 bg-gradient-to-r from-transparent via-[#f0b100]/50 to-transparent transform scale-x-0 transition-transform duration-500" />
                                         </div>
                                     </div>
                                 ))}

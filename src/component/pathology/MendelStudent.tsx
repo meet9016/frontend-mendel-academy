@@ -54,7 +54,7 @@ const MendelStudent = () => {
     return (
         <>
             {/* MENDEL STUDENT */}
-            <section className="relative py-20 bg-[#f9fafb] overflow-hidden">
+            <section className="relative py-15 bg-[#f9fafb] overflow-hidden">
                 <div className="absolute top-20 right-1/4 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
 
@@ -62,15 +62,15 @@ const MendelStudent = () => {
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center justify-center gap-2 mb-4">
                             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#f0b100]" />
-                            <span className="text-sm font-medium text-[#f0b100] uppercase tracking-wider">
+                            <span className="text-sm font-medium text-primary ff-font uppercase tracking-wider">
                                 Student Success Stories
                             </span>
                             <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#f0b100]" />
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                            What <span className="bg-gradient-to-r from-[#f0b100] to-yellow-600 bg-clip-text text-transparent">Mendel Students</span><br />Say About Us
+                        <h2 className="text-4xl md:text-5xl ff-font-bold font-bold mb-4">
+                            What Mendel Students<br />Say About Us
                         </h2>
-                        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                        <p className="ff-font text-lg max-w-2xl mx-auto">
                             Join thousands of pathology professionals who have transformed their diagnostic skills
                         </p>
                     </div>
@@ -84,7 +84,7 @@ const MendelStudent = () => {
                             className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 p-4 rounded-full bg-white border-2 border-[#f0b100]/30 shadow-xl transition-all duration-300 hover:scale-110 hover:bg-[#f0b100] hover:text-white group ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                         >
-                            <FaChevronLeft className="text-[#f0b100] group-hover:text-white" />
+                            <FaChevronLeft className="text-primary group-hover:text-white" />
                         </button>
 
                         <button
@@ -93,10 +93,10 @@ const MendelStudent = () => {
                             className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 p-4 rounded-full bg-white border-2 border-[#f0b100]/30 shadow-xl transition-all duration-300 hover:scale-110 hover:bg-[#f0b100] hover:text-white group ${currentIndex >= maxIndex ? 'opacity-50 cursor-not-allowed' : ''
                                 }`}
                         >
-                            <FaChevronRight className="text-[#f0b100] group-hover:text-white" />
+                            <FaChevronRight className="text-primary group-hover:text-white" />
                         </button>
 
-                        <div className="overflow-hidden px-2 cursor-pointer">
+                        <div className="overflow-hidden px-2 cursor-pointer  p-8">
                             <div
                                 className="flex gap-6 transition-transform duration-500 ease-out"
                                 style={{
@@ -106,22 +106,22 @@ const MendelStudent = () => {
                                 {testimonials.map((t, i) => (
                                     <div
                                         key={t.id}
-                                        className="min-w-[calc(33.333%-1rem)] group relative bg-white rounded-2xl border-2 border-[#f0b100]/20 p-8 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2"
+                                        className="min-w-[calc(33.333%-1rem)] group relative bg-white rounded-2xl border-2 border-primary p-8 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2"
                                     >
-                                        <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
+                                        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#FACC00] rounded-full flex items-center justify-center shadow-lg">
                                             <FaQuoteRight className="text-white" />
                                         </div>
 
-                                        <h3 className="text-xl font-bold mb-2">{t.name}</h3>
+                                        <h3 className="text-xl font-bold ff-font-bold mb-2">{t.name}</h3>
                                         <div className="flex items-center gap-2 mb-3">
                                             {[...Array(t.rating)].map((_, i) => (
-                                                <FaStar key={i} className="text-[#f0b100]" />
+                                                <FaStar key={i} className="text-primary" />
                                             ))}
-                                            <span className="text-sm text-muted-foreground">{t.timeAgo}</span>
+                                            <span className="text-sm ff-font">{t.timeAgo}</span>
                                         </div>
 
                                         {/* ✅ Only this line changed — limit text to 5 lines */}
-                                        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-5">
+                                        <p className="ff-font text-sm leading-relaxed line-clamp-5">
                                             {t.text}
                                         </p>
                                     </div>

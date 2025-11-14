@@ -16,6 +16,7 @@ import UpcomingCourse from './UpcomingCourse';
 import MendelStudent from './MendelStudent';
 import MeetYourMentor from './MeetYourMentor';
 import Footer from '../auth/Footer';
+import CommonButton from '@/comman/Button';
 
 const AdvancedPathology = () => {
     const [revealedSlides, setRevealedSlides] = useState<Set<number>>(new Set());
@@ -64,9 +65,7 @@ const AdvancedPathology = () => {
             <Header />
 
             {/* --- Hero Section --- */}
-            <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#fff8e1] to-[#fffdf5]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#f0b10033,transparent_60%)]" />
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#f0b100]/20 rounded-full blur-3xl animate-float" />
+            <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white">
                 <div
                     className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#f0b100]/15 rounded-full blur-3xl animate-float"
                     style={{ animationDelay: '1s' }}
@@ -76,18 +75,18 @@ const AdvancedPathology = () => {
                     {/* Left content */}
                     <div className="flex flex-col justify-center space-y-8 animate-fade-in-up h-full">
                         <div className="space-y-4">
-                            <div className="inline-block px-4 py-2 bg-[#f0b100]/10 border border-[#f0b100]/20 rounded-full backdrop-blur-sm">
-                                <span className="text-sm font-medium text-[#f0b100]">
+                            <div className="inline-block px-4 py-2 bg-white border border-[#FFCA00] rounded-full backdrop-blur-sm">
+                                <span className="text-sm font-medium ff-font">
                                     Mendel Mastery Series
                                 </span>
                             </div>
 
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                                <span className="bg-gradient-to-r from-[#f0b100] to-yellow-600 bg-clip-text text-transparent">
+                            <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold leading-tight">
+                                <span className="ff-font-bold">
                                     Advanced
                                 </span>
                                 <br />
-                                <span className="text-foreground">Pathology Prep.</span>
+                                <span className="ff-font-bold">Pathology Prep.</span>
                             </h1>
                         </div>
 
@@ -98,10 +97,10 @@ const AdvancedPathology = () => {
                                     className="flex items-start gap-4 group animate-fade-in-up"
                                     style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                                 >
-                                    <div className="mt-1 p-3 rounded-xl bg-[#f0b100]/10 border border-[#f0b100]/20 group-hover:scale-110 transition-transform duration-300">
-                                        <feature.icon className="w-5 h-5 text-[#f0b100]" />
+                                    <div className="mt-1 p-3 rounded-xl border-primary group-hover:scale-110 transition-transform duration-300">
+                                        <feature.icon className="w-5 h-5 text-primary" />
                                     </div>
-                                    <p className="text-muted-foreground leading-relaxed flex-1">
+                                    <p className="ff-font flex-1">
                                         {feature.text}
                                     </p>
                                 </div>
@@ -112,22 +111,25 @@ const AdvancedPathology = () => {
                             className="pt-4 animate-fade-in-up"
                             style={{ animationDelay: '0.6s' }}
                         >
-                            <button className="text-lg px-4 py-2 bg-[#f0b100] text-white hover:bg-[#d79d00] shadow-lg shadow-[#f0b100]/40 transition-all animate-glow-pulse rounded-md">
+                            {/* <button className="text-lg px-4 py-2 bg-[#f0b100] text-white hover:bg-[#d79d00] shadow-lg shadow-[#f0b100]/40 transition-all animate-glow-pulse rounded-md">
                                 Enroll now
-                            </button>
+                            </button> */}
+                            <CommonButton pyClass="py-5" pxClass="px-15" fontWeight={700} fontSize={18}>
+                                Enroll Now
+                            </CommonButton>
                         </div>
                     </div>
 
                     {/* Right content */}
                     <div
-                        className="relative flex flex-col justify-center items-center h-full animate-scale-in rounded-3xl border-2 border-[#f0b100]/40 bg-white/60 backdrop-blur-sm shadow-[0_0_25px_rgba(240,177,0,0.25)] p-8 transition-all hover:shadow-[0_0_35px_rgba(240,177,0,0.3)]"
+                        className="relative flex flex-col justify-center items-center h-full animate-scale-in rounded-3xl border-2 border-[#FFCA00]/40 bg-white/60 backdrop-blur-sm  p-8 transition-all "
                         style={{ animationDelay: '0.4s' }}
                     >
                         <div className="text-center mb-6 animate-fade-in-down">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-[#f0b100] to-yellow-600 bg-clip-text text-transparent leading-[1.2] pb-[4px]">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-2 ff-font-bold  leading-[1.2] pb-[4px]">
                                 Pathology Mastery Challenge
                             </h2>
-                            <p className="text-md text-muted-foreground">
+                            <p className="text-md ff-font">
                                 Can you diagnose these?
                             </p>
                         </div>
@@ -204,7 +206,7 @@ const AdvancedPathology = () => {
                             </button>
                         </div>
 
-                        <p className="text-center mt-4 text-muted-foreground italic animate-fade-in-up">
+                        <p className="text-center mt-4 ff-font">
                             Master pattern recognition with Mendel Academy's
                             case-based mentoring.
                         </p>
