@@ -409,7 +409,7 @@ const CourseCard = ({
           Enroll Now
         </button> */}
 
-        <CommonButton size="lg" fontWeight={700} fontSize={12}>
+        <CommonButton pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
           Enroll Now
         </CommonButton>
 

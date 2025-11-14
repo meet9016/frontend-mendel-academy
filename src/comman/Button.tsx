@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-type ButtonSize = "sm" | "md" | "lg";
+type ButtonSize = "sm" | "md" | "lg" | "xxl";
 type ButtonVariant = "primary" | "secondary" | "outline" | "danger";
 
 interface CommonButtonProps
@@ -14,6 +14,8 @@ interface CommonButtonProps
 
   fontSize?: number; // 👈 px size dynamic
   fontWeight?: number | string;
+  pyClass?: string; // 👈 tailwind class
+  pxClass?: string;
 }
 
 const CommonButton: React.FC<CommonButtonProps> = ({
@@ -24,15 +26,18 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   onClick,
   fontSize, // 👈 added
   fontWeight,
+  pyClass,
+  pxClass,
   ...props
 }) => {
   const base =
-    "ff-font font-weidth inline-flex items-center justify-center rounded-md font-medium transition duration-200 focus:outline-none";
+    "ff-font font-weidth cursor-pointer inline-flex items-center justify-center rounded-md font-medium transition duration-200 focus:outline-none";
 
   const sizes: Record<ButtonSize, string> = {
     sm: "px-3 py-1.5",
     md: "px-4 py-2",
-    lg: "px-28 py-3",
+    lg: "",
+    xxl: "w-full",
   };
 
   const variants: Record<ButtonVariant, string> = {
@@ -46,7 +51,14 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={clsx(base, sizes[size], variants[variant], className)}
+      className={clsx(
+        base,
+        sizes[size],
+        variants[variant],
+        pyClass,
+        pxClass,
+        className
+      )}
       style={{
         fontSize: fontSize ? `${fontSize}px` : undefined, // 👈 dynamic px font size
         fontWeight: fontWeight ? fontWeight : undefined,

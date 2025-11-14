@@ -1,4 +1,5 @@
 "use client";
+import CommonButton from "@/comman/Button";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
@@ -122,12 +123,23 @@ function AdvancedPathologyPrograms() {
         </div>
 
         {/* CTA Button */}
-        <button
+        {/* <button
           onClick={() => router.push("/subscription")}
-          className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition cursor-pointer">
+          className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition cursor-pointer"
+        >
           Learn More
           <BsArrowRight className="w-5 h-5" />
-        </button>
+        </button> */}
+
+        <CommonButton
+          size="xxl"
+          fontWeight={700}
+          fontSize={12}
+          pyClass="py-4" pxClass="px-10"
+          onClick={() => router.push("/subscription")}
+        >
+          Learn More <BsArrowRight className="w-5 h-5" />
+        </CommonButton>
       </div>
 
       {/* RECORDED PROGRAMS */}
@@ -156,7 +168,9 @@ function AdvancedPathologyPrograms() {
                 />
                 <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   <FaStar className="text-yellow-400 w-3 h-3 mr-1" />
-                  <span className="text-xs font-semibold">{recordedProgram?.rating}</span>
+                  <span className="text-xs font-semibold">
+                    {recordedProgram?.rating}
+                  </span>
                 </div>
                 <div className="absolute bottom-2 right-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
@@ -192,7 +206,6 @@ function AdvancedPathologyPrograms() {
                 >
                   {recordedProgram?.subtitle}
                 </p>
-
 
                 <div className="flex items-end justify-between">
                   <div>
