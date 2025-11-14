@@ -9,7 +9,6 @@ import { BiCalendar, BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { GiSparkles } from "react-icons/gi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-
 type Exam = {
   exam_name: string;
   link: string;
@@ -144,16 +143,17 @@ export default function Header() {
             className="flex items-center gap-2 cursor-pointer"
           >
             <img
-              src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
+              src={'../../../images/main logo.png'}
+              // src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
               alt="Mendel Academy Logo"
-              className="w-10 h-10 object-contain"
+              className="w-40 h-40 object-contain"
             />
-            <div className="flex flex-col leading-tight">
+            {/* <div className="flex flex-col leading-tight">
               <span className="font-bold text-lg text-gray-900">MENDEL</span>
               <span className="text-xs text-gray-500 uppercase tracking-wider">
                 ACADEMY
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* ✅ Links (Desktop) */}

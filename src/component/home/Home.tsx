@@ -19,6 +19,7 @@ import MedicalChooseMendelAcademy from "./MedicalChooseMendelAcademy";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { use, useEffect, useState } from "react";
+import CommonButton from "@/comman/Button";
 // import CourseCard from "../cousercard/CourseCard";
 
 interface CourseCardProps {
@@ -149,7 +150,7 @@ const Home = () => {
           Trusted by 10,000+ Medical Students
         </p>
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-snug">
+        <h1 className="ff-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-snug">
           We <span className="font-extrabold">simplify</span> learning, <br />
           <span className="bg-yellow-400 text-gray-900 px-2 py-1 rounded-lg">
             amplify
@@ -157,7 +158,7 @@ const Home = () => {
           success
         </h1>
 
-        <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl">
+        <p className="text-gray-600 ff-font text-sm sm:text-base md:text-lg max-w-2xl">
           Personalized Medical Coaching Driven by Data, Enhanced by AI
         </p>
 
@@ -404,9 +405,13 @@ const CourseCard = ({
         </p>
 
         {/* Enroll Button */}
-        <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-300 hover:shadow-lg hover:shadow-yellow-300/30 text-gray-900 font-bold py-4 rounded-xl transition-all duration-300 group-hover:scale-[1.02]">
+        {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-300 hover:shadow-lg hover:shadow-yellow-300/30 text-gray-900 font-bold py-4 rounded-xl transition-all duration-300 group-hover:scale-[1.02]">
           Enroll Now
-        </button>
+        </button> */}
+
+        <CommonButton size="lg" fontWeight={700} fontSize={12}>
+          Enroll Now
+        </CommonButton>
 
         <p className="text-xs text-gray-400 text-center mt-3 font-medium">
           Instant access • Secure checkout
