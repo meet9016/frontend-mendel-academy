@@ -64,6 +64,9 @@ const AdvancedPathology = () => {
         <>
             <Header />
 
+            {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
+            <PathologyMasterySeries />
+
             {/* --- Hero Section --- */}
             <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white">
                 <div
@@ -94,18 +97,20 @@ const AdvancedPathology = () => {
                             {features.map((feature, index) => (
                                 <div
                                     key={index}
-                                    className="flex items-start gap-4 group animate-fade-in-up"
+                                    className="flex items-center gap-4 group animate-fade-in-up"
                                     style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                                 >
-                                    <div className="mt-1 p-3 rounded-xl border-primary group-hover:scale-110 transition-transform duration-300">
+                                    <div className="p-3 rounded-xl border-primary group-hover:scale-110 transition-transform duration-300">
                                         <feature.icon className="w-5 h-5 text-primary" />
                                     </div>
+
                                     <p className="ff-font flex-1">
                                         {feature.text}
                                     </p>
                                 </div>
                             ))}
                         </div>
+
 
                         <div
                             className="pt-4 animate-fade-in-up"
@@ -221,7 +226,7 @@ const AdvancedPathology = () => {
             <EndometrialPathology />
 
             {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
-            <PathologyMasterySeries />
+            {/* <PathologyMasterySeries /> */}
 
             {/* UPCOMING COURSE */}
             <UpcomingCourse />

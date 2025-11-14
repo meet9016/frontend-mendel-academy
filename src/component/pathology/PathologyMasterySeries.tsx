@@ -16,13 +16,13 @@ const PathologyMasterySeries = () => {
                     {/* Header */}
                     <div className="text-center mb-16 space-y-6 animate-fade-in-up">
                         <div className="inline-block text-center">
-                            <h2 className="text-5xl md:text-5xl font-bold mb-4">
+                            <h2 className="text-5xl md:text-5xl font-bold ">
                                 <span className="ff-font-bold ">
                                     Pathology Mendel
                                 </span>{' '}
                                 <span className="text-foreground">Mastery Series™</span>
                             </h2>
-                            <div className="h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-3/4" />
+                            {/* <div className="h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-3/4" /> */}
 
                         </div>
 

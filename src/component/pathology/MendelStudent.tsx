@@ -54,7 +54,7 @@ const MendelStudent = () => {
     return (
         <>
             {/* MENDEL STUDENT */}
-            <section className="relative py-15 bg-[#f9fafb] overflow-hidden">
+            <section className="relative py-15 bg-white overflow-hidden">
                 <div className="absolute top-20 right-1/4 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
 

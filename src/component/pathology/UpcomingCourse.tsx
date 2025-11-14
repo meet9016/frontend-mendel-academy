@@ -36,7 +36,7 @@ const UpcomingCourse = () => {
     ];
     return (
         <>
-            <section className="relative py-15 overflow-hidden bg-white">
+            <section className="relative py-15 overflow-hidden bg-[#f9fafb]">
                 {/* Animated Background */}
                 {/* <div className="absolute top-20 left-10 w-72 h-72 bg-[#ffca00]/10 rounded-full blur-3xl animate-float" /> */}
                 <div
@@ -59,7 +59,7 @@ const UpcomingCourse = () => {
                                 <span className="text-foreground">Courses</span>
                             </h2>
 
-                            <div className="mt-3 h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-[30%]" />
+                            {/* <div className="mt-3 h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-[30%]" /> */}
                         </div>
 
                         <p className="text-lg text-muted-foreground  ff-font max-w-3xl mx-auto leading-relaxed">
@@ -142,10 +142,10 @@ const UpcomingCourse = () => {
                                             </p>
 
                                             {/* --- Info Boxes --- */}
-                                            <div className="space-y-3 pl-4 mt-2">
+                                            <div className="space-y-3 pl-1 mt-2">
                                                 <div className="relative group/date">
                                                     {/* <div className="absolute inset-0 bg-[#ffca00]/5 transform -skew-x-6 group-hover/date:skew-x-0 transition-transform duration-300" /> */}
-                                                    <div className="relative flex items-center gap-3 p-3 border-2 border-[#ffca00]/20 group-hover/date:border-[#ffca00]/40 transition-colors duration-300">
+                                                    <div className="relative flex items-center gap-3 p-3 border-2 border-primary transition-colors duration-300">
                                                         <div className="p-2 bg-[#FFCA00] ff-font-bold  rounded-full">
                                                             <FaCalendarAlt className="w-4 h-4 text-white" />
                                                         </div>
@@ -156,7 +156,7 @@ const UpcomingCourse = () => {
                                                 </div>
 
                                                 <div className="relative group/spots">
-                                                    <div className="absolute inset-0 bg-[#ffca00]/5 transform skew-x-6 group-hover/spots:skew-x-0 transition-transform duration-300" />
+                                                    <div className="absolute inset-0 duration-300" />
                                                     <div className="relative flex items-center gap-3 p-3 border-2 border-primary transition-colors duration-300">
                                                         <div className="p-2 bg-[#ffca00] rounded-full">
                                                             <FaUsers className="w-4 h-4 text-white" />

@@ -3,7 +3,7 @@ import { FaBriefcase, FaCertificate, FaFlask, FaSearch } from 'react-icons/fa'
 const MeetYourMentor = () => {
     return (
         <>
-            <section className="relative py-15 overflow-hidden bg-white">
+            <section className="relative py-15 overflow-hidden bg-[#f9fafb]">
                 {/* Decorative Elements */}
                 <div className="absolute top-10 right-10 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl animate-pulse" />
                 <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
