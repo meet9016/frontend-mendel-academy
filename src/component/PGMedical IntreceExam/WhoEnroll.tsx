@@ -32,43 +32,41 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
     <div>
       <section className="py-15 bg-gradient-to-br from-white to-gray-50">
         <div className="container mx-auto px-4">
-          <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
-            {/* Image Section */}
-            <div className="order-2 flex justify-center md:order-1">
-              <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2 w-[320px] h-[300px] md:w-[500px] md:h-[500px]">
-                <img
-                  src={
-                    plans?.who_can_enroll_image
-                      ? plans.who_can_enroll_image
-                      : "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"
-                  }
-                  alt="Medical professional"
-                  className="w-full h-full rounded-[1.5rem] object-cover shadow-2xl"
-                />
+          {loading ? skeletonImageTextSection : (
+            <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
+              {/* Image Section */}
+              <div className="order-2 flex justify-center md:order-1">
+                <div className="relative overflow-hidden rounded-3xl border-4 border-[#ffcb04] shadow-2xl p-2 w-[320px] h-[300px] md:w-[500px] md:h-[500px]">
+                  <img
+                    src={
+                      plans?.who_can_enroll_image
+                        ? plans.who_can_enroll_image
+                        : "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg"
+                    }
+                    alt="Medical professional"
+                    className="w-full h-full rounded-[1.5rem] object-cover shadow-2xl"
+                  />
+                </div>
+              </div>
+              {/* Text Section */}
+              <div className="order-1 space-y-8 md:order-2">
+                <div>
+                  <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+                    {plans?.who_can_enroll_title}
+                  </h2>
+                  <div className="h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div>
+                </div>
+
+                <div className="space-y-5">
+                  {/* <div dangerouslySetInnerHTML={{ __html: cleanHtml }} /> */}
+                  <div
+                    className="prose max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:marker:text-[#ffcb04] text-gray-800"
+                    dangerouslySetInnerHTML={{ __html: cleanHtml }}
+                  />
+                </div>
               </div>
             </div>
-
-
-
-
-            {/* Text Section */}
-            <div className="order-1 space-y-8 md:order-2">
-              <div>
-                <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
-                  {plans?.who_can_enroll_title}
-                </h2>
-                <div className="h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div>
-              </div>
-
-              <div className="space-y-5">
-                {/* <div dangerouslySetInnerHTML={{ __html: cleanHtml }} /> */}
-                <div
-                  className="prose max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:marker:text-[#ffcb04] text-gray-800"
-                  dangerouslySetInnerHTML={{ __html: cleanHtml }}
-                />
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Pricing Cards */}
           <div className="max-w-7xl mx-auto">
@@ -78,7 +76,6 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-[#ffcb04] to-amber-400 mx-auto rounded-full"></div>
             </div>
-
 
             {loading ? skeletonPlanCards :
               (
@@ -155,6 +152,30 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
   );
 };
 
+// Skeleton for Image + Text Section
+const skeletonImageTextSection = (
+  <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
+    {/* Image Skeleton - Left Side */}
+    <div className="relative order-1 md:order-1 flex justify-center">
+      <div className="relative overflow-hidden rounded-8xl shadow-2xl p-3 w-[500px] h-[500px]">
+        <Skeleton height="100%" />
+      </div>
+
+    </div>
+
+    {/* Text Skeleton - Right Side */}
+    <div className="order-2 md:order-2 space-y-8 w-full">
+      <Skeleton height={40} width={300} borderRadius={10} className="mb-4" />
+
+      <div className="space-y-3">
+        <div>
+          <Skeleton height={200} width="100%" borderRadius={20} />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const skeletonPlanCards = (
   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
     {[1, 2, 3, 4].map((i) => (
@@ -166,6 +187,7 @@ const skeletonPlanCards = (
       />
     ))}
   </div>
+
 );
 
 export default WhoEnroll;
