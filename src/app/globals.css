@@ -83,3 +83,26 @@ body {
 }
 
 
+.ff-font {
+  font-family: 'Helvetica', sans-serif;
+}
+
+/* override family only for bold title*/ 
+.ff-font-bold {
+  font-family: 'Arial', sans-serif;
+}
+
+.text-primary {
+  color: #FFCA00;
+}
+
+.border-primary {
+  border: 1px solid #FFCA00;
+}
+
+
+
+/* ff-font: // font-Helvetica */
+/* ff-font-bold: // font-Arial */
+/* text-primary: // font-color */
+/* border-primary: // font-border */
