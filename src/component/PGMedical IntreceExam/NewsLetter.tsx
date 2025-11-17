@@ -1,3 +1,4 @@
+import CommonButton from "@/comman/Button";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { newsLatterSchema } from "@/validationSchema/validationSchema";
@@ -64,11 +65,11 @@ const NewsLetter: React.FC = () => {
     });
     if (!error) {
       setErrors({
-         firstName: "",
-    lastName: "",
-    email: "",
-    medicalSchool: "",
-    graduationYear: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        medicalSchool: "",
+        graduationYear: "",
       });
       return true;
     }
@@ -114,30 +115,30 @@ const NewsLetter: React.FC = () => {
 
   return (
     <div>
-      <section className="relative overflow-hidden py-15 bg-gradient-to-br from-amber-100 via-white to-yellow-50">
+      <section className="relative overflow-hidden py-15 bg-[#f9fafb]">
         {/* Decorative Elements */}
         <div className="container relative z-10 mx-auto px-4">
           <div className="mx-auto max-w-6xl">
             {/* Header */}
             <div className="mb-12 text-center">
-              <div className="mb-4 inline-block rounded-full bg-yellow-100 px-6 py-2">
+              {/* <div className="mb-4 inline-block rounded-full bg-yellow-100 px-6 py-2">
                 <span className="text-sm font-bold uppercase tracking-wide text-yellow-700">
                   Reserve Your Spot
                 </span>
-              </div>
-              <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+              </div> */}
+              <h2 className="mb-4 text-4xl font-bold ff-font-bold md:text-5xl">
                 Start Your Journey Today
               </h2>
-              <p className="mx-auto max-w-2xl text-xl text-gray-600">
+              <p className="mx-auto max-w-2xl text-xl ff-font">
                 Fill in your details and take the first step towards USMLE
                 success
               </p>
-              <div className="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div>
+              {/* <div className="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-yellow-400 to-amber-400"></div> */}
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 items-stretch">
               {/* Form Section */}
-              <div className="h-full flex flex-col justify-between rounded-3xl border border-yellow-200 bg-white p-8 shadow-xl md:p-10">
+              <div className="h-full flex flex-col justify-between rounded-3xl border border-primary bg-white p-8 shadow-xl md:p-10">
                 <div className="flex flex-col justify-between h-full space-y-6">
                   <div className="space-y-6 flex-1">
                     {/* Name Fields */}
@@ -145,9 +146,9 @@ const NewsLetter: React.FC = () => {
                       <div className="space-y-2">
                         <label
                           htmlFor="firstName"
-                          className="flex items-center gap-2 font-semibold text-gray-800"
+                          className="flex items-center gap-2 font-medium ff-font"
                         >
-                          <FaUser className="text-yellow-600" />
+                          <FaUser className="text-primary" />
                           First Name
                         </label>
                         <input
@@ -156,7 +157,7 @@ const NewsLetter: React.FC = () => {
                           onChange={handleChange}
                           type="text"
                           placeholder="John"
-                          className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                          className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
                         {errors.firstName && (
                           <p className="text-red-500 text-sm">
@@ -167,9 +168,9 @@ const NewsLetter: React.FC = () => {
                       <div className="space-y-2">
                         <label
                           htmlFor="lastName"
-                          className="flex items-center gap-2 font-semibold text-gray-800"
+                          className="flex items-center gap-2 font-medium ff-font"
                         >
-                          <FaUser className="text-yellow-600" />
+                          <FaUser className="text-primary" />
                           Last Name
                         </label>
                         <input
@@ -178,7 +179,7 @@ const NewsLetter: React.FC = () => {
                           onChange={handleChange}
                           type="text"
                           placeholder="Doe"
-                          className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                          className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                         />
                         {errors.lastName && (
                           <p className="text-red-500 text-sm">
@@ -192,9 +193,9 @@ const NewsLetter: React.FC = () => {
                     <div className="space-y-2">
                       <label
                         htmlFor="email"
-                        className="flex items-center gap-2 font-semibold text-gray-800"
+                        className="flex items-center gap-2  font-medium ff-font"
                       >
-                        <FaEnvelope className="text-yellow-600" />
+                        <FaEnvelope className="text-primary" />
                         Email Address
                       </label>
                       <input
@@ -203,7 +204,7 @@ const NewsLetter: React.FC = () => {
                         onChange={handleChange}
                         type="email"
                         placeholder="john.doe@example.com"
-                        className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
                       {errors.email && (
                         <p className="text-red-500 text-sm">{errors.email}</p>
@@ -212,9 +213,9 @@ const NewsLetter: React.FC = () => {
                     <div className="space-y-2">
                       <label
                         htmlFor="email"
-                        className="flex items-center gap-2 font-semibold text-gray-800"
+                        className="flex items-center gap-2 font-medium ff-font"
                       >
-                        <FaEnvelope className="text-yellow-600" />
+                        <FaEnvelope className="text-primary" />
                         Medical School
                       </label>
                       <input
@@ -223,7 +224,7 @@ const NewsLetter: React.FC = () => {
                         value={formData.medicalSchool}
                         onChange={handleChange}
                         placeholder="Your school name"
-                        className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
                       {errors.medicalSchool && (
                         <p className="text-red-500 text-sm">
@@ -236,9 +237,9 @@ const NewsLetter: React.FC = () => {
                     <div className="space-y-2">
                       <label
                         htmlFor="graduationYear"
-                        className="flex items-center gap-2 font-semibold text-gray-800"
+                        className="flex items-center gap-2 font-medium ff-font"
                       >
-                        <FaCalendar className="text-yellow-600" />
+                        <FaCalendar className="text-primary" />
                         Graduation Year
                       </label>
                       <input
@@ -247,7 +248,7 @@ const NewsLetter: React.FC = () => {
                         onChange={handleChange}
                         type="text"
                         placeholder="2024"
-                        className="h-12 w-full rounded-lg border border-yellow-300 px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
                       />
                       {errors.graduationYear && (
                         <p className="text-red-500 text-sm">
@@ -259,14 +260,17 @@ const NewsLetter: React.FC = () => {
 
                   {/* Button at bottom */}
                   <div>
-                    <button
+                    {/* <button
                       type="submit"
                       onClick={handleRagisterNow}
                       className="group flex w-full h-14 items-center justify-center gap-2 rounded-xl bg-yellow-500 text-lg font-bold text-white shadow-lg hover:bg-yellow-600 transition-all"
                     >
                       Register Now
                       <FaArrowRight className="transition-transform group-hover:translate-x-1" />
-                    </button>
+                    </button> */}
+                    <CommonButton onClick={handleRagisterNow} pyClass="py-3" pxClass="px-45" fontWeight={700} fontSize={14} className='mt-8'>
+                      Register Now <span>→</span>
+                    </CommonButton>
 
                     <p className="text-center text-sm text-gray-500 mt-3">
                       By registering, you agree to our terms and conditions
@@ -278,35 +282,35 @@ const NewsLetter: React.FC = () => {
               {/* Info Section */}
               <div className="h-full space-y-8 flex flex-col justify-between">
                 {/* Contact */}
-                <div className="rounded-3xl border border-yellow-200 bg-white p-8 shadow-lg">
-                  <h3 className="mb-6 text-2xl font-bold text-gray-900">
+                <div className="rounded-3xl border-primary bg-white p-8 shadow-lg">
+                  <h3 className="mb-6 text-2xl font-bold ff-font-bold">
                     Need Help?
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex items-center gap-4 rounded-xl bg-yellow-50 p-4">
-                      <div className="flex size-12 items-center justify-center rounded-full bg-yellow-100">
-                        <FaPhone className="text-yellow-600" />
+                    <div className="flex items-center gap-4 rounded-xl border-primary p-4">
+                      <div className="flex size-12 items-center justify-center rounded-full bg-white border-primary">
+                        <FaPhone className="text-primary" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Call us at</p>
+                        <p className="text-sm ff-font">Call us at</p>
                         <a
                           href="tel:+919925511631"
-                          className="text-lg font-bold text-yellow-700 hover:underline"
+                          className="text-lg font-bold text-primary ff-font-bold hover:underline"
                         >
                           +91-99255-11631
                         </a>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 rounded-xl bg-yellow-50 p-4">
-                      <div className="flex size-12 items-center justify-center rounded-full bg-yellow-100">
-                        <FaEnvelope className="text-yellow-600" />
+                    <div className="flex items-center gap-4 rounded-xl border-primary p-4">
+                      <div className="flex size-12 items-center justify-center rounded-full bg-white border-primary">
+                        <FaEnvelope className="text-primary" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Email us at</p>
+                        <p className="text-sm ff-font">Email us at</p>
                         <a
                           href="mailto:ask@mendalacademy.com"
-                          className="break-all text-lg font-bold text-yellow-700 hover:underline"
+                          className="break-all text-lg font-bold text-primary ff-font-bold hover:underline"
                         >
                           ask@mendalacademy.com
                         </a>
@@ -316,8 +320,8 @@ const NewsLetter: React.FC = () => {
                 </div>
 
                 {/* Benefits */}
-                <div className="rounded-3xl border border-yellow-200 bg-gradient-to-br from-yellow-50 via-white to-amber-50 p-15 shadow-lg">
-                  <h3 className="mb-6 text-2xl font-bold text-gray-900">
+                <div className="rounded-3xl border border-primary bg-white p-15 shadow-lg">
+                  <h3 className="mb-6 text-2xl font-bold ff-font-bold">
                     Why Register Now?
                   </h3>
                   <ul className="space-y-4">
@@ -329,10 +333,10 @@ const NewsLetter: React.FC = () => {
                       "Join our community of successful students",
                     ].map((benefit, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <div className="mt-0.5 flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-yellow-500">
+                        <div className="mt-0.5 flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-[#ffca00]">
                           <FaCheckCircle className="text-sm text-white" />
                         </div>
-                        <span className="text-gray-800">{benefit}</span>
+                        <span className="ff-font">{benefit}</span>
                       </li>
                     ))}
                   </ul>

@@ -7,21 +7,21 @@ const CourseDes = ({ data }: { data: any }) => {
   });
   return (
     <div>
-      <section className="py-10 bg-gradient-to-br from-white to-gray-50">
+      <section className="py-15 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Section Heading */}
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
                 Course Description
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#ffcb04] to-amber-400 mx-auto rounded-full"></div>
+              {/* <div className="w-24 h-1 bg-gradient-to-r from-[#ffcb04] to-amber-400 mx-auto rounded-full"></div> */}
             </div>
 
             {/* Content Box */}
             <div
               dangerouslySetInnerHTML={{ __html: cleanHtml }}
-              className="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-gray-200 space-y-6">
+              className="bg-white p-8 md:p-12 ff-font rounded-3xl shadow-lg border border-gray-200 space-y-6">
             </div>
           </div>
         </div>
