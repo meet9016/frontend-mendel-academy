@@ -38,15 +38,15 @@ const Faq = () => {
 
     return (
         <div>
-            <section className=" mb-10 bg-gray-50">
+            <section className=" py-15 bg-[#f9fafb]">
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto">
                         {/* Section Heading */}
                         <div className="text-center mb-12">
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                            <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
                                 FAQs
                             </h2>
-                            <div className="w-24 h-1 bg-gradient-to-r from-[#ffcb04] to-amber-400 mx-auto rounded-full"></div>
+                            {/* <div className="w-24 h-1 bg-gradient-to-r from-[#ffcb04] to-amber-400 mx-auto rounded-full"></div> */}
                         </div>
 
                         {/* FAQ Items */}
@@ -60,16 +60,16 @@ const Faq = () => {
                                         >
                                             <button
                                                 onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                                                className="w-full p-6 flex items-center justify-between text-left hover:bg-yellow-50 transition-colors"
+                                                className="w-full p-6 flex items-center justify-between text-left"
                                             >
-                                                <span className="text-lg font-medium text-gray-900 pr-4">
+                                                <span className="text-lg font-medium ff-font-bold pr-4">
                                                     {faq.title}
                                                 </span>
-                                                <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                                <div className="flex-shrink-0 w-8 h-8 bg-white border-primary cursor-pointer rounded-lg flex items-center justify-center">
                                                     {openFaq === index ? (
-                                                        <FaChevronUp className="text-[#ffcb04]" />
+                                                        <FaChevronUp className="text-primary" />
                                                     ) : (
-                                                        <FaChevronDown className="text-[#ffcb04]" />
+                                                        <FaChevronDown className="text-primary" />
                                                     )}
                                                 </div>
                                             </button>
@@ -78,7 +78,7 @@ const Faq = () => {
                                                 <div className="px-6 pb-6">
                                                     <div className="pt-4 border-t border-gray-200">
                                                         <div
-                                                            className="text-gray-600"
+                                                            className="text-gray-600 ff-font"
                                                             dangerouslySetInnerHTML={{ __html: faq.description || "" }}
                                                         >
                                                         </div>
