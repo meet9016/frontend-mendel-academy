@@ -54,19 +54,19 @@ function AdvancedPathologyPrograms() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-10">
+    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-15">
       {/* Title Section */}
       <div className="text-center space-y-1">
-        <h1 className="text-4xl md:text-3xl font-extrabold text-gray-900">
+        <h1 className="text-4xl md:text-3xl font-extrabold ff-font-bold">
           Advanced Pathology
         </h1>
-        <h1 className="text-4xl md:text-3xl font-extrabold text-gray-900">
+        <h1 className="text-4xl md:text-3xl font-extrabold ff-font-bold">
           Programs
         </h1>
       </div>
 
       {/* Subtitle */}
-      <div className="text-center mt-4 text-gray-600 text-base md:text-lg">
+      <div className="text-center mt-4 ff-font text-base md:text-lg">
         <p>
           Specialized training designed by pathology experts to advance your
           diagnostic
@@ -75,7 +75,7 @@ function AdvancedPathologyPrograms() {
       </div>
 
       {/* Featured Live Program */}
-      <div className="w-full max-w-[1025px] mx-auto bg-gray-900 text-white rounded-2xl p-6 md:p-10 mt-10 shadow-lg hover:shadow-xl transition-shadow">
+      <div className="w-full max-w-[1025px] mx-auto bg-gray-900  text-white rounded-2xl p-6 md:p-10 mt-10 shadow-lg hover:shadow-xl transition-shadow">
         {/* Header Section */}
         <div className="flex flex-wrap items-center justify-between text-sm mb-6">
           <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
@@ -83,28 +83,28 @@ function AdvancedPathologyPrograms() {
             <span>Live</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="bg-white/10 px-3 py-1 rounded-full">Sold Out</span>
-            <span className="bg-white/10 px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="bg-white/10 ff-font-bold px-3 py-1 rounded-full">Sold Out</span>
+            <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
               <CgLock className="w-4 h-4" />8 weeks
             </span>
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-2xl md:text-3xl font-bold mb-4">
+        <h3 className="text-2xl md:text-3xl ff-font-bold font-bold mb-4">
           Molecular Pathology Training
         </h3>
 
         {/* Instructor Info */}
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-gray-700 ff-font-bold flex items-center justify-center">
             <span className="text-white text-lg font-semibold">D</span>
           </div>
           <div>
-            <h4 className="font-semibold text-white text-base md:text-lg">
+            <h4 className="font-semibold ff-font-bold text-white text-base md:text-lg">
               Dr. John Doe
             </h4>
-            <p className="text-gray-400 text-sm">MD, Senior Pathologist</p>
+            <p className="text-gray-400 ff-font text-sm">MD, Senior Pathologist</p>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ function AdvancedPathologyPrograms() {
             (feature, index) => (
               <div
                 key={index}
-                className="bg-gray-700 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-600 transition"
+                className="bg-gray-700 text-white ff-font px-4 py-1.5 rounded-full text-sm hover:bg-gray-600 transition"
               >
                 {feature}
               </div>
@@ -145,10 +145,10 @@ function AdvancedPathologyPrograms() {
       {/* RECORDED PROGRAMS */}
       <section className="w-full max-w-[1025px] mx-auto  mt-10">
         <div className="mb-6 text-left">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold ff-font-bold">
             Recorded Programs
           </h2>
-          <p className="text-gray-500 text-sm">
+          <p className="ff-font text-sm">
             Self-paced learning with lifetime access
           </p>
         </div>
@@ -167,12 +167,12 @@ function AdvancedPathologyPrograms() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
-                  <FaStar className="text-yellow-400 w-3 h-3 mr-1" />
+                  <FaStar className="text-primary w-3 h-3 mr-1" />
                   <span className="text-xs font-semibold">
                     {recordedProgram?.rating}
                   </span>
                 </div>
-                <div className="absolute bottom-2 right-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
+                <div className="absolute bottom-2 right-2 ff-font-bold flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
                   <span className="text-xs font-semibold">
                     {recordedProgram?.total_reviews}+ learners
@@ -183,7 +183,7 @@ function AdvancedPathologyPrograms() {
               {/* Content */}
               <div className="p-4">
                 <h3
-                  className="font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
+                  className="font-bold ff-font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
                   style={{
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
@@ -195,7 +195,7 @@ function AdvancedPathologyPrograms() {
                   {recordedProgram?.title}
                 </h3>
                 <p
-                  className="text-xs text-gray-500 mb-3 overflow-hidden text-ellipsis line-clamp-2"
+                  className="text-xs ff-font mb-3 overflow-hidden text-ellipsis line-clamp-2"
                   style={{
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
@@ -209,16 +209,20 @@ function AdvancedPathologyPrograms() {
 
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs ff-font">
                       {recordedProgram?.duration} month access
                     </p>
-                    <p className="text-sm font-bold text-gray-900">
+                    <p className="text-sm font-bold ff-font-bold">
                       ${recordedProgram?.price}
                     </p>
                   </div>
-                  <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
+                  {/* <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
                     Add to cart
-                  </button>
+                  </button> */}
+                  <CommonButton pyClass="py-0" pxClass="px-2" fontWeight={700} fontSize={14}>
+                    Add to cart
+                  </CommonButton>
+
                 </div>
               </div>
             </div>
@@ -229,10 +233,10 @@ function AdvancedPathologyPrograms() {
       {/* UPCOMING PROGRAMS */}
       <section className="w-full max-w-[1025px] mx-auto mt-10">
         <div className="mb-6 text-left">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold ff-font-bold ">
             Upcoming Programs
           </h2>
-          <p className="text-gray-500 text-sm">
+          <p className="ff-font text-sm">
             Join the waitlist and get early access
           </p>
         </div>
@@ -246,31 +250,31 @@ function AdvancedPathologyPrograms() {
 
               {/* Header */}
               <div className="flex items-center justify-between mb-2">
-                <div className="text-[10px] font-bold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md uppercase">
+                <div className="text-[10px] font-bold px-2 py-1 bg-white text-primary ff-font rounded-md uppercase">
                   LAUNCHING SOON
                 </div>
-                <GiSparkles className="w-4 h-4 text-yellow-500" />
+                <GiSparkles className="w-4 h-4 text-primary" />
               </div>
 
               {/* Title */}
-              <h3 className="text-sm font-bold text-gray-900 mb-2">
+              <h3 className="text-sm font-bold ff-font-bold mb-2">
                 {upcomingProgram.title}
               </h3>
 
               {/* Waitlist */}
               <div className="bg-gray-100 rounded-md p-2 mb-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-sm text-gray-700">
-                    <FaUsers className="text-yellow-500" />
+                  <div className="flex items-center gap-1.5 text-sm ff-font">
+                    <FaUsers className="text-primary" />
                     {upcomingProgram.waitlist.toLocaleString()}
                   </div>
-                  <span className="text-yellow-500 font-bold">
+                  <span className="text-primary font-bold">
                     {upcomingProgram.progress}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 h-1.5 rounded-full mt-1">
                   <div
-                    className="bg-yellow-400 h-1.5 rounded-full"
+                    className="bg-[#FFCA00] h-1.5 rounded-full"
                     style={{ width: `${upcomingProgram.progress}%` }}
                   />
                 </div>
@@ -278,19 +282,19 @@ function AdvancedPathologyPrograms() {
 
               {/* Starts In */}
               <div className="flex items-center gap-2 bg-gray-100 rounded-md p-2 mb-3">
-                <FaClock className="text-yellow-500" />
+                <FaClock className="text-primary" />
                 <div>
-                  <p className="text-xs font-semibold text-gray-700">
+                  <p className="text-xs font-semibold ff-font">
                     Starts in {upcomingProgram.startDays} days
                   </p>
-                  <p className="text-[10px] text-gray-500">
+                  <p className="text-[10px] ff-font">
                     {upcomingProgram.duration}
                   </p>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-xs text-gray-500 mb-4">
+              <p className="text-xs ff-font-bold mb-4">
                 {upcomingProgram.description}
               </p>
 
@@ -300,8 +304,19 @@ function AdvancedPathologyPrograms() {
                 <BsArrowRight className="w-4 h-4" />
               </button>
 
+              {/* <CommonButton
+                pyClass="py-0"
+                pxClass="px-16"
+                fontWeight={600}
+                fontSize={14}
+              >
+                Join Waitlist
+              </CommonButton> */}
+
+
+
               {/* Footer note */}
-              <p className="text-[11px] text-gray-500 text-center mt-2">
+              <p className="text-[11px] ff-font text-center mt-2">
                 No payment now · Email reminder before launch
               </p>
             </div>

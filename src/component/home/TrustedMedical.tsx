@@ -27,15 +27,15 @@ const TrustedMedical = () => {
     ];
 
     return (
-        <section className="bg-[#252525] text-white py-16 px-6">
+        <section className="bg-black text-white py-16 px-6">
             <div className="max-w-6xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
                     Trusted by Medical
                 </h2>
-                <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
                     Professionals Worldwide
                 </h2>
-                <p className="text-gray-300 text-base md:text-lg mb-10">
+                <p className="text-gray-300 ff-font text-base md:text-lg mb-10">
                     Thousands of students and professionals advance their careers with our
                     comprehensive pathology education.
                 </p>
@@ -47,13 +47,13 @@ const TrustedMedical = () => {
                             key={index}
                             className="group flex flex-col items-center text-center cursor-pointer"
                         >
-                            <div className="bg-yellow-400 rounded-full w-16 h-16 flex items-center justify-center mb-4 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-yellow-500/40">
+                            <div className="bg-[#FFCA00] rounded-full w-16 h-16 flex items-center justify-center mb-4 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-yellow-500/40">
                                 {item.icon}
                             </div>
-                            <h3 className="text-2xl font-semibold transition-colors duration-300 group-hover:text-yellow-400">
+                            <h3 className="text-2xl font-semibold transition-colors duration-300 ff-font-bold group-hover:text-yellow-400">
                                 {item.value}
                             </h3>
-                            <p className="text-gray-400 text-sm mt-1 tracking-wide transition-colors duration-300 group-hover:text-gray-200">
+                            <p className="text-gray-400 text-sm mt-1 tracking-wide ff-font transition-colors duration-300 group-hover:text-gray-200">
                                 {item.label}
                             </p>
                         </div>
