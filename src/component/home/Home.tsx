@@ -174,11 +174,11 @@ const Home = () => {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button className="bg-gray-900 text-white px-6 py-3 ff-font rounded-lg cursor-pointer hover:bg-gray-800 transition transform hover:-translate-y-1 shadow-md">
+        <div className="flex flex-col sm:flex-row gap-4 ">
+          <button className="bg-gray-900 text-white px-6 py-3 ff-font rounded-lg cursor-pointer transition transform hover:-translate-y-1 shadow-md">
             PG Entrance Exams
           </button>
-          <button className="border border-gray-300 text-gray-900 px-6 py-3 ff-font  rounded-lg cursor-pointer hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-md">
+          <button className="bg-[#ffca00] px-6 py-3 ff-font  rounded-lg cursor-pointer transition transform hover:-translate-y-1 shadow-md">
             Advanced Pathology
           </button>
         </div>
@@ -188,9 +188,9 @@ const Home = () => {
       <section className="bg-[#f9fafb] py-15 px-4 md:px-8 lg:px-16 relative group/section">
         <div className="max-w-7xl mx-auto relative">
           <div className="text-center mb-12">
-            <span className="inline-block text-xs font-semibold ff-font border-primary px-3 py-1 rounded-full mb-4 shadow-sm">
+            {/* <span className="inline-block text-xs font-semibold ff-font border-primary px-3 py-1 rounded-full mb-4 shadow-sm">
               AI-PERSONALIZED
-            </span>
+            </span> */}
             <h2 className="text-3xl md:text-4xl font-bold ff-font-bold mb-4">
               Adaptive Qbanks
               <br />

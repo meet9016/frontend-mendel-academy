@@ -244,9 +244,9 @@ function AdvancedPathologyPrograms() {
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
-              className="group bg-gradient-to-br from-gray-100 to-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md hover:-translate-y-1 transition relative"
+              className="group  from-gray-100 to-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md hover:-translate-y-1 transition relative"
             >
-              <div className="absolute inset-0 bg-yellow-100/10 opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl" />
+              <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl" />
 
               {/* Header */}
               <div className="flex items-center justify-between mb-2">
@@ -299,19 +299,19 @@ function AdvancedPathologyPrograms() {
               </p>
 
               {/* CTA */}
-              <button className="w-full bg-gray-900 text-white text-xs font-semibold py-2.5 rounded-md flex items-center justify-center gap-2 hover:bg-gray-800 transition">
+              {/* <button className="w-full bg-gray-900 text-white text-xs font-semibold py-2.5 rounded-md flex items-center justify-center gap-2 hover:bg-gray-800 transition">
                 Join Waitlist
                 <BsArrowRight className="w-4 h-4" />
-              </button>
+              </button> */}
 
-              {/* <CommonButton
+              <CommonButton
                 pyClass="py-0"
                 pxClass="px-16"
                 fontWeight={600}
-                fontSize={14}
+                fontSize={13}
               >
                 Join Waitlist
-              </CommonButton> */}
+              </CommonButton>
 
 
 

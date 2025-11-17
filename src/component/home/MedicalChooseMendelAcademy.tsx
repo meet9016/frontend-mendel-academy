@@ -117,16 +117,17 @@ const MedicalChooseMendelAcademy = () => {
                 </div>
 
                 <div className="mt-16 w-full flex justify-center">
-                    <div className="w-full max-w-3xl bg-black text-center text-white py-22 px-6 rounded-2xl relative shadow-lg ">
+                    <div className="w-full max-w-3xl bg-gray-900 text-center text-white py-15 px-6 rounded-2xl relative shadow-lg">
                         {/* Top Tag */}
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                            <span className="bg-white text-primary border-primary ff-font-bold text-xs font-semibold px-4 py-1 rounded-full shadow">
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 mt-1">
+                            {/* <span className="bg-white text-primary border-primary ff-font-bold text-xs font-semibold px-4 py-1 rounded-full shadow">
                                 Stay Updated
-                            </span>
+                            </span> */}
+                             <span className="bg-white/10 ff-font-bold px-4 py-1 text-sm rounded-full">Stay Updated</span>
                         </div>
 
                         {/* Title */}
-                        <h2 className="text-2xl ff-font-bold md:text-3xl font-bold mt-6">
+                        <h2 className="text-2xl ff-font-bold md:text-3xl font-bold">
                             Stay Ahead in Medical Education
                         </h2>
 
