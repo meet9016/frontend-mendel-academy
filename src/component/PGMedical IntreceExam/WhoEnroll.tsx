@@ -89,7 +89,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
                       key={index}
                       className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 
   ${plan.most_popular
-                          ? "border-primary shadow-xl bg-gradient-to-br from-yellow-50 via-white to-amber-50"
+                          ? "border-primary shadow-xl"
                           : "border-[#e5e7eb] cursor-pointer hover:shadow-xl hover:border-[#ffca00]"
                         }
   `}
@@ -97,7 +97,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
                       {/* Optional POPULAR badge for middle plan */}
                       {plan.most_popular && (
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                          <span className="bg-gradient-to-r from-[#ffcb04] to-amber-400 text-white ff-font-bold px-6 py-2 rounded-full text-xs font-bold shadow-lg">
+                          <span className="bg-[#ffca00] text-white ff-font-bold px-6 py-2 rounded-full text-xs font-bold shadow-lg">
                             POPULAR
                           </span>
                         </div>

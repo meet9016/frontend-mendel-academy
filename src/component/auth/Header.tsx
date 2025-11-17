@@ -2,7 +2,7 @@
 
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiCalendar, BiShoppingBag } from "react-icons/bi";
@@ -39,6 +39,8 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   const router = useRouter();
+  const pathname = usePathname();
+
 
   // const examCategories = {
   //   "USMLE Program": [
@@ -133,6 +135,9 @@ export default function Header() {
     },
   };
 
+  const isExamActive = pathname.startsWith("/medicalexam");
+
+
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-8xl mx-auto px-4">
@@ -160,31 +165,55 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-12">
             <button
               onClick={() => router.push("/")}
-              className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer"
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+  ${pathname === "/" ? "text-primary" : "hover:text-yellow-500"}
+`}
             >
               Home
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
             </button>
             <button
               onClick={() => router.push("/pathology")}
-              className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer"
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/pathology" ? "text-primary" : "hover:text-yellow-500"}
+    `}
             >
               Pathology
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
             </button>
             <button
               onClick={() => router.push("/blog")}
-              className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 cursor-pointer group"
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/blog" ? "text-primary" : "hover:text-yellow-500"}
+    `}
             >
               Blog
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
             </button>
             <button
-              className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer"
               onClick={() => router.push("/aboutUs")}
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-yellow-500"}
+    `}
             >
               About Us
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
             </button>
 
             {/* ✅ Dropdown Menu */}
@@ -192,10 +221,17 @@ export default function Header() {
               <button
                 id="exam-button"
                 onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
-                className="relative text-gray-700 font-medium text-sm hover:text-yellow-500 group cursor-pointer"
+                className={`relative ff-font font-medium text-sm group cursor-pointer
+    ${isExamActive ? "text-primary" : "hover:text-yellow-500"}
+  `}
               >
                 PG Medical Entrance Exams
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+    ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
+  `}
+                ></span>
+
               </button>
 
               {isExamDropdownOpen && (

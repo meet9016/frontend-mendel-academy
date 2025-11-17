@@ -133,4 +133,4 @@ const MeetYourMentor = () => {
     )
 }
 
-export default MeetYourMentor
+export default MeetYourMentor;

@@ -145,7 +145,7 @@ const MedicalExamDetail = () => {
                                     <CommonButton
                                         size="xxl"
                                         fontWeight={700}
-                                        fontSize={18}
+                                        fontSize={16}
                                         pyClass="py-3" pxClass="px-10"
                                      
                                     >
