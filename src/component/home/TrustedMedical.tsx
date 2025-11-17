@@ -27,7 +27,7 @@ const TrustedMedical = () => {
     ];
 
     return (
-        <section className="bg-black text-white py-16 px-6">
+        <section className="bg-gray-900 text-white py-16 px-6">
             <div className="max-w-6xl mx-auto text-center">
                 <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
                     Trusted by Medical
