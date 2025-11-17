@@ -68,7 +68,7 @@ const AdvancedPathology = () => {
             <PathologyMasterySeries />
 
             {/* --- Hero Section --- */}
-            <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white">
+            <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-white">
                 <div
                     className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#f0b100]/15 rounded-full blur-3xl animate-float"
                     style={{ animationDelay: '1s' }}

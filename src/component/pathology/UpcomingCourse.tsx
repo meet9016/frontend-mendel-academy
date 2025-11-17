@@ -77,7 +77,7 @@ const UpcomingCourse = () => {
                                 style={{ animationDelay: `${index * 0.2}s` }}
                             >
                                 {/* Glow */}
-                                <div className="absolute -inset-4 bg-gradient-to-br from-[#ffca00]/30 via-[#ffca00]/10 to-transparent rounded-md blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                                <div className="absolute -inset-4 bg-gradient-to-br to-transparent rounded-md blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
 
                                 {/* Main Card */}
                                 <div
