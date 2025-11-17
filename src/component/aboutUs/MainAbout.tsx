@@ -26,7 +26,7 @@ const MainAbout = () => {
                 {/* Content */}
                 <div className="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
                     <div className="text-center animate-fade-in-up">
-                        <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-2xl">
+                        <h1 className="text-5xl md:text-7xl font-bold ff-font-bold text-white drop-shadow-2xl">
                             About Mendel Academy
                         </h1>
                     </div>
@@ -34,7 +34,7 @@ const MainAbout = () => {
             </section>
 
             {/* COMPANYINFO  */}
-            <section className="py-15 bg-gradient-to-b from-background to-secondary/30">
+            <section className="py-15 bg-gradient-to-b from-background to-secondary/30">    
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         {/* Logo and Content Grid */}
@@ -43,14 +43,14 @@ const MainAbout = () => {
                             <div className="md:col-span-4 flex justify-center animate-slide-in-left">
                                 <div className="relative group flex items-center gap-5">
                                     {/* Glow Effect */}
-                                    <div
+                                    {/* <div
                                         className="absolute -inset-4 rounded-3xl opacity-40 group-hover:opacity-70 blur-2xl transition-all duration-500"
                                         style={{
                                             background:
                                                 "radial-gradient(circle at center, #ffcc09 0%, rgba(255,204,9,0.3) 40%, transparent 80%)",
                                             boxShadow: "0 0 40px 10px rgba(255,204,9,0.25)",
                                         }}
-                                    ></div>
+                                    ></div> */}
 
                                     {/* Logo Container */}
                                     <div className="relative bg-white rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-[#ffcc09] transition-all duration-500 hover:shadow-[0_0_35px_#ffcc09]">
@@ -63,8 +63,8 @@ const MainAbout = () => {
 
                                     {/* Text Next to Logo */}
                                     <div className="relative">
-                                        <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-                                            Mendel <span className="text-[#ffcc09]">Academy</span>
+                                        <h2 className="text-3xl font-extrabold ff-font-bold tracking-tight">
+                                            Mendel <span className="text-primary ff-font-bold">Academy</span>
                                         </h2>
 
                                     </div>
@@ -76,27 +76,27 @@ const MainAbout = () => {
                             {/* Text Content */}
                             <div className="md:col-span-8 space-y-6 animate-slide-in-right">
                                 {/* Paragraph 1 */}
-                                <div className="bg-white rounded-2xl p-8 shadow-[0_0_25px_rgba(255,204,9,0.2)] border border-[#ffcc09]/60 hover:border-[#ffcc09] transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,204,9,0.4)]">
-                                    <p className="text-lg leading-relaxed text-gray-800">
-                                        <span className="font-bold text-[#ffcc09]">
+                                <div className="bg-white rounded-2xl p-8  border border-primary transition-all duration-500 ">
+                                    <p className="text-lg leading-relaxed ff-font-bold">
+                                        <span className="font-bold ff-font text-primary]">
                                             Mendel EdTech Pvt Ltd (Mendel Academy)
                                         </span>{' '}
                                         is a family-owned startup offering a digital education platform for medical school graduates.
                                         Founded in 2015, Mendel Academy offers an adaptive{' '}
-                                        <span className="font-semibold text-[#ffcc09]">live-online course</span>{' '}
+                                        <span className="font-semibold ff-font text-primary">live-online course</span>{' '}
                                         for students to prepare for highly specialized licensure exams.
                                     </p>
                                 </div>
 
                                 {/* Paragraph 2 */}
-                                <div className="bg-white rounded-2xl p-8 shadow-[0_0_25px_rgba(255,204,9,0.2)] border border-[#ffcc09]/60 hover:border-[#ffcc09] transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,204,9,0.4)]">
-                                    <p className="text-lg leading-relaxed text-gray-800 mb-6">
+                                <div className="bg-white rounded-2xl p-8 border border-primary transition-all duration-500 ">
+                                    <p className="text-lg leading-relaxed ff-font-bold mb-6">
                                         Here at{' '}
-                                        <span className="font-bold text-[#ffcc09]">Mendel Academy</span>, we have been
+                                        <span className="font-bold ff-font text-primary">Mendel Academy</span>, we have been
                                         providing personalized coaching to over{' '}
-                                        <span className="font-bold text-[#ffcc09]">1000 medical students</span> for
+                                        <span className="font-bold ff-font text-primary">1000 medical students</span> for
                                         licensure exams with special focus on the USMLEs; resulting in over{' '}
-                                        <span className="font-bold text-[#ffcc09]">
+                                        <span className="font-bold ff-font text-primary">
                                             90% students matching into top residency programs
                                         </span>. In the wake of the pandemic, Mendel Academy has adapted to the
                                         changing times and incorporated modern EdTech tools to provide an online
@@ -114,14 +114,14 @@ const MainAbout = () => {
             </section>
 
             {/* OUR MISSIION */}
-            <section className="relative py-15 bg-gradient-to-b from-[#fffaf0] via-white to-[#fff3c4] overflow-hidden">
+            <section className="relative py-15 bg-[#f9fafb] overflow-hidden">
                 <div className="container mx-auto px-6 md:px-12 lg:px-50 relative z-10">
                     {/* Heading */}
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-                            Our <span className="text-[#ffcc09]">Achievements</span> & Vision
+                        <h2 className="text-4xl md:text-5xl font-extrabold ff-font-bold mb-4">
+                            Our Achievements & Vision
                         </h2>
-                        <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+                        <p className="ff-font max-w-3xl mx-auto text-lg">
                             Building excellence in medical education through innovation,
                             accessibility, and precision learning.
                         </p>
@@ -130,41 +130,41 @@ const MainAbout = () => {
                     {/* Content Grid */}
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         {/* Left - Achievements */}
-                        <div className="bg-white rounded-3xl shadow-[0_0_30px_rgba(255,204,9,0.2)] border border-[#ffcc09]/40 p-10 relative group hover:shadow-[0_0_50px_rgba(255,204,9,0.4)] transition-all duration-500">
-                            <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-[#ffcc09]/20 to-transparent opacity-0 group-hover:opacity-100 blur-2xl transition-all"></div>
+                        <div className="bg-white rounded-3xl  border border-primary p-10 relative transition-all duration-500">
+                            {/* <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-[#ffcc09]/20 to-transparent opacity-0 group-hover:opacity-100 blur-2xl transition-all"></div> */}
                             <div className="relative z-10">
                                 <div className="flex items-center gap-4 mb-6">
-                                    <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#ffcc09]/20 text-[#ffcc09] text-3xl">
+                                    <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white border border-primary text-primary text-3xl">
                                         <FaTrophy />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-900">
+                                    <h3 className="text-2xl font-bold ff-font-bold">
                                         Our Achievements
                                     </h3>
                                 </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">
+                                <p className="ff-font text-lg leading-relaxed">
                                     At{" "}
-                                    <span className="font-semibold text-[#ffcc09]">
+                                    <span className="font-semibold text-primary">
                                         Mendel Academy
                                     </span>
                                     , we’ve developed a proprietary
-                                    <span className="font-bold text-[#ffcc09]"> question bank </span>
+                                    <span className="font-bold text-primary"> question bank </span>
                                     of over
-                                    <span className="font-bold text-[#ffcc09]">
+                                    <span className="font-bold text-primary">
                                         {" "}
                                         10,000 USMLE-style MCQs
                                     </span>
                                     , helping students enhance their performance by{" "}
-                                    <span className="font-bold text-[#ffcc09]">15–20%</span>.
+                                    <span className="font-bold text-primary">15–20%</span>.
                                 </p>
-                                <p className="text-gray-700 text-lg leading-relaxed mt-4">
+                                <p className="ff-font text-lg leading-relaxed mt-4">
                                     We take pride in our unique{" "}
-                                    <span className="font-bold text-[#ffcc09]">
+                                    <span className="font-bold text-primary">
                                         "Mendel SketchNotes"
                                     </span>
                                     , designed to simplify complex medical concepts with elegant
                                     visuals and precise annotations. Mendel Academy has established
                                     its presence in{" "}
-                                    <span className="font-semibold text-[#ffcc09]">
+                                    <span className="font-semibold text-primary">
                                         India, USA, Russia, China,
                                     </span>{" "}
                                     and beyond.
@@ -173,7 +173,7 @@ const MainAbout = () => {
                         </div>
 
                         {/* Right - Vision */}
-                        <div className="bg-white rounded-3xl shadow-[0_0_30px_rgba(255,204,9,0.2)] border border-[#ffcc09]/40 p-10 relative group hover:shadow-[0_0_50px_rgba(255,204,9,0.4)] transition-all duration-500">
+                        <div className="bg-white rounded-3xl  border border-primary p-10 relative  transition-all duration-500">
                             <div className="absolute -inset-2 rounded-3xl bg-gradient-to-bl from-[#ffcc09]/20 to-transparent opacity-0 group-hover:opacity-100 blur-2xl transition-all"></div>
                             <div className="relative z-10 text-center md:text-left">
                                 {/* ✅ Logo and Text side by side */}
@@ -184,25 +184,25 @@ const MainAbout = () => {
                                         className="w-20 h-auto"
                                     />
                                     <div className="text-center md:text-left">
-                                        <h2 className="text-3xl font-extrabold text-gray-900 leading-tight">
+                                        <h2 className="text-3xl font-extrabold ff-font-boldleading-tight">
                                             Mendel
                                         </h2>
-                                        <h3 className="text-3xl font-extrabold text-[#ffcc09] leading-tight">
+                                        <h3 className="text-3xl font-extrabold text-primary leading-tight">
                                             Academy
                                         </h3>
                                     </div>
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                <h3 className="text-2xl font-bold ff-font-bold mb-4">
                                     Our Vision
                                 </h3>
-                                <p className="text-gray-700 text-lg leading-relaxed">
+                                <p className="ff-font text-lg leading-relaxed">
                                     Our vision at{" "}
-                                    <span className="font-semibold text-[#ffcc09]">
+                                    <span className="font-semibold ff-font text-primary">
                                         Mendel Academy
                                     </span>{" "}
                                     is to create an{" "}
-                                    <span className="font-bold text-[#ffcc09]">
+                                    <span className="font-bold ff-font text-primary">
                                         accessible digital coaching platform
                                     </span>{" "}
                                     that empowers medical students globally to unlock their full
@@ -210,7 +210,7 @@ const MainAbout = () => {
                                 </p>
 
                                 <div className="mt-6 flex justify-center md:justify-start">
-                                    <div className="flex items-center gap-3 text-[#ffcc09] font-semibold text-lg">
+                                    <div className="flex items-center gap-3 ff-font text-primary font-semibold text-lg">
                                         <FaEarthAmericas className="text-2xl" />
                                         <span>Global Learning, Limitless Access</span>
                                     </div>
@@ -221,8 +221,8 @@ const MainAbout = () => {
                 </div>
 
                 {/* ✅ Decorative Yellow Glows (raised higher) */}
-                <div className="absolute -top-10 -left-10 w-80 h-80 bg-[#ffcc09]/30 rounded-full blur-3xl opacity-60"></div>
-                <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#ffcc09]/40 rounded-full blur-3xl opacity-40"></div>
+                {/* <div className="absolute -top-10 -left-10 w-80 h-80 bg-[#ffcc09]/30 rounded-full blur-3xl opacity-60"></div>
+                <div className="absolute bottom-10 right-0 w-96 h-96 bg-[#ffcc09]/40 rounded-full blur-3xl opacity-40"></div> */}
             </section>
 
             <Footer />

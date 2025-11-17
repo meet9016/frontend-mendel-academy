@@ -105,8 +105,8 @@ const BlogCard = () => {
         <>
             <Header />
 
-            {/* ✅ Hero Section */}
-            <section className="relative w-full bg-gradient-to-br from-[#FFD95A] via-[#fbba2d] to-[#f8a300] py-24 lg:py-36 overflow-hidden">
+            {/* Hero Section */}
+            <section className="relative w-full bg-[#ffca00] py-24 lg:py-36 overflow-hidden">
                 <motion.div
                     className="absolute inset-0"
                     animate={{
@@ -125,10 +125,10 @@ const BlogCard = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 1 }}
                     >
-                        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold text-gray-900 leading-tight">
+                        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold ff-font-bold leading-tight">
                             Articles and <br className="hidden sm:block" /> Insights
                         </h1>
-                        <p className="text-lg sm:text-xl text-gray-800 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        <p className="text-lg sm:text-xl ff-font leading-relaxed max-w-xl mx-auto lg:mx-0">
                             Stay updated with expert insights, medical exam strategies, and the
                             latest in healthcare education.
                         </p>
@@ -151,20 +151,20 @@ const BlogCard = () => {
                 </div>
             </section>
 
-            {/* ✅ Blog Grid Section */}
-            <section className="py-20 bg-gray-50">
+            {/* Blog Grid Section */}
+            <section className="py-15 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 md:px-10">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl sm:text-4xl font-bold ff-font-bold mb-4">
                             Latest Articles
                         </h2>
-                        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                        <p className="ff-font text-lg max-w-2xl mx-auto">
                             Expert insights and guidance to help you excel in your medical
                             career
                         </p>
                     </div>
 
-                    {/* ✅ Blog Cards */}
+                    {/*  Blog Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                         {datas?.map((post: any, index) => (
                             <div
@@ -177,7 +177,7 @@ const BlogCard = () => {
                         ))}
                     </div>
 
-                    {/* ✅ Pagination */}
+                    {/*  Pagination */}
                     <div className="mt-12 flex justify-center">
                         <ReactPaginate
                             previousLabel={"←"}
@@ -191,7 +191,7 @@ const BlogCard = () => {
                             pageClassName={
                                 "border border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-yellow-500 hover:text-white font-medium"
                             }
-                            activeClassName={"bg-yellow-500 text-white"}
+                            activeClassName={"bg-[#ffca00] text-black"}
                             previousClassName={
                                 "border border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-yellow-500 hover:text-white"
                             }
@@ -209,7 +209,7 @@ const BlogCard = () => {
     );
 };
 
-// ✅ Single Blog Card Component
+//  Single Blog Card Component
 const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
     <motion.article
         key={index}
@@ -239,17 +239,17 @@ const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
         {/* Content */}
         <div className="p-6 space-y-4 flex flex-col flex-grow">
             <div className="flex items-center justify-between">
-                <span className="inline-block px-3 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full capitalize">
+                <span className="inline-block px-3 py-1 text-xs font-semibold bg-white ff-font-bold text-primary border-primary rounded-full capitalize">
                     {post.exam_name || "general"}
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm ff-font">
                     {formatDateWithDayjs(post.date) || "-"}
                 </span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-yellow-600 transition-colors duration-300">
+            <h3 className="text-xl font-bold ff-font-bold line-clamp-2 group-hover:text-[#ffca00] transition-colors duration-300">
                 {post.title}
             </h3>
-            <p className="text-gray-600 text-sm line-clamp-3 flex-grow">
+            <p className="ff-font text-sm line-clamp-3 flex-grow">
                 {post.sort_description || "Click to read more about this article."}
             </p>
         </div>

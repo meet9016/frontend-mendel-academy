@@ -217,6 +217,19 @@
 
 // export default BlogDetail
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use client';
 
 import { FaFacebookF, FaLinkedinIn, FaTiktok, FaWhatsapp } from "react-icons/fa";
@@ -263,21 +276,21 @@ const BlogDetail = () => {
                 >
                     {/* Tag */}
                     <motion.div
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-100 border border-yellow-300 rounded-full mb-6"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-primary rounded-full mb-6"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3, duration: 0.6 }}
                         viewport={{ once: true }}
                     >
-                        <FiTag className="w-4 h-4 text-yellow-600" />
-                        <span className="text-sm font-semibold text-yellow-600">
+                        <FiTag className="w-4 h-4 text-primary" />
+                        <span className="text-sm font-semibold ff-font-bold text-primary">
                             NEET PG • USMLE • PLAB
                         </span>
                     </motion.div>
 
                     {/* Title */}
                     <motion.h1
-                        className="text-4xl font-bold text-gray-900 mb-6 leading-tight"
+                        className="text-4xl font-bold ff-font-bold mb-6 leading-tight"
                         initial={{ y: 40, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
@@ -288,7 +301,7 @@ const BlogDetail = () => {
 
                     {/* Paragraph */}
                     <motion.p
-                        className="text-lg text-gray-700 mb-8 leading-relaxed"
+                        className="text-lg ff-font mb-8 leading-relaxed"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.8 }}
@@ -300,14 +313,14 @@ const BlogDetail = () => {
 
                     {/* Author Info */}
                     <motion.div
-                        className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-t border-gray-200 pt-6"
+                        className="flex flex-wrap items-center gap-6 text-sm ff-font border-t border-gray-200 pt-6"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.8, duration: 0.8 }}
                         viewport={{ once: true }}
                     >
                         <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 rounded-full bg-[#ffca00] flex items-center justify-center text-black font-bold">
                                 PS
                             </div>
                             <span className="font-medium text-gray-800">Dr. Priya Sharma</span>
@@ -331,7 +344,7 @@ const BlogDetail = () => {
                     transition={{ duration: 1, ease: "easeOut" }}
                     viewport={{ once: true }}
                 >
-                    <div className="prose max-w-none prose-p:text-gray-700 prose-headings:text-gray-900">
+                    <div className="prose max-w-none prose-p:ff-font prose-headings:ff-font">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -368,15 +381,15 @@ const BlogDetail = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        <h3 className="text-lg font-semibold ff-font-bold mb-4">
                             Share this article
                         </h3>
-                        <div className="flex items-center gap-3 text-xl text-gray-500">
+                        <div className="flex items-center gap-3 text-xl ff-font">
                             {[FaFacebookF, FaLinkedinIn, FaWhatsapp, FaTiktok].map((Icon, i) => (
                                 <motion.a
                                     key={i}
                                     href="#"
-                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-yellow-500 hover:text-white transition-all"
+                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#ffca00] hover:text-white transition-all"
                                     whileHover={{ scale: 1.15, rotate: 5 }}
                                     whileTap={{ scale: 0.9 }}
                                 >

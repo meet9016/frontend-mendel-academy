@@ -1,4 +1,5 @@
 "use client";
+import CommonButton from "@/comman/Button";
 import InputField from "@/comman/InputField";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
@@ -96,7 +97,7 @@ export default function Registers() {
             </div>
 
             {/* ------------------- RIGHT PANEL: SIGN-UP FORM ------------------- */}
-            <div className="w-full lg:w-1/2 bg-[#f5b73d] relative flex items-center justify-center p-8 md:p-16">
+            <div className="w-full lg:w-1/2 bg-[#ffca00] relative flex items-center justify-center p-8 md:p-16">
                 <div className="w-full max-w-md relative z-10">
                     {/* header */}
                     <div className="text-center mb-6 md:mb-8">
@@ -187,7 +188,7 @@ export default function Registers() {
                                 required
                                 className="mt-1 w-4 h-4 rounded border-gray-300 cursor-pointer"
                             />
-                            <label htmlFor="terms" className="text-gray-700 cursor-pointer select-none leading-tight">
+                            <label htmlFor="terms" className="ff-font mt-1 cursor-pointer select-none leading-tight">
                                 I agree to Mendel Academy&apos;s{" "}
                                 <a href="#" className="underline hover:text-gray-900">Terms of Service</a> &{" "}
                                 <a href="#" className="underline hover:text-gray-900">Privacy Policy</a>.
@@ -195,13 +196,22 @@ export default function Registers() {
                         </div>
 
                         {/* Submit */}
-                        <button
+                        {/* <button
                             type="submit"
                             className="w-full py-3 md:py-4 rounded-lg cursor-pointer bg-black hover:bg-gray-800 text-white font-semibold shadow-md transition-all duration-300 active:scale-95"
                             onClick={(e) => handleSubmit(e)}
                         >
                             Create account
-                        </button>
+                        </button> */}
+                        <CommonButton
+                            className="bg-black text-white hover:bg-black hover:text-[#ffca00]"
+                            pyClass="py-4"
+                            pxClass="px-41"
+                            fontWeight={700}
+                            fontSize={16}
+                        >
+                            Create account
+                        </CommonButton>
 
                         {/* Social row */}
                         <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">

@@ -24,13 +24,13 @@ const Footer = () => {
                         />
                         <div className="flex flex-col leading-tight">
                             <span className="font-bold text-lg text-white">MENDEL</span>
-                            <span className="text-xs text-gray-400 uppercase tracking-wider">ACADEMY</span>
+                            <span className="text-xs ff-font* uppercase tracking-wider">ACADEMY</span>
                         </div>
                     </div>
-                    <p className="text-gray-400 text-sm">
+                    <p className="ff-font text-sm">
                         Empowering medical aspirants worldwide with expert guidance, innovative strategies, and a community-driven approach.
                     </p>
-                    <div className="flex items-center gap-3 mt-2 text-xl text-gray-400">
+                    <div className="flex items-center gap-3 mt-2 text-xl ff-font">
                         <a href="#" className="hover:text-yellow-500 transition-colors"><FaFacebookF /></a>
                         <a href="#" className="hover:text-yellow-500 transition-colors"><FaInstagram /></a>
                         <a href="#" className="hover:text-yellow-500 transition-colors"><FaWhatsapp /></a>
@@ -43,8 +43,8 @@ const Footer = () => {
 
                 {/* Quick Links */}
                 <div>
-                    <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-                    <ul className="space-y-2 text-gray-400 text-sm">
+                    <h4 className="ff-font-bold font-semibold mb-4">Quick Links</h4>
+                    <ul className="space-y-2 ff-font text-sm">
                         {navLinks.map((link, index) => (
                             <li key={index} onClick={() => router.push(link.path)} className="hover:text-yellow-500 transition-colors cursor-pointer">{link.name}</li>
                         ))}
@@ -53,21 +53,21 @@ const Footer = () => {
 
                 {/* Contact Info */}
                 <div>
-                    <h4 className="text-white font-semibold mb-4">Contact Us</h4>
-                    <p className="text-gray-400 text-sm flex items-center gap-2">
+                    <h4 className="ff-font-bold font-semibold mb-4">Contact Us</h4>
+                    <p className="ff-fonttext-sm flex items-center gap-2">
                         <span>🇮🇳</span> +91 99255-11511
                     </p>
-                    <p className="text-gray-400 text-sm flex items-center gap-2 mt-2">
+                    <p className="ff-font text-sm flex items-center gap-2 mt-2">
                         <span>🇺🇸</span> +1 310-708-3244
                     </p>
-                    <p className="text-gray-400 text-sm mt-4">
+                    <p className="ff-font text-sm mt-4">
                         <a href="mailto:info@mendelacademy.com" className="hover:text-yellow-500 transition-colors">info@mendelacademy.com</a>
                     </p>
                 </div>
             </div>
 
             {/* Bottom Footer */}
-            <div className="border-t border-gray-700 mt-10 pt-6 text-center text-gray-500 text-sm">
+            <div className="border-t border-gray-700 mt-10 pt-6 text-center ff-font  text-sm">
                 © 2025 Mendel Academy. All rights reserved. Designed & Developed by <a href="#" className="hover:text-yellow-500">Gargi Managoli</a>
             </div>
         </footer>
