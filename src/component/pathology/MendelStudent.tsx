@@ -58,7 +58,7 @@ const MendelStudent = () => {
                 <div className="absolute top-20 right-1/4 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6">
+                <div className="relative  max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center justify-center gap-2 mb-4">
                             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#f0b100]" />

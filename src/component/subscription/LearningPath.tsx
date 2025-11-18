@@ -78,10 +78,10 @@ const LearningPath = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
                             Choose Your Learning Path
                         </h2>
-                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        <p className="text-lg ff-font max-w-2xl mx-auto">
                             Select the module that best fits your learning goals and career aspirations
                         </p>
                     </motion.div>
@@ -111,8 +111,8 @@ const LearningPath = () => {
 
                                     <div
                                         className={`relative h-full max-w-[400px] w-full mx-auto ${isWhiteCard
-                                            ? "bg-white border-2 border-[#ffcc09]"
-                                            : `bg-gradient-to-br ${module.gradient} border-2 ${module.popular ? "border-[#ffcc09]" : "border-gray-200"
+                                            ? "bg-white border-2 border-[#ffca00]"
+                                            : `bg-gradient-to-br ${module.gradient} border-2 ${module.popular ? "border-[#ffca00]" : "border-gray-200"
                                             }`
                                             } rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col`}
                                     >
@@ -126,10 +126,10 @@ const LearningPath = () => {
 
                                         {/* Icon Box */}
                                         <div
-                                            className={`w-14 h-14 rounded-xl ${module.popular
+                                            className={`w-14 h-14 border-primary rounded-xl ${module.popular
                                                 ? "bg-[#ffcc09] text-black"
                                                 : isWhiteCard
-                                                    ? "bg-gray-100 text-gray-700"
+                                                    ? "bg-white text-primary"
                                                     : "bg-white text-gray-700"
                                                 } flex items-center justify-center mb-5 shadow-md`}
                                         >
