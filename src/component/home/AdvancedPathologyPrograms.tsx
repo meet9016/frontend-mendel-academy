@@ -8,6 +8,7 @@ import { BsArrowRight } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
 import { FaStar, FaUsers, FaClock } from "react-icons/fa";
 import { GiSparkles } from "react-icons/gi";
+import { toast } from "react-toastify";
 
 function AdvancedPathologyPrograms() {
   // Sample Data (used for 3 repeated cards)
@@ -53,6 +54,36 @@ function AdvancedPathologyPrograms() {
     getBlogData();
   }, []);
 
+const getTempId = () => {
+  let tempId = sessionStorage.getItem("temp_id");
+
+  if (!tempId) {
+    tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    sessionStorage.setItem("temp_id", tempId);
+  }
+
+  return tempId;
+};
+
+
+  const addToCart = async (item) =>{
+     const temp_id = getTempId();
+    const body = {
+      temp_id: temp_id,
+      product_id: item?.id,
+      category_name: item?.category,
+      price: item?.price,
+      quantity: 1,
+      duration: item?.duration
+    }
+    const res = await api.post(`${endPointApi.postCreateAddToCart}`,body);
+    console.log("res",res.data);
+    if(res.data.success){
+      console.log("99999999*", res.data);
+      
+      toast.success(res.data.message);
+    }
+  }
   return (
     <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-15">
       {/* Title Section */}
@@ -154,7 +185,7 @@ function AdvancedPathologyPrograms() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
-          {[...Array(4)]?.map((_, index) => (
+          {programs?.map((item, index) => (
             <div
               key={index}
               className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
@@ -163,19 +194,19 @@ function AdvancedPathologyPrograms() {
               <div className="relative h-32">
                 <img
                   src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
-                  alt={recordedProgram?.title}
+                  alt={item?.title}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   <FaStar className="text-primary w-3 h-3 mr-1" />
                   <span className="text-xs font-semibold">
-                    {recordedProgram?.rating}
+                    {item?.rating}
                   </span>
                 </div>
                 <div className="absolute bottom-2 right-2 ff-font-bold flex items-center bg-white/90 px-2 py-0.5 rounded-full">
                   {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
                   <span className="text-xs font-semibold">
-                    {recordedProgram?.total_reviews}+ learners
+                    {item?.total_reviews}+ learners
                   </span>
                 </div>
               </div>
@@ -192,7 +223,7 @@ function AdvancedPathologyPrograms() {
                     height: "2.8rem",
                   }}
                 >
-                  {recordedProgram?.title}
+                  {item?.title}
                 </h3>
                 <p
                   className="text-xs ff-font mb-3 overflow-hidden text-ellipsis line-clamp-2"
@@ -204,22 +235,22 @@ function AdvancedPathologyPrograms() {
                     height: "2.4rem",
                   }}
                 >
-                  {recordedProgram?.subtitle}
+                  {item?.subtitle}
                 </p>
 
                 <div className="flex items-end justify-between">
                   <div>
                     <p className="text-xs ff-font">
-                      {recordedProgram?.duration} month access
+                      {item?.duration} month access
                     </p>
                     <p className="text-sm font-bold ff-font-bold">
-                      ${recordedProgram?.price}
+                      ${item?.price}
                     </p>
                   </div>
                   {/* <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
                     Add to cart
                   </button> */}
-                  <CommonButton pyClass="py-0" pxClass="px-2" fontWeight={700} fontSize={14}>
+                  <CommonButton pyClass="py-0" pxClass="px-2" fontWeight={700} fontSize={14} onClick={() => addToCart(item)}>
                     Add to cart
                   </CommonButton>
 

@@ -21,6 +21,7 @@ export interface EndPointApi {
 
     //my cart
     getPlan?: string;
+    postCreateAddToCart?: string;
 
     //faq
     getAllFaq?: string;
@@ -59,7 +60,7 @@ const endPointApi: EndPointApi = {
 
     //my cart
     getPlan: 'examlist/get-plan',
-
+    postCreateAddToCart:'cart/create',
     //faq
     getAllFaq: 'faq/getall',
 

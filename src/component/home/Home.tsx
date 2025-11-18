@@ -46,70 +46,70 @@ const badgeColors: Record<
 };
 
 const Home = () => {
-  const courses = [
-    {
-      icon: <FiFileText className="w-7 h-7" />,
-      title: "USMLE Step 1",
-      tag: "POPULAR",
-      rating: 4.9,
-      students: 1300,
-      features: ["Adaptive AI", "Analytics"],
-      moreFeatures: 1,
-      sort_description:
-        "Master the exam prep with our adaptive AI powered techniques",
-      badgeVariant: "default",
-    },
-    {
-      icon: <FiActivity className="w-7 h-7" />,
-      title: "USMLE Step 2",
-      tag: "UPDATED",
-      rating: 4.8,
-      students: 940,
-      features: ["Patient Cases", "Dx Trainer"],
-      moreFeatures: 1,
-      sort_description:
-        "Excel in clinical knowledge and patient care scenarios",
-      badgeVariant: "secondary",
-      total_reviews: 2400,
-    },
-    {
-      icon: <FiHeart className="w-7 h-7" />,
-      title: "USMLE Step 3",
-      tag: "NEW",
-      rating: 4.7,
-      students: 610,
-      features: ["EMR Training", "Residency Cases"],
-      moreFeatures: 1,
-      sort_description:
-        "Complete your USMLE journey with confidence and success",
-      badgeVariant: "outline",
-      total_reviews: 2400,
-    },
-    {
-      icon: <FiBookOpen className="w-7 h-7" />,
-      title: "INI CET",
-      tag: "POPULAR",
-      rating: 4.8,
-      students: 820,
-      features: ["AIIMS Faculty", "Topper Strategy"],
-      moreFeatures: 1,
-      sort_description: "Secure your AIIMS seat with our comprehensive program",
-      badgeVariant: "default",
-      total_reviews: 2400,
-    },
-    {
-      icon: <FiCpu className="w-7 h-7" />,
-      title: "NEET PG",
-      tag: "TRENDING",
-      rating: 4.9,
-      students: 1520,
-      features: ["Weak Areas AI", "Smart Notes"],
-      moreFeatures: 1,
-      sort_description: "Achieve your dream with proven strategies",
-      badgeVariant: "secondary",
-      total_reviews: 2400,
-    },
-  ];
+  // const courses = [
+  //   {
+  //     icon: <FiFileText className="w-7 h-7" />,
+  //     title: "USMLE Step 1",
+  //     tag: "POPULAR",
+  //     rating: 4.9,
+  //     students: 1300,
+  //     features: ["Adaptive AI", "Analytics"],
+  //     moreFeatures: 1,
+  //     sort_description:
+  //       "Master the exam prep with our adaptive AI powered techniques",
+  //     badgeVariant: "default",
+  //   },
+  //   {
+  //     icon: <FiActivity className="w-7 h-7" />,
+  //     title: "USMLE Step 2",
+  //     tag: "UPDATED",
+  //     rating: 4.8,
+  //     students: 940,
+  //     features: ["Patient Cases", "Dx Trainer"],
+  //     moreFeatures: 1,
+  //     sort_description:
+  //       "Excel in clinical knowledge and patient care scenarios",
+  //     badgeVariant: "secondary",
+  //     total_reviews: 2400,
+  //   },
+  //   {
+  //     icon: <FiHeart className="w-7 h-7" />,
+  //     title: "USMLE Step 3",
+  //     tag: "NEW",
+  //     rating: 4.7,
+  //     students: 610,
+  //     features: ["EMR Training", "Residency Cases"],
+  //     moreFeatures: 1,
+  //     sort_description:
+  //       "Complete your USMLE journey with confidence and success",
+  //     badgeVariant: "outline",
+  //     total_reviews: 2400,
+  //   },
+  //   {
+  //     icon: <FiBookOpen className="w-7 h-7" />,
+  //     title: "INI CET",
+  //     tag: "POPULAR",
+  //     rating: 4.8,
+  //     students: 820,
+  //     features: ["AIIMS Faculty", "Topper Strategy"],
+  //     moreFeatures: 1,
+  //     sort_description: "Secure your AIIMS seat with our comprehensive program",
+  //     badgeVariant: "default",
+  //     total_reviews: 2400,
+  //   },
+  //   {
+  //     icon: <FiCpu className="w-7 h-7" />,
+  //     title: "NEET PG",
+  //     tag: "TRENDING",
+  //     rating: 4.9,
+  //     students: 1520,
+  //     features: ["Weak Areas AI", "Smart Notes"],
+  //     moreFeatures: 1,
+  //     sort_description: "Achieve your dream with proven strategies",
+  //     badgeVariant: "secondary",
+  //     total_reviews: 2400,
+  //   },
+  // ];
 
   const [questionBank, setQuestionBank] = useState([]);
 
@@ -221,7 +221,7 @@ const Home = () => {
               id="course-scroll-container"
               className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
             >
-              {courses?.map((course: any, index) => (
+              {questionBank?.map((course: any, index) => (
                 <CourseCard
                   key={index}
                   icon={<FiFileText className="w-7 h-7" />}

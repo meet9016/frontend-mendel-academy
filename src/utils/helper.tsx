@@ -15,3 +15,14 @@ export function formatPrice(value: string | number) {
   if (isNaN(num)) return value;
   return num.toLocaleString("en-IN");
 }
+
+//temp_Id generate pc wise
+export const getTempId = () => {
+  let tempId = sessionStorage.getItem("temp_id");
+
+  if (!tempId) {
+    tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    sessionStorage.setItem("temp_id", tempId);
+  }
+  return tempId;
+};
