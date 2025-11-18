@@ -55,7 +55,7 @@ const ProgramFeatures = () => {
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
                             Why you will love this program
                         </h2>
                     </div>
@@ -75,22 +75,22 @@ const ProgramFeatures = () => {
                                             <div
                                                 className={`w-20 h-20 ${feature.iconBg} rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-300 flex items-center justify-center relative overflow-hidden`}
                                             >
-                                                <div className="absolute top-0 right-0 w-8 h-8 opacity-40 bg-yellow-400" />
+                                                {/* <div className="absolute top-0 right-0 w-8 h-8 opacity-40 bg-yellow-400" /> */}
                                                 <Icon
-                                                    className="text-4xl relative z-10 group-hover:scale-110 transition-transform duration-300 text-yellow-500"
+                                                    className="text-4xl relative z-10 group-hover:scale-110 transition-transform duration-300 text-primary"
                                                 />
                                             </div>
-                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full opacity-30 bg-yellow-400" />
+                                            {/* <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full opacity-30 bg-yellow-400" /> */}
                                         </div>
 
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-yellow-600 transition-colors">
+                                        <h3 className="text-xl font-bold ff-font-bold mb-3 group-hover:text-[#ffca00] transition-colors">
                                             {feature.title}
                                         </h3>
-                                        <p className="text-gray-600 leading-relaxed">
+                                        <p className="ff-font leading-relaxed">
                                             {feature.description}
                                         </p>
 
-                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                        {/* <div className="absolute b  ottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
                                     </div>
                                 </div>
                             );
@@ -98,8 +98,8 @@ const ProgramFeatures = () => {
                     </div>
 
                     {/* Decorative accents */}
-                    <div className="absolute left-10 top-1/4 w-32 h-32 rounded-full opacity-5 bg-yellow-400" />
-                    <div className="absolute right-20 bottom-1/4 w-24 h-24 rotate-45 opacity-5 bg-yellow-400" />
+                    {/* <div className="absolute left-10 top-1/4 w-32 h-32 rounded-full opacity-5 bg-yellow-400" />
+                    <div className="absolute right-20 bottom-1/4 w-24 h-24 rotate-45 opacity-5 bg-yellow-400" /> */}
                 </div>
             </section>
         </div>

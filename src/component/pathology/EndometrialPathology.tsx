@@ -223,19 +223,9 @@ const EndometrialPathology = () => {
 
               {/* CTA Section */}
               <div className="bg-[#FFCA00] rounded-3xl p-8 text-black shadow-md relative overflow-hidden group">
-                <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-                  <div className="text-center sm:text-left">
-                    <h3 className="text-2xl ff-font-bold  font-bold mb-2">
-                      Register Now
-                    </h3>
-                    <p className="text-sm ff-font opacity-90">
-                      Small cohort sizes ensure personalized attention •
-                      Expert-led instruction
-                    </p>
-                  </div>
-
-                  {/* Buttons Row */}
-                  <div className="flex flex-row flex-wrap gap-4 justify-center sm:justify-end w-full sm:w-auto">
+                <div className="relative z-10 flex flex-col gap-6">
+                  {/* BUTTON ROW */}
+                  <div className="flex flex-row flex-wrap gap-4 justify-center sm:justify-start">
                     <button
                       className="bg-white text-black ff-font-bold cursor-pointer hover:bg-white/90 px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2"
                       onClick={() =>
@@ -245,14 +235,20 @@ const EndometrialPathology = () => {
                         )
                       }
                     >
-                      Enroll Now
+                      Register Now
                       <FaArrowRight />
                     </button>
 
-                    <button className="border-2 ff-font-bold cursor-pointer  text-black hover:bg-white/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
+                    <button className="border-2 border-black ff-font-bold cursor-pointer text-black hover:bg-white/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
                       More Details
                     </button>
                   </div>
+
+                  {/* PARAGRAPH BELOW BUTTONS */}
+                  <p className="text-sm ff-font opacity-90 text-center sm:text-left">
+                    Small cohort sizes ensure personalized attention •
+                    Expert-led instruction
+                  </p>
                 </div>
               </div>
             </div>

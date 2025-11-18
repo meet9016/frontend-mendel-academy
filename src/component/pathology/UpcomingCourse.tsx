@@ -1,8 +1,22 @@
 import CommonButton from '@/comman/Button';
-import React from 'react'
-import { FaArrowRight, FaBell, FaCalendarAlt, FaEnvelope, FaGraduationCap, FaUsers } from 'react-icons/fa'
+import React, { useState } from 'react'
+import { FaArrowRight, FaBell, FaCalendarAlt, FaCheckCircle, FaEnvelope, FaGift, FaGraduationCap, FaTimes, FaUser, FaUsers } from 'react-icons/fa'
+import { AnimatePresence, motion } from "framer-motion";
+
 
 const UpcomingCourse = () => {
+    const [openCourseDetails, setOpenCourseDetails] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const openPopup = (course) => {
+        setSelectedCourse(course);
+        setOpenCourseDetails(true);
+    };
+
+
+    const closePopup = () => {
+        setOpenCourseDetails(false);
+        setSelectedCourse(null);
+    };
     const courses = [
         {
             id: 1,
@@ -183,6 +197,7 @@ const UpcomingCourse = () => {
                                                 pxClass="px-22"
                                                 fontWeight={700}
                                                 fontSize={14}
+                                                onClick={() => setOpenCourseDetails(!openCourseDetails)}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     {/* <FaBell className="w-4 h-4" /> */}
@@ -198,6 +213,120 @@ const UpcomingCourse = () => {
                                     {/* <div className="h-2 bg-gradient-to-r from-[#FFCA00] via-[#f0b100] to-[#ffca00]" /> */}
                                 </div>
 
+
+
+
+
+                                <AnimatePresence>
+                                    {openCourseDetails && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-[999] px-4"
+                                        >
+                                            <motion.div
+                                                initial={{ scale: 0.92, opacity: 0, y: 30 }}
+                                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                                exit={{ scale: 0.92, opacity: 0, y: 30 }}
+                                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                                className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 relative"
+                                            >
+                                                {/* CLOSE BUTTON */}
+                                                <button
+                                                    onClick={closePopup}
+                                                    className="absolute top-3 right-3 w-9 h-9   
+                   flex items-center justify-center shadow-sm transition"
+                                                >
+                                                    <FaTimes className="w-4 h-4 text-gray-600" />
+                                                </button>
+
+                                                {/* TITLE + SUBTITLE */}
+                                                <div className="pt-6 text-center">
+                                                    <h2 className="text-xl font-bold ff-font-bold">
+                                                        Get notified when this course launches
+
+                                                    </h2>
+                                                    <p className="ff-font mt-1 text-sm">
+                                                        Join the waitlist to get early access and exclusive updates.
+                                                    </p>
+                                                </div>
+
+                                                {/* COURSE INFO */}
+                                                <div className="p-4 mt-4 bg-gray-100 border border-gray-300 rounded-xl">
+                                                    <h3 className="font-bold text-sm ff-font-bold">
+                                                        Interpretation of Bone Marrow Biopsies
+                                                    </h3>
+                                                    <p className="text-xs text-gray-600 ff-font">Starts September 2025</p>
+                                                </div>
+
+                                                {/* FORM */}
+                                                <div className="space-y-4 mt-5">
+                                                    <div className="flex flex-col gap-1">
+                                                        <label className="text-sm font-semibold ff-font-bold">
+                                                            Email Address <span className="text-red-500">*</span>
+                                                        </label>
+                                                        <input
+                                                            type="email"
+                                                            placeholder="your.email@example.com"
+                                                            className="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-yellow-400 ff-font"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-1">
+                                                        <label className="text-sm font-semibold ff-font-bold">
+                                                            Name <span className="text-gray-400">(optional)</span>
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Your full name"
+                                                            className="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-yellow-400 ff-font"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {/* WHAT YOU GET */}
+                                                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-6">
+                                                    <div className="flex items-start gap-2">
+                                                        <FaEnvelope className="text-primary w-4 h-4 mt-0.5" />
+                                                        <div>
+                                                            <h4 className="font-bold text-xs text-black ff-font-bold mb-1">
+                                                                What you'll get:
+                                                            </h4>
+                                                            <ul className="text-xs text-black ff-font space-y-1">
+                                                                <li>• Early access when registration opens</li>
+                                                                <li>• Course details and pricing info</li>
+                                                                <li>• Priority for limited seats</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* FOOTER BUTTONS */}
+                                                <div className="mt-7 flex items-center justify-between gap-3">
+                                                    <button
+                                                        onClick={closePopup}
+                                                        className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-100 transition"
+                                                    >
+                                                        Cancel
+                                                    </button>
+
+                                                    <button
+                                                        className="flex-1 bg-yellow-400 text-black py-2.5 rounded-xl font-semibold hover:bg-yellow-500 transition flex items-center justify-center gap-2"
+                                                    >
+                                                        <FaBell className="w-4 h-4" />
+                                                        Notify Me
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+
+
+
+
                                 {/* Floating Decorations */}
                                 <div className="absolute -bottom-6 -right-6 w-24 h-24 border-8 border-[#ffca00]/20 rounded-full group-hover:scale-110 group-hover:border-[#ffca00]/40 transition-all duration-700" />
                                 <div className="absolute -top-6 -left-6 w-16 h-16 bg-[#ffca00]/10 rounded-full group-hover:scale-125 transition-all duration-700" />
@@ -207,7 +336,8 @@ const UpcomingCourse = () => {
 
 
                     {/* Newsletter Section */}
-                    <div className="relative animate-fade-in-up" style={{ animationDelay: "0.8s" }}>
+                    <div className="relative animate-fade-in-up max-w-6xl mx-auto"
+                        style={{ animationDelay: "0.8s" }}>
                         <div className="relative bg-white border-primary rounded-3xl p-1 shadow-2xl ">
                             <div className="bg-card rounded-3xl p-8 md:p-12">
                                 <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -238,7 +368,7 @@ const UpcomingCourse = () => {
 
                                         {/* Trust Badge */}
                                         <div className="flex items-center gap-3 pt-4">
-                                            <div className="flex -space-x-2">
+                                            {/* <div className="flex -space-x-2">
                                                 {[1, 2, 3, 4].map((i) => (
                                                     <div
                                                         key={i}
@@ -247,7 +377,7 @@ const UpcomingCourse = () => {
                                                         {i}
                                                     </div>
                                                 ))}
-                                            </div>
+                                            </div> */}
                                             <div className="text-sm ff-font-bold">
                                                 Join <span className=" text-foreground">10,000+ medical professionals</span>{" "}
                                                 •{" "}
@@ -257,14 +387,14 @@ const UpcomingCourse = () => {
                                     </div>
 
                                     {/* Right CTA */}
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 ml-50">
                                         <div className="flex flex-col sm:flex-row gap-4">
 
                                             {/* <button className="bg-gradient-to-r from-[#ffca00] to-[#f0b100] hover:from-[#f0b100] hover:to-[#e0a100] text-white font-bold px-10 py-5 rounded-full flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl">
                                                 <FaEnvelope />
                                                 Subscribe to Newsletter
                                             </button> */}
-                                            <CommonButton pyClass="py-5" pxClass="px-15" fontWeight={700} fontSize={18}>
+                                            <CommonButton pyClass="py-5" pxClass="px-12" fontWeight={700} fontSize={18}>
                                                 Subscribe to Newsletter
                                             </CommonButton>
                                         </div>
@@ -275,8 +405,19 @@ const UpcomingCourse = () => {
                     </div>
                 </div>
             </section>
+
+
+
+
+
+
+
+
+
         </>
     )
 }
+
+
 
 export default UpcomingCourse

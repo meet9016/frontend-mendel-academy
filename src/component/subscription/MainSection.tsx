@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Header from "../auth/Header";
-import {  MdAutoAwesome, MdBiotech, } from "react-icons/md";
+import { MdAutoAwesome, MdBiotech, } from "react-icons/md";
 import { TbDna2 } from "react-icons/tb";
 import { FiArrowRight, FiPlay } from "react-icons/fi";
 import LiveSession from "./LiveSession";
@@ -12,12 +12,12 @@ import LearningPath from "./LearningPath";
 import MeetYourMentor from "../pathology/MeetYourMentor";
 import RegisterMasterClass from "./RegisterMasterClass";
 import Footer from "../auth/Footer";
+import CommonButton from "@/comman/Button";
 
 const MainSection = () => {
-    const heroBackground =
-        "https://heise.cloudimg.io/width/610/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/4/8/1/2/3/1/6/shutterstock_1932149360-98c98b4c5c9c2e4f.jpeg";
-
-
+    // const heroBackground =
+    //     "https://heise.cloudimg.io/width/610/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/4/8/1/2/3/1/6/shutterstock_1932149360-98c98b4c5c9c2e4f.jpeg";
+    const heroBackground = "https://t4.ftcdn.net/jpg/02/65/95/81/360_F_265958166_YTEL6wHpfxnPlN9nNYxL7UKHiOWCln59.jpg"
     return (
         <>
             <Header />
@@ -107,38 +107,44 @@ const MainSection = () => {
                     <div className="max-w-3xl mx-auto text-center">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-200/10 backdrop-blur-sm border border-blue-200/30 mb-6">
                             <MdAutoAwesome className="text-blue-200 text-xl" />
-                            <span className="text-blue-200 font-semibold">
+                            <span className="text-blue-200 ff-font-bold font-semibold">
                                 Advanced Medical Solutions
                             </span>
                         </div>
 
-                        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white leading-tight">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-4 ff-font-bold text-white leading-tight">
                             Interpretation of
-                            <span className="block mt-2 bg-gradient-to-r from-blue-200 via-yellow-300 to-blue-200 bg-clip-text text-transparent">
+                            <span className="block mt-2 ff-font-bold bg-white bg-clip-text text-transparent">
                                 Endometrial Biopsies
                             </span>
                         </h1>
 
-                        <p className="text-lg md:text-xl mb-3 text-white/90 font-semibold">
+                        <p className="text-lg md:text-xl mb-3 ff-font-bold text-white/90 font-semibold">
                             Mendel Mastery Series™
                         </p>
 
-                        <p className="text-base md:text-lg mb-8 text-white/80 max-w-2xl mx-auto">
+                        <p className="text-base md:text-lg mb-8 ff-font-bold text-white/80 max-w-2xl mx-auto">
                             For Pathologists, Pathology Residents,
                             <br /> & Fellows in Gynecologic Pathology
                         </p>
 
                         {/* Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <button className="min-w-[180px] text-base bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition">
+                            {/* <button className="min-w-[180px] text-base bg-yellow-400 hover:bg-yellow-300 text-black font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition">
                                 Register Now
                                 <FiArrowRight className="ml-2" />
-                            </button>
+                            </button> */}
+                            <CommonButton pyClass="py-4" pxClass="px-15" fontWeight={700} fontSize={14}>
+                               Register Now   <FiArrowRight className="ml-2" />
+                            </CommonButton>
 
-                            <button className="min-w-[180px] text-base border border-white text-white hover:bg-white/10 flex items-center justify-center gap-2 py-3 rounded-xl transition">
+                            {/* <button className="min-w-[180px] text-base border border-white text-white hover:bg-white/10 flex items-center justify-center gap-2 py-3 rounded-xl transition">
                                 <FiPlay className="mr-2" />
                                 See More Details
-                            </button>
+                            </button> */}
+                            <CommonButton pyClass="py-4" pxClass="px-15" fontWeight={700} fontSize={14} className="border-white bg-white text-black">
+                                   <FiPlay className="mr-2" /> See More Details
+                            </CommonButton>
                         </div>
                     </div>
                 </motion.div>
