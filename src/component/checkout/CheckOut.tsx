@@ -1,24 +1,72 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Header from "../auth/Header";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { loadStripe } from "@stripe/stripe-js";
 import {
-  FaUser,
-  FaEnvelope,
-  FaPhone,
-  FaGlobe,
-  FaCity,
-  FaMapPin,
-  FaShoppingCart,
-  FaCreditCard,
-  FaWallet,
-  FaMoneyBillWave,
-} from "react-icons/fa";
-import { MdPayment, MdLocalShipping } from "react-icons/md";
-import Footer from "../auth/Footer";
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { useParams, useRouter } from "next/navigation";
-import PaymentSuccess from "@/comman/PaymentSuccess";
+import { FaCreditCard, FaEnvelope, FaPhone, FaUser, FaWallet } from "react-icons/fa";
+import Header from "../auth/Header";
+import Footer from "../auth/Footer";
+
+const StripeCheckoutForm = ({ full_name, phone ,email, plan, onSuccess }: any) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    setLoading(true);
+    setMessage("");
+
+    const result: any = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin + "/paymentsuccess",
+        receipt_email: email,
+      },
+      redirect: "if_required",
+    });
+
+    if (result.error) {
+      setMessage(result.error.message);
+      return;
+    }
+
+    if (result.paymentIntent?.status === "succeeded") {
+      await api.post(`${endPointApi.verifyStripePayment}`, {
+        paymentIntentId: result.paymentIntent.id,
+        full_name: full_name,
+        email: email,
+        phone: phone,
+        plan_id: plan._id,
+        amount: plan.plan_pricing,
+      });
+
+      onSuccess();
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      <button className="btn btn-primary w-full mt-4" disabled={!stripe || loading}>
+        {loading ? "Processing…" : "Pay Now"}
+      </button>
+      {message && <p className="text-red-600 mt-2">{message}</p>}
+    </form>
+  );
+};
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface BillingInformation {
   fullName: string;
@@ -28,709 +76,266 @@ interface BillingInformation {
 }
 
 const CheckOut = () => {
-  const router = useRouter();
-const baseURL = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-console.log("baseURL*****",baseURL);
-
-  const [sameAsShipping, setSameAsShipping] = useState<boolean>(false);
-  const [billingInformation, setBillingInformation] =
-    useState<BillingInformation>({
-      fullName: "",
-      email: "",
-      phone: "",
-      selectedPayment: "Razorpay",
-    });
-  const [discountCode, setDiscountCode] = useState<string>("");
-
-  const orderItems = [
-    {
-      id: 1,
-      name: "FOSTER STAND",
-      size: "A4 SIZE",
-      quantity: 2,
-      price: 2800,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
-    },
-    {
-      id: 2,
-      name: "TABLE TOP LEG FRAME STAND",
-      size: "A4 SIZE",
-      quantity: 1,
-      price: 1900,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
-    },
-    {
-      id: 3,
-      name: "HEXAGON DOUBLE SIDE ROLLUP STAND",
-      size: "2M5 FEET",
-      quantity: 1,
-      price: 3700,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200",
-    },
-  ];
-
-  const subtotal = orderItems.reduce((sum, item) => sum + item.price, 0);
-  const discount = 0;
-  const finalTotal = subtotal;
-  const [amount, setAmount] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [plan, setPlan] = useState<any>(null);
   const { id } = useParams();
+  const router = useRouter();
 
-  console.log(plan, "plannn");
+  const [plan, setPlan] = useState<any>(null);
+  const [clientSecret, setClientSecret] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [billing, setBilling] = useState<BillingInformation>({
+    fullName: "",
+    email: "",
+    phone: "",
+    selectedPayment: "Razorpay",
+  });
 
   const fetchPlan = async () => {
     try {
       setLoading(true);
       const res = await api.get(`${endPointApi.getPlan}/${id}`);
-      if (res.data) {
-        setPlan(res?.data?.data);
-      } else {
-        console.log("DATA FAILED");
-      }
-    } catch (error) {
-      console.error("Error fetching exam data:", error);
+      setPlan(res?.data?.data);
+    } catch (err) {
+      console.error("Fetch plan error:", err);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPlan();
   }, []);
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (document.getElementById("razorpay-script")) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement("script");
-      script.id = "razorpay-script";
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
+  const handlePaymentSelect = (method: string) =>
+    setBilling((prev) => ({ ...prev, selectedPayment: method }));
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+  const handleChange = (field: keyof BillingInformation, value: string) =>
+    setBilling((prev) => ({ ...prev, [field]: value }));
 
+  // =============================
+  // 🔹 Razorpay Handler
+  // =============================
+  const handleRazorpayPayment = async () => {
     try {
-      // 🔹 Step 1: Create order on your backend
-      const body = {
-        full_name: billingInformation.fullName,
-        email: billingInformation.email,
-        phone: billingInformation.phone,
-        plan_id: id, // your plan id
+      const res = await api.post(`${endPointApi.postPaymentCreate}`, {
+        full_name: billing.fullName,
+        email: billing.email,
+        phone: billing.phone,
+        plan_id: id,
         amount: plan?.plan_pricing,
-        payment_method: billingInformation?.selectedPayment
-      };
+        payment_method: "Razorpay",
+      });
 
-      const response = await api.post(`${endPointApi.postPaymentCreate}`, body);
-      const data = response.data;
-      console.log("Payment record created:", data);
+      const data = res.data;
+      const scriptLoaded = await new Promise((resolve) => {
+        if (document.getElementById("razorpay-script")) return resolve(true);
+        const script = document.createElement("script");
+        script.id = "razorpay-script";
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+      if (!scriptLoaded) return alert("Failed to load Razorpay.");
 
-      // 🔹 Step 2: Load Razorpay SDK
-      const res = await loadRazorpayScript();
-      if (!res) {
-        alert("Failed to load Razorpay SDK. Check your internet connection.");
-        setIsProcessing(false);
-        return;
-      }
-
-      let hasFailedBeenHandled = false;
-
-      // 🔹 Step 3: Setup Razorpay options
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // use env key in prod
-        // key: "rzp_test_0FzOHHHmz8CGlC", // use env key in prod
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
         currency: data.currency,
         name: "Mendel Academy",
-        description: `Payment for Plan: ${body.plan_id}`,
-        order_id: data.order_id, // ensure this matches backend response
-        handler: async function (response: any) {
-          console.log("✅ Payment Success:", response);
-
+        description: `Payment for Plan ${id}`,
+        order_id: data.order_id,
+        handler: async (response: any) => {
           const verifyBody = {
-            ...response,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
             amount: data.amount / 100,
-            status: "captured", // for backend
-            plan_id: body.plan_id, // ✅ send plan_id here too
+            plan_id: id,
+            status: "captured",
           };
-
-          try {
-            const verifyRes = await api.post(
-              `${endPointApi.postPaymentVerify}`,
-              verifyBody
-            );
-            console.log("11110/----*", verifyRes);
-
-            if (verifyRes.data.success) {
-              // alert("✅ Payment Successful!");
-              console.log("********99999");
-              router.push(`/paymentsuccess`);
-            } else {
-              alert("⚠️ Payment verified but marked as failed.");
-            }
-          } catch (error) {
-            console.error("Verification Error:", error);
-            alert("Verification failed — please contact support.");
-          } finally {
-            setIsProcessing(false);
-          }
+          const verifyRes = await api.post(
+            `${endPointApi.postPaymentVerify}`,
+            verifyBody
+          );
+          if (verifyRes.data.success) router.push("/paymentsuccess");
         },
       };
 
       const paymentObject = new (window as any).Razorpay(options);
-
-      // 🔹 Step 4: Handle payment failure
-      paymentObject.on("payment.failed", async (response: any) => {
-        if (hasFailedBeenHandled) return;
-        hasFailedBeenHandled = true;
-
-        try {
-          await api.post(`${endPointApi.postPaymentVerify}`, {
-            razorpay_order_id: response.error.metadata.order_id,
-            razorpay_payment_id: response.error.metadata.payment_id,
-            razorpay_signature: response.error.metadata.signature || "",
-            amount: data.amount / 100,
-            status: "failed",
-            plan_id: body.plan_id, // ✅ include plan_id even on failure
-          });
-          <PaymentSuccess />;
-          console.log("************");
-        } catch (err) {
-          console.error("Failed to save failed payment:", err);
-        } finally {
-          setIsProcessing(false);
-        }
-      });
-
-      // 🔹 Step 5: Open Razorpay
       paymentObject.open();
     } catch (error) {
-      console.error("Error creating payment:", error);
-      alert("Payment creation failed. Please try again.");
-      setIsProcessing(false);
+      console.error("Razorpay Error:", error);
     }
   };
 
-  const handleBillingChange = (field: keyof BillingInformation, value: string) => {
-  setBillingInformation((prev) => ({
-    ...prev,
-    [field]: value,
-  }));
-};
+  // =============================
+  // 💰 Stripe Handler
+  // =============================
+  const handleStripePayment = async () => {
+    try {
+      const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
+        amount: plan?.plan_pricing,
+        email: billing.email,
+      });
+      setClientSecret(res.data.clientSecret);
+    } catch (err) {
+      console.error("Stripe Payment Intent Error:", err);
+    }
+  };
 
-const handlePaymentSelect = (method: string) => {
-  setBillingInformation((prev) => ({ ...prev, selectedPayment: method }));
-};
+  const appearance = { theme: "stripe" };
+  const stripeOptions: any = { clientSecret, appearance };
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-        <Header />
-        {/* Top Bar */}
-        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col items-center justify-between text-center">
-          <h1 className="text-4xl font-extrabold text-gray-800">Checkout</h1>
-          <p className="text-lg text-gray-500 mt-2">
-            Complete your order in just a few steps
-          </p>
-        </div>
-
-        {/* Main Layout */}
-        <div className="max-w-7xl mx-auto px-4 py-3 grid lg:grid-cols-3 gap-6">
-          {/* LEFT SIDE */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* BILLING INFORMATION */}
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
-                <MdPayment className="text-white text-2xl" />
-                <h2 className="text-white font-bold text-xl">
-                  Billing Information
-                </h2>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="max-w-6xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
+        {/* Left: Billing Info */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <h2 className="text-xl font-bold text-yellow-500 mb-4">
+              Billing Information
+            </h2>
+            <div className="p-6 space-y-4">
+              {/* Full Name */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Full Name *
+                </label>
+                <div className="relative">
+                  <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    value={billing.fullName}
+                    onChange={(e) => handleChange("fullName", e.target.value)}
+                  />
+                </div>
               </div>
 
-              <div className="p-6 space-y-4">
-                {/* Full Name */}
+              {/* Email & Phone */}
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Full Name *
+                    Email Address *
                   </label>
                   <div className="relative">
-                    <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                    <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
                     <input
-                      type="text"
-                      placeholder="Enter your full name"
+                      type="email"
+                      placeholder="your@email.com"
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                      value={billingInformation.fullName}
-                      onChange={(e) =>
-                        handleBillingChange("fullName", e.target.value)
-                      }
+                      value={billing.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
                     />
                   </div>
                 </div>
 
-                {/* Email & Phone */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Email Address *
-                    </label>
-                    <div className="relative">
-                      <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                      <input
-                        type="email"
-                        placeholder="your@email.com"
-                        className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                        value={billingInformation.email}
-                        onChange={(e) =>
-                          handleBillingChange("email", e.target.value)
-                        }
-                      />
-                    </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <div className="relative">
+                    <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                    <input
+                      type="tel"
+                      placeholder="+91 1234567890"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      value={billing.phone}
+                      onChange={(e) => handleChange("phone", e.target.value)}
+                    />
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Phone Number *
-                    </label>
-                    <div className="relative">
-                      <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                      <input
-                        type="tel"
-                        placeholder="+91 1234567890"
-                        className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                        value={billingInformation.phone}
-                        onChange={(e) =>
-                          handleBillingChange("phone", e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Country, State, City, Postal */}
-                {/* <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Country *
-                                        </label>
-                                        <div className="relative">
-                                            <FaGlobe className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <select className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none">
-                                                <option value="">Select Country</option>
-                                                <option value="india">India</option>
-                                                <option value="usa">USA</option>
-                                                <option value="uk">UK</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            State *
-                                        </label>
-                                        <div className="relative">
-                                            <FaMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <select className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none">
-                                                <option value="">Select State</option>
-                                                <option value="gujarat">Gujarat</option>
-                                                <option value="maharashtra">Maharashtra</option>
-                                                <option value="delhi">Delhi</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> */}
-
-                {/* <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            City *
-                                        </label>
-                                        <div className="relative">
-                                            <FaCity className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <input
-                                                type="text"
-                                                placeholder="Enter your city"
-                                                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Postal Code *
-                                        </label>
-                                        <div className="relative">
-                                            <FaMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <input
-                                                type="text"
-                                                placeholder="e.g. 400001"
-                                                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none"
-                                            />
-                                        </div>
-                                    </div>
-                                </div> */}
-
-                {/* <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Full Address *
-                                </label>
-                                <textarea
-                                    rows={3}
-                                    placeholder="House/Flat No., Street, Area"
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none resize-none"
-                                />
-                            </div> */}
-              </div>
-            </div>
-
-            {/* SHIPPING INFORMATION */}
-            {/* <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-                            <div className="bg-[#feda4c] p-4 flex items-center gap-3">
-                                <MdLocalShipping className="text-white text-2xl" />
-                                <h2 className="text-white font-bold text-xl">Shipping Address</h2>
-                            </div>
-
-                            <div className="p-6 space-y-4">
-                                <label className="flex items-center gap-2 text-gray-700 font-medium">
-                                    <input
-                                        type="checkbox"
-                                        checked={sameAsShipping}
-                                        onChange={(e) => setSameAsShipping(e.target.checked)}
-                                        className="w-5 h-5 accent-[#feda4c]"
-                                    />
-                                    Same as billing address
-                                </label>
-                            </div>
-
-                            {!sameAsShipping && (
-                                <div className="p-6 space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Full Name *
-                                        </label>
-                                        <div className="relative">
-                                            <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                            <input
-                                                type="text"
-                                                placeholder="Enter your full name"
-                                                className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Email Address *
-                                            </label>
-                                            <div className="relative">
-                                                <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <input
-                                                    type="email"
-                                                    placeholder="your@email.com"
-                                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Phone Number *
-                                            </label>
-                                            <div className="relative">
-                                                <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <input
-                                                    type="tel"
-                                                    placeholder="+91 1234567890"
-                                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Country *
-                                            </label>
-                                            <div className="relative">
-                                                <FaGlobe className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <select className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none">
-                                                    <option value="">Select Country</option>
-                                                    <option value="india">India</option>
-                                                    <option value="usa">USA</option>
-                                                    <option value="uk">UK</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                State *
-                                            </label>
-                                            <div className="relative">
-                                                <FaMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <select className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none">
-                                                    <option value="">Select State</option>
-                                                    <option value="gujarat">Gujarat</option>
-                                                    <option value="maharashtra">Maharashtra</option>
-                                                    <option value="delhi">Delhi</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                City *
-                                            </label>
-                                            <div className="relative">
-                                                <FaCity className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Enter your city"
-                                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                                Postal Code *
-                                            </label>
-                                            <div className="relative">
-                                                <FaMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
-                                                <input
-                                                    type="text"
-                                                    placeholder="e.g. 400001"
-                                                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div> */}
-
-            {/* PAYMENT METHOD */}
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 flex items-center gap-3">
-                <MdPayment className="text-white text-2xl" />
-                <h2 className="text-white font-bold text-xl">Payment Method</h2>
-              </div>
-
-              <div className="p-6 grid md:grid-cols-2 gap-4">
-                {/* Stripe Payment Option */}
-                <div
-                  onClick={() => handlePaymentSelect("Stripe")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
-                   billingInformation?.selectedPayment === "Stripe"
-                      ? "border-[#feda4c] bg-[#fffbea]"
-                      : "border-gray-200 hover:border-[#feda4c]"
-                  } flex flex-col justify-center items-center text-center`}
-                >
-                  <div className="text-[#feda4c] text-3xl mb-3">
-                    <FaWallet />
-                  </div>
-                  <span className="font-semibold text-lg">Stripe Payment</span>
-                </div>
-
-                {/* Razor Pay Option */}
-                <div
-                  onClick={() => handlePaymentSelect("Razorpay")}
-                  className={`cursor-pointer p-6 h-40 rounded-xl border-2 transition-all ${
-                    billingInformation?.selectedPayment === "Razorpay"
-                      ? "border-[#feda4c] bg-[#fffbea]"
-                      : "border-gray-200 hover:border-[#feda4c]"
-                  } flex flex-col justify-center items-center text-center`}
-                >
-                  <div className="text-[#feda4c] text-3xl mb-3">
-                    <FaCreditCard />
-                  </div>
-                  <span className="font-semibold text-lg">Razor Pay</span>
                 </div>
               </div>
-
-              {/* SHOW CARD INPUT FIELDS IF STRIPE SELECTED */}
-              {/* {selectedPayment === 'stripe' && ( */}
-              {/* <div className="px-6 pb-6 space-y-4 mt-2 border-t border-gray-200"> */}
-                {/* Card Number */}
-                {/* <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">
-                      Card Number *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="1234 5678 9012 3456"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 mt-5">
-                      Cardholder Name *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Name on card"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Expiry Date *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      CVV *
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="123"
-                      maxLength={3}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
-                    />
-                  </div>
-                </div> */}
-              {/* </div> */}
-              {/* )} */}
             </div>
           </div>
-          {/* RIGHT SIDE — ORDER SUMMARY */}
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 h-fit sticky top-24">
-            {/* Header */}
-            <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-t-2xl flex items-center gap-2">
-              <FaShoppingCart className="text-white text-xl" />
-              <h2 className="text-white font-bold text-xl">Order Summary</h2>
-            </div>
 
-            <div className="p-6">
-              {/* Discount Code Section */}
-              <div className="flex gap-2 mb-6">
-                <input
-                  placeholder="Enter discount code"
-                  value={discountCode}
-                  onChange={(e) => setDiscountCode(e.target.value)}
-                  className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-[#feda4c] outline-none"
-                />
-                <button className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold hover:bg-[#ffd329] transition">
-                  Apply
-                </button>
-              </div>
+          {/* Payment Method */}
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <h2 className="text-xl font-bold text-yellow-500 mb-4">
+              Select Payment Method
+            </h2>
 
-              {/* Scrollable Order Items */}
-              <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#feda4c] scrollbar-track-gray-100">
-                {/* {orderItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-md border border-gray-200"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-sm">{item.name}</h3>
-                      <p className="text-xs text-gray-500">Size: {item.size}</p>
-                      <p className="text-sm font-bold text-gray-500">
-                        ₹{item.price} x {item.quantity}₹{item.price}
-                      </p>
-                    </div>
-                  </div>
-                ))} */}
-
-                {/* Dynamic Plan Details */}
-                {plan && (
-                  <div
-                    key={plan._id}
-                    className="flex gap-3 p-3 border rounded-xl bg-gray-50 hover:bg-gray-100 transition"
-                  >
-                    {/* Optional Plan Image */}
-                    <img
-                      src={
-                        plan?.plan_image ||
-                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop"
-                      }
-                      alt={plan.plan_type}
-                      className="w-16 h-16 object-cover rounded-md border border-gray-200"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-sm capitalize">
-                        {plan.plan_type}
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        Duration: {plan.plan_day} days
-                      </p>
-                      <p className="text-sm font-bold text-gray-600">
-                        ₹{plan.plan_pricing}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Totals */}
-              <div className="space-y-2 text-sm mb-6">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-medium">
-                    {" "}
-                    ₹{plan?.plan_pricing ? plan.plan_pricing : 0}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Discount:</span>
-                  <span className="font-medium text-green-600">
-                    -₹{discount}
-                  </span>
-                </div>
-                {/* <div className="flex justify-between">
-                                    <span className="text-gray-600">Shipping:</span>
-                                    <span className="font-medium">₹{shippingCharge}</span>
-                                </div> */}
-              </div>
-
-              {/* Final Total */}
-              <div className="flex justify-between items-center bg-yellow-50 p-4 rounded-xl mb-6">
-                <span className="font-semibold text-lg">Final Total:</span>
-                <span className="font-bold text-2xl text-[#feda4c]">
-                  ₹{plan?.plan_pricing ? plan.plan_pricing : 0}
-                </span>
-              </div>
-
-              {/* Buttons */}
-              <button
-                className="w-full h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 text-white font-semibold rounded-xl hover:opacity-90"
-                onClick={handlePayment}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div
+                onClick={() => handlePaymentSelect("Razorpay")}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
               >
-                Place Order
-              </button>
-              <button className="w-full h-12 mt-3 border border-gray-300 rounded-xl hover:bg-gray-100">
-                ← Continue
-              </button>
+                <FaCreditCard className="text-yellow-400 text-2xl mx-auto mb-2" />
+                Razorpay
+              </div>
+
+              <div
+                onClick={() => handlePaymentSelect("Stripe")}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
+              >
+                <FaWallet className="text-yellow-400 text-2xl mx-auto mb-2" />
+                Stripe
+              </div>
             </div>
+
+            {/* Stripe Payment UI */}
+            {billing.selectedPayment === "Stripe" && clientSecret && (
+              <Elements stripe={stripePromise} options={stripeOptions}>
+                <StripeCheckoutForm
+                  full_name={billing.fullName}
+                  phone={billing.phone}
+                  email={billing.email}
+                  plan={plan}
+                  onSuccess={() => router.push("/paymentsuccess")}
+                />
+              </Elements>
+            )}
           </div>
+        </div>
+
+        {/* Right: Summary */}
+        <div className="bg-white rounded-2xl shadow-md p-6 h-fit">
+          <h2 className="text-xl font-bold text-yellow-500 mb-4">
+            Order Summary
+          </h2>
+          {plan && (
+            <div className="border rounded-lg p-3 flex gap-3 items-center mb-4">
+              <img
+                src={plan.plan_image || "/default.jpg"}
+                className="w-16 h-16 rounded-md object-cover"
+                alt="plan"
+              />
+              <div>
+                <p className="font-semibold">{plan.plan_type}</p>
+                <p className="text-sm text-gray-500">
+                  Duration: {plan.plan_day} days
+                </p>
+                <p className="font-bold text-gray-800">
+                  ₹{plan.plan_pricing}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={
+              billing.selectedPayment === "Stripe"
+                ? handleStripePayment
+                : handleRazorpayPayment
+            }
+            className="w-full bg-yellow-400 text-white font-semibold py-3 rounded-xl"
+          >
+            {billing.selectedPayment === "Stripe"
+              ? "Proceed with Stripe"
+              : "Pay with Razorpay"}
+          </button>
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

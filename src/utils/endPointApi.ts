@@ -27,6 +27,10 @@ export interface EndPointApi {
 
     //User Reagister
     userRagisterCreate?: string
+
+    //Payment
+    verifyStripePayment: string;
+    createStripePaymentIntent: string;
 }
 
 // Define and export the API endpoint object
@@ -62,6 +66,9 @@ const endPointApi: EndPointApi = {
     //User Reagister
     userRagisterCreate: 'contactus/create',
 
+    //Payment
+    verifyStripePayment: 'payment/verify-payment-stripe',
+    createStripePaymentIntent: 'payment/create-payment-intent',
 };
 
 export default endPointApi;
