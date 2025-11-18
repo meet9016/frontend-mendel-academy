@@ -37,7 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({
           required
           className={`w-full ${
             icon ? "pl-12" : "pl-4"
-          } pr-4 py-3 md:py-4 rounded-lg bg-white border text-gray-800 
+          } pr-4 py-3 md:py-4 rounded-md bg-white border text-gray-800 
           placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
           ${
             error

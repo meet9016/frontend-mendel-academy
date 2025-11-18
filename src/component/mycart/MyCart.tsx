@@ -107,15 +107,6 @@ const MyCart = () => {
   };
 
 
-  const updatePeriod = (id: number, period: "30" | "60" | "90") => {
-    setCartItems((items) =>
-      items.map((item) => (item.id === id ? { ...item, period } : item))
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
 
   const calculateItemPrice = (item: CartItem) => {
     const multiplier = item.period === "30" ? 1 : item.period === "60" ? 2 : 3;
@@ -126,7 +117,6 @@ const MyCart = () => {
     (sum, item) => sum + calculateItemPrice(item),
     0
   );
-  const total = subtotal;
 
   return (
     <>
@@ -258,7 +248,6 @@ const MyCart = () => {
                   </div>
                 </div>
               ))} */}
-
 
 
               {plan && (

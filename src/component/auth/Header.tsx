@@ -9,6 +9,8 @@ import { BiCalendar, BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { GiSparkles } from "react-icons/gi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import CommonButton from "@/comman/Button";
+import { getTempId } from "@/utils/helper";
 type Exam = {
   exam_name: string;
   link: string;
@@ -20,11 +22,12 @@ type ExamCategory = {
 };
 
 type CartItem = {
-  id: string;
-  title: string;
+  _id: string;
+  category_name: string;
   price: number;
-  days: number;
+  duration: number;
   image: string;
+  quantity: number,
 };
 
 
@@ -37,25 +40,12 @@ export default function Header() {
   const [examCategories, setExamCategories] = useState<ExamCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [cartData, setCartData] = useState<CartItem[]>([]);
+  const [cartTotalAmount, setCartTotalAmount] = useState<number>(0);
 
   const router = useRouter();
   const pathname = usePathname();
 
-
-  // const examCategories = {
-  //   "USMLE Program": [
-  //     { name: "USMLE Step 1", link: "/exams/usmle-step-1" },
-  //     { name: "USMLE Step 2", link: "/exams/usmle-step-2" },
-  //     { name: "USMLE Step 3", link: "/exams/usmle-step-3" },
-  //   ],
-  //   "International Exams": [
-  //     { name: "PLAB (UK)", link: "/exams/plab" },
-  //     { name: "NExT (India)", link: "/exams/next" },
-  //     { name: "FMGE (India)", link: "/exams/fmge" },
-  //     { name: "INI-CET (India)", link: "/exams/ini-cet" },
-  //     { name: "AMC (Australia)", link: "/exams/amc" },
-  //   ],
-  // };
 
   useEffect(() => {
     const fetchExams = async () => {
@@ -63,7 +53,7 @@ export default function Header() {
         setLoading(true);
         const res = await api.get(`${endPointApi.getAppMedicalExam}`)
         if (res.data.data) {
-          setExamCategories(res.data.data)
+          setExamCategories(res.data.data || [])
         }
       } catch (error) {
         console.error("Error fetching exam data:", error);
@@ -78,43 +68,6 @@ export default function Header() {
     localStorage.removeItem("auth_token");
     router.push("/auth/login");
   };
-
-  const cartItems: CartItem[] = [
-    {
-      id: "1",
-      title: "USMLE Step 1 Complete Course",
-      price: 299.99,
-      days: 90,
-      image:
-        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80",
-    },
-    {
-      id: "2",
-      title: "Pathology Master Class",
-      price: 199.99,
-      days: 60,
-      image:
-        "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80",
-    },
-    {
-      id: "3",
-      title: "PLAB Preparation Bundle",
-      price: 349.99,
-      days: 120,
-      image:
-        "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&q=80",
-    },
-    {
-      id: "4",
-      title: "Medical Anatomy Essentials",
-      price: 179.99,
-      days: 45,
-      image:
-        "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=400&q=80",
-    },
-
-  ];
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -137,6 +90,26 @@ export default function Header() {
 
   const isExamActive = pathname.startsWith("/medicalexam");
 
+  const handleCartOpen = async () => {
+    setIsCartOpen(true);
+
+    try {
+      const tempId = getTempId();
+      console.log(tempId, 'tempppppppp')
+      const res = await api.get(
+        `${endPointApi.getCart}?temp_id=${tempId}`
+      );
+
+      if (res.data) {
+        setCartData(res.data.cart);
+        setCartTotalAmount(res.data.total || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  };
+
+
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -153,12 +126,6 @@ export default function Header() {
               alt="Mendel Academy Logo"
               className="w-40 h-40 object-contain"
             />
-            {/* <div className="flex flex-col leading-tight">
-              <span className="font-bold text-lg text-gray-900">MENDEL</span>
-              <span className="text-xs text-gray-500 uppercase tracking-wider">
-                ACADEMY
-              </span>
-            </div> */}
           </div>
 
           {/* ✅ Links (Desktop) */}
@@ -299,7 +266,7 @@ export default function Header() {
           {/* ✅ Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             <button
-              onClick={() => setIsCartOpen(true)}
+              onClick={handleCartOpen}
               className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200"
             >
               {/* Cart Icon */}
@@ -462,7 +429,7 @@ export default function Header() {
                 damping: 14,
                 duration: 0.7,
               }}
-              className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-gradient-to-br from-white via-yellow-50 to-yellow-100 shadow-2xl z-50 rounded-l-3xl overflow-hidden perspective-1000"
+              className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl z-50 rounded-l-3xl overflow-hidden perspective-1000"
             >
               <motion.div
                 className="flex flex-col h-full relative overflow-hidden"
@@ -474,22 +441,21 @@ export default function Header() {
                 <div className="relative flex items-center justify-between p-6 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
                   <div className="flex items-center gap-4">
                     <div className="relative">
-                      <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-3 rounded-xl shadow-lg">
-                        <BiShoppingBag className="w-6 h-6 text-black" />
+                      <div className="bg-white  border-primary p-3 rounded-xl shadow-lg">
+                        <BiShoppingBag className="w-6 h-6 text-primary" />
                       </div>
                       <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-white">
-                          {cartItems.length}
+                        <span className="text-xs font-bold ff-font-bold text-white">
+                          {/* {cartItems.length} */}
                         </span>
                       </div>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <h2 className="text-2xl font-bold ff-font-bold flex items-center gap-2">
                         My Cart
-                        <GiSparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
                       </h2>
-                      <p className="text-sm text-gray-500">
-                        {cartItems.length} courses selected
+                      <p className="text-sm ff-font">
+                        {/* {cartItems.length} courses selected */}
                       </p>
                     </div>
                   </div>
@@ -497,7 +463,7 @@ export default function Header() {
                     onClick={() => setIsCartOpen(false)}
                     className="p-2 hover:bg-yellow-50 rounded-xl cursor-pointer transition-all duration-200 hover:scale-110"
                   >
-                    <AiOutlineClose className="w-6 h-6 text-gray-700" />
+                    <AiOutlineClose className="w-6 h-6 ff-font-bold" />
                   </button>
                 </div>
 
@@ -508,48 +474,49 @@ export default function Header() {
                   initial="hidden"
                   animate="show"
                 >
-                  {cartItems.map((item) => (
+                  {cartData.map((item) => (
                     <motion.div
-                      key={item.id}
+                      key={item._id}
                       variants={itemVariants}
                       whileHover={{ scale: 1.02, rotateX: 1 }}
-                      className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                      className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
                     >
                       {/* Delete Icon */}
                       <button
-                        onClick={() => console.log('Delete:', item.id)}
+                        onClick={() => console.log('Delete:', item._id)}
                         className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
                       >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
 
-                      <div className="flex gap-3 p-3">
-                        <div className="relative flex-shrink-0">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-20 h-20 rounded-lg object-cover ring-2 ring-yellow-200 group-hover:ring-yellow-400 transition-all duration-300"
-                          />
-                          <div className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-yellow-400 to-yellow-500 text-black px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 shadow">
-                            {/* <BiCalendar className="w-3 h-3" /> */}
-                            {item.days} Day
-                          </div>
+                      <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl border border-primary">
+
+                        <div className="flex flex-col flex-1">
+
+                          {/* Name */}
+                          <h3 className="font-semibold ff-font-bold mb-1 line-clamp-2">
+                            {/* {item.title} */}
+                            {item.category_name}
+                          </h3>
+
+                          {/* Duration */}
+                          <p className="text-xs text-black bg-white ff-font border border-primary px-2 py-0.5 rounded-full w-fit font-medium mb-1">
+                            Duration: {item.duration} Days
+                          </p>
+
+                          {/* Quantity */}
+                          <p className="text-xs ff-font-bold font-medium">
+                            Quantity: {item.quantity}
+                          </p>
                         </div>
 
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-semibold text-gray-900 mb-0.5 line-clamp-2 group-hover:text-yellow-500 transition-colors">
-                              {item.title}
-                            </h3>
-                            <span className="text-[11px] bg-yellow-100 text-yellow-600 px-2 py-0.5 rounded-full font-medium">
-                              Full Access
-                            </span>
-                          </div>
-                          <div className="text-lg font-bold text-yellow-500">
-                            ${item.price.toFixed(2)}
-                          </div>
+                        {/* Price */}
+                        <div className="text-lg font-bold ff-font-bold text-primary">
+                          ₹{item.price}
                         </div>
                       </div>
+
+
                     </motion.div>
                   ))}
                 </motion.div>
@@ -560,38 +527,42 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 30 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="border-t border-gray-200 p-6 bg-gradient-to-t from-yellow-50 to-white space-y-4"
+                  className="border-t border-gray-200 p-6 bg-white space-y-4"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500 font-medium">Subtotal</span>
-                    <span className="font-bold text-gray-900 text-lg">
-                      ${subtotal.toFixed(2)}
+                    <span className="text-gray-500 ff-font-bold font-medium">Subtotal</span>
+                    <span className="font-bold ff-font-bold text-lg">
+                      ₹{cartTotalAmount}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500 font-medium">Discount</span>
-                    <span className="font-bold text-green-600 text-lg">
-                      -${(subtotal * 0.1).toFixed(2)}
+                    <span className="text-gray-500 ff-font-bold font-medium">Discount</span>
+                    <span className="font-bold ff-font-bold text-green-600 text-lg">
+                      ₹0.00
                     </span>
                   </div>
-                  <div className="flex justify-between items-center bg-yellow-50 rounded-xl p-4 border-2 border-yellow-100">
+                  <div className="flex justify-between items-center bg-white rounded-xl p-4 border-2 border-primary">
                     <div>
-                      <p className="text-xs text-gray-500 font-medium">Total Amount</p>
-                      <span className="text-3xl font-bold text-yellow-500">
-                        ${(subtotal * 0.9).toFixed(2)}
+                      <p className="text-xs text-gray-500 ff-font-bold font-medium">Total Amount</p>
+                      <span className="text-3xl font-bold text-primary ff-font-bold">
+                        ₹{cartTotalAmount}
                       </span>
                     </div>
                     <GiSparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
                   </div>
-                  <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
+                  {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
                     Checkout Now
-                  </button>
+                  </button> */}
+                  <CommonButton pyClass="py-3" pxClass="px-39" fontWeight={700} fontSize={15} className="ml-2">
+                    Checkout Now
+                  </CommonButton>
                   <button
-                    className="w-full border border-yellow-300 hover:bg-yellow-50 rounded-xl py-4 font-semibold"
+                    className="w-full border border-primary ff-font-bold rounded-xl py-4 font-semibold"
                     onClick={() => setIsCartOpen(false)}
                   >
                     Continue Shopping
                   </button>
+
                 </motion.div>
               </motion.div>
             </motion.div>

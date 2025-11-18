@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { MdArrowForward } from 'react-icons/md';
 import { FiCalendar, FiClock, FiMail, FiVideo } from 'react-icons/fi';
 import { BsHourglass } from 'react-icons/bs';
+import CommonButton from '@/comman/Button';
 
 const RegisterMasterClass = () => {
     const details = [
@@ -18,7 +19,7 @@ const RegisterMasterClass = () => {
     ];
     return (
         <div>
-            <section className="relative py-15 bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 overflow-hidden">
+            <section className="relative py-15 bg-white overflow-hidden">
                 {/* Animated Background */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
                     <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
@@ -51,23 +52,23 @@ const RegisterMasterClass = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center mb-16"
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/30 mb-4">
+                        {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/30 mb-4">
                             <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
                             <span className="text-yellow-600 font-semibold text-sm">
                                 Limited Seats Available
                             </span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            Register for the <span className="text-yellow-500">Masterclass</span>
+                        </div> */}
+                        <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
+                            Register for the Masterclass
                         </h2>
-                        <div className="w-24 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mx-auto" />
+                        {/* <div className="w-24 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mx-auto" /> */}
                     </motion.div>
 
                     <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
                         <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                             {/* LEFT SIDE */}
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-8">
+                                <h3 className="text-2xl font-bold ff-font-bold mb-8">
                                     Course Details
                                 </h3>
 
@@ -76,18 +77,18 @@ const RegisterMasterClass = () => {
                                         key={index}
                                         className="flex items-start gap-4 mb-6 group"
                                     >
-                                        <div className="relative w-12 h-12 flex items-center justify-center bg-yellow-50 border border-yellow-200 rounded-lg group-hover:scale-110 transition-transform">
-                                            <detail.icon className="text-xl text-yellow-600" />
+                                        <div className="relative w-12 h-12 flex items-center justify-center bg-white border border-primary rounded-lg group-hover:scale-110 transition-transform">
+                                            <detail.icon className="text-xl text-primary" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-500">
+                                            <p className="text-sm font-semibold ff-font">
                                                 {detail.label}
                                             </p>
-                                            <p className="text-base font-bold text-gray-800">
+                                            <p className="text-base font-bold ff-font-bold">
                                                 {detail.value}
                                             </p>
                                             {detail.subValue && (
-                                                <p className="text-sm text-gray-500 mt-1">
+                                                <p className="text-sm ff-font mt-1">
                                                     {detail.subValue}
                                                 </p>
                                             )}
@@ -95,19 +96,30 @@ const RegisterMasterClass = () => {
                                     </div>
                                 ))}
 
-                                <button className="w-full px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-xl shadow-lg shadow-yellow-400/30 flex items-center justify-center gap-3 transition-all group mt-8">
+                                {/* <button className="w-full px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-bold rounded-xl shadow-lg shadow-yellow-400/30 flex items-center justify-center gap-3 transition-all group mt-8">
                                     <span className="text-lg">Register Now</span>
                                     <MdArrowForward className="text-xl group-hover:translate-x-1 transition-transform" />
-                                </button>
+                                </button> */}
+                                <CommonButton
+                                    pyClass="py-3"
+                                    pxClass="px-35"
+                                    fontWeight={700}
+                                    fontSize={14}
+                                    className="flex items-center gap-2"
+                                >
+                                    Register Now
+                                    <MdArrowForward className="text-xl group-hover:translate-x-1 transition-transform" />
+                                </CommonButton>
+
 
                                 <div className="flex flex-col gap-2 mt-6">
-                                    <div className="flex items-center gap-3 text-sm text-gray-600">
-                                        <FiMail className="text-yellow-500" />
+                                    <div className="flex items-center gap-3 text-sm ff-font">
+                                        <FiMail className="text-black" />
                                         <span>Need help? Contact us at</span>
                                     </div>
                                     <a
                                         href="mailto:info@mendelacademy.com"
-                                        className="text-yellow-600 font-semibold hover:text-yellow-700 underline"
+                                        className="text-primary font-semibold hover:text-yellow-700 underline"
                                     >
                                         info@mendelacademy.com
                                     </a>
@@ -133,11 +145,11 @@ const RegisterMasterClass = () => {
                                             repeat: Infinity,
                                             ease: "easeInOut",
                                         }}
-                                        className="absolute -bottom-4 -right-4 bg-gradient-to-br from-yellow-400 to-yellow-500 text-black font-bold px-6 py-3 rounded-xl shadow-lg"
+                                        className="absolute -bottom-4 -right-4 bg-[#FFCA00] text-black font-bold px-6 py-3 rounded-xl shadow-lg"
                                     >
                                         <div className="text-center">
-                                            <div className="text-2xl">8</div>
-                                            <div className="text-xs">WEEKS</div>
+                                            <div className="text-2xl ff-font-bold">8</div>
+                                            <div className="text-xs ff-font">WEEKS</div>
                                         </div>
                                     </motion.div>
                                 </div>
@@ -162,7 +174,7 @@ const RegisterMasterClass = () => {
                                     delay: i * 0.2,
                                     ease: "easeInOut",
                                 }}
-                                className="w-2 h-2 bg-yellow-400 rounded-full"
+                                className="w-2 h-2 bg-[#FFCA00] rounded-full"
                             />
                         ))}
                     </motion.div>

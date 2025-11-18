@@ -20,8 +20,9 @@ export interface EndPointApi {
     getMedicalById?: string;
 
     //my cart
-    getPlan?: string;
-    postCreateAddToCart?: string;
+    getCart?: string;
+    // postCreateAddToCart?: string;
+    cartCount?:string;
 
     //faq
     getAllFaq?: string;
@@ -59,8 +60,10 @@ const endPointApi: EndPointApi = {
     getMedicalById: 'examlist/getById',
 
     //my cart
-    getPlan: 'examlist/get-plan',
-    postCreateAddToCart:'cart/create',
+    getCart: 'cart/get',
+    // postCreateAddToCart: 'cart/create',
+    cartCount:'cart/count',
+
     //faq
     getAllFaq: 'faq/getall',
 

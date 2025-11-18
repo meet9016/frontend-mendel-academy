@@ -51,10 +51,12 @@ const MeetYourMentor = () => {
                                                 />
                                             </div>
                                             {/* Floating Badge (Jump Animation) */}
-                                            <div className="absolute -bottom-2 -right-2 bg-[#FACC00] text-black  ff-font px-4 py-2 rounded-full shadow-lg animate-jump">
+                                            {/* <div className="absolute -bottom-2 -right-2 bg-[#FACC00] text-black  ff-font px-4 py-2 rounded-full shadow-lg animate-jump">
+                                                <span className="text-sm font-bold">MD</span>
+                                            </div> */}
+                                            <div className="absolute -bottom-2 -right-2 bg-[#FACC00] text-black  ff-font px-4 py-2 rounded-full shadow-lg ">
                                                 <span className="text-sm font-bold">MD</span>
                                             </div>
-
                                         </div>
 
                                         {/* Name and Title */}
@@ -100,27 +102,27 @@ const MeetYourMentor = () => {
                                         style={{ animationDelay: `${index * 0.15}s` }}
                                     >
                                         {/* Card Background Glow */}
-                                        <div className="absolute -inset-1 bg-gradient-to-r from-[#f0b100]/0 via-[#f0b100]/50 to-[#f0b100]/0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                                        {/* <div className="absolute -inset-1 bg-gradient-to-r from-[#f0b100]/0 via-[#f0b100]/50 to-[#f0b100]/0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" /> */}
 
                                         {/* Achievement Card */}
-                                        <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-primary shadow-lg transition-all duration-500 hover:-translate-y-2">
+                                        <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-primary transition-all duration-500 hover:-translate-y-2">
                                             <div className="flex items-center gap-6">
                                                 {/* Icon Container */}
                                                 <div className="relative">
-                                                    <div className="absolute inset-0 bg-[#FACC00] rounded-2xl blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
+                                                    <div className="absolute inset-0 bg-[#FACC00] rounded-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
                                                     <div className="relative bg-[#FACC00] rounded-2xl p-4 transform group-hover:rotate-6 transition-transform duration-500">
                                                         <achievement.icon className="w-8 h-8 text-white" />
                                                     </div>
                                                 </div>
 
                                                 {/* Text */}
-                                                <p className="text-lg font-medium text-foreground flex-1 group-hover:text-[#f0b100] transition-colors">
+                                                <p className="text-lg font-medium text-foreground flex-1 group-hover:text-black transition-colors">
                                                     {achievement.text}
                                                 </p>
                                             </div>
 
                                             {/* Decorative Line */}
-                                            <div className="absolute bottom-0 left-6 right-6 h-1 bg-gradient-to-r from-transparent via-[#f0b100]/50 to-transparent transform scale-x-0 transition-transform duration-500" />
+                                            {/* <div className="absolute bottom-0 left-6 right-6 h-1 bg-gradient-to-r from-transparent via-[#f0b100]/50 to-transparent transform scale-x-0 transition-transform duration-500" /> */}
                                         </div>
                                     </div>
                                 ))}

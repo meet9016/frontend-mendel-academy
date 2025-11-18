@@ -4,6 +4,7 @@ import { BsAward, BsShieldCheck } from 'react-icons/bs';
 import { MdOutlineSchool, MdTrendingUp, MdVerifiedUser } from 'react-icons/md';
 import { FaEarthAmericas } from 'react-icons/fa6';
 import { FiAlertCircle, FiCheck, FiMail } from 'react-icons/fi';
+import CommonButton from '@/comman/Button';
 
 const LearningPath = () => {
     const modules = [
@@ -111,15 +112,15 @@ const LearningPath = () => {
 
                                     <div
                                         className={`relative h-full max-w-[400px] w-full mx-auto ${isWhiteCard
-                                            ? "bg-white border-2 border-[#ffca00]"
-                                            : `bg-gradient-to-br ${module.gradient} border-2 ${module.popular ? "border-[#ffca00]" : "border-gray-200"
+                                            ? "bg-white border-2 border-primary"
+                                            : `bg-white ${module.gradient} border-2 ${module.popular ? "border-primary" : "border-gray-200"
                                             }`
                                             } rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col`}
                                     >
                                         {/* Corner Decoration */}
                                         {!isWhiteCard && (
                                             <div
-                                                className={`absolute top-0 right-0 w-20 h-20 ${module.popular ? "bg-[#ffcc09]" : "bg-gray-200"
+                                                className={`absolute top-0 right-0 w-20 h-20 ${module.popular ? "bg-white" : "bg-gray-200"
                                                     } opacity-10 rounded-bl-full`}
                                             />
                                         )}
@@ -127,7 +128,7 @@ const LearningPath = () => {
                                         {/* Icon Box */}
                                         <div
                                             className={`w-14 h-14 border-primary rounded-xl ${module.popular
-                                                ? "bg-[#ffcc09] text-black"
+                                                ? "bg-white text-primary"
                                                 : isWhiteCard
                                                     ? "bg-white text-primary"
                                                     : "bg-white text-gray-700"
@@ -138,29 +139,29 @@ const LearningPath = () => {
 
                                         {/* Title + Subtitle */}
                                         <div className="mb-3">
-                                            <h3 className="text-xs font-bold text-gray-500 mb-1">
+                                            <h3 className="text-xs font-bold ff-font-bold mb-1">
                                                 {module.title}
                                             </h3>
-                                            <h4 className="text-lg font-bold text-gray-900 leading-tight">
+                                            <h4 className="text-lg font-bold ff-font leading-tight">
                                                 {module.subtitle}
                                             </h4>
                                         </div>
 
-                                        <p className="text-sm text-gray-600 mb-5 flex-grow">
+                                        <p className="text-sm ff-font mb-5 flex-grow">
                                             {module.description}
                                         </p>
 
                                         {/* Price */}
                                         <div className="mb-5 pb-5 border-b-2 border-gray-200">
                                             <div className="flex items-baseline gap-2 mb-1">
-                                                <span className="text-xs text-gray-500">IN</span>
+                                                <span className="text-xs  ff-font">IN</span>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-3xl font-semibold text-gray-600">INR</span>
-                                                    <span className="text-3xl font-bold text-gray-900">{module.priceINR}</span>
+                                                    <span className="text-3xl font-semibold ff-font">INR</span>
+                                                    <span className="text-3xl font-bold ff-font-bold">{module.priceINR}</span>
                                                 </div>
 
                                             </div>
-                                            <div className="flex items-center gap-1 text-gray-600 mt-1">
+                                            <div className="flex items-center gap-1 ff-font mt-1">
                                                 <div className="flex items-center justify-center w-5 h-5 bg-gray-100 rounded-full">
                                                     <FaEarthAmericas className="text-blue-500 text-lg" />
                                                 </div>
@@ -188,7 +189,7 @@ const LearningPath = () => {
                                                                 }`}
                                                         />
                                                     </div>
-                                                    <span className="text-sm text-gray-700 leading-relaxed">
+                                                    <span className="text-sm ff-font leading-relaxed">
                                                         {feature}
                                                     </span>
                                                 </li>
@@ -196,10 +197,13 @@ const LearningPath = () => {
                                         </ul>
 
                                         {/* Button */}
-                                        <button
+                                        {/* <button
                                             className="w-full cursor-pointer py-3 rounded-xl font-bold text-sm  bg-[#ffcc09] hover:bg-[#ffd633] text-black shadow-lg hover:shadow-xl transition-all duration-300">
                                             Enroll Now
-                                        </button>
+                                        </button> */}
+                                        <CommonButton pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
+                                            Enroll Now
+                                        </CommonButton>
                                     </div>
                                 </motion.div>
                             );
@@ -212,11 +216,11 @@ const LearningPath = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.3 }}
-                        className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-[#ffcc09] rounded-xl p-6 mb-12 flex items-center gap-4 max-w-4xl mx-auto"
+                        className="bg-white border-2 border-primary rounded-xl p-6 mb-12 flex items-center gap-4 max-w-4xl mx-auto"
                     >
-                        <FiAlertCircle className="text-3xl text-[#ffcc09] flex-shrink-0" />
-                        <p className="text-gray-700 font-medium">
-                            <span className="font-bold text-gray-900">Seats are limited!</span> Course fee based on chosen module (non-refundable)
+                        <FiAlertCircle className="text-3xl text-primary flex-shrink-0" />
+                        <p className="ff-font font-medium">
+                            <span className="font-bold ff-font-bold">Seats are limited!</span> Course fee based on chosen module (non-refundable)
                         </p>
                     </motion.div>
 
@@ -226,19 +230,30 @@ const LearningPath = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="bg-gray-50 rounded-2xl p-10 text-center max-w-2xl mx-auto"
+                        className="bg-[#f9fafb] rounded-2xl p-10 text-center max-w-2xl mx-auto"
                     >
                         <MdVerifiedUser className="text-5xl text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        <h3 className="text-2xl font-bold ff-font-bold mb-3">
                             Need Help Choosing?
                         </h3>
-                        <p className="text-gray-600 mb-6">
+                        <p className="ff-font mb-6">
                             Not sure which module is right for you? Our team is here to help you make the best choice for your career goals.
                         </p>
-                        <button className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300">
+                        {/* <button className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300">
                             <FiMail />
                             Contact Our Team
-                        </button>
+                        </button> */}
+                        <CommonButton
+                            pyClass="py-3"
+                            pxClass="px-12"
+                            fontWeight={700}
+                            fontSize={15}
+                            className="bg-black text-white flex items-center gap-2 hover:bg-black hover:text-white"
+                        >
+                            <FiMail />
+                            Contact Our Team
+                        </CommonButton>
+
                     </motion.div>
                 </div>
             </section >
