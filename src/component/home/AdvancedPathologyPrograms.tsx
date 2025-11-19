@@ -79,7 +79,7 @@ const getTempId = () => {
     const res = await api.post(`${endPointApi.postCreateAddToCart}`,body);
     console.log("res",res.data);
     if(res.data.success){
-      console.log("99999999*", res.data);
+      
       
       toast.success(res.data.message);
     }

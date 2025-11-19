@@ -32,6 +32,7 @@ type CartItem = {
 
 
 export default function Header() {
+    const tempIdGet = sessionStorage.getItem("temp_id");
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 
@@ -89,15 +90,13 @@ export default function Header() {
   };
 
   const isExamActive = pathname.startsWith("/medicalexam");
-
+  
   const handleCartOpen = async () => {
     setIsCartOpen(true);
 
     try {
-      const tempId = getTempId();
-      console.log(tempId, 'tempppppppp')
       const res = await api.get(
-        `${endPointApi.getCart}?temp_id=${tempId}`
+        `${endPointApi.getCart}?temp_id=${tempIdGet}`
       );
 
       if (res.data) {
@@ -108,8 +107,6 @@ export default function Header() {
       console.error("Error fetching cart data:", error);
     }
   };
-
-
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
@@ -273,9 +270,9 @@ export default function Header() {
               <FiShoppingCart className="w-5 h-5 text-gray-700" />
 
               {/* Count Badge */}
-              <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
+              {/* <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
                 {cartItems.length}
-              </span>
+              </span> */}
             </button>
 
             {authToken ? (
@@ -541,7 +538,7 @@ export default function Header() {
                       ₹0.00
                     </span>
                   </div>
-                  <div className="flex justify-between items-center bg-white rounded-xl p-4 border-2 border-primary">
+                  {/* <div className="flex justify-between items-center bg-white rounded-xl p-4 border-2 border-primary">
                     <div>
                       <p className="text-xs text-gray-500 ff-font-bold font-medium">Total Amount</p>
                       <span className="text-3xl font-bold text-primary ff-font-bold">
@@ -549,7 +546,7 @@ export default function Header() {
                       </span>
                     </div>
                     <GiSparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
-                  </div>
+                  </div> */}
                   {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
                     Checkout Now
                   </button> */}

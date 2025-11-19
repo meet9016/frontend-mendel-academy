@@ -21,7 +21,7 @@ export interface EndPointApi {
 
     //my cart
     getCart?: string;
-    // postCreateAddToCart?: string;
+    postCreateAddToCart?: string;
     cartCount?:string;
 
     //faq
@@ -61,7 +61,7 @@ const endPointApi: EndPointApi = {
 
     //my cart
     getCart: 'cart/get',
-    // postCreateAddToCart: 'cart/create',
+    postCreateAddToCart: 'cart/create',
     cartCount:'cart/count',
 
     //faq

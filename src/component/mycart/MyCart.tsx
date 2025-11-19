@@ -344,7 +344,6 @@ const MyCart = () => {
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
                       <p className="text-sm text-gray-500 mb-1">Total Amount</p>
                       <p className="text-3xl font-extrabold text-yellow-600">
-                        {/* ₹{total.toLocaleString()} */}
                         ₹{plan?.plan_pricing ? Number(plan.plan_pricing).toLocaleString() : "0"}
                       </p>
                     </div>
