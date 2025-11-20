@@ -386,6 +386,7 @@ function AdvancedPathologyPrograms() {
                 pxClass="px-16"
                 fontWeight={600}
                 fontSize={13}
+                className="ff-font-bold"
               >
                 Join Waitlist
               </CommonButton>

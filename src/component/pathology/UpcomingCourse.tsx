@@ -199,7 +199,7 @@ const UpcomingCourse = () => {
                                                 fontSize={14}
                                                 onClick={() => setOpenCourseDetails(!openCourseDetails)}
                                             >
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 ff-font-bold">
                                                     {/* <FaBell className="w-4 h-4" /> */}
                                                     <span>Get Notified</span>
                                                     <FaArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />

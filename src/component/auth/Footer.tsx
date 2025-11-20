@@ -79,7 +79,7 @@ const Footer = () => {
             </div>
 
             {/* Bottom Footer */}
-            <div className="border-t border-gray-700 py-5 mt-6 text-center text-xs md:text-sm">
+            <div className="border-t ff-font-bold border-gray-700 py-5 mt-6 text-center text-xs md:text-sm">
                 © 2025 Mendel Academy. All rights reserved. Designed & Developed by
                 <a href="#" className="hover:text-[#ffca00] ml-1">Gargi Managoli</a>
             </div>

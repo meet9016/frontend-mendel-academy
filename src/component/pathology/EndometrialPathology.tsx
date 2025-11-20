@@ -252,7 +252,7 @@ const EndometrialPathology = () => {
                       fontSize={14}
                       className="group bg-white hover:bg-white"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 ff-font-bold">
                         <span>Register Now</span>
                         <FaArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </div>
@@ -262,7 +262,7 @@ const EndometrialPathology = () => {
                     {/* <button className="border-2 border-black ff-font-bold cursor-pointer text-black hover:bg-white/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
                       More Details
                     </button> */}
-                    <CommonButton pyClass="py-4" pxClass="px-8" fontWeight={700} fontSize={14} className="group border border-black">
+                    <CommonButton pyClass="py-4" pxClass="px-8" fontWeight={700} fontSize={14} className="group border border-black ff-font-bold">
                       More Details
                     </CommonButton>
 
