@@ -1,4 +1,4 @@
-
+// "use client";
 import BlogCard from "@/component/blog/BlogCard";
 import { Metadata } from "next";
 

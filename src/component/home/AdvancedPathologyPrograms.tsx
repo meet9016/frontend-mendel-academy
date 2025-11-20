@@ -2,6 +2,7 @@
 import CommonButton from "@/comman/Button";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
+import { getTempId } from "@/utils/helper";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
@@ -59,7 +60,7 @@ function AdvancedPathologyPrograms() {
   };
 
 
-  const addToCart = async (item) => {
+  const addToCart = async (item: any) => {
     const temp_id = getTempId();
     const body = {
       temp_id: temp_id,
