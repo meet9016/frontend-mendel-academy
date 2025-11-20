@@ -3,16 +3,19 @@ import CommonButton from "@/comman/Button";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
 import { FaStar, FaUsers, FaClock } from "react-icons/fa";
 import { GiSparkles } from "react-icons/gi";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
 import { toast } from "react-toastify";
 
 function AdvancedPathologyPrograms() {
   // Sample Data (used for 3 repeated cards)
   const [programs, setPrograms] = React.useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const recordedProgram = {
@@ -40,13 +43,15 @@ function AdvancedPathologyPrograms() {
 
   const getBlogData = async () => {
     try {
+      setLoading(true);
       const res = await api.get(`${endPointApi.getAllPreRecorded}`);
-
       if (res?.data?.data.length) {
         setPrograms(res.data.data);
       }
     } catch (err) {
       console.error("Error fetching blogs:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,20 +59,20 @@ function AdvancedPathologyPrograms() {
     getBlogData();
   }, []);
 
-const getTempId = () => {
-  let tempId = sessionStorage.getItem("temp_id");
+  const getTempId = () => {
+    let tempId = sessionStorage.getItem("temp_id");
 
-  if (!tempId) {
-    tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
-    sessionStorage.setItem("temp_id", tempId);
-  }
+    if (!tempId) {
+      tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+      sessionStorage.setItem("temp_id", tempId);
+    }
 
-  return tempId;
-};
+    return tempId;
+  };
 
 
-  const addToCart = async (item) =>{
-     const temp_id = getTempId();
+  const addToCart = async (item) => {
+    const temp_id = getTempId();
     const body = {
       temp_id: temp_id,
       product_id: item?.id,
@@ -76,14 +81,22 @@ const getTempId = () => {
       quantity: 1,
       duration: item?.duration
     }
-    const res = await api.post(`${endPointApi.postCreateAddToCart}`,body);
-    console.log("res",res.data);
-    if(res.data.success){
-      
-      
+    const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
+    console.log("res", res.data);
+    if (res.data.success) {
       toast.success(res.data.message);
     }
   }
+
+
+
+
+
+
+
+
+
+
   return (
     <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-15">
       {/* Title Section */}
@@ -173,6 +186,16 @@ const getTempId = () => {
         </CommonButton>
       </div>
 
+
+
+
+
+
+
+
+
+
+
       {/* RECORDED PROGRAMS */}
       <section className="w-full max-w-[1025px] mx-auto  mt-10">
         <div className="mb-6 text-left">
@@ -184,82 +207,100 @@ const getTempId = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
-          {programs?.map((item, index) => (
-            <div
-              key={index}
-              className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
-            >
-              {/*  IMAGE REPLACING CATEGORY */}
-              <div className="relative h-32">
-                <img
-                  src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
-                  alt={item?.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
-                  <FaStar className="text-primary w-3 h-3 mr-1" />
-                  <span className="text-xs font-semibold">
-                    {item?.rating}
-                  </span>
-                </div>
-                <div className="absolute bottom-2 right-2 ff-font-bold flex items-center bg-white/90 px-2 py-0.5 rounded-full">
-                  {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
-                  <span className="text-xs font-semibold">
-                    {item?.total_reviews}+ learners
-                  </span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-4">
-                <h3
-                  className="font-bold ff-font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    lineHeight: "1.4rem",
-                    height: "2.8rem",
-                  }}
+        {loading ? ProgramSkeleton :
+          (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+              {programs?.map((item, index) => (
+                <div
+                  key={index}
+                  className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
                 >
-                  {item?.title}
-                </h3>
-                <p
-                  className="text-xs ff-font mb-3 overflow-hidden text-ellipsis line-clamp-2"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    lineHeight: "1.2rem",
-                    height: "2.4rem",
-                  }}
-                >
-                  {item?.subtitle}
-                </p>
-
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-xs ff-font">
-                      {item?.duration} month access
-                    </p>
-                    <p className="text-sm font-bold ff-font-bold">
-                      ${item?.price}
-                    </p>
+                  {/*  IMAGE REPLACING CATEGORY */}
+                  <div className="relative h-32">
+                    <img
+                      src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
+                      alt={item?.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
+                      <FaStar className="text-primary w-3 h-3 mr-1" />
+                      <span className="text-xs font-semibold">
+                        {item?.rating}
+                      </span>
+                    </div>
+                    <div className="absolute bottom-2 right-2 ff-font-bold flex items-center bg-white/90 px-2 py-0.5 rounded-full">
+                      {/* <FaStar className="text-yellow-400 w-3 h-3 mr-1" /> */}
+                      <span className="text-xs font-semibold">
+                        {item?.total_reviews}+ learners
+                      </span>
+                    </div>
                   </div>
-                  {/* <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
-                    Add to cart
-                  </button> */}
-                  <CommonButton pyClass="py-0" pxClass="px-2" fontWeight={700} fontSize={14} onClick={() => addToCart(item)}>
-                    Add to cart
-                  </CommonButton>
 
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3
+                      className="font-bold ff-font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        lineHeight: "1.4rem",
+                        height: "2.8rem",
+                      }}
+                    >
+                      {item?.title}
+                    </h3>
+                    <p
+                      className="text-xs ff-font mb-3 overflow-hidden text-ellipsis line-clamp-2"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        lineHeight: "1.2rem",
+                        height: "2.4rem",
+                      }}
+                    >
+                      {item?.subtitle}
+                    </p>
+
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <p className="text-xs ff-font">
+                          {item?.duration} month access
+                        </p>
+                        <p className="text-sm font-bold ff-font-bold">
+                          ${item?.price}
+                        </p>
+                      </div>
+                      {/* <button className="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-semibold px-5 py-2.5 rounded-md">
+                Add to cart
+              </button> */}
+                      <CommonButton pyClass="py-0" pxClass="px-2" fontWeight={700} fontSize={14} onClick={() => addToCart(item)}>
+                        Add to cart
+                      </CommonButton>
+
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          )
+        }
+
       </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* UPCOMING PROGRAMS */}
       <section className="w-full max-w-[1025px] mx-auto mt-10">
@@ -359,3 +400,16 @@ const getTempId = () => {
 }
 
 export default AdvancedPathologyPrograms;
+
+const ProgramSkeleton = (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+      <Skeleton
+        key={i}
+        height={300}
+        borderRadius={16}
+        className="rounded-xl"
+      />
+    ))}
+  </div>
+);

@@ -267,7 +267,7 @@ export default function Header() {
               className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200"
             >
               {/* Cart Icon */}
-              <FiShoppingCart className="w-5 h-5 text-gray-700" />
+              <FiShoppingCart className="w-5 h-5" />
 
               {/* Count Badge */}
               {/* <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
@@ -286,13 +286,13 @@ export default function Header() {
               <>
                 <button
                   onClick={() => router.push("/auth/login")}
-                  className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                  className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 ff-font-bold hover:bg-gray-100 font-medium"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffca00] text-black font-semibold hover:bg-yellow"
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffca00] ff-font-bold font-semibold hover:bg-yellow"
                 >
                   Sign Up
                 </button>

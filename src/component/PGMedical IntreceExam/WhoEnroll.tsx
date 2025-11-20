@@ -33,6 +33,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
     <div>
       <section className="py-15 bg-white">
         <div className="container mx-auto px-4">
+          {loading ? skeletonImageTextSection : (
           <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
             {/* Image Section */}
             <div className="order-2 flex justify-center md:order-1">
@@ -48,10 +49,6 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
                 />
               </div>
             </div>
-
-
-
-
             {/* Text Section */}
             <div className="order-1 space-y-8 md:order-2">
               <div>
@@ -70,6 +67,7 @@ const WhoEnroll = ({ plans, loading }: WhoEnrollProps) => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Pricing Cards */}
           <div className="max-w-7xl mx-auto">
@@ -169,6 +167,30 @@ const skeletonPlanCards = (
         className="rounded-2xl"
       />
     ))}
+  </div>
+);
+
+
+const skeletonImageTextSection = (
+  <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
+    {/* Image Skeleton - Left Side */}
+    <div className="relative order-1 md:order-1 flex justify-center">
+      <div className="relative overflow-hidden rounded-8xl shadow-2xl p-3 w-[500px] h-[500px]">
+        <Skeleton height="100%" />
+      </div>
+
+    </div>
+
+    {/* Text Skeleton - Right Side */}
+    <div className="order-2 md:order-2 space-y-8 w-full">
+      <Skeleton height={40} width={300} borderRadius={10} className="mb-4" />
+
+      <div className="space-y-3">
+        <div>
+          <Skeleton height={200} width="100%" borderRadius={20} />
+        </div>
+      </div>
+    </div>
   </div>
 );
 

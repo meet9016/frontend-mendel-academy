@@ -1,7 +1,13 @@
 import React from "react";
 import DOMPurify from 'dompurify';
+import Skeleton from "react-loading-skeleton";
 
-const CourseDes = ({ data }: { data: any }) => {
+interface CourseDesProps {
+  data: any;
+  loading?: boolean;
+}
+
+const CourseDes = ({ data, loading = false }: CourseDesProps) => {
   const cleanHtml = DOMPurify.sanitize(data || '', {
     USE_PROFILES: { html: true },
   });
@@ -19,15 +25,26 @@ const CourseDes = ({ data }: { data: any }) => {
             </div>
 
             {/* Content Box */}
-            <div
-              dangerouslySetInnerHTML={{ __html: cleanHtml }}
-              className="bg-white p-8 md:p-12 ff-font rounded-3xl shadow-lg border border-gray-200 space-y-6">
-            </div>
+            {loading ? contentSkeleton : (
+              <div
+                dangerouslySetInnerHTML={{ __html: cleanHtml }}
+                className="bg-white p-8 md:p-12 ff-font rounded-3xl shadow-lg border border-gray-200 space-y-6">
+              </div>
+            )}
           </div>
         </div>
       </section>
     </div>
   );
 };
+
+const contentSkeleton = (
+  <div className="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-gray-200 space-y-6">
+    {[1, 2, 3, 4, 5].map((i) => (
+      <Skeleton key={i} height={30} width="100%" className="mb-4" />
+    ))}
+    <Skeleton height={20} width="80%" />
+  </div>
+);
 
 export default CourseDes;

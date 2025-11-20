@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { formatDateWithDayjs } from "@/utils/helper";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 type BlogType = {
     id?: number;
@@ -25,58 +27,15 @@ type BlogType = {
 
 
 const BlogCard = () => {
-    const datas = [
-  {
-    id: 1,
-    title: "Understanding Motion Animations in React",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    exam_name: "ReactJS",
-    date: "2025-10-10",
-    sort_description:
-      "Learn how to add smooth animations using Framer Motion in your React projects to enhance user experience.",
-  },
-  {
-    id: 2,
-    title: "Top 10 Tips to Crack SSC CGL 2025",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
-    exam_name: "SSC CGL",
-    date: "2025-09-25",
-    sort_description:
-      "A complete guide with study tips, best books, and time management strategies for SSC CGL aspirants.",
-  },
-  {
-    id: 3,
-    title: "Mastering English Vocabulary for Banking Exams",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    exam_name: "Bank PO",
-    date: "2025-08-15",
-    sort_description:
-      "Boost your English vocabulary with these powerful tricks and word lists tailored for banking exams.",
-  },
-  {
-    id: 4,
-    title: "Daily Current Affairs: November 2025",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-    exam_name: "General",
-    date: "2025-11-01",
-    sort_description:
-      "Stay updated with the latest current affairs that can help you score higher in your upcoming government exams.",
-  },
-  {
-    id: 5,
-    title: "Time Management Strategies for UPSC Aspirants",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
-    exam_name: "UPSC",
-    date: "2025-07-30",
-    sort_description:
-      "Learn how to balance study hours, revision, and rest effectively to stay consistent throughout UPSC preparation.",
-  },
-];
-
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<BlogType[]>([]);
     const router = useRouter();
     const itemsPerPage = 6;
+    const startIndex = currentPage * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = data.slice(startIndex, endIndex);
+    const pageCount = Math.ceil(data.length / itemsPerPage);
 
     const handlePageClick = (event: any) => {
         setCurrentPage(event.selected);
@@ -85,12 +44,15 @@ const BlogCard = () => {
 
     const getBlogData = async () => {
         try {
+            setLoading(true)
             const res = await api.get(`${endPointApi.getAllBlogs}`);
             if (res?.data?.data?.length) {
                 setData(res.data.data);
             }
         } catch (err) {
             console.error("Error fetching blogs:", err);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -98,8 +60,8 @@ const BlogCard = () => {
         getBlogData();
     }, []);
 
-    const postsToRender = data.length ? data : '';
-    const pageCount = Math.ceil(postsToRender.length / itemsPerPage);
+ 
+
 
     return (
         <>
@@ -164,17 +126,22 @@ const BlogCard = () => {
                         </p>
                     </div>
 
-                    {/*  Blog Cards */}
+
+                    {/* Blog Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                        {datas?.map((post: any, index) => (
-                            <div
-                                key={index}
-                                className="w-full lg:max-w-[380px]"
-                                onClick={() => router.push(`/blog/${post.id}`)}
-                            >
-                                <MultipleCard post={post} index={index} />
-                            </div>
-                        ))}
+                        {loading ? (
+                            <BlogSingleSkeleton />
+                        ) : (
+                            currentItems?.map((post: any, index: number) => (
+                                <div
+                                    key={index}
+                                    className="w-full lg:max-w-[380px]"
+                                    onClick={() => router.push(`/blog/${post.id}`)}
+                                >
+                                    <MultipleCard post={post} index={index} />
+                                </div>
+                            ))
+                        )}
                     </div>
 
                     {/*  Pagination */}
@@ -189,7 +156,7 @@ const BlogCard = () => {
                             pageRangeDisplayed={3}
                             containerClassName={"flex gap-2"}
                             pageClassName={
-                                "border border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-yellow-500 hover:text-white font-medium"
+                                "border border-gray-300 cursor-pointer rounded-lg w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-yellow-500 hover:text-white font-medium"
                             }
                             activeClassName={"bg-[#ffca00] text-black"}
                             previousClassName={
@@ -227,8 +194,10 @@ const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
         {/* Image */}
         <div className="relative w-full h-56 overflow-hidden bg-gray-100 rounded-t-xl flex-shrink-0">
             <motion.img
-                src={post?.image}
-                alt={post.title}
+                src={post.image ? post?.image : "https://thumbs.dreamstime.com/b/no-photo-available-missing-image-no-image-symbol-isolated-white-background-no-photo-available-missing-image-no-image-272386847.jpg"}
+
+                // src={post?.image}
+                alt={post.exam_name}
                 className="w-full h-full object-cover"
                 initial={{ scale: 1.05 }}
                 whileHover={{ scale: 1.1 }}
@@ -257,3 +226,22 @@ const MultipleCard = ({ post, index }: { post: BlogType; index: number }) => (
 );
 
 export default BlogCard;
+
+
+
+
+const BlogSingleSkeleton = () => {
+    return (
+        <>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Skeleton
+                    key={i}
+                    height={380}
+                    width={340}
+                    borderRadius={24}
+                    className="rounded-3xl w-full lg:max-w-[380px]"
+                />
+            ))}
+        </>
+    );
+};

@@ -98,7 +98,6 @@ const Faq = () => {
 
 
 
-
 const skeletonFaq = (
     <div className="space-y-4">
         {[1, 2, 3].map((_, i) => (
@@ -115,9 +114,6 @@ const skeletonFaq = (
         ))}
     </div>
 );
-
-
-
 
 
 

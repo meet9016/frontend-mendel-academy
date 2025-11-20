@@ -20,6 +20,8 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { use, useEffect, useState } from "react";
 import CommonButton from "@/comman/Button";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
 // import CourseCard from "../cousercard/CourseCard";
 
 interface CourseCardProps {
@@ -112,6 +114,7 @@ const Home = () => {
   // ];
 
   const [questionBank, setQuestionBank] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const scroll = (direction: "left" | "right") => {
     const container = document.getElementById("course-scroll-container");
@@ -127,20 +130,42 @@ const Home = () => {
     }
   };
 
-  const getQuestionBank = () => {
-    api
-      .get(`${endPointApi.getAllQuestion}`)
-      .then((response) => {
-        setQuestionBank(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching question bank data:", error);
-      });
-  };
+  // const getQuestionBank = () => {
+  //   api
+  //     .get(`${endPointApi.getAllQuestion}`)
+  //     .then((response) => {
+  //       setQuestionBank(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching question bank data:", error);
+  //     });
+  // };
+
+
+
+  const getQuestionBank = async () => {
+    try {
+      setLoading(true)
+      const res = await api.get(`${endPointApi.getAllQuestion}`)
+      if (res.data) {
+        setQuestionBank(res?.data?.data);
+      } else {
+        console.log("DATA FAILED")
+      }
+    } catch (error) {
+      console.log("ERROR", error)
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
+    }
+  }
 
   useEffect(() => {
     getQuestionBank();
   }, []);
+
+
   return (
     <>
       <Header />
@@ -175,14 +200,18 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 ">
-          <button className="bg-gray-900 text-white px-6 py-3 ff-font rounded-lg cursor-pointer transition transform hover:-translate-y-1 shadow-md">
+          <CommonButton pyClass="py-3" pxClass="px-18" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
             PG Entrance Exams
-          </button>
-          <button className="bg-[#ffca00] px-6 py-3 ff-font  rounded-lg cursor-pointer transition transform hover:-translate-y-1 shadow-md">
+          </CommonButton>
+          <CommonButton pyClass="py-3" pxClass="px-18" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
             Advanced Pathology
-          </button>
+          </CommonButton>
+          <></>
         </div>
       </main>
+
+
+
 
       {/* Courses Section */}
       <section className="bg-[#f9fafb] py-15 px-4 md:px-8 lg:px-16 relative group/section">
@@ -217,25 +246,29 @@ const Home = () => {
             </button>
 
             {/* Scrollable Courses */}
-            <div
-              id="course-scroll-container"
-              className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
-            >
-              {questionBank?.map((course: any, index) => (
-                <CourseCard
-                  key={index}
-                  icon={<FiFileText className="w-7 h-7" />}
-                  title={course.title}
-                  badge={course.tag}
-                  badgeVariant="secondary"
-                  rating={course.rating}
-                  total_reviews={course.total_reviews}
-                  tags={course.features}
-                  moreFeatures={3}
-                  description={course.sort_description}
-                />
-              ))}
-            </div>
+            {loading ? (
+              CourseCardSkeleton
+            ) : (
+              <div
+                id="course-scroll-container"
+                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
+              >
+                {questionBank?.map((course: any, index) => (
+                  <CourseCard
+                    key={index}
+                    icon={<FiFileText className="w-7 h-7" />}
+                    title={course.title}
+                    badge={course.tag}
+                    badgeVariant="secondary"
+                    rating={course.rating}
+                    total_reviews={course.total_reviews}
+                    tags={course.features}
+                    moreFeatures={3}
+                    description={course.sort_description}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Right Scroll Button */}
             <button
@@ -247,6 +280,15 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+
+
+
+
+
+
+
+
 
       {/* Hide scrollbar */}
       <style>{`
@@ -420,3 +462,18 @@ const CourseCard = ({
     </div>
   );
 };
+
+
+const CourseCardSkeleton = (
+  <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4">
+    {[1, 2, 3, 4].map((i) => (
+      <Skeleton
+        key={i}
+        height={380}
+        width={340}
+        borderRadius={24}
+        className="rounded-3xl flex-shrink-0"
+      />
+    ))}
+  </div>
+);

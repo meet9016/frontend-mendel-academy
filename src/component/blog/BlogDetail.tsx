@@ -243,7 +243,7 @@ const BlogDetail = () => {
         <>
             <Header />
 
-            {/* ✅ Hero Image Section */}
+            {/*  Hero Image Section */}
             <section className="relative w-full h-[80vh] overflow-hidden">
                 {/* Hero Image */}
                 <motion.img
