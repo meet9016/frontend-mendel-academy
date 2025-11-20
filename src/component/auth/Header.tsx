@@ -32,7 +32,7 @@ type CartItem = {
 
 
 export default function Header() {
-    const tempIdGet = sessionStorage.getItem("temp_id");
+  const tempIdGet = sessionStorage.getItem("temp_id");
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 
@@ -90,7 +90,7 @@ export default function Header() {
   };
 
   const isExamActive = pathname.startsWith("/medicalexam");
-  
+
   const handleCartOpen = async () => {
     setIsCartOpen(true);
 
@@ -130,7 +130,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-  ${pathname === "/" ? "text-primary" : "hover:text-yellow-500"}
+  ${pathname === "/" ? "text-primary" : "hover:text-[#ffca00]"}
 `}
             >
               Home
@@ -143,7 +143,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/pathology")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/pathology" ? "text-primary" : "hover:text-yellow-500"}
+      ${pathname === "/pathology" ? "text-primary" : "hover:text-[#ffca00]"}
     `}
             >
               Pathology
@@ -156,7 +156,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/blog" ? "text-primary" : "hover:text-yellow-500"}
+      ${pathname === "/blog" ? "text-primary" : "hover:text-[#ffca00]"}
     `}
             >
               Blog
@@ -169,7 +169,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-yellow-500"}
+      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
     `}
             >
               About Us
@@ -186,7 +186,7 @@ export default function Header() {
                 id="exam-button"
                 onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
-    ${isExamActive ? "text-primary" : "hover:text-yellow-500"}
+    ${isExamActive ? "text-primary" : "hover:text-[#ffca00]"}
   `}
               >
                 PG Medical Entrance Exams
@@ -195,7 +195,6 @@ export default function Header() {
     ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
   `}
                 ></span>
-
               </button>
 
               {isExamDropdownOpen && (
@@ -250,7 +249,7 @@ export default function Header() {
                       onClick={() => {
                         setIsExamDropdownOpen(false);
                       }}
-                      className="text-yellow-600 font-medium text-sm hover:underline"
+                      className="text-primary font-medium text-sm hover:underline"
                     >
                       View All Exam Services →
                     </button>
@@ -292,7 +291,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffca00] ff-font-bold font-semibold hover:bg-yellow"
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffca00] ff-font-bold  hover:bg-yellow"
                 >
                   Sign Up
                 </button>
@@ -553,12 +552,18 @@ export default function Header() {
                   <CommonButton pyClass="py-3" pxClass="px-39" fontWeight={700} fontSize={15} className="ml-2">
                     Checkout Now
                   </CommonButton>
-                  <button
+                  {/* <button
                     className="w-full border border-primary ff-font-bold rounded-xl py-4 font-semibold"
                     onClick={() => setIsCartOpen(false)}
                   >
                     Continue Shopping
-                  </button>
+                  </button> */}
+                  <CommonButton
+                    pyClass="py-3" pxClass="px-35" fontWeight={700} fontSize={15} className="ml-2"
+                    onClick={() => setIsCartOpen(false)}
+                  >
+                    Continue Shopping
+                  </CommonButton>
 
                 </motion.div>
               </motion.div>

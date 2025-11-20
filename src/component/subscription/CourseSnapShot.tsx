@@ -58,7 +58,7 @@ const CourseSnapShot = () => {
                             {leftTopics.map((topic, index) => (
                                 <div
                                     key={index}
-                                    className="group relative bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-6 hover:border-[#ffca00] hover:shadow-lg transition-all duration-300"
+                                    className="group relative bg-white border-2 border-primary rounded-2xl p-6 hover:border-[#ffca00] hover:shadow-lg transition-all duration-300"
                                 >
                                     <div className="flex gap-4">
                                         <div className="flex-shrink-0">
@@ -88,7 +88,7 @@ const CourseSnapShot = () => {
                             {rightTopics.map((topic, index) => (
                                 <div
                                     key={index}
-                                    className="group relative bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-6 hover:border-[#ffca00] hover:shadow-lg transition-all duration-300"
+                                    className="group relative bg-white border-2 border-primary rounded-2xl p-6 hover:border-[#ffca00] hover:shadow-lg transition-all duration-300"
                                 >
                                     <div className="flex gap-4">
                                         <div className="flex-shrink-0">

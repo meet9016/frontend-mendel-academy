@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
-import { FaStar, FaUsers, FaClock } from "react-icons/fa";
+import { FaStar, FaUsers, FaClock, FaArrowRight } from "react-icons/fa";
 import { GiSparkles } from "react-icons/gi";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -18,19 +18,7 @@ function AdvancedPathologyPrograms() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const recordedProgram = {
-    title: "MENDEL MASTERY SERIES™: LYMPHOMAS",
-    description: "Curriculum aligned with WHO 5th Ed. Blue Book",
-    category:
-      "https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg",
-    rating: 4.9,
-    price: 59.99,
-    originalPrice: 79.99,
-    total_reviews: 78,
-    duration: 3,
-    subtitle:
-      "Comprehensive training on lymphoma pathology, diagnosis, and molecular markers.",
-  };
+
 
   const upcomingProgram = {
     title: "MENDEL MASTERY SERIES™: BRAIN TUMORS",
@@ -175,7 +163,7 @@ function AdvancedPathologyPrograms() {
           <BsArrowRight className="w-5 h-5" />
         </button> */}
 
-        <CommonButton
+        {/* <CommonButton
           size="xxl"
           fontWeight={700}
           fontSize={12}
@@ -183,6 +171,22 @@ function AdvancedPathologyPrograms() {
           onClick={() => router.push("/subscription")}
         >
           Learn More <BsArrowRight className="w-5 h-5" />
+        </CommonButton> */}
+
+
+        <CommonButton
+          size="xxl"
+          pyClass="py-4"
+          pxClass="px-10"
+          fontWeight={700}
+          fontSize={14}
+          onClick={() => router.push("/subscription")}
+          className="group"
+        >
+          <div className="flex items-center gap-2">
+            <span> Learn More </span>
+            <FaArrowRight className="w-4 h-4 duration-300 transition-transform group-hover:translate-x-1" />
+          </div>
         </CommonButton>
       </div>
 

@@ -22,6 +22,7 @@ import { use, useEffect, useState } from "react";
 import CommonButton from "@/comman/Button";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useRouter } from "next/navigation";
 // import CourseCard from "../cousercard/CourseCard";
 
 interface CourseCardProps {
@@ -48,70 +49,7 @@ const badgeColors: Record<
 };
 
 const Home = () => {
-  // const courses = [
-  //   {
-  //     icon: <FiFileText className="w-7 h-7" />,
-  //     title: "USMLE Step 1",
-  //     tag: "POPULAR",
-  //     rating: 4.9,
-  //     students: 1300,
-  //     features: ["Adaptive AI", "Analytics"],
-  //     moreFeatures: 1,
-  //     sort_description:
-  //       "Master the exam prep with our adaptive AI powered techniques",
-  //     badgeVariant: "default",
-  //   },
-  //   {
-  //     icon: <FiActivity className="w-7 h-7" />,
-  //     title: "USMLE Step 2",
-  //     tag: "UPDATED",
-  //     rating: 4.8,
-  //     students: 940,
-  //     features: ["Patient Cases", "Dx Trainer"],
-  //     moreFeatures: 1,
-  //     sort_description:
-  //       "Excel in clinical knowledge and patient care scenarios",
-  //     badgeVariant: "secondary",
-  //     total_reviews: 2400,
-  //   },
-  //   {
-  //     icon: <FiHeart className="w-7 h-7" />,
-  //     title: "USMLE Step 3",
-  //     tag: "NEW",
-  //     rating: 4.7,
-  //     students: 610,
-  //     features: ["EMR Training", "Residency Cases"],
-  //     moreFeatures: 1,
-  //     sort_description:
-  //       "Complete your USMLE journey with confidence and success",
-  //     badgeVariant: "outline",
-  //     total_reviews: 2400,
-  //   },
-  //   {
-  //     icon: <FiBookOpen className="w-7 h-7" />,
-  //     title: "INI CET",
-  //     tag: "POPULAR",
-  //     rating: 4.8,
-  //     students: 820,
-  //     features: ["AIIMS Faculty", "Topper Strategy"],
-  //     moreFeatures: 1,
-  //     sort_description: "Secure your AIIMS seat with our comprehensive program",
-  //     badgeVariant: "default",
-  //     total_reviews: 2400,
-  //   },
-  //   {
-  //     icon: <FiCpu className="w-7 h-7" />,
-  //     title: "NEET PG",
-  //     tag: "TRENDING",
-  //     rating: 4.9,
-  //     students: 1520,
-  //     features: ["Weak Areas AI", "Smart Notes"],
-  //     moreFeatures: 1,
-  //     sort_description: "Achieve your dream with proven strategies",
-  //     badgeVariant: "secondary",
-  //     total_reviews: 2400,
-  //   },
-  // ];
+
 
   const [questionBank, setQuestionBank] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -200,10 +138,10 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 ">
-          <CommonButton pyClass="py-3" pxClass="px-18" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
+          <CommonButton pyClass="py-3" pxClass="px-12" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
             PG Entrance Exams
           </CommonButton>
-          <CommonButton pyClass="py-3" pxClass="px-18" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
+          <CommonButton pyClass="py-3" pxClass="px-12" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
             Advanced Pathology
           </CommonButton>
           <></>
@@ -215,7 +153,7 @@ const Home = () => {
 
       {/* Courses Section */}
       <section className="bg-[#f9fafb] py-15 px-4 md:px-8 lg:px-16 relative group/section">
-        <div className="max-w-7xl mx-auto relative">
+        <div className="max-w-[1025px] mx-auto relative">
           <div className="text-center mb-12">
             {/* <span className="inline-block text-xs font-semibold ff-font border-primary px-3 py-1 rounded-full mb-4 shadow-sm">
               AI-PERSONALIZED
@@ -234,8 +172,8 @@ const Home = () => {
           {/* Scroll container wrapper (relative for overlay buttons) */}
           <div className="relative">
             {/* Gradient Overlays (side fade) */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#f9fafb] to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#f9fafb] to-transparent z-10 pointer-events-none" />
+            {/* <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#f9fafb] to-transparent z-10 pointer-events-none" /> */}
+            {/* <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#f9fafb] to-transparent z-10 pointer-events-none" /> */}
 
             {/* Left Scroll Button */}
             <button
@@ -265,6 +203,7 @@ const Home = () => {
                     tags={course.features}
                     moreFeatures={3}
                     description={course.sort_description}
+                 
                   />
                 ))}
               </div>
@@ -317,6 +256,7 @@ const CourseCard = ({
   moreFeatures = 0,
   description,
   badgeVariant = "secondary",
+  
 }: CourseCardProps) => {
   // const badgeClasses = {
   // default: "bg-black text-white",
@@ -332,7 +272,7 @@ const CourseCard = ({
     secondary: "blue",
     outline: "transparent",
   };
-
+  const router = useRouter();
   return (
     <div className="group flex-shrink-0 w-[340px] cursor-pointer bg-white border-2 border-gray-200 rounded-3xl p-6 transition-all duration-500 hover:-translate-y-0 flex flex-col relative overflow-hidden">
       {/* Gradient overlay */}
@@ -451,7 +391,9 @@ const CourseCard = ({
           Enroll Now
         </button> */}
 
-        <CommonButton pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
+        <CommonButton
+         
+          pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
           Enroll Now
         </CommonButton>
 

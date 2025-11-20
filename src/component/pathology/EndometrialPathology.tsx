@@ -1,4 +1,5 @@
 "use client";
+import CommonButton from "@/comman/Button";
 import React from "react";
 import {
   FaArrowRight,
@@ -226,7 +227,7 @@ const EndometrialPathology = () => {
                 <div className="relative z-10 flex flex-col gap-6">
                   {/* BUTTON ROW */}
                   <div className="flex flex-row flex-wrap gap-4 justify-center sm:justify-start">
-                    <button
+                    {/* <button
                       className="bg-white text-black ff-font-bold cursor-pointer hover:bg-white/90 px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2"
                       onClick={() =>
                         window.open(
@@ -237,11 +238,34 @@ const EndometrialPathology = () => {
                     >
                       Register Now
                       <FaArrowRight />
-                    </button>
+                    </button> */}
+                    <CommonButton
+                      onClick={() =>
+                        window.open(
+                          "https://docs.google.com/forms/d/1yyf1DbaORWmGhkv3wCKL9XMXUrinumuxSv8SyUOcc9Q/edit?usp=forms_home&ouid=107875348860911010529&ths=true",
+                          "_blank"
+                        )
+                      }
+                      pyClass="py-4"
+                      pxClass="px-10"
+                      fontWeight={700}
+                      fontSize={14}
+                      className="group bg-white hover:bg-white"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>Register Now</span>
+                        <FaArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+                    </CommonButton>
 
-                    <button className="border-2 border-black ff-font-bold cursor-pointer text-black hover:bg-white/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
+
+                    {/* <button className="border-2 border-black ff-font-bold cursor-pointer text-black hover:bg-white/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
                       More Details
-                    </button>
+                    </button> */}
+                    <CommonButton pyClass="py-4" pxClass="px-8" fontWeight={700} fontSize={14} className="group border border-black">
+                      More Details
+                    </CommonButton>
+
                   </div>
 
                   {/* PARAGRAPH BELOW BUTTONS */}

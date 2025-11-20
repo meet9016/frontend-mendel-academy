@@ -13,6 +13,7 @@ import MeetYourMentor from "../pathology/MeetYourMentor";
 import RegisterMasterClass from "./RegisterMasterClass";
 import Footer from "../auth/Footer";
 import CommonButton from "@/comman/Button";
+import { FaArrowRight } from "react-icons/fa";
 
 const MainSection = () => {
     // const heroBackground =
@@ -134,8 +135,17 @@ const MainSection = () => {
                                 Register Now
                                 <FiArrowRight className="ml-2" />
                             </button> */}
-                            <CommonButton pyClass="py-4" pxClass="px-15" fontWeight={700} fontSize={14}>
-                               Register Now   <FiArrowRight className="ml-2" />
+                            <CommonButton
+                                pyClass="py-4"
+                                pxClass="px-15"
+                                fontWeight={700}
+                                fontSize={14}
+                                className="group"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span>Register Now</span>
+                                    <FaArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </div>
                             </CommonButton>
 
                             {/* <button className="min-w-[180px] text-base border border-white text-white hover:bg-white/10 flex items-center justify-center gap-2 py-3 rounded-xl transition">
@@ -143,7 +153,7 @@ const MainSection = () => {
                                 See More Details
                             </button> */}
                             <CommonButton pyClass="py-4" pxClass="px-15" fontWeight={700} fontSize={14} className="border-white bg-white text-black">
-                                   <FiPlay className="mr-2" /> See More Details
+                                <FiPlay className="mr-2" /> See More Details
                             </CommonButton>
                         </div>
                     </div>

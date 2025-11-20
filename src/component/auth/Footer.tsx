@@ -12,65 +12,79 @@ const navLinks = [
 const Footer = () => {
     const router = useRouter();
     return (
-        <footer className="bg-gray-900 text-gray-200 ">
-            <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 grid lg:grid-cols-3 gap-10">
-                {/* Logo & Description */}
-                <div className="space-y-4">
+        <footer className="bg-[#1a1a18] text-white">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                {/* Logo + Description */}
+                <div className="space-y-5">
                     <div className="flex items-center gap-2 cursor-pointer">
                         <img
-                            src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
+                            src="/images/main logo.png"
                             alt="Mendel Academy Logo"
-                            className="w-12 h-12 object-contain"
+                            className="w-40 h-auto object-contain"
                         />
-                        <div className="flex flex-col leading-tight">
-                            <span className="font-bold text-lg text-white">MENDEL</span>
-                            <span className="text-xs ff-font* uppercase tracking-wider">ACADEMY</span>
-                        </div>
                     </div>
-                    <p className="ff-font text-sm">
-                        Empowering medical aspirants worldwide with expert guidance, innovative strategies, and a community-driven approach.
+                    <p className="text-sm leading-relaxed ff-font-bold">
+                        Empowering medical aspirants worldwide with expert guidance,
+                        innovative strategies, and a community-driven approach.
                     </p>
-                    <div className="flex items-center gap-3 mt-2 text-xl ff-font">
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaFacebookF /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaInstagram /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaWhatsapp /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaYoutube /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaTiktok /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaPinterestP /></a>
-                        <a href="#" className="hover:text-yellow-500 transition-colors"><FaLinkedinIn /></a>
+
+                    {/* Social Icons */}
+                    <div className="flex items-center gap-4 text-xl pt-2">
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaFacebookF /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaInstagram /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaWhatsapp /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaYoutube /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaTiktok /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaPinterestP /></a>
+                        <a href="#" className="hover:text-[#ffca00] transition"><FaLinkedinIn /></a>
                     </div>
                 </div>
 
                 {/* Quick Links */}
                 <div>
-                    <h4 className="ff-font-bold font-semibold mb-4">Quick Links</h4>
+                    <h4 className="font-semibold ff-font-bold text-lg mb-4">Quick Links</h4>
                     <ul className="space-y-2 ff-font text-sm">
                         {navLinks.map((link, index) => (
-                            <li key={index} onClick={() => router.push(link.path)} className="hover:text-yellow-500 transition-colors cursor-pointer">{link.name}</li>
+                            <li
+                                key={index}
+                                onClick={() => router.push(link.path)}
+                                className="hover:text-[#ffca00] cursor-pointer transition"
+                            >
+                                {link.name}
+                            </li>
                         ))}
                     </ul>
                 </div>
 
                 {/* Contact Info */}
                 <div>
-                    <h4 className="ff-font-bold font-semibold mb-4">Contact Us</h4>
-                    <p className="ff-fonttext-sm flex items-center gap-2">
-                        <span>🇮🇳</span> +91 99255-11511
-                    </p>
-                    <p className="ff-font text-sm flex items-center gap-2 mt-2">
-                        <span>🇺🇸</span> +1 310-708-3244
-                    </p>
-                    <p className="ff-font text-sm mt-4">
-                        <a href="mailto:info@mendelacademy.com" className="hover:text-yellow-500 transition-colors">info@mendelacademy.com</a>
-                    </p>
+                    <h4 className="font-semibold ff-font-bold text-lg mb-4">Contact Us</h4>
+                    <div className="space-y-3 ff-font text-sm">
+                        <p className="flex items-center gap-2">
+                            🇮🇳 <span>+91 99255-11511</span>
+                        </p>
+                        <p className="flex items-center gap-2">
+                            🇺🇸 <span>+1 310-708-3244</span>
+                        </p>
+                        <p className="pt-2">
+                            <a
+                                href="mailto:info@mendelacademy.com"
+                                className="hover:text-[#ffca00] ff-font-bold transition"
+                            >
+                                info@mendelacademy.com
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
 
             {/* Bottom Footer */}
-            <div className="border-t border-gray-700 mt-10 pt-6 text-center ff-font  text-sm">
-                © 2025 Mendel Academy. All rights reserved. Designed & Developed by <a href="#" className="hover:text-yellow-500">Gargi Managoli</a>
+            <div className="border-t border-gray-700 py-5 mt-6 text-center text-xs md:text-sm">
+                © 2025 Mendel Academy. All rights reserved. Designed & Developed by
+                <a href="#" className="hover:text-[#ffca00] ml-1">Gargi Managoli</a>
             </div>
         </footer>
+
     )
 }
 

@@ -184,7 +184,7 @@ const UpcomingCourse = () => {
                                         </div>
 
                                         {/* --- CTA Button --- */}
-                                        <div className="relative pt-0 pl-4">
+                                        <div className="relative pt-0 pl-1">
                                             {/* <button
                                                 className="w-full py-3 px-6 bg-[#f0b100] hover:bg-[#ffca00] text-white font-semibold rounded-md shadow-md transition-all duration-300 flex items-center justify-center gap-3"
                                             >
@@ -194,7 +194,7 @@ const UpcomingCourse = () => {
                                             </button> */}
                                             <CommonButton
                                                 pyClass="py-3"
-                                                pxClass="px-22"
+                                                pxClass="px-23"
                                                 fontWeight={700}
                                                 fontSize={14}
                                                 onClick={() => setOpenCourseDetails(!openCourseDetails)}
@@ -336,7 +336,7 @@ const UpcomingCourse = () => {
 
 
                     {/* Newsletter Section */}
-                    <div className="relative animate-fade-in-up max-w-6xl mx-auto"
+                    <div className="relative animate-fade-in-up max-w-5xl mx-auto"
                         style={{ animationDelay: "0.8s" }}>
                         <div className="relative bg-white border-primary rounded-3xl p-1 shadow-2xl ">
                             <div className="bg-card rounded-3xl p-8 md:p-12">
@@ -387,14 +387,14 @@ const UpcomingCourse = () => {
                                     </div>
 
                                     {/* Right CTA */}
-                                    <div className="space-y-4 ml-50">
+                                    <div className="space-y-4 ml-45">
                                         <div className="flex flex-col sm:flex-row gap-4">
 
                                             {/* <button className="bg-gradient-to-r from-[#ffca00] to-[#f0b100] hover:from-[#f0b100] hover:to-[#e0a100] text-white font-bold px-10 py-5 rounded-full flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl">
                                                 <FaEnvelope />
                                                 Subscribe to Newsletter
                                             </button> */}
-                                            <CommonButton pyClass="py-5" pxClass="px-12" fontWeight={700} fontSize={18}>
+                                            <CommonButton pyClass="py-3" pxClass="px-8" fontWeight={700} fontSize={16}>
                                                 Subscribe to Newsletter
                                             </CommonButton>
                                         </div>
@@ -405,15 +405,6 @@ const UpcomingCourse = () => {
                     </div>
                 </div>
             </section>
-
-
-
-
-
-
-
-
-
         </>
     )
 }

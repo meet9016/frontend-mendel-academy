@@ -1,18 +1,18 @@
 'use client'
 import CommonButton from '@/comman/Button'
 import React from 'react'
-import { FaUserMd, FaGraduationCap, FaChartLine, FaClock, FaUsers, FaCertificate } from 'react-icons/fa'
+import { FaUserMd, FaGraduationCap, FaChartLine, FaClock, FaUsers, FaCertificate, FaArrowRight } from 'react-icons/fa'
 
 const MedicalChooseMendelAcademy = () => {
     const features = [
         {
-            icon: <FaUserMd  />,
+            icon: <FaUserMd />,
             title: 'Expert-Led Instruction',
             desc: 'Learn directly from board-certified pathologists and experienced educators with years of clinical experience.',
             tag: 'Board-certified faculty',
         },
         {
-            icon: <FaGraduationCap  />,
+            icon: <FaGraduationCap />,
             title: 'Comprehensive Curriculum',
             desc: 'Master essential pathology concepts with structured lessons, interactive case studies, and assessments.',
             tag: '600+ case studies',
@@ -24,7 +24,7 @@ const MedicalChooseMendelAcademy = () => {
             tag: '95% success rate',
         },
         {
-            icon: <FaClock  />,
+            icon: <FaClock />,
             title: 'Flexible Learning',
             desc: 'Access your courses anytime, anywhere — learn at your own pace with live and recorded sessions.',
             tag: 'Learn anywhere, anytime',
@@ -72,25 +72,30 @@ const MedicalChooseMendelAcademy = () => {
                             className="relative bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden group hover:shadow-2xl hover:border-yellow-300 transition-all duration-300"
                         >
                             {/* Tag Badge */}
-                            <div className="absolute top-3 right-3 ff-font text-primary border-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                            <div className="absolute top-3 p-6 right-3 ff-font text-primary border-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                                 {feature.tag}
                             </div>
 
-                            {/* Icon Circle */}
-                            <div className="bg-white text-primary w-14 h-14 text-3xl border-primary flex items-center justify-center rounded-xl mt-6 ml-6 shadow-md group-hover:scale-110  duration-300">
+                            {/* Icon Circle (Aligned with Tag on the same row) */}
+                            <div className="absolute top-3 left-3 bg-white text-primary w-14 h-14 text-3xl border-primary flex items-center justify-center rounded-xl shadow-md group-hover:scale-110 transition duration-300">
                                 {feature.icon}
                             </div>
 
                             {/* Text Content */}
-                            <div className="p-6 pt-4 space-y-3">
+                            <div className="p-4 pt-24 space-y-3">
                                 <h3 className="text-lg font-bold ff-font-bold">{feature.title}</h3>
                                 <p className="ff-font text-sm leading-relaxed">{feature.desc}</p>
 
-                                <button className="text-primary ff-font-bold font-semibold hover:underline flex items-center gap-1 mt-3">
+                                {/* <button className="text-primary ff-font-bold font-semibold hover:underline flex items-center gap-1 mt-3">
                                     Learn more <span>→</span>
-                                </button>
+                                </button> */}
+                                <div className="text-primary ff-font-bold font-semibold hover:underline flex items-center gap-1 mt-3">
+                                    <span> Learn More </span>
+                                    <FaArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                </div>
                             </div>
                         </div>
+
                     ))}
                 </div>
 
@@ -123,7 +128,7 @@ const MedicalChooseMendelAcademy = () => {
                             {/* <span className="bg-white text-primary border-primary ff-font-bold text-xs font-semibold px-4 py-1 rounded-full shadow">
                                 Stay Updated
                             </span> */}
-                             <span className="bg-white/10 ff-font-bold px-4 py-1 text-sm rounded-full">Stay Updated</span>
+                            <span className="bg-white/10 ff-font-bold px-4 py-1 text-sm rounded-full">Stay Updated</span>
                         </div>
 
                         {/* Title */}
@@ -141,8 +146,17 @@ const MedicalChooseMendelAcademy = () => {
                         {/* <button className="mt-8 bg-yellow-400 hover:bg-yellow-500 cursor-pointer text-black font-semibold px-6 py-3 rounded-md text-sm md:text-base flex items-center justify-center gap-2 mx-auto transition-colors duration-200">
                             Subscribe to Newsletter <span>→</span>
                         </button> */}
-                        <CommonButton pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} className='mt-8'>
-                            Enroll Now <span>→</span>
+                        <CommonButton
+                            pyClass="py-3"
+                            pxClass="px-20"
+                            fontWeight={700}
+                            fontSize={14}
+                            className='mt-8 group'
+                        >
+                            <div className="flex items-center gap-2">
+                                <span> Enroll Now  </span>
+                                <FaArrowRight className="w-4 h-4  duration-300 transition-transform group-hover:translate-x-1" />
+                            </div>
                         </CommonButton>
                     </div>
                 </div>

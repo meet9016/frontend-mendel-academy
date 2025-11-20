@@ -68,7 +68,7 @@ const AdvancedPathology = () => {
             <PathologyMasterySeries />
 
             {/* --- Hero Section --- */}
-            <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-white">
+                <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-white">
                 <div
                     className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#f0b100]/15 rounded-full blur-3xl animate-float"
                     style={{ animationDelay: '1s' }}
@@ -119,7 +119,7 @@ const AdvancedPathology = () => {
                             {/* <button className="text-lg px-4 py-2 bg-[#f0b100] text-white hover:bg-[#d79d00] shadow-lg shadow-[#f0b100]/40 transition-all animate-glow-pulse rounded-md">
                                 Enroll now
                             </button> */}
-                            <CommonButton pyClass="py-5" pxClass="px-15" fontWeight={700} fontSize={18}>
+                            <CommonButton pyClass="py-3" pxClass="px-15" fontWeight={700} fontSize={18}>
                                 Enroll Now
                             </CommonButton>
                         </div>
@@ -151,7 +151,7 @@ const AdvancedPathology = () => {
                                         className="group relative animate-scale-in w-[200px] h-[250px] flex-shrink-0"
                                         style={{ animationDelay: `${index * 0.2}s` }}
                                     >
-                                        <div className="relative h-full rounded-2xl overflow-hidden bg-card border-2 border-[#f0b100]/30 shadow-lg shadow-[#f0b100]/30 hover:shadow-[#f0b100]/50 transition-all duration-500 hover:scale-105">
+                                        <div className="relative h-full rounded-2xl overflow-hidden bg-card border-2 border-[#f0b100]/30 shadow-lg  transition-all duration-500 hover:scale-105">
                                             <img
                                                 src={slide.image}
                                                 alt={`Pathology slide ${slide.id}`}
@@ -167,7 +167,7 @@ const AdvancedPathology = () => {
                                                     onClick={() =>
                                                         handleReveal(slide.id)
                                                     }
-                                                    className="flex items-center gap-2 px-5 py-2 bg-white/20 backdrop-blur-sm border cursor-pointer border-white/30 rounded-full text-gray-900 text-sm font-medium hover:bg-white/30 transition-all duration-300 hover:scale-110"
+                                                    className="flex items-center gap-2 px-5 py-2 bg-white/20 backdrop-blur-sm border cursor-pointer border-white/30 rounded-full text-gray-900 text-sm font-medium  transition-all duration-300 hover:scale-110"
                                                 >
                                                     <span>Slide to reveal</span>
                                                     <FaChevronRight className="w-4 h-4" />

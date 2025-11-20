@@ -4,6 +4,7 @@ import { MdArrowForward } from 'react-icons/md';
 import { FiCalendar, FiClock, FiMail, FiVideo } from 'react-icons/fi';
 import { BsHourglass } from 'react-icons/bs';
 import CommonButton from '@/comman/Button';
+import { FaArrowRight } from 'react-icons/fa';
 
 const RegisterMasterClass = () => {
     const details = [
@@ -105,11 +106,12 @@ const RegisterMasterClass = () => {
                                     pxClass="px-35"
                                     fontWeight={700}
                                     fontSize={14}
-                                    className="flex items-center gap-2"
+                                    className="flex items-center group gap-2"
                                 >
                                     Register Now
-                                    <MdArrowForward className="text-xl group-hover:translate-x-1 transition-transform" />
+                                    <FaArrowRight className="text-xl duration-300 group-hover:translate-x-1 transition-transform" />
                                 </CommonButton>
+
 
 
                                 <div className="flex flex-col gap-2 mt-6">
@@ -129,7 +131,7 @@ const RegisterMasterClass = () => {
                             {/* RIGHT SIDE */}
                             <div className="flex justify-center items-center">
                                 <div className="relative w-full">
-                                    <div className="absolute -inset-4 bg-gradient-to-br from-yellow-400/20 via-pink-300/20 to-purple-400/20 rounded-2xl blur-xl" />
+                                    {/* <div className="absolute -inset-4 bg-gradient-to-br from-yellow-400/20 via-pink-300/20 to-purple-400/20 rounded-2xl blur-xl" /> */}
                                     <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                                         <img
                                             src='https://www.autopista.es/uploads/s1/10/32/90/85/la-ameba-contiene-estructuras-especializadas-llamadas-organulos-que-realizan-una-variedad-de-funciones-celulares.jpeg'
@@ -138,20 +140,14 @@ const RegisterMasterClass = () => {
                                         />
                                     </div>
 
-                                    <motion.div
-                                        animate={{ y: [0, -10, 0] }}
-                                        transition={{
-                                            duration: 3,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                        }}
+                                    <div
                                         className="absolute -bottom-4 -right-4 bg-[#FFCA00] text-black font-bold px-6 py-3 rounded-xl shadow-lg"
                                     >
                                         <div className="text-center">
                                             <div className="text-2xl ff-font-bold">8</div>
                                             <div className="text-xs ff-font">WEEKS</div>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

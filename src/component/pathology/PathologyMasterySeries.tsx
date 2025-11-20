@@ -23,7 +23,6 @@ const PathologyMasterySeries = () => {
                                 <span className="text-foreground">Mastery Series™</span>
                             </h2>
                             {/* <div className="h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-3/4" /> */}
-
                         </div>
 
 
@@ -91,7 +90,7 @@ const PathologyMasterySeries = () => {
                                 .map((course, i) => (
                                     <div
                                         key={i}
-                                        className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-[#f0b100]/20 shadow-[0_4px_10px_rgba(240,177,0,0.08)] hover:shadow-[0_6px_18px_rgba(240,177,0,0.15)] transition-all duration-500"
+                                        className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500"
                                     >
                                         {/* Glow Border on Hover */}
                                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
@@ -104,14 +103,14 @@ const PathologyMasterySeries = () => {
                                                     alt={course.title}
                                                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div>
+                                                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div> */}
                                                 <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
                                                     {course.category}
                                                 </div>
                                             </div>
 
                                             {/* Content Section */}
-                                            <div className="p-6 flex flex-col justify-between flex-1 bg-gray-100">
+                                            <div className="p-6 flex flex-col justify-between flex-1 bg-white">
                                                 <div>
                                                     <h3 className="text-lg  leading-tight ff-font-bold  min-h-[48px] mb-2">
                                                         {course.title}
@@ -183,7 +182,7 @@ const PathologyMasterySeries = () => {
                             onClick={() =>
                                 document.getElementById("courseScroll")?.scrollBy({ left: 350, behavior: "smooth" })
                             }
-                            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+                            className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
                         >
                             <FaChevronDown className="-rotate-90 w-5 h-5" />
                         </button>

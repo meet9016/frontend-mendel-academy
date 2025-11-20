@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FiCalendar, FiClock, FiRadio, FiUsers } from 'react-icons/fi'
 import { MdAccessTime } from 'react-icons/md';
 import CommonButton from '@/comman/Button';
+import { FaArrowRight } from 'react-icons/fa';
 
 const LiveSession = () => {
     return (
@@ -67,31 +68,25 @@ const LiveSession = () => {
                             <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-[#fecd11] rounded-tl-3xl" />
                             <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-[#fecd11] rounded-br-3xl" />
 
-                            <motion.h2
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
+                            <h2
+
                                 className="text-2xl md:text-3xl font-bold text-center mb-2 bg-white ff-font-bold  bg-clip-text text-transparent"
                             >
                                 Course In Session
-                            </motion.h2>
+                            </h2>
 
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
+                            <div
+
                                 className="flex items-center justify-center gap-2 mb-4"
                             >
                                 <MdAccessTime className="text-primary text-base" />
                                 <p className="text-white ff-font-bold text-sm">
                                     Started <span className="text-primary font-semibold">09/11</span>
                                 </p>
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6 }}
+                            <div
+
                                 className="text-center mb-5"
                             >
                                 <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#fecd11]/10 backdrop-blur-sm rounded-xl border border-primary">
@@ -100,12 +95,9 @@ const LiveSession = () => {
                                         Enrollment Still Open – Join Anytime
                                     </p>
                                 </div>
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.7 }}
+                            <div
                                 className="grid grid-cols-1 md:grid-cols-3 gap-3"
                             >
                                 <div className="flex flex-col items-center p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#fecd11]/50 transition-all duration-300 hover:shadow-md hover:shadow-[#fecd11]/20">
@@ -125,12 +117,10 @@ const LiveSession = () => {
                                     <h3 className="text-white font-semibold ff-font-bold text-sm mb-1">Lifetime Access</h3>
                                     <p className="text-white/70 text-xs ff-font text-center">Materials always available</p>
                                 </div>
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 }}
+                            <div
+
                                 className="mt-5 text-center"
                             >
                                 {/* <button className="group px-7 py-2.5 bg-gradient-to-r from-[#fecd11] to-[#ffd94d] hover:from-[#ffd94d] hover:to-[#fecd11] text-[#1a2332] font-bold text-sm rounded-full shadow-md shadow-[#fecd11]/30 hover:shadow-lg hover:shadow-[#fecd11]/50 transition-all duration-300 hover:scale-105">
@@ -150,10 +140,10 @@ const LiveSession = () => {
                                         animate={{ x: [0, 5, 0] }}
                                         transition={{ duration: 1.5, repeat: Infinity }}
                                     >
-                                        →
+                                        < FaArrowRight />
                                     </motion.span>
                                 </CommonButton>
-                            </motion.div>
+                            </div>
                         </motion.div>
                     </motion.div>
                 </div>

@@ -157,7 +157,7 @@ const NewsLetter: React.FC = () => {
                           onChange={handleChange}
                           type="text"
                           placeholder="John"
-                          className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                          className="h-12 w-full rounded-lg  px-3 border-2 border-gray-200 focus:border-[#FFCA00] outline-none"
                         />
                         {errors.firstName && (
                           <p className="text-red-500 text-sm">
@@ -179,7 +179,7 @@ const NewsLetter: React.FC = () => {
                           onChange={handleChange}
                           type="text"
                           placeholder="Doe"
-                          className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                          className="h-12 w-full rounded-lg px-3 border-2 border-gray-200 focus:border-[#FFCA00] outline-none"
                         />
                         {errors.lastName && (
                           <p className="text-red-500 text-sm">
@@ -204,7 +204,7 @@ const NewsLetter: React.FC = () => {
                         onChange={handleChange}
                         type="email"
                         placeholder="john.doe@example.com"
-                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg px-3 border-2 border-gray-200 focus:border-[#FFCA00] outline-none"
                       />
                       {errors.email && (
                         <p className="text-red-500 text-sm">{errors.email}</p>
@@ -224,7 +224,7 @@ const NewsLetter: React.FC = () => {
                         value={formData.medicalSchool}
                         onChange={handleChange}
                         placeholder="Your school name"
-                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg px-3 border-2 border-gray-200 focus:border-[#FFCA00] outline-none"
                       />
                       {errors.medicalSchool && (
                         <p className="text-red-500 text-sm">
@@ -248,7 +248,7 @@ const NewsLetter: React.FC = () => {
                         onChange={handleChange}
                         type="text"
                         placeholder="2024"
-                        className="h-12 w-full rounded-lg border border-primary px-3 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200"
+                        className="h-12 w-full rounded-lg px-3 border-2 border-gray-200 focus:border-[#FFCA00] outline-none"
                       />
                       {errors.graduationYear && (
                         <p className="text-red-500 text-sm">
@@ -268,8 +268,16 @@ const NewsLetter: React.FC = () => {
                       Register Now
                       <FaArrowRight className="transition-transform group-hover:translate-x-1" />
                     </button> */}
-                    <CommonButton onClick={handleRagisterNow} pyClass="py-3" pxClass="px-45" fontWeight={700} fontSize={14} className='mt-8'>
+                    {/* <CommonButton onClick={handleRagisterNow} pyClass="py-3" pxClass="px-45" fontWeight={700} fontSize={14} className='mt-8'>
                       Register Now <span>→</span>
+                    </CommonButton> */}
+                    <CommonButton
+                      onClick={handleRagisterNow} pyClass="py-3" pxClass="px-44" fontWeight={700} fontSize={14} className='mt-8'
+                    >
+                      <div className="flex items-center gap-2">
+                        <span> Register Now  </span>
+                        <FaArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </div>
                     </CommonButton>
 
                     <p className="text-center text-sm text-gray-500 mt-3">
