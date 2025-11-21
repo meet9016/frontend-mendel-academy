@@ -1,4 +1,5 @@
-import Home from "@/component/home/Home";
+import HomePage from "@/component/home/page";
+import Home from "@/component/home/sections/Home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <div>
-        <Home/>
+        <HomePage/>
     </div>
   );
 }

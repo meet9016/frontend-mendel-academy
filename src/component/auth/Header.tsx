@@ -204,25 +204,6 @@ export default function Header() {
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[600px] bg-white border border-gray-200 rounded-lg shadow-xl p-6 animate-fadeIn"
                 >
                   <div className="grid grid-cols-2 gap-6">
-                    {/* {Object.entries(examCategories).map(([category, exams]) => (
-                      <div key={category}>
-                        <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-                          {category}
-                        </h3>
-                        <ul className="space-y-2">
-                          {exams.map((exam) => (
-                            <li key={exam.name}>
-                              <button
-                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md transition-all"
-                                onClick={() => router.push("/medicalexam")}
-                              >
-                                {exam.name}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))} */}
                     {examCategories.map((category) => (
                       <div key={category.category_name}>
                         <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
@@ -387,19 +368,6 @@ export default function Header() {
           </div>
         )}
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       <AnimatePresence>
         {isCartOpen && (
@@ -572,18 +540,6 @@ export default function Header() {
           </>
         )}
       </AnimatePresence>
-
-
-
-
-
-
-
-
-
-
-
-
     </header>
   );
 }

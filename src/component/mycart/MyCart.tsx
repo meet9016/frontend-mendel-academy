@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "../auth/Header";
 import {
   FiArrowRight,
 } from "react-icons/fi";
 import { useParams, useRouter } from "next/navigation";
-import Footer from "../auth/Footer";
-import { BiMinus, BiPlus, BiShield } from "react-icons/bi";
+import { BiShield } from "react-icons/bi";
 import { BsPercent, BsTruck } from "react-icons/bs";
 import { CgClose } from "react-icons/cg";
 import { FaShoppingCart } from "react-icons/fa";
@@ -78,9 +76,7 @@ const MyCart = () => {
       period: "30",
     },
   ]);
-  console.log(cartItems, "cartI");
-
-
+ 
   const handleProceedToCheckout = async () => {
     try {
       setLoading(true);
@@ -106,8 +102,6 @@ const MyCart = () => {
     }
   };
 
-
-
   const calculateItemPrice = (item: CartItem) => {
     const multiplier = item.period === "30" ? 1 : item.period === "60" ? 2 : 3;
     return item.basePrice * multiplier * item.quantity;
@@ -120,8 +114,6 @@ const MyCart = () => {
 
   return (
     <>
-      <Header />
-
       <div className="min-h-screen bg-gray-50">
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
           {/* Page Header */}
@@ -138,118 +130,6 @@ const MyCart = () => {
           <div className="grid lg:grid-cols-12 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-8 space-y-6">
-              {/* {cartItems.map((item: any, index: number) => (
-                <div
-                  key={item.id}
-                  className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          Base price: ₹{item.basePrice.toLocaleString()}/30 days
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-2 rounded-full hover:bg-red-100 hover:text-red-600 transition"
-                      >
-                        <CgClose className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="text-sm font-semibold text-gray-800 mb-2 block">
-                        Subscription Period
-                      </label>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-4 flex-wrap">
-                          {[
-                            { value: "30", label: "30 Days" },
-                            { value: "60", label: "60 Days", badge: "2x" },
-                            { value: "90", label: "90 Days", badge: "3x" },
-                          ].map(({ value, label, badge }) => (
-                            <label
-                              key={value}
-                              className="flex items-center gap-2 text-sm font-medium cursor-pointer select-none"
-                            >
-                              <div className="relative flex items-center justify-center">
-                                <input
-                                  type="radio"
-                                  name={`period-${item.id}`}
-                                  value={value}
-                                  checked={item.period === value}
-                                  onChange={(e) =>
-                                    updatePeriod(
-                                      item.id,
-                                      e.target.value as "30" | "60" | "90"
-                                    )
-                                  }
-                                  className="
-                appearance-none
-                w-5 h-5
-                rounded-full
-                border-2 border-gray-300
-                checked:border-yellow-500
-                checked:bg-yellow-500
-                transition-all duration-200
-              "
-                                />
-                                <span
-                                  className={`
-                pointer-events-none absolute
-                h-2.5 w-2.5 rounded-full bg-white
-                transition-all duration-200
-                ${item.period === value
-                                      ? "opacity-100 scale-100"
-                                      : "opacity-0 scale-0"
-                                    }
-              `}
-                                ></span>
-                              </div>
-
-                              {label}
-                              {badge && (
-                                <span className="ml-1 text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full font-semibold">
-                                  {badge}
-                                </span>
-                              )}
-                            </label>
-                          ))}
-                        </div>
-
-                        <p className="text-sm text-gray-600">
-                          Price: <span className="font-semibold">₹{plan?.plan_pricing}</span>
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Duration: <span className="font-semibold">{plan?.plan_day} Days</span>
-                        </p>
-
-
-                      
-                        <p className="text-xl font-bold text-gray-900 whitespace-nowrap">
-                          ₹{calculateItemPrice(item).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))} */}
-
-
               {plan && (
                 <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5 relative">
                   {/*  Close Button */}
@@ -290,7 +170,6 @@ const MyCart = () => {
                   </div>
                 </div>
               )}
-
 
               {/* Trust Badges */}
               <div className="grid grid-cols-3 gap-3 pt-4">
@@ -370,7 +249,6 @@ const MyCart = () => {
           </div>
         </main>
       </div>
-      <Footer />
     </>
   );
 };
