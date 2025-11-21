@@ -1,4 +1,4 @@
-import MedicalExamDetail from "@/component/PGMedical IntreceExam/MedicalExamDetail";
+import PgMedicalEntranceExams from "@/component/PGMedical IntreceExam/page";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function page() {
     return (
-        <MedicalExamDetail />
+        <PgMedicalEntranceExams />
     )
 }
