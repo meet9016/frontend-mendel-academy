@@ -8,14 +8,14 @@ import {
     FaChevronLeft
 } from 'react-icons/fa';
 
-import Header from '../auth/Header';
+import Header from '../../auth/Header';
 import StatusSection from './StatusSection';
 import EndometrialPathology from './EndometrialPathology';
 import PathologyMasterySeries from './PathologyMasterySeries';
 import UpcomingCourse from './UpcomingCourse';
 import MendelStudent from './MendelStudent';
 import MeetYourMentor from './MeetYourMentor';
-import Footer from '../auth/Footer';
+import Footer from '../../auth/Footer';
 import CommonButton from '@/comman/Button';
 
 const AdvancedPathology = () => {
@@ -57,15 +57,8 @@ const AdvancedPathology = () => {
         },
     ];
 
-
-
-
     return (
         <>
-            <Header />
-
-            {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
-            <PathologyMasterySeries />
 
             {/* --- Hero Section --- */}
                 <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-white">
@@ -218,26 +211,7 @@ const AdvancedPathology = () => {
                     </div>
                 </div>
             </section>
-
-            {/* --- Stats Section --- */}
-            <StatusSection />
-
-            {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
-            <EndometrialPathology />
-
-            {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
-            {/* <PathologyMasterySeries /> */}
-
-            {/* UPCOMING COURSE */}
-            <UpcomingCourse />
-
-            {/* MENDEL STUDENT */}
-            <MendelStudent />
-
-            {/* MEET YOUR MENTOR */}
-            <MeetYourMentor />
-
-            <Footer />
+           
         </>
     );
 };

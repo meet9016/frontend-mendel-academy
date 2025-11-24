@@ -34,6 +34,9 @@ export interface EndPointApi {
     verifyStripePayment: string;
     createStripePaymentIntent: string;
     getPlan: string;
+
+    //UpComing
+    getUpComingCourses: string;
 }
 
 // Define and export the API endpoint object
@@ -74,7 +77,10 @@ const endPointApi: EndPointApi = {
     //Payment
     verifyStripePayment: 'payment/verify-payment-stripe',
     createStripePaymentIntent: 'payment/create-payment-intent',
-    getPlan: 'examlist/get-plan'
+    getPlan: 'examlist/get-plan',
+
+    //UpComing
+    getUpComingCourses: 'upcomming/getall'
 };
 
 export default endPointApi;

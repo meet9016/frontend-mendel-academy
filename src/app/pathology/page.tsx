@@ -1,5 +1,5 @@
 
-import AdvancedPathology from "@/component/pathology/AdvancedPathology";
+import Pathology from "@/component/pathology/page";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-    return <AdvancedPathology />
+    return <Pathology />
 }

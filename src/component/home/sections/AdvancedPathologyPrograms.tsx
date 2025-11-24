@@ -34,8 +34,6 @@ const usePrograms = () => {
       try {
         setLoading(true);
         const res = await api.get(`${endPointApi.getAllPreRecorded}`);
-
-        console.log("res*********",res);
         
         if (res?.data?.data?.length) setPrograms(res.data.data);
       } catch {

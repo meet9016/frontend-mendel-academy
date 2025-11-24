@@ -9,7 +9,7 @@ import LiveSession from "./LiveSession";
 import CourseSnapShot from "./CourseSnapShot";
 import ProgramFeatures from "./ProgramFeatures";
 import LearningPath from "./LearningPath";
-import MeetYourMentor from "../pathology/MeetYourMentor";
+import MeetYourMentor from "../pathology/sections/MeetYourMentor";
 import RegisterMasterClass from "./RegisterMasterClass";
 import Footer from "../auth/Footer";
 import CommonButton from "@/comman/Button";
