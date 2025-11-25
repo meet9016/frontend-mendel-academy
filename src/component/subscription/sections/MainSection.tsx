@@ -1,28 +1,24 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import Header from "../auth/Header";
 import { MdAutoAwesome, MdBiotech, } from "react-icons/md";
 import { TbDna2 } from "react-icons/tb";
-import { FiArrowRight, FiPlay } from "react-icons/fi";
-import LiveSession from "./LiveSession";
-import CourseSnapShot from "./CourseSnapShot";
-import ProgramFeatures from "./ProgramFeatures";
-import LearningPath from "./LearningPath";
-import MeetYourMentor from "../pathology/sections/MeetYourMentor";
-import RegisterMasterClass from "./RegisterMasterClass";
-import Footer from "../auth/Footer";
+import { FiPlay } from "react-icons/fi";
 import CommonButton from "@/comman/Button";
 import { FaArrowRight } from "react-icons/fa";
 
-const MainSection = () => {
+interface MainSectionProps {
+    data: any; // ideally, replace 'any' with proper type
+}
+
+const MainSection: React.FC<MainSectionProps> = ({ data }) => {
+
     // const heroBackground =
     //     "https://heise.cloudimg.io/width/610/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/4/8/1/2/3/1/6/shutterstock_1932149360-98c98b4c5c9c2e4f.jpeg";
     const heroBackground = "https://t4.ftcdn.net/jpg/02/65/95/81/360_F_265958166_YTEL6wHpfxnPlN9nNYxL7UKHiOWCln59.jpg"
+
     return (
         <>
-            <Header />
-
             {/* HERO SECTION */}
             <motion.section
                 initial={{ opacity: 0 }}
@@ -114,10 +110,7 @@ const MainSection = () => {
                         </div>
 
                         <h1 className="text-4xl md:text-6xl font-bold mb-4 ff-font-bold text-white leading-tight">
-                            Interpretation of
-                            <span className="block mt-2 ff-font-bold bg-white bg-clip-text text-transparent">
-                                Endometrial Biopsies
-                            </span>
+                            {data?.course_title}
                         </h1>
 
                         <p className="text-lg md:text-xl mb-3 ff-font-bold text-white/90 font-semibold">
@@ -159,33 +152,6 @@ const MainSection = () => {
                     </div>
                 </motion.div>
             </motion.section>
-
-
-
-            {/* LIVE SECTION */}
-            <LiveSession />
-
-
-            {/* COURSE SNAPSHOT */}
-            <CourseSnapShot />
-
-
-            {/* PROGRAM FEATURES */}
-            <ProgramFeatures />
-
-
-            {/* CHOOSE LEARNING PATH */}
-            <LearningPath />
-
-
-            {/* MEET YOUR MENTOR */}
-            <MeetYourMentor />
-
-            {/* REGISTER FOR MASTERCLASS */}
-            <RegisterMasterClass />
-
-            {/* FOOTER */}
-            <Footer />
         </>
     );
 };

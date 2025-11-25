@@ -1,6 +1,6 @@
-// "use client";
-import MainSection from "@/component/subscription/MainSection";
+"use client";
+import UpCommingCourses from "@/component/subscription/page";
 
 export default function page() {
-    return <MainSection />
+    return <UpCommingCourses />
 }

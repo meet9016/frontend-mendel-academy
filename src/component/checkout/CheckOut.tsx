@@ -14,7 +14,7 @@ import { FaCreditCard, FaEnvelope, FaPhone, FaUser, FaWallet } from "react-icons
 import Header from "../auth/Header";
 import Footer from "../auth/Footer";
 
-const StripeCheckoutForm = ({ full_name, phone ,email, plan, onSuccess }: any) => {
+const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -38,31 +38,72 @@ const StripeCheckoutForm = ({ full_name, phone ,email, plan, onSuccess }: any) =
 
     if (result.error) {
       setMessage(result.error.message);
+      setLoading(false);
       return;
     }
 
     if (result.paymentIntent?.status === "succeeded") {
       await api.post(`${endPointApi.verifyStripePayment}`, {
         paymentIntentId: result.paymentIntent.id,
-        full_name: full_name,
-        email: email,
-        phone: phone,
+        full_name,
+        email,
+        phone,
         plan_id: plan._id,
         amount: plan.plan_pricing,
       });
 
       onSuccess();
     }
+
+    setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <button className="btn btn-primary w-full mt-4" disabled={!stripe || loading}>
-        {loading ? "Processing…" : "Pay Now"}
-      </button>
-      {message && <p className="text-red-600 mt-2">{message}</p>}
-    </form>
+    <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+        Complete Your Payment
+      </h2>
+
+      <div className="border rounded-lg p-4 bg-gray-50 mb-4">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold">Plan:</span> {plan?.plan_type}
+        </p>
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold">Price:</span> ${plan?.plan_pricing}
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="p-4 bg-gray-50 border rounded-xl">
+          <PaymentElement />
+        </div>
+
+        {message && (
+          <p className="text-red-600 text-sm bg-red-50 p-2 rounded-md border border-red-200">
+            {message}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={!stripe || loading}
+          className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
+            ${loading || !stripe
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            }`}
+        >
+          {loading ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></span>
+              Processing…
+            </div>
+          ) : (
+            "Pay Now"
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
 
@@ -188,7 +229,6 @@ const CheckOut = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
       <div className="max-w-6xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
         {/* Left: Billing Info */}
         <div className="lg:col-span-2 space-y-6">
@@ -334,7 +374,6 @@ const CheckOut = () => {
           </button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

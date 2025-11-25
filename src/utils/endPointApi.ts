@@ -37,6 +37,9 @@ export interface EndPointApi {
 
     //UpComing
     getUpComingCourses: string;
+
+    //LiveCourses
+    getAllLiveCourses?: string;
 }
 
 // Define and export the API endpoint object
@@ -80,7 +83,10 @@ const endPointApi: EndPointApi = {
     getPlan: 'examlist/get-plan',
 
     //UpComing
-    getUpComingCourses: 'upcomming/getall'
+    getUpComingCourses: 'upcomming/getall',
+
+    //LiveCourses
+    getAllLiveCourses: 'livecourses/getLiveData',
 };
 
 export default endPointApi;

@@ -1,37 +1,37 @@
-import React from 'react'
-import PathologyMasterySeries from './sections/PathologyMasterySeries'
-import StatusSection from './sections/StatusSection'
-import EndometrialPathology from './sections/EndometrialPathology'
-import UpcomingCourse from './sections/UpcomingCourse'
-import MendelStudent from './sections/MendelStudent'
-import MeetYourMentor from './sections/MeetYourMentor'
-import AdvancedPathology from './sections/AdvancedPathology'
+import React from "react";
+import PathologyMasterySeries from "./sections/PathologyMasterySeries";
+import StatusSection from "./sections/StatusSection";
+import EndometrialPathology from "./sections/EndometrialPathology";
+import UpcomingCourse from "./sections/UpcomingCourse";
+import MendelStudent from "./sections/MendelStudent";
+import MeetYourMentor from "./sections/MeetYourMentor";
+import AdvancedPathology from "./sections/AdvancedPathology";
 
 function Pathology() {
   return (
     <div>
-                  <PathologyMasterySeries />
+      <PathologyMasterySeries />
 
-<AdvancedPathology/>
-                   {/* --- Stats Section --- */}
-            <StatusSection />
+      <AdvancedPathology />
+      {/* --- Stats Section --- */}
+      <StatusSection />
 
-            {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
-            <EndometrialPathology />
+      {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
+      <EndometrialPathology />
 
-            {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
-            {/* <PathologyMasterySeries /> */}
+      {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
+      {/* <PathologyMasterySeries /> */}
 
-            {/* UPCOMING COURSE */}
-            <UpcomingCourse />
+      {/* UPCOMING COURSE */}
+      <UpcomingCourse />
 
-            {/* MENDEL STUDENT */}
-            <MendelStudent />
+      {/* MENDEL STUDENT */}
+      <MendelStudent />
 
-            {/* MEET YOUR MENTOR */}
-            <MeetYourMentor />
+      {/* MEET YOUR MENTOR */}
+      <MeetYourMentor />
     </div>
-  )
+  );
 }
 
-export default Pathology
+export default Pathology;

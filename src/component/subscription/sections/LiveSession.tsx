@@ -1,3 +1,4 @@
+'use client';
 import React from 'react'
 import { motion } from "framer-motion";
 import { FiCalendar, FiClock, FiRadio, FiUsers } from 'react-icons/fi'
@@ -5,7 +6,11 @@ import { MdAccessTime } from 'react-icons/md';
 import CommonButton from '@/comman/Button';
 import { FaArrowRight } from 'react-icons/fa';
 
-const LiveSession = () => {
+interface LiveSessionProps {
+    data: any; // ideally, replace 'any' with proper type
+}
+
+const LiveSession: React.FC<LiveSessionProps> = ({ data }) => {
     return (
         <div>
 
@@ -24,6 +29,7 @@ const LiveSession = () => {
                         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                     />
                 </div>
+
 
                 <div className="container mx-auto px-4 relative z-10">
                     <motion.div
@@ -81,7 +87,7 @@ const LiveSession = () => {
                             >
                                 <MdAccessTime className="text-primary text-base" />
                                 <p className="text-white ff-font-bold text-sm">
-                                    Started <span className="text-primary font-semibold">09/11</span>
+                                    Started <span className="text-primary font-semibold">{data?.date}</span>
                                 </p>
                             </div>
 

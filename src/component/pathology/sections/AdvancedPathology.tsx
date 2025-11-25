@@ -7,15 +7,6 @@ import {
     FaChevronRight,
     FaChevronLeft
 } from 'react-icons/fa';
-
-import Header from '../../auth/Header';
-import StatusSection from './StatusSection';
-import EndometrialPathology from './EndometrialPathology';
-import PathologyMasterySeries from './PathologyMasterySeries';
-import UpcomingCourse from './UpcomingCourse';
-import MendelStudent from './MendelStudent';
-import MeetYourMentor from './MeetYourMentor';
-import Footer from '../../auth/Footer';
 import CommonButton from '@/comman/Button';
 
 const AdvancedPathology = () => {

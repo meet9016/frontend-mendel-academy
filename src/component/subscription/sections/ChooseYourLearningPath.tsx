@@ -6,67 +6,85 @@ import { FaEarthAmericas } from 'react-icons/fa6';
 import { FiAlertCircle, FiCheck, FiMail } from 'react-icons/fi';
 import CommonButton from '@/comman/Button';
 
-const LearningPath = () => {
-    const modules = [
-        {
-            id: 1,
-            icon: <MdOutlineSchool className="text-4xl" />,
-            title: "MODULE 1",
-            subtitle: "CORE COMPETENCE BUNDLE",
-            description:
-                "A 7-8 week course with annotated images, algorithms, IHC ladders, and diagnostic insights. ",
-            priceINR: "7500",
-            priceUSD: "105",
-            features: [
-                "7-8 week comprehensive course",
-                "Annotated images and algorithms",
-                "IHC ladders for interpretation",
-                "Real diagnostic insights",
-                "Core competence development",
-            ],
-            popular: false,
-            gradient: "from-blue-50 to-cyan-50",
-        },
-        {
-            id: 2,
-            icon: <BsShieldCheck className="text-4xl" />,
-            title: "MODULE 2",
-            subtitle: "CORE COMPETENCE + LEGAL-SAFE BUNDLE",
-            description:
-                "Core + Reporting Toolkit: 100+ Endometrial Biopsy Scenarios, CAP-compliant, Litigation-safe.",
-            priceINR: "9500",
-            priceUSD: "129",
-            features: [
-                "Everything from Module 1",
-                "100+ Endometrial Biopsy Scenarios",
-                "CAP-compliant reporting",
-                "Litigation-safe protocols",
-                "Legal-safe reporting toolkit",
-            ],
-            popular: false,
-            gradient: "from-purple-50 to-pink-50",
-        },
-        {
-            id: 3,
-            icon: <BsAward className="text-4xl" />,
-            title: "MODULE 3",
-            subtitle: "MAESTRO PREMIUM BUNDLE",
-            description:
-                "Core + Toolkit + 100 Case Discussions + Mastery & Dual Certification (incl. Mendel Mastery Certificate for CV boost).",
-            priceINR: "15000",
-            priceUSD: "179",
-            features: [
-                "Everything from Module 1 & 2",
-                "100 comprehensive case discussions",
-                "Mastery-level expertise development",
-                "Dual Certification included",
-                "Mendel Mastery Certificate",
-                "CV enhancement credentials",
-            ],
-            popular: true,
-            gradient: "from-amber-50 to-yellow-50",
-        },
-    ];
+// TypeScript interfaces
+interface ModuleFeature {
+  features: string[];
+}
+
+interface ModuleData extends ModuleFeature {
+  id: string | number;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: number;
+  priceUSD?: number;
+  isMostPopular?: boolean;
+  gradient?: string;
+  icon?: React.ReactNode;
+}
+
+interface ChooseYourLearningPathProps {
+  data: ModuleData[];
+}
+
+const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({ data }) => {
+    
+    // Icon mapping function with proper TypeScript typing
+    const getIconComponent = (module: ModuleData, index: number): React.ReactNode => {
+        // For most popular module, show shield icon
+        if (module.isMostPopular) {
+            return <BsShieldCheck className="text-4xl" />;
+        }
+        
+        // For other modules, show different icons based on position/index
+        switch (index) {
+            case 0:
+                return <BsAward className="text-4xl" />;
+            case 1:
+                return <MdOutlineSchool className="text-4xl" />;
+            default:
+                return <BsAward className="text-4xl" />;
+        }
+    };
+
+    // Dynamic card styling function - only most popular gets yellow border
+    const getCardStyling = (module: ModuleData, index: number): string => {
+        if (module.isMostPopular) {
+            // Only most popular module gets yellow border
+            return `bg-white ${module.gradient} border-2 border-[#ffcc09]`;
+        } else {
+            // All other cards get gray border
+            return `bg-white ${module.gradient} border-2 border-gray-200`;
+        }
+    };
+
+    // Dynamic icon background styling
+    const getIconBoxStyling = (module: ModuleData): string => {
+        if (module.isMostPopular) {
+            return "bg-white text-primary";
+        } else {
+            return "bg-white text-gray-700";
+        }
+    };
+
+    // Dynamic check circle styling
+    const getCheckCircleStyling = (module: ModuleData): string => {
+        if (module.isMostPopular) {
+            return "bg-[#ffcc09]";
+        } else {
+            return "bg-gray-300";
+        }
+    };
+
+    // Dynamic check mark styling
+    const getCheckMarkStyling = (module: ModuleData): string => {
+        if (module.isMostPopular) {
+            return "text-black";
+        } else {
+            return "text-white";
+        }
+    };
+
     return (
         <>
             <section className="py-15 bg-white relative overflow-hidden">
@@ -89,9 +107,7 @@ const LearningPath = () => {
 
                     {/* Cards */}
                     <div className="grid md:grid-cols-3 gap-6 cursor-pointer justify-center mb-12">
-                        {modules.map((module, index) => {
-                            const isWhiteCard = index === 0 || index === 1;
-
+                        {data?.map((module, index) => {
                             return (
                                 <motion.div
                                     key={module.id}
@@ -101,7 +117,7 @@ const LearningPath = () => {
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
                                     className="relative group h-full flex justify-center"
                                 >
-                                    {module.popular && (
+                                    {module.isMostPopular && (
                                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                                             <div className="bg-[#ffcc09] text-black text-xs font-bold px-6 py-2 rounded-full shadow-lg flex items-center gap-2">
                                                 <MdTrendingUp />
@@ -111,30 +127,20 @@ const LearningPath = () => {
                                     )}
 
                                     <div
-                                        className={`relative h-full max-w-[400px] w-full mx-auto ${isWhiteCard
-                                            ? "bg-white border-2 border-primary"
-                                            : `bg-white ${module.gradient} border-2 ${module.popular ? "border-primary" : "border-gray-200"
-                                            }`
-                                            } rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] flex flex-col`}
+                                        className={`relative h-full max-w-[400px] w-full mx-auto ${getCardStyling(module, index)} rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] flex flex-col`}
                                     >
-                                        {/* Corner Decoration */}
-                                        {!isWhiteCard && (
+                                        {/* Corner Decoration - only for non-most popular cards */}
+                                        {!module.isMostPopular && (
                                             <div
-                                                className={`absolute top-0 right-0 w-20 h-20 ${module.popular ? "bg-white" : "bg-gray-200"
-                                                    } opacity-10 rounded-bl-full`}
+                                                className="absolute top-0 right-0 w-20 h-20 bg-gray-200 opacity-10 rounded-bl-full"
                                             />
                                         )}
 
                                         {/* Icon Box */}
                                         <div
-                                            className={`w-14 h-14 border-primary rounded-xl ${module.popular
-                                                ? "bg-white text-primary"
-                                                : isWhiteCard
-                                                    ? "bg-white text-primary"
-                                                    : "bg-white text-gray-700"
-                                                } flex items-center justify-center mb-5 shadow-md`}
+                                            className={`w-14 h-14 border-primary rounded-xl ${getIconBoxStyling(module)} flex items-center justify-center mb-5 shadow-md`}
                                         >
-                                            {module.icon}
+                                            {getIconComponent(module, index)}
                                         </div>
 
                                         {/* Title + Subtitle */}
@@ -154,22 +160,11 @@ const LearningPath = () => {
                                         {/* Price */}
                                         <div className="mb-5 pb-5 border-b-2 border-gray-200">
                                             <div className="flex items-baseline gap-2 mb-1">
-                                                <span className="text-xs  ff-font">IN</span>
                                                 <div className="flex items-baseline gap-1">
                                                     <span className="text-3xl font-semibold ff-font">INR</span>
-                                                    <span className="text-3xl font-bold ff-font-bold">{module.priceINR}</span>
+                                                    <span className="text-3xl font-bold ff-font-bold">{module.price}</span>
                                                 </div>
-
                                             </div>
-                                            <div className="flex items-center gap-1 ff-font mt-1">
-                                                <div className="flex items-center justify-center w-5 h-5 bg-gray-100 rounded-full">
-                                                    <FaEarthAmericas className="text-blue-500 text-lg" />
-                                                </div>
-                                                <span className="text-sm font-medium tracking-wide">
-                                                    USD&nbsp;{module.priceUSD}
-                                                </span>
-                                            </div>
-
                                         </div>
 
                                         {/* Features */}
@@ -177,16 +172,10 @@ const LearningPath = () => {
                                             {module.features.map((feature, idx) => (
                                                 <li key={idx} className="flex items-start gap-2.5">
                                                     <div
-                                                        className={`mt-0.5 flex-shrink-0 w-4.5 h-4.5 rounded-full ${module.popular
-                                                            ? "bg-[#ffcc09]"
-                                                            : isWhiteCard
-                                                                ? "bg-gray-300"
-                                                                : "bg-gray-300"
-                                                            } flex items-center justify-center`}
+                                                        className={`mt-0.5 flex-shrink-0 w-4.5 h-4.5 rounded-full ${getCheckCircleStyling(module)} flex items-center justify-center`}
                                                     >
                                                         <FiCheck
-                                                            className={`text-[10px] ${module.popular ? "text-black" : "text-white"
-                                                                }`}
+                                                            className={`text-[10px] ${getCheckMarkStyling(module)}`}
                                                         />
                                                     </div>
                                                     <span className="text-sm ff-font leading-relaxed">
@@ -197,10 +186,6 @@ const LearningPath = () => {
                                         </ul>
 
                                         {/* Button */}
-                                        {/* <button
-                                            className="w-full cursor-pointer py-3 rounded-xl font-bold text-sm  bg-[#ffcc09] hover:bg-[#ffd633] text-black shadow-lg hover:shadow-xl transition-all duration-300">
-                                            Enroll Now
-                                        </button> */}
                                         <CommonButton pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
                                             Enroll Now
                                         </CommonButton>
@@ -239,10 +224,6 @@ const LearningPath = () => {
                         <p className="ff-font mb-6">
                             Not sure which module is right for you? Our team is here to help you make the best choice for your career goals.
                         </p>
-                        {/* <button className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300">
-                            <FiMail />
-                            Contact Our Team
-                        </button> */}
                         <CommonButton
                             pyClass="py-3"
                             pxClass="px-12"
@@ -261,4 +242,4 @@ const LearningPath = () => {
     )
 }
 
-export default LearningPath
+export default ChooseYourLearningPath;

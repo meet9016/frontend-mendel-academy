@@ -5,12 +5,8 @@ import {
   FaArrowRight,
   FaBell,
   FaCalendarAlt,
-  FaCheckCircle,
   FaEnvelope,
-  FaGift,
-  FaGraduationCap,
   FaTimes,
-  FaUser,
   FaUsers,
 } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
@@ -33,8 +29,6 @@ const UpcomingCourse = () => {
   };
 
   useEffect(() => {
-    console.log("sdsdsds");
-
     getUpcomingCourse();
   }, []);
   return (
