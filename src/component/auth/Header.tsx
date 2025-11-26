@@ -141,47 +141,7 @@ export default function Header() {
       `}
               ></span>
             </button>
-            <button
-              onClick={() => router.push("/pathology")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/pathology" ? "text-primary" : "hover:text-[#ffca00]"}
-    `}
-            >
-              Pathology
-              <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
-        ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
-              ></span>
-            </button>
-            <button
-              onClick={() => router.push("/blog")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/blog" ? "text-primary" : "hover:text-[#ffca00]"}
-    `}
-            >
-              Blog
-              <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
-        ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
-              ></span>
-            </button>
-            <button
-              onClick={() => router.push("/aboutUs")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
-    `}
-            >
-              About Us
-              <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
-        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
-              ></span>
-            </button>
-
-            {/* ✅ Dropdown Menu */}
+             {/* ✅ Dropdown Menu */}
             <div className="relative">
               <button
                 id="exam-button"
@@ -239,6 +199,46 @@ export default function Header() {
                 </div>
               )}
             </div>
+            <button
+              onClick={() => router.push("/pathology")}
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/pathology" ? "text-primary" : "hover:text-[#ffca00]"}
+    `}
+            >
+              Advanced Pathology Prep
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
+            </button>
+            <button
+              onClick={() => router.push("/blog")}
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/blog" ? "text-primary" : "hover:text-[#ffca00]"}
+    `}
+            >
+              Blog
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
+            </button>
+            <button
+              onClick={() => router.push("/aboutUs")}
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
+    `}
+            >
+              About Us
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
+            </button>
+
           </nav>
 
           {/* ✅ Buttons (Desktop) */}

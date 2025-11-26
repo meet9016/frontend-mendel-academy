@@ -69,9 +69,9 @@ export default function Home() {
     <>
       {/* ----------------  HERO  ---------------- */}
       <main className="flex flex-col items-center justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center space-y-8 py-24">
-        <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
+        {/* <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
           Trusted by 10,000+ Medical Students
-        </p>
+        </p> */}
 
         <h1 className="ff-font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug">
           We <span className="font-extrabold">simplify</span> learning, <br />
@@ -79,7 +79,7 @@ export default function Home() {
         </h1>
 
         <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
-          Personalized Medical Coaching Driven by Data, Enhanced by AI
+          Personalized Medical Coaching
         </p>
 
         <div className="w-full max-w-xl relative">
