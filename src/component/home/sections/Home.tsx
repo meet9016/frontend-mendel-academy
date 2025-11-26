@@ -68,46 +68,51 @@ export default function Home() {
   return (
     <>
       {/* ----------------  HERO  ---------------- */}
-      <main className="flex flex-col items-center justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center space-y-8 py-24">
-        {/* <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
-          Trusted by 10,000+ Medical Students
-        </p> */}
+      <main className="flex justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center py-10">
+        <div className="flex flex-col items-center space-y-7 w-full">
 
-        <h1 className="ff-font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug">
-          We <span className="font-extrabold">simplify</span> learning, <br />
-          <span className="bg-[#FFCA00] px-2 py-1 rounded-lg">amplify</span> success
-        </h1>
+          <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
+            Trusted by 10,000+ Medical Students
+          </p>
 
-        <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
-          Personalized Medical Coaching
-        </p>
+          <h1 className="ff-font-bold -mt-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">
+            We simplify learning, <br />
+            <span className="bg-[#FFCA00] px-2 py-1 rounded-lg">amplify</span> success
+          </h1>
 
-        <div className="w-full max-w-xl relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="What do you want to learn today?"
-            className="w-full border border-gray-300 rounded-lg px-10 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-gray-700 placeholder-gray-400 transition"
-          />
-        </div>
+          <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
+            Personalized Medical Coaching Driven by Data, Enhanced by AI
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <CommonButton pyClass="py-3" pxClass="px-12" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
-            PG Entrance Exams
-          </CommonButton>
-          <CommonButton pyClass="py-3" pxClass="px-12" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
-            Advanced Pathology
-          </CommonButton>
+          <div className="w-full max-w-xl relative">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="What do you want to learn today?"
+              className="w-full border border-gray-300 rounded-lg px-10 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-gray-700 placeholder-gray-400 transition"
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <CommonButton pyClass="py-3" pxClass="px-12" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
+              PG Entrance Exams
+            </CommonButton>
+            <CommonButton pyClass="py-3" pxClass="px-12" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
+              Advanced Pathology
+            </CommonButton>
+          </div>
+
         </div>
       </main>
 
+
       {/* ----------------  QBANK SECTION  ---------------- */}
-      <section className="bg-[#f9fafb] py-15 px-4 md:px-8 lg:px-16 relative group/section">
-        <div className="max-w-[1025px] mx-auto relative">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold ff-font-bold mb-4">
+      <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
+        <div className="max-w-[1025px] mx-auto relative py-10 space-y-7">
+          <div className="text-center ">
+            <h2 className="text-2xl md:text-3xl font-bold ff-font-bold mb-2">
               Adaptive Qbanks
-              <br />
+             
               for Exam Prep
             </h2>
             <p className="ff-font text-base md:text-lg max-w-2xl mx-auto">
@@ -134,7 +139,7 @@ export default function Home() {
             ) : (
               <div
                 id="course-scroll-container"
-                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
+                className="flex gap-6 overflow-x-auto  scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
               >
                 {questionBank.map((course, index) => (
                   <CourseCard key={index} {...course} />
@@ -167,7 +172,7 @@ const CourseCard = (course: QBank) => {
   const { title, tag, rating, total_reviews, features, sort_description } = course;
 
   return (
-    <div className="group flex-shrink-0 w-[340px] cursor-pointer bg-white border-2 border-gray-200 rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 flex flex-col relative overflow-hidden">
+    <div className="group flex-shrink-0 w-[300px] cursor-pointer bg-white border-2 border-gray-200 rounded-3xl p-6 transition-all duration-500 flex flex-col relative overflow-hidden">
       {tag && (
         <div className="absolute top-0 right-0 bg-[#FFCA00] ff-font text-xs font-semibold px-6 py-1 rounded-bl-2xl shadow-md">
           {tag}
@@ -175,7 +180,7 @@ const CourseCard = (course: QBank) => {
       )}
 
       <div className="relative z-10">
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-3 ">
           <div className="w-15 h-15 bg-white border-primary text-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
             <FiFileText className="w-7 h-7" />
           </div>
@@ -196,7 +201,7 @@ const CourseCard = (course: QBank) => {
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide mb-3">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-3">
           {features.slice(0, 3).map((f, idx) => (
             <span key={idx} className="text-xs px-3 py-1.5 bg-[#f3f6fa] rounded-full whitespace-nowrap">
               {f}
@@ -208,7 +213,7 @@ const CourseCard = (course: QBank) => {
           {sort_description}
         </p>
 
-        <CommonButton pyClass="py-3" pxClass="px-26" fontWeight={700} fontSize={14}>
+        <CommonButton pyClass="py-3" pxClass="px-21.5" fontWeight={700} fontSize={14}>
           Enroll Now
         </CommonButton>
         <p className="text-xs ff-font text-center mt-3 font-sm">Instant access • Secure checkout</p>
