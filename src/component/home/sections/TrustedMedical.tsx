@@ -36,7 +36,7 @@ const stats: Stat[] = [
 /* ----------  MAIN COMPONENT  ---------- */
 export default function TrustedMedical() {
   return (
-    <section className="bg-gray-900 text-white py-16 px-6">
+    <section className="bg-gray-900 text-white py-10 px-6">
       <div className="max-w-6xl mx-auto text-center">
         <Header />
         <StatsGrid stats={stats} />
@@ -48,13 +48,13 @@ export default function TrustedMedical() {
 /* ----------  SUB-COMPONENTS  ---------- */
 const Header = () => (
   <>
-    <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
+    <h2 className="text-3xl md:text-4xl ff-font-bold font-bold">
       Trusted by Medical
     </h2>
     <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
       Professionals Worldwide
     </h2>
-    <p className="text-gray-300 ff-font text-base md:text-lg mb-10">
+    <p className="text-gray-300 ff-font text-base md:text-lg mb-7">
       Thousands of students and professionals advance their careers with our
       comprehensive pathology education.
     </p>

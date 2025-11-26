@@ -115,17 +115,15 @@ export default function AdvancedPathologyPrograms() {
   }, [dispatch]);
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-15">
+    <main className="flex flex-col items-center justify-center   bg-white px-4 md:px-6 lg:px-8 py-10">
       {/* ----  TITLE  ---- */}
       <div className="text-center space-y-1">
-        <h1 className="text-4xl md:text-3xl font-extrabold ff-font-bold">
-          Advanced Pathology
+        <h1 className="text-2xl md:text-3xl font-bold ff-font-bold">
+          Advanced Pathology  Programs
         </h1>
-        <h1 className="text-4xl md:text-3xl font-extrabold ff-font-bold">
-          Programs
-        </h1>
+        
       </div>
-      <div className="text-center mt-4 ff-font text-base md:text-lg">
+      <div className="text-center mt-2 ff-font md:text-lg max-w-2xl">
         <p>
           Specialized training designed by pathology experts to advance your
           diagnostic

@@ -13,6 +13,7 @@ import endPointApi from "@/utils/endPointApi";
 import { FaCreditCard, FaEnvelope, FaPhone, FaUser, FaWallet } from "react-icons/fa";
 import Header from "../auth/Header";
 import Footer from "../auth/Footer";
+import { paySchema } from "@/validationSchema/validationSchema";
 
 const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) => {
   const stripe = useStripe();
@@ -115,11 +116,10 @@ interface BillingInformation {
   phone: string;
   selectedPayment: string;
 }
-
+export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 const CheckOut = () => {
   const { id } = useParams();
   const router = useRouter();
-
   const [plan, setPlan] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
@@ -129,6 +129,7 @@ const CheckOut = () => {
     phone: "",
     selectedPayment: "Razorpay",
   });
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const fetchPlan = async () => {
     try {
@@ -142,6 +143,23 @@ const CheckOut = () => {
     }
   };
 
+  const validateForm = (): boolean => {
+    const { error } = paySchema.validate(billing, { abortEarly: false });
+    if (!error) {
+      setErrors({});
+      return true;
+    }
+    const newErrors: FormErrors = {};
+    error.details.forEach((detail) => {
+      const key = detail.path[0] as keyof BillingInformation;
+      newErrors[key] = detail.message;
+    });
+    setErrors(newErrors);
+    return false;
+  };
+
+
+
   useEffect(() => {
     fetchPlan();
   }, []);
@@ -149,13 +167,16 @@ const CheckOut = () => {
   const handlePaymentSelect = (method: string) =>
     setBilling((prev) => ({ ...prev, selectedPayment: method }));
 
-  const handleChange = (field: keyof BillingInformation, value: string) =>
+  const handleChange = (field: keyof BillingInformation, value: string) => {
     setBilling((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
 
   // =============================
   // 🔹 Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
+    if (!validateForm()) return;
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         full_name: billing.fullName,
@@ -213,6 +234,7 @@ const CheckOut = () => {
   // 💰 Stripe Handler
   // =============================
   const handleStripePayment = async () => {
+    if (!validateForm()) return;
     try {
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
         amount: plan?.plan_pricing,
@@ -238,12 +260,14 @@ const CheckOut = () => {
             </h2>
             <div className="p-6 space-y-4">
               {/* Full Name */}
-              <div>
+              <div className="mb-1">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Full Name *
                 </label>
-                <div className="relative">
-                  <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+
+                <div className="relative h-[52px] flex items-center">
+                  <FaUser className="absolute left-4 text-[#feda4c] pointer-events-none" />
+
                   <input
                     type="text"
                     placeholder="Enter your full name"
@@ -252,16 +276,20 @@ const CheckOut = () => {
                     onChange={(e) => handleChange("fullName", e.target.value)}
                   />
                 </div>
+                {errors.fullName && (
+                  <p className="text-red-500 text-sm ml-2">{errors.fullName}</p>
+                )}
               </div>
+
 
               {/* Email & Phone */}
               <div className="grid md:grid-cols-2 gap-4">
-                <div>
+                <div className="mb-1">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Email Address *
                   </label>
-                  <div className="relative">
-                    <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                  <div className="relative h-[52px] flex items-center">
+                    <FaEnvelope className="absolute left-4 text-[#feda4c] pointer-events-none" />
                     <input
                       type="email"
                       placeholder="your@email.com"
@@ -270,14 +298,18 @@ const CheckOut = () => {
                       onChange={(e) => handleChange("email", e.target.value)}
                     />
                   </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm ml-2">{errors.email}</p>
+                  )}
                 </div>
 
-                <div>
+
+                <div className="mb-1">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Phone Number *
                   </label>
-                  <div className="relative">
-                    <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-[#feda4c]" />
+                  <div className="relative h-[52px] flex items-center">
+                    <FaPhone className="absolute left-4 text-[#feda4c] pointer-events-none" />
                     <input
                       type="tel"
                       placeholder="+91 1234567890"
@@ -286,7 +318,11 @@ const CheckOut = () => {
                       onChange={(e) => handleChange("phone", e.target.value)}
                     />
                   </div>
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm ml-2">{errors.phone}</p>
+                  )}
                 </div>
+
               </div>
             </div>
           </div>

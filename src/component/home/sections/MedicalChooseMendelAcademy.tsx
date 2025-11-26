@@ -62,7 +62,7 @@ const features: Feature[] = [
 /* ----------  MAIN PAGE  ---------- */
 export default function MedicalChooseMendelAcademy() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-15">
+    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-10">
       <Header />
       <FeatureGrid features={features} />
       <BottomSection />
@@ -73,22 +73,22 @@ export default function MedicalChooseMendelAcademy() {
 /* ----------  SECTIONS  ---------- */
 const Header = () => (
   <>
-    <div className="text-center space-y-1">
-      <h1 className="text-4xl md:text-3xl ff-font-bold font-extrabold">
+    <div className="text-center space-y-0">
+      <h1 className="text-2xl md:text-3xl ff-font-bold font-bold">
         Why Medical Professionals
       </h1>
-      <h2 className="text-4xl md:text-3xl ff-font-bold font-extrabold">
+      <h2 className="text-2xl md:text-3xl ff-font-bold font-bold">
         Choose Mendel Academy
       </h2>
     </div>
-    <div className="text-center mt-4 ff-font text-base md:text-lg">
+    <div className="text-center mt-2 ff-font md:text-lg max-w-2xl">
       <p>Our comprehensive pathology platform accelerates your professional growth and clinical expertise.</p>
     </div>
   </>
 );
 
 const FeatureGrid = ({ features }: { features: Feature[] }) => (
-  <section className="w-full max-w-[1025px] mx-auto mt-10">
+  <section className="w-full max-w-[1025px] mx-auto mt-7">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
       {features.map((f) => (
         <FeatureCard key={f.title} {...f} />
@@ -119,7 +119,7 @@ const FeatureCard = ({ icon, title, desc, tag }: Feature) => (
 );
 
 const BottomSection = () => (
-  <div className="w-full max-w-[1025px] mx-auto mt-16 space-y-16">
+  <div className="w-full max-w-[1025px] mx-auto mt-10 space-y-7">
     {/* join count */}
     <div className="w-full flex justify-center">
       <div className="flex items-center gap-4 bg-[#f9fafb] py-3 px-6 rounded-full shadow-sm border border-gray-100">

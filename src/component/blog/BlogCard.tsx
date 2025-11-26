@@ -71,7 +71,7 @@ export default function BlogCard() {
 
 /* ----------  HERO  (identical motion)  ---------- */
 const Hero = () => (
-  <section className="relative w-full bg-[#ffca00] py-24 lg:py-36 overflow-hidden">
+  <section className="relative w-full bg-[#ffca00] py-8 lg:py-10 overflow-hidden">
     <motion.div
       className="absolute inset-0"
       animate={{
@@ -90,7 +90,7 @@ const Hero = () => (
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}
       >
-        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold ff-font-bold leading-tight">
+        <h1 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold ff-font-bold leading-tight">
           Articles and <br className="hidden sm:block" /> Insights
         </h1>
         <p className="text-lg sm:text-xl ff-font leading-relaxed max-w-xl mx-auto lg:mx-0">
@@ -118,11 +118,11 @@ const Hero = () => (
 
 /* ----------  BLOG SECTION  ---------- */
 const BlogSection = ({ loading, blogs, onCard }: { loading: boolean; blogs: Blog[]; onCard: (id?: number) => void }) => (
-  <section className="py-15 bg-gray-50">
+  <section className="py-10 bg-gray-50">
     <div className="max-w-7xl mx-auto px-6 md:px-10">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl sm:text-4xl font-bold ff-font-bold mb-4">Latest Articles</h2>
-        <p className="ff-font text-lg max-w-2xl mx-auto">Expert insights and guidance to help you excel in your medical career</p>
+      <div className="text-center mb-5">
+        <h2 className="text-3xl sm:text-4xl font-bold ff-font-bold mb-1">Latest Articles</h2>
+        <p className="ff-font text-lg max-w-2xl mb-5 mx-auto">Expert insights and guidance to help you excel in your medical career</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
@@ -179,7 +179,7 @@ const Card = ({ post, index, onClick }: { post: Blog; index: number; onClick: ()
 
 /* ----------  PAGINATION  ---------- */
 const Pagination = ({ pageCount, onPageChange }: { pageCount: number; onPageChange: (event: { selected: number }) => void }) => (
-  <div className="mt-12 flex justify-center">
+  <div className="mt-5 flex justify-center">
     <ReactPaginate
       previousLabel={"←"}
       nextLabel={"→"}

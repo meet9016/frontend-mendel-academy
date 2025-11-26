@@ -66,3 +66,29 @@ export const newsLatterSchema = Joi.object({
       "string.pattern.base": "Enter a valid year (e.g. 2025)",
     }),
 });
+
+export const paySchema = Joi.object({
+  fullName: Joi.string()
+    .trim()
+    .required()
+    .messages({
+      "string.empty": "Full name is required",
+    }),
+
+  email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.empty": "Email is required",
+      "string.email": "Please enter a valid email address",
+    }),
+
+  phone: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .required()
+    .messages({
+      "string.empty": "Phone number is required",
+      "string.pattern.base": "Phone number must be 10 digits",
+    }),
+});
