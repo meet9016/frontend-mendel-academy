@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const PaymentSuccess = () => {
+
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       {/* Header */}
@@ -14,11 +15,19 @@ const PaymentSuccess = () => {
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 13l4 4L19 7"
+          />
         </svg>
         <div>
-          <h2 className="text-lg font-semibold text-green-700">Payment Successful!</h2>
-          <p className="text-green-600 text-sm">Your event registration has been confirmed.</p>
+          <h2 className="text-lg font-semibold text-green-700">
+            Payment Successful!
+          </h2>
+          <p className="text-green-600 text-sm">
+            Your event registration has been confirmed.
+          </p>
         </div>
       </div>
 
@@ -69,7 +78,9 @@ const PaymentSuccess = () => {
               </svg>
               <div>
                 <strong>Confirmation Email</strong>
-                <p className="text-gray-400 text-xs">Sent to your email address</p>
+                <p className="text-gray-400 text-xs">
+                  Sent to your email address
+                </p>
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -90,7 +101,9 @@ const PaymentSuccess = () => {
               </svg>
               <div>
                 <strong>Event Tickets</strong>
-                <p className="text-gray-400 text-xs">Available in your account</p>
+                <p className="text-gray-400 text-xs">
+                  Available in your account
+                </p>
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -111,7 +124,9 @@ const PaymentSuccess = () => {
               </svg>
               <div>
                 <strong>Event Reminder</strong>
-                <p className="text-gray-400 text-xs">You'll receive reminders before the event</p>
+                <p className="text-gray-400 text-xs">
+                  You'll receive reminders before the event
+                </p>
               </div>
             </li>
           </ul>
@@ -122,7 +137,7 @@ const PaymentSuccess = () => {
       <div className="mt-8">
         <button
           className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition-transform transform hover:scale-105"
-          onClick={() => alert('Done clicked')}
+          onClick={() => alert("Done clicked")}
         >
           Done
         </button>
@@ -130,10 +145,10 @@ const PaymentSuccess = () => {
 
       {/* Support link */}
       <p className="mt-6 text-center text-xs text-blue-700">
-        Need help?{' '}
+        Need help?{" "}
         <a href="#" className="underline font-semibold">
           Contact our support team
-        </a>{' '}
+        </a>{" "}
         or check your email for event details.
       </p>
     </div>

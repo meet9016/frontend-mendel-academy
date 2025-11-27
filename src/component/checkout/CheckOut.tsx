@@ -10,12 +10,22 @@ import {
 } from "@stripe/react-stripe-js";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { FaCreditCard, FaEnvelope, FaPhone, FaUser, FaWallet } from "react-icons/fa";
-import Header from "../auth/Header";
-import Footer from "../auth/Footer";
+import {
+  FaCreditCard,
+  FaEnvelope,
+  FaPhone,
+  FaUser,
+  FaWallet,
+} from "react-icons/fa";
 import { paySchema } from "@/validationSchema/validationSchema";
 
-const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) => {
+const StripeCheckoutForm = ({
+  full_name,
+  phone,
+  email,
+  plan,
+  onSuccess,
+}: any) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -44,14 +54,18 @@ const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) =
     }
 
     if (result.paymentIntent?.status === "succeeded") {
-      await api.post(`${endPointApi.verifyStripePayment}`, {
-        paymentIntentId: result.paymentIntent.id,
-        full_name,
-        email,
-        phone,
-        plan_id: plan._id,
-        amount: plan.plan_pricing,
-      });
+      await api
+        .post(`${endPointApi.verifyStripePayment}`, {
+          paymentIntentId: result.paymentIntent.id,
+          full_name,
+          email,
+          phone,
+          plan_id: plan._id,
+          amount: plan.plan_pricing,
+        })
+        .then((res) => {
+           localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
+        });
 
       onSuccess();
     }
@@ -89,9 +103,10 @@ const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) =
           type="submit"
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${loading || !stripe
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            ${
+              loading || !stripe
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 shadow-md"
             }`}
         >
           {loading ? (
@@ -108,7 +123,9 @@ const StripeCheckoutForm = ({ full_name, phone, email, plan, onSuccess }: any) =
   );
 };
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 interface BillingInformation {
   fullName: string;
@@ -130,7 +147,6 @@ const CheckOut = () => {
     selectedPayment: "Razorpay",
   });
   const [errors, setErrors] = useState<FormErrors>({});
-
   const fetchPlan = async () => {
     try {
       setLoading(true);
@@ -158,8 +174,6 @@ const CheckOut = () => {
     return false;
   };
 
-
-
   useEffect(() => {
     fetchPlan();
   }, []);
@@ -176,7 +190,7 @@ const CheckOut = () => {
   // 🔹 Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         full_name: billing.fullName,
@@ -219,7 +233,11 @@ const CheckOut = () => {
             `${endPointApi.postPaymentVerify}`,
             verifyBody
           );
-          if (verifyRes.data.success) router.push("/paymentsuccess");
+          
+          if (verifyRes.data.success){
+            localStorage.setItem("stripdata", JSON.stringify(verifyRes.data.payment));
+            router.push("/paymentsuccess");
+          } 
         },
       };
 
@@ -234,7 +252,8 @@ const CheckOut = () => {
   // 💰 Stripe Handler
   // =============================
   const handleStripePayment = async () => {
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
+    
     try {
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
         amount: plan?.plan_pricing,
@@ -281,7 +300,6 @@ const CheckOut = () => {
                 )}
               </div>
 
-
               {/* Email & Phone */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="mb-1">
@@ -303,7 +321,6 @@ const CheckOut = () => {
                   )}
                 </div>
 
-
                 <div className="mb-1">
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Phone Number *
@@ -322,7 +339,6 @@ const CheckOut = () => {
                     <p className="text-red-500 text-sm ml-2">{errors.phone}</p>
                   )}
                 </div>
-
               </div>
             </div>
           </div>
@@ -336,10 +352,11 @@ const CheckOut = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
-                  ? "border-yellow-400 bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Razorpay"
+                    ? "border-yellow-400 bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaCreditCard className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Razorpay
@@ -347,10 +364,11 @@ const CheckOut = () => {
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
-                  ? "border-yellow-400 bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Stripe"
+                    ? "border-yellow-400 bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaWallet className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Stripe
@@ -389,9 +407,7 @@ const CheckOut = () => {
                 <p className="text-sm text-gray-500">
                   Duration: {plan.plan_day} days
                 </p>
-                <p className="font-bold text-gray-800">
-                  ₹{plan.plan_pricing}
-                </p>
+                <p className="font-bold text-gray-800">₹{plan.plan_pricing}</p>
               </div>
             </div>
           )}
@@ -402,7 +418,7 @@ const CheckOut = () => {
                 ? handleStripePayment
                 : handleRazorpayPayment
             }
-            className="w-full bg-yellow-400 text-white font-semibold py-3 rounded-xl"
+            className="w-full bg-yellow-400 text-white font-semibold py-3 rounded-xl cursor-pointer hover:bg-yellow-500 transition-all duration-300 mt-2 shadow-md"
           >
             {billing.selectedPayment === "Stripe"
               ? "Proceed with Stripe"

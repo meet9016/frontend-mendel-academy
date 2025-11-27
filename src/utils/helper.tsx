@@ -26,3 +26,11 @@ export const getTempId = () => {
   }
   return tempId;
 };
+
+export const formatCurrency = (amount: number, currency: string) =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: currency.toUpperCase() }).format(amount / 100);
+
+export const formatDate = (iso: string) =>
+  new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(new Date(iso));
+
+export const copyToClip = (text: string) => navigator.clipboard.writeText(text);
