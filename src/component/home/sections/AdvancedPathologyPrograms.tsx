@@ -7,7 +7,6 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { BsArrowRight } from "react-icons/bs";
 import { CgLock } from "react-icons/cg";
 import { FaStar, FaUsers, FaClock, FaArrowRight } from "react-icons/fa";
 import { GiSparkles } from "react-icons/gi";
@@ -121,7 +120,6 @@ export default function AdvancedPathologyPrograms() {
         <h1 className="text-2xl md:text-3xl font-bold ff-font-bold">
           Advanced Pathology  Programs
         </h1>
-        
       </div>
       <div className="text-center mt-2 ff-font md:text-lg max-w-2xl">
         <p>

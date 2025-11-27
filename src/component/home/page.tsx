@@ -8,7 +8,7 @@ function HomePage() {
   return (
     <div>
       <Home />
-      <AdvancedPathologyPrograms />
+      {/* <AdvancedPathologyPrograms /> */}
       <TrustedMedical />
       <MedicalChooseMendelAcademy />
     </div>

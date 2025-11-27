@@ -62,7 +62,7 @@ const features: Feature[] = [
 /* ----------  MAIN PAGE  ---------- */
 export default function MedicalChooseMendelAcademy() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-[60vh] bg-white px-4 md:px-6 lg:px-8 py-10">
+<main className="flex flex-col items-center max-w-[1380px] mx-auto justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
       <Header />
       <FeatureGrid features={features} />
       <BottomSection />
@@ -81,14 +81,14 @@ const Header = () => (
         Choose Mendel Academy
       </h2>
     </div>
-    <div className="text-center mt-2 ff-font md:text-lg max-w-2xl">
+    <div className="text-center mt-3 ff-font md:text-lg max-w-4xl">
       <p>Our comprehensive pathology platform accelerates your professional growth and clinical expertise.</p>
     </div>
   </>
 );
 
 const FeatureGrid = ({ features }: { features: Feature[] }) => (
-  <section className="w-full max-w-[1025px] mx-auto mt-7">
+  <section className="w-full max-w-[1380px] mx-auto mt-3">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
       {features.map((f) => (
         <FeatureCard key={f.title} {...f} />
@@ -136,7 +136,7 @@ const BottomSection = () => (
           Stay Updated
         </span>
         <h2 className="text-2xl ff-font-bold md:text-3xl font-bold">Stay Ahead in Medical Education</h2>
-        <p className="mt-4 ff-font text-gray-300 text-sm md:text-base leading-relaxed max-w-lg mx-auto">
+        <p className="mt-3 ff-font text-gray-300 text-sm md:text-base leading-relaxed max-w-lg mx-auto">
           Get expert insights, course updates, and exclusive content—be first to know about new programs & breakthroughs.
         </p>
         <CommonButton

@@ -61,8 +61,8 @@ export default function MendelStudent() {
   const handleNext = () => setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
 
   return (
-    <section className="relative py-15 bg-white overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6">
+    <section className="relative py-10  bg-white overflow-hidden">
+      <div className="relative max-w-[1380px] mx-auto px-6">
         <Header />
         <Carousel
           testimonials={testimonials}
@@ -80,7 +80,7 @@ export default function MendelStudent() {
 /* ----------  SUB-COMPONENTS  ---------- */
 const Header = () => (
   <div className="text-center mb-16">
-    <div className="inline-flex items-center justify-center gap-2 mb-4">
+    <div className="inline-flex items-center justify-center gap-2 mb-2">
       <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#f0b100]" />
       <span className="text-sm font-medium text-primary ff-font uppercase tracking-wider">Student Success Stories</span>
       <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#f0b100]" />
@@ -90,7 +90,7 @@ const Header = () => (
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="text-4xl md:text-5xl ff-font-bold font-bold mb-4"
+      className="text-2xl md:text-4xl ff-font-bold font-bold mb-2"
     >
       What Mendel Students<br />Say About Us
     </motion.h2>
@@ -99,7 +99,7 @@ const Header = () => (
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.8 }}
       viewport={{ once: true }}
-      className="ff-font text-lg max-w-2xl mx-auto"
+      className="ff-font text-lg max-w-3xl mx-auto"
     >
       Join thousands of pathology professionals who have transformed their diagnostic skills
     </motion.p>
@@ -127,7 +127,7 @@ const Carousel = ({
     <Arrow onClick={onNext} disabled={currentIndex >= maxIndex} icon={FaChevronRight} right />
 
     {/* Cards */}
-    <div className="overflow-hidden px-2 cursor-pointer p-8">
+    <div className="overflow-hidden px-2 cursor-pointer ">
       <motion.div
         className="flex gap-6 transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * (100 / 3 + 2)}%)` }}
@@ -139,7 +139,7 @@ const Carousel = ({
     </div>
 
     {/* Dots */}
-    <div className="flex justify-center gap-2 mt-8">
+    <div className="flex justify-center gap-2 mt-3">
       {[...Array(maxIndex + 1)].map((_, i) => (
         <Dot key={i} active={i === currentIndex} onClick={() => onDot(i)} />
       ))}
@@ -161,7 +161,7 @@ const Arrow = ({
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`absolute top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-white border-2 border-[#f0b100]/30 shadow-xl transition-all duration-300 hover:scale-110 hover:bg-[#f0b100] hover:text-white group ${
+    className={`absolute top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-white border-2 border-[#f0b100]/30 shadow-xl transition-all duration-300 hover:scale-110 cursor-pointer hover:bg-[#fff7db] hover:text-white group ${
       disabled ? "opacity-50 cursor-not-allowed" : ""
     } ${left ? "-translate-x-4 left-0" : "translate-x-4 right-0"}`}
   >

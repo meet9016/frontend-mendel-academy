@@ -52,23 +52,16 @@ const AdvancedPathology = () => {
         <>
 
             {/* --- Hero Section --- */}
-                <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-white">
+            <section className="relative flex items-center justify-center overflow-hidden bg-white">
                 <div
                     className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#f0b100]/15 rounded-full blur-3xl animate-float"
                     style={{ animationDelay: '1s' }}
                 />
-
-                <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+                <div className="relative z-10 max-w-[1380px] mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
                     {/* Left content */}
                     <div className="flex flex-col justify-center space-y-8 animate-fade-in-up h-full">
                         <div className="space-y-4">
-                            <div className="inline-block px-4 py-2 bg-white border border-[#FFCA00] rounded-full backdrop-blur-sm">
-                                <span className="text-sm font-medium ff-font">
-                                    Mendel Mastery Series
-                                </span>
-                            </div>
-
-                            <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold leading-tight">
+                            <h1 className="text-2xl md:text-4xl  font-bold ">
                                 <span className="ff-font-bold">
                                     Advanced
                                 </span>
@@ -115,7 +108,7 @@ const AdvancedPathology = () => {
                         style={{ animationDelay: '0.4s' }}
                     >
                         <div className="text-center mb-6 animate-fade-in-down">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-2 ff-font-bold  leading-[1.2] pb-[4px]">
+                            <h2 className="text-2xl md:text-4xl font-bold mb-2 ff-font-bold pb-[4px]">
                                 Pathology Mastery Challenge
                             </h2>
                             <p className="text-md ff-font">
@@ -202,7 +195,7 @@ const AdvancedPathology = () => {
                     </div>
                 </div>
             </section>
-           
+
         </>
     );
 };

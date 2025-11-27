@@ -13,11 +13,12 @@ function Pathology() {
       <PathologyMasterySeries />
 
       <AdvancedPathology />
+      
       {/* --- Stats Section --- */}
       <StatusSection />
 
       {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
-      <EndometrialPathology />
+      {/* <EndometrialPathology /> */}
 
       {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
       {/* <PathologyMasterySeries /> */}

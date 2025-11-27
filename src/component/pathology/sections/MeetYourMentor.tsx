@@ -17,12 +17,12 @@ const achievements: Achievement[] = [
 /* ----------  MAIN COMPONENT  ---------- */
 export default function MeetYourMentor() {
   return (
-    <section className="relative py-15 overflow-hidden bg-[#f9fafb]">
+    <section className="relative py-10 overflow-hidden bg-[#f9fafb]">
       {/* Decorative Elements */}
       <div className="absolute top-10 right-10 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-[1380px] mx-auto px-6">
         <Header />
         <Content achievements={achievements} />
       </div>
@@ -32,15 +32,15 @@ export default function MeetYourMentor() {
 
 /* ----------  SUB-COMPONENTS  ---------- */
 const Header = () => (
-  <div className="text-center mb-16">
+  <div className="text-center mb-10">
     <motion.h2
       initial={{ opacity: 0, y: -20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="text-5xl ff-font-bold md:text-6xl font-bold mb-4"
+      className="text-2xl ff-font-bold md:text-4xl font-bold mb-2"
     >
-      Meet Your <span className="text-foreground">Mentor</span>
+      Meet Your Mentor
     </motion.h2>
   </div>
 );
@@ -66,7 +66,7 @@ const ProfileCard = () => (
     <div className="relative bg-white backdrop-blur-lg rounded-[1rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
       {/* Profile Image with Geometric Frame */}
       <div className="relative mb-6">
-        <div className="relative w-48 h-48 mx-auto">
+        <div className="relative w-48 h-48 max-w-[1380px] mx-auto">
           <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-full animate-spin-slow opacity-20" />
           <div className="absolute inset-2 bg-white rounded-full" />
           <img

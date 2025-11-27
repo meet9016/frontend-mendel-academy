@@ -59,31 +59,31 @@ export default function EndometrialPathology() {
 
 /* ----------  SECTIONS  ---------- */
 const HeroSection = () => (
-  <section className="bg-white py-15 relative overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <section className="bg-[#f9fafb]  py-10 ">
+    <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="text-center mb-12 space-y-4">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-5xl ff-font-bold font-bold leading-tight"
+          className="text-2xl md:text-4xl ff-font-bold  font-bold"
         >
-          Advanced Endometrial <br />
-          <span className="ff-font-bold">Pathology Program</span>
+          Advanced Endometrial
+          Pathology Program
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-lg ff-font mx-auto"
+          className="text-lg ff-font mt-auto"
         >
           Comprehensive training designed to enhance diagnostic confidence in complex endometrial pathology.
         </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 mt-10 lg:grid-cols-12 gap-10">
         {/* Left Image Card */}
         <motion.div
           initial={{ opacity: 0, x: -60 }}

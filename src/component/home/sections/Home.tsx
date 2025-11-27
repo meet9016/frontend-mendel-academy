@@ -69,7 +69,7 @@ export default function Home() {
     <>
       {/* ----------------  HERO  ---------------- */}
       <main className="flex justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center py-10">
-        <div className="flex flex-col items-center space-y-7 w-full">
+        <div className="flex flex-col items-center space-y-7 max-w-[1380px] max-auto">
 
           <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
             Trusted by 10,000+ Medical Students
@@ -107,56 +107,54 @@ export default function Home() {
 
 
       {/* ----------------  QBANK SECTION  ---------------- */}
-      <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
-        <div className="max-w-[1025px] mx-auto relative py-10 space-y-7">
-          <div className="text-center ">
-            <h2 className="text-2xl md:text-3xl font-bold ff-font-bold mb-2">
-              Adaptive Qbanks
-             
-              for Exam Prep
-            </h2>
-            <p className="ff-font text-base md:text-lg max-w-2xl mx-auto">
-              Crush high-stakes medical exams with data-driven practice & targeted remediation.
-            </p>
-          </div>
+      {/* <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
+          <div className="max-w-[1025px] mx-auto relative py-10 space-y-7">
+            <div className="text-center ">
+              <h2 className="text-2xl md:text-3xl font-bold ff-font-bold mb-2">
+                Adaptive Qbanks
 
-          <div className="relative">
-            {/* Left Scroll Button */}
-            <button
-              onClick={() => scroll("left")}
-              className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:bg-gray-100 hover:scale-110 transition-all duration-300 opacity-0 group-hover/section:opacity-100"
-            >
-              <FiChevronLeft className="w-6 h-6 text-primary" />
-            </button>
+                for Exam Prep
+              </h2>
+              <p className="ff-font text-base md:text-lg max-w-2xl mx-auto">
+                Crush high-stakes medical exams with data-driven practice & targeted remediation.
+              </p>
+            </div>
 
-            {/* Cards */}
-            {loading ? (
-              <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <Skeleton key={i} height={380} width={340} borderRadius={24} className="rounded-3xl flex-shrink-0" />
-                ))}
-              </div>
-            ) : (
-              <div
-                id="course-scroll-container"
-                className="flex gap-6 overflow-x-auto  scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
+            <div className="relative">
+              <button
+                onClick={() => scroll("left")}
+                className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:bg-gray-100 hover:scale-110 transition-all duration-300 opacity-0 group-hover/section:opacity-100"
               >
-                {questionBank.map((course, index) => (
-                  <CourseCard key={index} {...course} />
-                ))}
-              </div>
-            )}
+                <FiChevronLeft className="w-6 h-6 text-primary" />
+              </button>
 
-            {/* Right Scroll Button */}
-            <button
-              onClick={() => scroll("right")}
-              className="absolute cursor-pointer right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:scale-110 transition-all duration-300 opacity-0 group-hover/section:opacity-100"
-            >
-              <FiChevronRight className="w-6 h-6 text-primary" />
-            </button>
+            
+              {loading ? (
+                <div className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory scroll-smooth px-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <Skeleton key={i} height={380} width={340} borderRadius={24} className="rounded-3xl flex-shrink-0" />
+                  ))}
+                </div>
+              ) : (
+                <div
+                  id="course-scroll-container"
+                  className="flex gap-6 overflow-x-auto  scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
+                >
+                  {questionBank.map((course, index) => (
+                    <CourseCard key={index} {...course} />
+                  ))}
+                </div>
+              )}
+
+              <button
+                onClick={() => scroll("right")}
+                className="absolute cursor-pointer right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:scale-110 transition-all duration-300 opacity-0 group-hover/section:opacity-100"
+              >
+                <FiChevronRight className="w-6 h-6 text-primary" />
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section> */}
 
       <style>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
