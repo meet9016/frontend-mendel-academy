@@ -105,11 +105,11 @@ export default function Login() {
         className="hidden lg:flex w-1/2 bg-[#ffca00] relative flex-col items-center justify-center p-16"
         style={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)" }}
       >
-        <img
+        {/* <img
           src="http://localhost:3002/images/main%20logo.png"
           alt="BoardMe Logo"
           className="absolute top-8 right-10 h-15"
-        />
+        /> */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-sm text-black">
           <h2 className="text-3xl font-bold mb-4">Glad to See You Again</h2>
           <p className="text-lg mb-8">Log in to continue your progress and explore new learning opportunities.</p>

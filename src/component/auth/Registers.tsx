@@ -69,11 +69,11 @@ export default function Registers() {
         className="hidden lg:flex w-1/2 bg-[#ffca00] relative flex-col items-center justify-center p-8 md:p-16"
         style={{ clipPath: "polygon(0 0, 100% 0, 80% 100%, 0 100%)" }}
       >
-        <img
+        {/* <img
           src="http://localhost:3002/images/main%20logo.png"
           alt="BoardMe Logo"
           className="absolute top-8 left-10 h-15"
-        />
+        /> */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-sm text-black">
           <h2 className="text-2xl font-extrabold ff-font-bold mb-4">Create Your Account Today!</h2>
           <p className="ff-font text-lg mb-8">Join Mendel Academy and Start Your Extraordinary Educational Journey</p>

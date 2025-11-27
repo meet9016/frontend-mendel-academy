@@ -27,12 +27,11 @@ type CartItem = {
   price: number;
   duration: number;
   image: string;
-  quantity: number,
+  quantity: number;
 };
 
-
 export default function Header() {
-  const tempIdGet = ''
+  const tempIdGet = "";
   // sessionStorage.getItem("temp_id");
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
@@ -48,14 +47,13 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-
   useEffect(() => {
     const fetchExams = async () => {
       try {
         setLoading(true);
-        const res = await api.get(`${endPointApi.getAppMedicalExam}`)
+        const res = await api.get(`${endPointApi.getAppMedicalExam}`);
         if (res.data.data) {
-          setExamCategories(res.data.data || [])
+          setExamCategories(res.data.data || []);
         }
       } catch (error) {
         console.error("Error fetching exam data:", error);
@@ -63,8 +61,8 @@ export default function Header() {
         setLoading(false);
       }
     };
-    fetchExams()
-  }, [])
+    fetchExams();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
@@ -96,9 +94,7 @@ export default function Header() {
     setIsCartOpen(true);
 
     try {
-      const res = await api.get(
-        `${endPointApi.getCart}?temp_id=${tempIdGet}`
-      );
+      const res = await api.get(`${endPointApi.getCart}?temp_id=${tempIdGet}`);
 
       if (res.data) {
         setCartData(res.data.cart);
@@ -119,7 +115,7 @@ export default function Header() {
             className="flex items-center gap-2 cursor-pointer"
           >
             <img
-              src={'../../../images/main logo.png'}
+              src={"../../../images/main logo.png"}
               // src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
               alt="Mendel Academy Logo"
               className="w-40 h-40 object-contain"
@@ -141,7 +137,7 @@ export default function Header() {
       `}
               ></span>
             </button>
-             {/* ✅ Dropdown Menu */}
+            {/* ✅ Dropdown Menu */}
             <div className="relative">
               <button
                 id="exam-button"
@@ -176,7 +172,9 @@ export default function Header() {
                               <button
                                 className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md cursor-pointer transition-all"
                                 // onClick={() => router.push("/medicalexam")}
-                                onClick={() => router.push(`/medicalexam/${exam?.exam_id}`)}
+                                onClick={() =>
+                                  router.push(`/medicalexam/${exam?.exam_id}`)
+                                }
                               >
                                 {exam.exam_name}
                               </button>
@@ -213,6 +211,19 @@ export default function Header() {
               ></span>
             </button>
             <button
+              onClick={() => router.push("/aboutUs")}
+              className={`relative ff-font font-medium text-sm group cursor-pointer
+      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
+    `}
+            >
+              About Us
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+      `}
+              ></span>
+            </button>
+            <button
               onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
       ${pathname === "/blog" ? "text-primary" : "hover:text-[#ffca00]"}
@@ -226,19 +237,18 @@ export default function Header() {
               ></span>
             </button>
             <button
-              onClick={() => router.push("/aboutUs")}
+              onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
+      ${pathname === "/studentTestimonials" ? "text-primary" : "hover:text-[#ffca00]"}
     `}
             >
-              About Us
+              Student Testimonials
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
-        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+        ${pathname === "/studentTestimonials" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
             </button>
-
           </nav>
 
           {/* ✅ Buttons (Desktop) */}
@@ -359,7 +369,8 @@ export default function Header() {
                     setIsCartOpen(true);
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+                  className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                >
                   <FiShoppingCart className="w-5 h-5" />
                   Cart
                 </button>
@@ -448,16 +459,14 @@ export default function Header() {
                     >
                       {/* Delete Icon */}
                       <button
-                        onClick={() => console.log('Delete:', item._id)}
+                        onClick={() => console.log("Delete:", item._id)}
                         className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
                       >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
 
                       <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl border border-primary">
-
                         <div className="flex flex-col flex-1">
-
                           {/* Name */}
                           <h3 className="font-semibold ff-font-bold mb-1 line-clamp-2">
                             {/* {item.title} */}
@@ -480,8 +489,6 @@ export default function Header() {
                           ₹{item.price}
                         </div>
                       </div>
-
-
                     </motion.div>
                   ))}
                 </motion.div>
@@ -495,13 +502,17 @@ export default function Header() {
                   className="border-t border-gray-200 p-6 bg-white space-y-4"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500 ff-font-bold font-medium">Subtotal</span>
+                    <span className="text-gray-500 ff-font-bold font-medium">
+                      Subtotal
+                    </span>
                     <span className="font-bold ff-font-bold text-lg">
                       ₹{cartTotalAmount}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500 ff-font-bold font-medium">Discount</span>
+                    <span className="text-gray-500 ff-font-bold font-medium">
+                      Discount
+                    </span>
                     <span className="font-bold ff-font-bold text-green-600 text-lg">
                       ₹0.00
                     </span>
@@ -518,7 +529,13 @@ export default function Header() {
                   {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
                     Checkout Now
                   </button> */}
-                  <CommonButton pyClass="py-3" pxClass="px-39" fontWeight={700} fontSize={15} className="ml-2">
+                  <CommonButton
+                    pyClass="py-3"
+                    pxClass="px-39"
+                    fontWeight={700}
+                    fontSize={15}
+                    className="ml-2"
+                  >
                     Checkout Now
                   </CommonButton>
                   {/* <button
@@ -528,12 +545,15 @@ export default function Header() {
                     Continue Shopping
                   </button> */}
                   <CommonButton
-                    pyClass="py-3" pxClass="px-35" fontWeight={700} fontSize={15} className="ml-2"
+                    pyClass="py-3"
+                    pxClass="px-35"
+                    fontWeight={700}
+                    fontSize={15}
+                    className="ml-2"
                     onClick={() => setIsCartOpen(false)}
                   >
                     Continue Shopping
                   </CommonButton>
-
                 </motion.div>
               </motion.div>
             </motion.div>
