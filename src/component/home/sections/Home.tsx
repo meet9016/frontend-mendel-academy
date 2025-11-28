@@ -71,9 +71,9 @@ export default function Home() {
       <main className="flex justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center py-10">
         <div className="flex flex-col items-center space-y-7 max-w-[1380px] max-auto">
 
-          <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
+          {/* <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
             Trusted by 10,000+ Medical Students
-          </p>
+          </p> */}
 
           <h1 className="ff-font-bold -mt-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">
             We simplify learning, <br />
@@ -81,7 +81,7 @@ export default function Home() {
           </h1>
 
           <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
-            Personalized Medical Coaching Driven by Data, Enhanced by AI
+            Personalized Medical Coaching
           </p>
 
           <div className="w-full max-w-xl relative">
@@ -93,15 +93,81 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <CommonButton pyClass="py-3" pxClass="px-12" className="bg-black text-white hover:bg-black hover:text-white transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
-              PG Entrance Exams
-            </CommonButton>
-            <CommonButton pyClass="py-3" pxClass="px-12" className="transition transform hover:-translate-y-1 shadow-md" fontWeight={700} fontSize={16}>
-              Advanced Pathology
-            </CommonButton>
-          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2 w-full max-w-3xl">
+            {/* PG Entrance Exam Prep Box */}
+            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col">
+              <h3 className="ff-font-bold text-lg mb-3">PG Entrance Exam Prep</h3>
+
+              <ul className="space-y-2 ff-font text-black">
+                {[
+                  "USMLE - 1, 2 & 3",
+                  "NEET-PG",
+                  "INI-CET",
+                  "FMGE",
+                  "AMC",
+                  "UKMLE (PLAB)",
+                ].map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="relative pl-4 group cursor-pointer"
+                  >
+                    {/* bullet on hover */}
+                    <span className="absolute ff-font left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FFCA00] opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              {/* fixed bottom button */}
+              <div className="mt-auto pt-4">
+                <CommonButton
+                  pyClass="py-2"
+                  pxClass="px-6"
+                  className="transition shadow-md w-fit"
+                  fontWeight={700}
+                  fontSize={15}
+                >
+                  Learn more
+                </CommonButton>
+              </div>
+            </div>
+
+            {/* Advanced Pathology Box */}
+            <div className="bg-white border border-[#d1d5dc] rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col">
+              <h3 className="ff-font-bold  text-lg mb-3">Advanced Pathology</h3>
+              <ul className="space-y-2 ff-font text-black">
+                {[
+                  "Pathology Residents",
+                  "Consultant Pathologists",
+                  "DNBs",
+                  "Fellows",
+                ].map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="relative pl-4 group cursor-pointer"
+                  >
+                    {/* bullet on hover */}
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FFCA00] opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              {/* fixed bottom button */}
+              <div className="mt-auto pt-4">
+                <CommonButton
+                  pyClass="py-2"
+                  pxClass="px-6"
+                  className="transition shadow-md w-fit"
+                  fontWeight={700}
+                  fontSize={15}
+                >
+                  Learn more
+                </CommonButton>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 

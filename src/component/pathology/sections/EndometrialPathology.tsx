@@ -114,30 +114,35 @@ const HeroSection = () => (
 /* ----------  SUB-COMPONENTS  ---------- */
 const ImageCard = () => (
   <div className="bg-white/70 rounded-3xl overflow-hidden shadow-lg border border-[#f0b100]/30 backdrop-blur-sm hover:shadow-xl transition-all duration-500">
-    <img
-      src="https://www.snexplores.org/wp-content/uploads/2020/05/1030_SS_amoeba-1028x579.png"
-      alt="Endometrial pathology specimen"
-      className="w-full h-72 object-cover transition-transform duration-700 hover:scale-110"
-    />
-
+    {/* Image */}
+    <div className="overflow-hidden">
+      <img
+        src="https://www.snexplores.org/wp-content/uploads/2020/05/1030_SS_amoeba-1028x579.png"
+        alt="Endometrial pathology specimen"
+        className="w-full h-56 sm:h-72 object-cover transition-transform duration-700 hover:scale-110"
+      />
+    </div>
     {/* Stats */}
-    <div className="grid grid-cols-3 gap-3 w-[90%] mx-auto -mt-8 relative z-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-[90%] mx-auto -mt-6 relative z-10">
       {stats.map((stat, i) => (
-        <div key={i} className="bg-white rounded-2xl p-4 text-center border border-[#f0b100]/30 shadow-md hover:shadow-lg transition-all">
+        <div
+          key={i}
+          className="bg-white rounded-2xl p-4 text-center border border-[#f0b100]/30 shadow-md hover:shadow-lg transition-all"
+        >
           <stat.icon className="w-6 h-6 mx-auto text-primary mb-2" />
-          <div className="text-2xl ff-font-bold font-bold">{stat.value}</div>
+          <div className="text-xl sm:text-2xl ff-font-bold font-bold">{stat.value}</div>
           <div className="text-xs ff-font text-gray-500">{stat.label}</div>
         </div>
       ))}
     </div>
-
-    {/* Schedule and Testimonial */}
-    <div className="p-6 space-y-6 mt-4">
+    {/* Content */}
+    <div className="p-4 sm:p-6 space-y-6 mt-2 sm:mt-4">
       <NextSessionCard />
       <TestimonialCard />
     </div>
   </div>
 );
+
 
 const DetailsCard = () => (
   <div className="bg-white/70 rounded-3xl p-8 shadow-lg border border-[#f0b100]/30 backdrop-blur-sm hover:shadow-xl transition-all duration-500">
@@ -211,15 +216,24 @@ const CtaCard = () => (
 
 /* ----------  ATOMIC COMPONENTS  ---------- */
 const NextSessionCard = () => (
-  <div className="bg-[#FFCA00] text-black p-5 rounded-2xl shadow-md">
-    <div className="flex justify-between items-center mb-2">
-      <span className="text-sm ff-font opacity-80">Next Session</span>
-      <div className="bg-white/20 text-black ff-font flex items-center gap-1 px-2 py-1 rounded-md text-sm">
+  <div className="bg-[#FFCA00] text-black p-4 sm:p-5 rounded-2xl shadow-md">
+    {/* Header */}
+    <div className="flex flex-wrap justify-between items-center mb-2 gap-2">
+      <span className="text-xs sm:text-sm ff-font opacity-80">
+        Next Session
+      </span>
+      <div className="bg-white/20 text-black ff-font flex items-center gap-1 px-2 py-1 rounded-md text-xs sm:text-sm">
         <FaCalendarAlt className="w-3 h-3" /> Live
       </div>
     </div>
-    <div className="text-xl ff-font-bold font-bold">Thursday, Sep 11</div>
-    <div className="ff-font">9:00 PM GMT+5:30</div>
+    {/* Date */}
+    <div className="text-lg sm:text-xl ff-font-bold font-bold">
+      Thursday, Sep 11
+    </div>
+    {/* Time */}
+    <div className="text-xs sm:text-sm ff-font mt-1">
+      9:00 PM GMT+5:30
+    </div>
   </div>
 );
 
@@ -237,21 +251,25 @@ const TestimonialCard = () => (
   </div>
 );
 
+
 const InstructorCard = () => (
   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 mb-6">
-    <div className="flex gap-4 items-center mb-4">
+    {/* Top Section */}
+    <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start mb-4">
       <img
         src="https://www.shutterstock.com/image-photo/profile-photo-attractive-family-doc-600nw-1724693776.jpg"
         alt="Dr. Nandkishore Managoli"
-        className="w-16 h-16 rounded-full object-cover border-2 border-primary"
+        className="w-20 h-20 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-primary"
       />
-      <div>
+      <div className="text-center sm:text-left">
         <h3 className="text-lg ff-font-bold">Dr. Nandkishore Managoli</h3>
-        <p className="text-sm ff-font">MD, Senior Surgical & Digital Pathologist</p>
+        <p className="text-sm ff-font">
+          MD, Senior Surgical & Digital Pathologist
+        </p>
       </div>
     </div>
-
-    <div className="flex items-center gap-6 text-sm mb-3">
+    {/* Stats Row */}
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm mb-3">
       <div className="flex items-center gap-2">
         <FaAward className="text-primary" />
         <span className="ff-font">30+ Years Experience</span>
@@ -261,7 +279,7 @@ const InstructorCard = () => (
         <span className="ff-font">1000+ Students Taught</span>
       </div>
     </div>
-
+    {/* Quote */}
     <div className="border-l-4 border-[#FFCA00] pl-4 ff-font text-sm">
       "Focused on advancing diagnostic accuracy through systematic evaluation approaches and evidence-based practice."
     </div>

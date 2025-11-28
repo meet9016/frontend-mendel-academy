@@ -95,92 +95,102 @@ const CompanyInfo = () => (
 );
 
 const Mission = () => (
-  <section className="relative py-15 bg-[#f9fafb] overflow-hidden">
-    <div className="container mx-auto px-6 md:px-12 lg:px-50 relative z-10">
-      <div className="text-center mb-16">
+  <section className="relative py-12 sm:py-16 bg-[#f9fafb] overflow-hidden">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative z-10">
+      {/* Heading */}
+      <div className="text-center mb-12 sm:mb-16">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-extrabold ff-font-bold mb-4"
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold ff-font-bold mb-4"
         >
           Our Achievements & Vision
         </motion.h2>
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="ff-font max-w-3xl mx-auto text-lg"
+          className="ff-font max-w-2xl mx-auto text-base sm:text-lg"
         >
           Building excellence in medical education through innovation, accessibility, and precision learning.
         </motion.p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        {/* Achievements */}
+      {/* Content Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start">
+
+        {/* Achievements Card */}
         <motion.div
           initial={{ opacity: 0, x: -60 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-white rounded-3xl border border-primary p-10 relative transition-all duration-500"
+          className="bg-white rounded-3xl border border-primary p-6 sm:p-10 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white border border-primary text-primary text-3xl">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl bg-white border border-primary text-primary text-2xl sm:text-3xl">
               <FaTrophy />
             </div>
-            <h3 className="text-2xl font-bold ff-font-bold">Our Achievements</h3>
+            <h3 className="text-xl sm:text-2xl font-bold ff-font-bold">Our Achievements</h3>
           </div>
-          <p className="ff-font text-lg leading-relaxed">
+
+          <p className="ff-font text-base sm:text-lg leading-relaxed">
             At <span className="font-semibold ff-font text-primary">Mendel Academy</span>, we’ve developed a proprietary
             <span className="font-bold ff-font text-primary"> question bank </span>
             of over <span className="font-bold ff-font text-primary">10,000 USMLE-style MCQs</span>, helping students enhance their performance by{" "}
             <span className="font-bold ff-font text-primary">15–20%</span>.
           </p>
-          <p className="ff-font text-lg leading-relaxed mt-4">
-            We take pride in our unique <span className="font-bold ff-font text-primary">"Mendel SketchNotes"</span>, designed to simplify complex medical concepts with elegant visuals and precise annotations. Mendel Academy has established its presence in{" "}
-            <span className="font-semibold ff-font text-primary">India, USA, Russia, China,</span> and beyond.
+
+          <p className="ff-font text-base sm:text-lg leading-relaxed mt-4">
+            We take pride in our unique <span className="font-bold ff-font text-primary">"Mendel SketchNotes"</span>, designed to simplify complex concepts with elegant visuals. Mendel Academy has established its presence in{" "}
+            <span className="font-semibold ff-font text-primary">India, USA, Russia, China</span> and beyond.
           </p>
         </motion.div>
 
-        {/* Vision */}
+        {/* Vision Card */}
         <motion.div
           initial={{ opacity: 0, x: 60 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-white rounded-3xl border border-primary p-10 relative transition-all duration-500"
+          className="bg-white rounded-3xl border border-primary p-6 sm:p-10 shadow-sm"
         >
-          <div className="flex justify-center md:justify-start items-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4 mb-6">
             <img
               src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
               alt="Mendel Academy"
-              className="w-20 h-auto"
+              className="w-16 sm:w-20 h-auto"
             />
             <div>
-              <h2 className="text-3xl font-extrabold ff-font-bold leading-tight">Mendel</h2>
-              <h3 className="text-3xl font-extrabold text-primary leading-tight">Academy</h3>
+              <h2 className="text-2xl sm:text-3xl font-extrabold ff-font-bold leading-tight">Mendel</h2>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-primary leading-tight">Academy</h3>
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold ff-font-bold mb-4">Our Vision</h3>
-          <p className="ff-font text-lg leading-relaxed">
+          <h3 className="text-xl sm:text-2xl font-bold ff-font-bold mb-4">Our Vision</h3>
+
+          <p className="ff-font text-base sm:text-lg leading-relaxed">
             Our vision at <span className="font-semibold ff-font text-primary">Mendel Academy</span> is to create an{" "}
-            <span className="font-bold ff-font text-primary">accessible digital coaching platform</span> that empowers medical students globally to unlock their full potential — regardless of cost or location.
+            <span className="font-bold ff-font text-primary">accessible digital coaching platform</span> that empowers medical students globally — regardless of cost or location.
           </p>
-          <div className="mt-6 flex justify-center md:justify-start">
-            <div className="flex items-center gap-3 ff-font text-primary font-semibold text-lg">
-              <FaEarthAmericas className="text-2xl" />
+
+          <div className="mt-6 flex justify-start">
+            <div className="flex items-center gap-3 ff-font text-primary font-semibold text-base sm:text-lg">
+              <FaEarthAmericas className="text-xl sm:text-2xl" />
               <span>Global Learning, Limitless Access</span>
             </div>
           </div>
         </motion.div>
+
       </div>
     </div>
   </section>
 );
+
 
 /* ----------  HELPER  ---------- */
 const Paragraph = ({ children }: { children: React.ReactNode }) => (

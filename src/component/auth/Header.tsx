@@ -5,12 +5,10 @@ import endPointApi from "@/utils/endPointApi";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { BiCalendar, BiShoppingBag } from "react-icons/bi";
+import {  BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
-import { GiSparkles } from "react-icons/gi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import CommonButton from "@/comman/Button";
-import { getTempId } from "@/utils/helper";
 type Exam = {
   exam_name: string;
   link: string;

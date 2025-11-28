@@ -62,7 +62,7 @@ const features: Feature[] = [
 /* ----------  MAIN PAGE  ---------- */
 export default function MedicalChooseMendelAcademy() {
   return (
-<main className="flex flex-col items-center max-w-[1380px] mx-auto justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
+    <main className="flex flex-col items-center max-w-[1380px] mx-auto justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
       <Header />
       <FeatureGrid features={features} />
       <BottomSection />
@@ -99,24 +99,31 @@ const FeatureGrid = ({ features }: { features: Feature[] }) => (
 
 const FeatureCard = ({ icon, title, desc, tag }: Feature) => (
   <div className="relative bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden group hover:border-yellow-300 transition-all duration-300">
-    {/* tag + icon on same row */}
-    <div className="absolute top-3 right-3 ff-font text-primary border-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+    {/* Tag */}
+    <div className="absolute top-3 right-3 ff-font text-primary border border-primary text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 rounded-full shadow-sm bg-white">
       {tag}
     </div>
-    <div className="absolute top-3 left-3 bg-white text-primary w-14 h-14 text-3xl border-primary flex items-center justify-center rounded-xl shadow-md group-hover:scale-110 transition duration-300">
+    {/* Icon */}
+    <div className="absolute top-3 left-3 bg-white text-primary 
+      w-12 h-12 sm:w-14 sm:h-14 text-2xl sm:text-3xl 
+      border border-primary flex items-center justify-center 
+      rounded-xl shadow-md group-hover:scale-110 transition duration-300">
       {icon}
     </div>
-
-    <div className="p-4 pt-24 space-y-3">
-      <h3 className="text-lg font-bold ff-font-bold">{title}</h3>
-      <p className="ff-font text-sm leading-relaxed">{desc}</p>
-      <div className="text-primary ff-font-bold font-semibold flex items-center gap-1 mt-3">
+    {/* Content */}
+    <div className="p-4 pt-20 sm:pt-24 space-y-3">
+      <h3 className="text-base sm:text-lg font-bold ff-font-bold">{title}</h3>
+      <p className="ff-font text-xs sm:text-sm leading-relaxed">
+        {desc}
+      </p>
+      <div className="text-primary ff-font-bold font-semibold flex items-center gap-1 mt-3 text-sm sm:text-base">
         <span>Learn More</span>
-        <FaArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+        <FaArrowRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
       </div>
     </div>
   </div>
 );
+
 
 const BottomSection = () => (
   <div className="w-full max-w-[1025px] mx-auto mt-10 space-y-7">
@@ -130,39 +137,55 @@ const BottomSection = () => (
     </div>
 
     {/* CTA box */}
-    <div className="w-full flex justify-center">
-      <div className="w-full max-w-3xl bg-gray-900 text-center text-white py-15 px-6 rounded-2xl relative shadow-lg">
-        <span className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/10 ff-font-bold px-4 py-1 text-sm rounded-full">
+    <div className="w-full flex justify-center px-4">
+      <div className="w-full max-w-3xl bg-gray-900 text-center text-white py-10 sm:py-14 px-4 sm:px-6 rounded-2xl relative shadow-lg">
+        {/* Badge */}
+        <span className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/10 ff-font-bold px-3 sm:px-4 py-1 text-xs sm:text-sm rounded-full">
           Stay Updated
         </span>
-        <h2 className="text-2xl ff-font-bold md:text-3xl font-bold">Stay Ahead in Medical Education</h2>
-        <p className="mt-3 ff-font text-gray-300 text-sm md:text-base leading-relaxed max-w-lg mx-auto">
+        {/* Title */}
+        <h2 className="text-xl sm:text-3xl ff-font-bold font-bold mt-8 sm:mt-6">
+          Stay Ahead in Medical Education
+        </h2>
+        {/* Description */}
+        <p className="mt-3 ff-font text-gray-300 text-sm sm:text-base leading-relaxed max-w-lg mx-auto px-2">
           Get expert insights, course updates, and exclusive content—be first to know about new programs & breakthroughs.
         </p>
-        <CommonButton
-          pyClass="py-3"
-          pxClass="px-20"
-          fontWeight={700}
-          fontSize={14}
-          className="mt-8 group"
-        >
-          <div className="flex items-center gap-2">
-            <span>Enroll Now</span>
-            <FaArrowRight className="w-4 h-4 duration-300 transition-transform group-hover:translate-x-1" />
-          </div>
-        </CommonButton>
+        {/* Button */}
+        <div className="mt-7 sm:mt-8 flex justify-center">
+          <CommonButton
+            pyClass="py-3"
+            pxClass="px-8 sm:px-20"
+            fontWeight={700}
+            fontSize={14}
+            className="group w-full sm:w-auto"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <span>Enroll Now</span>
+              <FaArrowRight className="w-4 h-4 duration-300 transition-transform group-hover:translate-x-1" />
+            </div>
+          </CommonButton>
+        </div>
+
       </div>
     </div>
 
+
     {/* bottom note */}
-    <div className="w-full flex justify-center">
-      <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 shadow-sm text-sm">
-        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+    <div className="w-full flex justify-center px-3">
+      <div
+        className="flex flex-wrap items-center justify-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 shadow-sm text-xs sm:text-sm text-center max-w-full">
+        {/* Green Icon */}
+        <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center shrink-0">
           <div className="w-2 h-2 bg-white rounded-full" />
         </div>
-        <span className="font-medium ff-font-bold">Unsubscribe anytime</span>
-        <span>•</span>
-        <span>Trusted by medical professionals worldwide</span>
+        <span className="font-medium ff-font-bold whitespace-nowrap">
+          Unsubscribe anytime
+        </span>
+        <span className="hidden sm:inline">•</span>
+        <span className="text-gray-700 ff-font">
+          Trusted by medical professionals worldwide
+        </span>
       </div>
     </div>
   </div>
