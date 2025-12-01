@@ -94,12 +94,11 @@ export default function Home() {
           </div>
 
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2 w-full max-w-3xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-15 mt-2 w-full max-w-3xl">
             {/* PG Entrance Exam Prep Box */}
-            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col">
-              <h3 className="ff-font-bold text-lg mb-3">PG Entrance Exam Prep</h3>
-
-              <ul className="space-y-2 ff-font text-black">
+            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-100">
+              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">PG Entrance Exam Prep</h3>
+              <ul className="space-y-2 ff-font text-center text-black">
                 {[
                   "USMLE - 1, 2 & 3",
                   "NEET-PG",
@@ -112,19 +111,17 @@ export default function Home() {
                     key={idx}
                     className="relative pl-4 group cursor-pointer"
                   >
-                    {/* bullet on hover */}
-                    <span className="absolute ff-font left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FFCA00] opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                     {item}
                   </li>
                 ))}
               </ul>
 
               {/* fixed bottom button */}
-              <div className="mt-auto pt-4">
+              <div className="mt-auto text-center pt-4">
                 <CommonButton
-                  pyClass="py-2"
-                  pxClass="px-6"
-                  className="transition shadow-md w-fit"
+                  pyClass="py-3"
+                  pxClass="px-8"
+                  className="transition shadow-md w-fit !rounded-full"
                   fontWeight={700}
                   fontSize={15}
                 >
@@ -134,9 +131,9 @@ export default function Home() {
             </div>
 
             {/* Advanced Pathology Box */}
-            <div className="bg-white border border-[#d1d5dc] rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col">
-              <h3 className="ff-font-bold  text-lg mb-3">Advanced Pathology</h3>
-              <ul className="space-y-2 ff-font text-black">
+            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-100">
+              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">Advanced Pathology</h3>
+              <ul className="space-y-2 ff-font text-center text-black">
                 {[
                   "Pathology Residents",
                   "Consultant Pathologists",
@@ -147,19 +144,17 @@ export default function Home() {
                     key={idx}
                     className="relative pl-4 group cursor-pointer"
                   >
-                    {/* bullet on hover */}
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FFCA00] opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                     {item}
                   </li>
                 ))}
               </ul>
 
               {/* fixed bottom button */}
-              <div className="mt-auto pt-4">
+              <div className="mt-auto text-center pt-4">
                 <CommonButton
-                  pyClass="py-2"
-                  pxClass="px-6"
-                  className="transition shadow-md w-fit"
+                  pyClass="py-3"
+                  pxClass="px-8"
+                  className="transition shadow-md w-fit !rounded-full"
                   fontWeight={700}
                   fontSize={15}
                 >
