@@ -190,7 +190,7 @@ const CheckOut = () => {
   // 🔹 Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
-    // if (!validateForm()) return;
+    if (!validateForm()) return;
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         full_name: billing.fullName,

@@ -97,7 +97,7 @@ const Banner = () => (
 /* Content grid                                                       */
 /* ------------------------------------------------------------------ */
 const Content = ({ stripeData }: { stripeData: StripeData | null }) => (
-  <div className="p-6 grid md:grid-cols-2 gap-8">
+  <div className="max-w-5xl mx-auto p-6 grid md:grid-cols-2 gap-6">
     <OrderDetails data={stripeData} />
     <NextSteps />
   </div>
@@ -110,61 +110,63 @@ const OrderDetails = ({ data }: { data: StripeData | null }) => {
   if (!data) return <SkeletonRows />;
 
   const rows: { label: string; value: string; chip?: boolean }[] = [
-    { label: "Order ID", value: data.id, chip: true },
-    { label: "Transaction ID", value: data.transaction_id, chip: true },
-    { label: "Amount Paid", value: formatCurrency(data.amount, data.currency) },
-    { label: "Date", value: formatDate(data.createdAt) },
-    { label: "Name", value: data.full_name },
-    { label: "Email", value: data.email, chip: true },
-    { label: "Phone", value: data.phone },
-    { label: "Payment Method", value: data.payment_method },
-    { label: "Status", value: data.payment_status },
-    { label: "Plan ID", value: data.plan_id, chip: true },
+    { label: 'Order ID', value: data.id, chip: true },
+    { label: 'Transaction ID', value: data.transaction_id, chip: true },
+    { label: 'Amount Paid', value: formatCurrency(data.amount, data.currency) },
+    { label: 'Date', value: formatDate(data.createdAt) },
+    { label: 'Name', value: data.full_name },
+    { label: 'Email', value: data.email, chip: true },
+    { label: 'Phone', value: data.phone },
+    { label: 'Payment Method', value: data.payment_method },
+    { label: 'Status', value: data.payment_status },
+    { label: 'Plan ID', value: data.plan_id, chip: true },
   ];
 
   return (
-    <div>
-      <h2 className="font-semibold text-gray-800 mb-4">Order Details</h2>
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <table className="w-full text-sm text-gray-700">
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.label} className="border-b last:border-b-0 hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-600 align-top">{r.label}</td>
-                <td className="px-4 py-3 text-right">
-                  {r.chip ? (
-                    <Chip text={r.value} onClick={() => copyToClip(r.value)} />
-                  ) : (
-                    r.value
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <section className="bg-white rounded-2xl shadow-sm border border-gray-100">
+      <header className="px-6 py-4 border-b border-gray-100">
+        <h2 className="text-lg font-semibold text-gray-800">Order Details</h2>
+        <p className="text-sm text-gray-500 mt-1">Receipt for your purchase</p>
+      </header>
+
+      <div className="px-6 py-4 grid gap-3">
+        {rows.map(({ label, value, chip }) => (
+          <div
+            key={label}
+            className="flex items-start justify-between gap-4 text-sm"
+          >
+            <span className="text-gray-500">{label}</span>
+            <span className="font-medium text-gray-800 text-right">
+              {chip ? <Chip text={value} onClick={() => copyToClip(value)} /> : value}
+            </span>
+          </div>
+        ))}
       </div>
-    </div>
+
+      <footer className="px-6 py-3 bg-gray-50 rounded-b-2xl text-xs text-gray-500">
+        Need help? Contact support@yourapp.com
+      </footer>
+    </section>
   );
 };
-
 /* ------------------------------------------------------------------ */
 /* Next steps list                                                    */
 /* ------------------------------------------------------------------ */
 const NextSteps = () => (
-  <div>
-    <h2 className="font-semibold text-gray-800 mb-4">What's Next?</h2>
-    <ul className="space-y-3">
+  <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <h2 className="text-lg font-semibold text-gray-800 mb-4">What’s Next?</h2>
+    <ul className="space-y-4">
       {nextSteps.map((s) => (
-        <li key={s.title} className="flex items-start gap-3">
-          {s.icon}
+        <li key={s.title} className="flex items-start gap-4">
+          <span className="mt-0.5">{s.icon}</span>
           <div>
             <p className="font-medium text-gray-800">{s.title}</p>
-            <p className="text-xs text-gray-500">{s.subtitle}</p>
+            <p className="text-sm text-gray-500">{s.subtitle}</p>
           </div>
         </li>
       ))}
     </ul>
-  </div>
+  </section>
 );
 
 /* ------------------------------------------------------------------ */
