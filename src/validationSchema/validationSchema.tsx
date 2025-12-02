@@ -85,10 +85,10 @@ export const paySchema = Joi.object({
     }),
 
   phone: Joi.string()
-    .pattern(/^[0-9]{10}$/)
     .required()
     .messages({
       "string.empty": "Phone number is required",
-      "string.pattern.base": "Phone number must be 10 digits",
     }),
+  selectedPayment: Joi.string().optional(), 
 });
+
