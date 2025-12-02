@@ -64,6 +64,7 @@ const scroll = (direction: "left" | "right") => {
 /* ----------  MAIN PAGE  ---------- */
 export default function Home() {
   const { questionBank, loading } = useQBank();
+  const router = useRouter();
 
   return (
     <>
@@ -96,7 +97,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-2 w-full max-w-3xl">
             {/* PG Entrance Exam Prep Box */}
-            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
+            <div className="bg-white border-gray-300 border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
               <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">PG Entrance Exam Prep</h3>
               <ul className="space-y-2 ff-font text-center text-black">
                 {[
@@ -157,6 +158,7 @@ export default function Home() {
                   className="transition shadow-md w-fit !rounded-full"
                   fontWeight={700}
                   fontSize={15}
+                  onClick={() => router.push("/studentTestimonials")}
                 >
                   Learn more
                 </CommonButton>

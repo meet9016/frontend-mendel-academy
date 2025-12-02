@@ -98,7 +98,7 @@ const FeatureGrid = ({ features }: { features: Feature[] }) => (
 );
 
 const FeatureCard = ({ icon, title, desc, tag }: Feature) => (
-  <div className="relative bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden group hover:border-yellow-300 transition-all duration-300">
+  <div className="relative bg-white rounded-3xl shadow-lg border border-gray-300 overflow-hidden group hover:border-yellow-300 transition-all duration-300">
     {/* Tag */}
     <div className="absolute top-3 right-3 ff-font text-primary border border-primary text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 rounded-full shadow-sm bg-white">
       {tag}
