@@ -17,14 +17,14 @@ const UpcomingCourse = () => {
   const [openCourseDetails, setOpenCourseDetails] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courseData, setCourseData] = useState([]);
-
+  
   const closePopup = () => {
     setOpenCourseDetails(false);
     setSelectedCourse(null);
   };
-
+  
   const getUpcomingCourse = async () => {
-    const res = await api.get(`${endPointApi.getUpComingCourses}`);
+    const res = await api.get(`${endPointApi.getUpComingProgram}`);
     setCourseData(res.data.data);
   };
 
@@ -33,7 +33,6 @@ const UpcomingCourse = () => {
   }, []);
   return (
     <>
-      <section className="relative py-10 overflow-hidden bg-white">
         {/* Animated Background */}
         {/* <div className="absolute top-20 left-10 w-72 h-72 bg-[#ffca00]/10 rounded-full blur-3xl animate-float" /> */}
         <div
@@ -43,28 +42,25 @@ const UpcomingCourse = () => {
 
         <div className="relative z-10 max-w-[1380px] mx-auto px-6">
           {/* Header */}
-          <div className="text-center mb-10 space-y-4 animate-fade-in-up">
-            {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#ffca00]/10 border border-[#ffca00]/30 rounded-full backdrop-blur-sm">
+          {/* <div className="text-center mb-10 space-y-4 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#ffca00]/10 border border-[#ffca00]/30 rounded-full backdrop-blur-sm">
                             <FaGraduationCap className="w-4 h-4 text-primary" />
                             <span className="text-sm font-semibold text-primary">
                                 2025 Course Calendar
                             </span>
-                        </div> */}
+                        </div>
             <div className="text-center w-full">
               <h2 className="text-2xl md:text-4xl ff-font-bold font-bold inline-block">
                 <span>Upcoming</span>{" "}
                 Courses
               </h2>
-
-              {/* <div className="mt-3 h-1 bg-gradient-to-r from-transparent via-[#FFCA00] to-transparent rounded-full mx-auto w-[30%]" /> */}
             </div>
-
             <p className="text-lg  ff-font max-w-4xl mx-auto ">
               Expand your expertise with additional subspeciality training
               courses launching throughout 2025. Join the waitlist to get early
               access and exclusive updates.
             </p>
-          </div>
+          </div> */}
 
           {/* Course Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
@@ -159,7 +155,7 @@ const UpcomingCourse = () => {
                             </div>
                             <span className="text-sm ff-font text-muted-foreground">
                               <span className="font-bold ff-font-bold ">
-                                {course.spotsLeft} spots
+                                {course.waitlistCount} spots
                               </span>{" "}
                               on waitlist
                             </span>
@@ -179,11 +175,11 @@ const UpcomingCourse = () => {
                                             </button> */}
                       <CommonButton
                         pyClass="py-3"
-                        pxClass="px-23"
+                        pxClass="px-27"
                         fontWeight={700}
                         fontSize={14}
                         onClick={() => setOpenCourseDetails(!openCourseDetails)}
-                      >
+                      > 
                         <div className="flex items-center gap-2 ff-font-bold">
                           {/* <FaBell className="w-4 h-4" /> */}
                           <span>Get Notified</span>
@@ -390,7 +386,7 @@ const UpcomingCourse = () => {
             </div>
           </div>
         </div>
-      </section>
+   
     </>
   );
 };

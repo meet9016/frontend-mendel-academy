@@ -15,6 +15,7 @@ import endPointApi from '@/utils/endPointApi';
 import { toast } from 'react-toastify';
 import { GiSparkles } from 'react-icons/gi';
 import "react-loading-skeleton/dist/skeleton.css";
+import UpcomingCourse from './UpcomingCourse';
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -65,7 +66,6 @@ const usePrograms = () => {
             }
         })();
     }, []);
-
     return { programs, loading };
 };
 
@@ -92,6 +92,9 @@ const addToCart = async (item: Program) => {
     const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
     if (res.data.success) toast.success(res.data.message);
 };
+
+
+
 
 
 const PathologyMasterySeries = () => {
@@ -142,34 +145,41 @@ const PathologyMasterySeries = () => {
             {/* ----  EndometrialPathology  ---- */}
             <EndometrialPathology />
 
-            {/* ----  RECORDED  ---- */}
+
+            {/* ----  RECORDED PROGRAM---- */}
             <Section
                 title="Recorded Programs"
                 subtitle="Self-paced learning with lifetime access"
             >
                 {loading ? (
                     <ProgramSkeleton />
-                ) : ( 
-                    <RecordedGrid programs={programs} onCart={addToCart} learnMore={() => router.push("/recordedprograms")} />
+                ) : (
+                    // <RecordedGrid programs={programs} onCart={addToCart} learnMore={() => router.push("/recordedprograms")} />
+                    <RecordedGrid programs={programs} onCart={addToCart} />
                 )}
             </Section>
 
-            {/* ----  UPCOMING  ---- */}
+
+            {/* ----  UPCOMING PROGRAM ----- */}
             <Section
                 title="Upcoming Programs"
                 subtitle="Join the waitlist and get early access"
             >
-                <UpcomingGrid program={upcomingProgram} />
+                {/* <UpcomingGrid program={upcomingProgram} /> */}
+                {loading ? (
+                    <UpcomeingProgramSkeleton />
+                ) : (
+                    <UpcomingGrid />
+                )}
             </Section>
 
-            <section className="relative py-10 overflow-hidden bg-[#f9fafb]">
+            {/* <section className="relative py-10 overflow-hidden bg-[#f9fafb]">
                 <div
                     className="absolute bottom-0 right-1/3 w-96 h-96 bg-[#f0b100]/10 rounded-full blur-3xl animate-float"
                     style={{ animationDelay: "1s" }}
                 />
 
                 <div className="relative max-w-[1380px] mx-auto px-6">
-                    {/* Header */}
                     <div className="text-center mb-10  animate-fade-in-up">
                         <div className=" text-center">
                             <h2 className="text-2xl md:text-4xl font-bold ">
@@ -186,8 +196,6 @@ const PathologyMasterySeries = () => {
                         <p className="text-base mt-2 text-black ff-font max-w-2xl mx-auto">
                             Your all-in-one, deep-dive into each pathology subject—covering everything you need to master topics like Lymphomas, case by case.
                         </p>
-
-                        {/* Features Bar */}
                         <div className="flex flex-wrap justify-center gap-4 pt-6">
                             <div className="flex items-center gap-2 px-4 py-2  rounded-full border border-primary">
                                 <FaVideo className="w-4 h-4 text-primary" />
@@ -203,10 +211,8 @@ const PathologyMasterySeries = () => {
                             </div>
                         </div>
                     </div>
-
-                    {/* Course Cards */}
                     <div className="relative mb-10">
-                        {/* Left Arrow */}
+                      
                         <button
                             onClick={() =>
                                 document.getElementById("courseScroll")?.scrollBy({ left: -350, behavior: "smooth" })
@@ -216,13 +222,12 @@ const PathologyMasterySeries = () => {
                             <FaChevronDown className="rotate-90 w-5 h-5" />
                         </button>
 
-                        {/* Scrollable Container */}
                         <div
                             id="courseScroll"
                             className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
                             style={{ scrollSnapType: "x mandatory" }}
                         >
-                            {Array(8) // you can have more, but 4 show at once
+                            {Array(8) 
                                 .fill({
                                     id: 1,
                                     category: "HEMATOPATHOLOGY",
@@ -245,24 +250,24 @@ const PathologyMasterySeries = () => {
                                         key={i}
                                         className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500"
                                     >
-                                        {/* Glow Border on Hover */}
+                                  
                                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
 
                                         <div className="relative z-10 flex flex-col h-full">
-                                            {/* Image Section */}
+                                      
                                             <div className="relative h-48 w-full overflow-hidden">
                                                 <img
                                                     src={course.icon}
                                                     alt={course.title}
                                                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
-                                                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div> */}
+                                            
                                                 <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
                                                     {course.category}
                                                 </div>
                                             </div>
 
-                                            {/* Content Section */}
+                           
                                             <div className="p-6 flex flex-col justify-between flex-1 bg-white">
                                                 <div>
                                                     <h3 className="text-lg  leading-tight ff-font-bold  min-h-[48px] mb-2">
@@ -277,7 +282,7 @@ const PathologyMasterySeries = () => {
                                                         <div className="border-b border-[#f0b100]/20"></div>
                                                     </div>
 
-                                                    {/* Rating & Learners */}
+                                                   
                                                     <div className="mb-3">
                                                         <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
                                                             <div className="flex items-center gap-2 text-primary">
@@ -292,13 +297,13 @@ const PathologyMasterySeries = () => {
                                                         <div className="mt-3 border-b border-[#f0b100]/20"></div>
                                                     </div>
 
-                                                    {/* Duration & Price */}
+                                            
                                                     <div className="flex items-center justify-between mb-2">
                                                         <p className="text-sm text-black ff-font">{course.duration}</p>
                                                         <p className="text-2xl font-bold ff-font-bold  text-black">{`$${course.price}`}</p>
                                                     </div>
 
-                                                    {/* Features */}
+                                               
                                                     <div className="flex items-center justify-center text-xs text-black mt-3 gap-5">
                                                         {course.features.map((f: any) => (
                                                             <div key={f.name} className="flex flex-col items-center text-center my-1">
@@ -308,18 +313,12 @@ const PathologyMasterySeries = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Buttons */}
+                                        
                                                 <div className="flex flex-col gap-3 mt-4">
                                                     <button className="flex items-center justify-between w-full border border-[#f0b100]/40 rounded-md px-4 py-2 text-sm text-black ff-font hover:bg-[#fff9e6] transition-all">
                                                         What You'll Learn <FaChevronDown className="w-4 h-4 text-primary" />
                                                     </button>
-
-                                                    {/* <button
-                                                        disabled
-                                                        className="text-sm px-4 py-2 rounded-md bg-gradient-to-r from-[#f0b100] to-[#ffcc33] text-white font-semibold shadow hover:opacity-90 transition-all"
-                                                    >
-                                                        Coming Soon
-                                                    </button> */}
+                                                
                                                     <CommonButton pyClass="py-3" pxClass="px-22" fontWeight={700} fontSize={15}>
                                                         Enroll Now
                                                     </CommonButton>
@@ -330,7 +329,7 @@ const PathologyMasterySeries = () => {
                                 ))}
                         </div>
 
-                        {/* Right Arrow */}
+                        
                         <button
                             onClick={() =>
                                 document.getElementById("courseScroll")?.scrollBy({ left: 350, behavior: "smooth" })
@@ -342,14 +341,12 @@ const PathologyMasterySeries = () => {
                     </div>
 
 
-                    {/* Bundle Offer */}
+
                     <div className="relative animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-                        {/* <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl blur-lg opacity-20" /> */}
+                     
                         <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
                             <div className="flex flex-col md:flex-row items-center gap-6">
-                                {/* <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-lg">
-                                    <FaMoneyBillWave className="w-8 h-8" />
-                                </div> */}
+                               
                                 <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
                                     <FaMoneyBillWave className="w-8 h-8 text-primary" />
                                 </div>
@@ -381,7 +378,7 @@ const PathologyMasterySeries = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
         </>
     )
 }
@@ -462,18 +459,16 @@ const FeaturedLive = ({
         </div>
     );
 };
-                                                                                                                                                        
+
 const RecordedGrid = ({
     programs,
-    onCart,
-    learnMore
+    onCart
 }: {
     programs: Program[];
     onCart: (p: Program) => void;
-    learnMore: () => void;
 }) => (
     <>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
             {programs.slice(0, 4).map((p) => (
                 <div
                     key={p.id}
@@ -554,66 +549,229 @@ const RecordedGrid = ({
             >
                 View More
             </CommonButton>
+        </div> */}
+
+        {/* Course Cards */}
+        <div className="relative mb-10">
+            {/* Left Arrow */}
+            <button
+                onClick={() =>
+                    document.getElementById("courseScroll")?.scrollBy({ left: -350, behavior: "smooth" })
+                }
+                className="absolute cursor-pointer left-1 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+            >
+                <FaChevronDown className="rotate-90 w-5 h-5" />
+            </button>
+
+            {/* Scrollable Container */}
+            <div
+                id="courseScroll"
+                className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
+                style={{ scrollSnapType: "x mandatory" }}
+            >
+                {programs.map((p, i) => (
+                    <div
+                        key={p.id || i}
+                        className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500"
+                    >
+                        {/* Glow Border on Hover */}
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
+
+                        <div className="relative z-10 flex flex-col h-full">
+                            {/* Image Section */}
+                            <div className="relative h-48 w-full overflow-hidden">
+                                <img
+                                    src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
+                                    alt={p.title}
+                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div> */}
+                                <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
+                                    Hitarthi
+                                </div>
+                            </div>
+
+                            {/* Content Section */}
+                            <div className="p-6 flex flex-col justify-between flex-1 bg-white">
+                                <div>
+                                    <h3 className="text-lg leading-tight ff-font-bold min-h-[48px] mb-2 line-clamp-2">
+                                        {p.title}
+                                    </h3>
+
+                                    <div className="mb-3">
+                                        <p className="text-sm text-black ff-font mb-2 line-clamp-2 min-h-[40px]">
+                                            {p.subtitle}
+                                        </p>
+
+                                        <div className="border-b border-[#f0b100]/20"></div>
+                                    </div>
+
+
+                                    {/* Rating & Learners */}
+                                    <div className="mb-3">
+                                        <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
+                                            <div className="flex items-center gap-2 text-primary">
+                                                <FaRegStar className="w-4 h-4" />
+                                                <span className="font-medium ff-font text-black">{p.rating}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <FaUsers className="w-4 h-4 text-primary" />
+                                                <span className="text-black ff-font" > {p.total_reviews}+ learners</span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3 border-b border-[#f0b100]/20"></div>
+                                    </div>
+
+                                    {/* Duration & Price */}
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-sm text-black ff-font">{p.duration} month access</p>
+                                        <p className="text-2xl font-bold ff-font-bold  text-black">${p.price}</p>
+                                    </div>
+
+                                    {/* Features */}
+                                    <div className="flex items-center justify-between text-xs text-black mt-3 gap-3 border-t border-[#f0b100]/20 pt-3">
+                                        <div className="flex-1 text-center">
+                                            <span className="ff-font">E-certificate included</span>
+                                        </div>
+                                        <div className="flex-1 text-center">
+                                            <span className="ff-font">CV + CME friendly</span>
+                                        </div>
+                                        <div className="flex-1 text-center">
+                                            <span className="ff-font">One-time payment</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Buttons */}
+                                <div className="flex flex-col gap-3 mt-3">
+                                    <CommonButton
+                                        pyClass="py-0"
+                                        pxClass="px-2"
+                                        fontWeight={700}
+                                        fontSize={14}
+                                        onClick={() => onCart(p)}
+                                    >
+                                        Add to cart
+                                    </CommonButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Right Arrow */}
+            <button
+                onClick={() =>
+                    document.getElementById("courseScroll")?.scrollBy({ left: 350, behavior: "smooth" })
+                }
+                className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+            >
+                <FaChevronDown className="-rotate-90 w-5 h-5" />
+            </button>
         </div>
+
+        {/* Bundle Offer */}
+        <div className="relative animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+            {/* <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl blur-lg opacity-20" /> */}
+            <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                    {/* <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-lg">
+                                    <FaMoneyBillWave className="w-8 h-8" />
+                                </div> */}
+                    <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
+                        <FaMoneyBillWave className="w-8 h-8 text-primary" />
+                    </div>
+                    <div className="text-center md:text-left">
+                        <h3 className="text-2xl md:text-3xl font-bold mb-2 ff-font-bold ">
+                            Bundle more. Save more.
+                        </h3>
+                        <p className="text-lg ff-font mb-4">
+                            Add one more Mendel Mastery course and get{" "}
+                            <span className="font-bold ff-font-bold ">10% OFF</span>. Bundle all 3
+                            and save up to <span className="font-bold ff-font-bold ">20%</span>.
+                        </p>
+                        <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                            <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-medium">
+                                1 course = regular price
+                            </span>
+                            <span className="px-4 py-2 ff-font-bold  rounded-full border-primary text-sm font-bold">
+                                2 courses = 10% off
+                            </span>
+                            <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-bold">
+                                3 courses = 20% off
+                            </span>
+                        </div>
+                        <p className="text-sm ff-font mt-4">
+                            Discount applied automatically at checkout.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </>
 );
 
+
+
 const UpcomingGrid = ({ program }: { program: Record<string, any> }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  relative overflow-hidden cursor-pointer">
-        {[...Array(3)].map((_, i) => (
-            <div
-                key={i}
-                className="group from-gray-100 to-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md hover:-translate-y-1 transition relative"
-            >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl" />
-                <div className="flex items-center justify-between mb-2">
-                    <div className="text-[10px] font-bold px-2 py-1 bg-white text-primary ff-font rounded-md uppercase">
-                        LAUNCHING SOON
-                    </div>
-                    <GiSparkles className="w-4 h-4 text-primary" />
-                </div>
-                <h3 className="text-sm font-bold ff-font-bold mb-2">{program.title}</h3>
-                <div className="bg-gray-100 rounded-md p-2 mb-3">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-sm ff-font">
-                            <FaUsers className="text-primary" />
-                            {program.waitlist.toLocaleString()}
-                        </div>
-                        <span className="text-primary font-bold">{program.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 h-1.5 rounded-full mt-1">
-                        <div
-                            className="bg-[#FFCA00] h-1.5 rounded-full"
-                            style={{ width: `${program.progress}%` }}
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 bg-gray-100 rounded-md p-2 mb-3">
-                    <FaClock className="text-primary" />
-                    <div>
-                        <p className="text-xs font-semibold ff-font">
-                            Starts in {program.startDays} days
-                        </p>
-                        <p className="text-[10px] ff-font">{program.duration}</p>
-                    </div>
-                </div>
-                <p className="text-xs ff-font-bold mb-4">{program.description}</p>
-                <CommonButton
-                    pyClass="py-0"
-                    pxClass="px-16"
-                    fontWeight={600}
-                    fontSize={13}
-                    className="ff-font-bold"
-                >
-                    Join Waitlist
-                </CommonButton>
-                <p className="text-[11px] ff-font text-center mt-2">
-                    No payment now · Email reminder before launch
-                </p>
-            </div>
-        ))}
-    </div>
+    // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  relative overflow-hidden cursor-pointer">
+    //     {[...Array(3)].map((_, i) => (
+    //         <div
+    //             key={i}
+    //             className="group from-gray-100 to-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md hover:-translate-y-1 transition relative"
+    //         >
+    //             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl" />
+    //             <div className="flex items-center justify-between mb-2">
+    //                 <div className="text-[10px] font-bold px-2 py-1 bg-white text-primary ff-font rounded-md uppercase">
+    //                     LAUNCHING SOON
+    //                 </div>
+    //                 <GiSparkles className="w-4 h-4 text-primary" />
+    //             </div>
+    //             <h3 className="text-sm font-bold ff-font-bold mb-2">{program.title}</h3>
+    //             <div className="bg-gray-100 rounded-md p-2 mb-3">
+    //                 <div className="flex items-center justify-between">
+    //                     <div className="flex items-center gap-1.5 text-sm ff-font">
+    //                         <FaUsers className="text-primary" />
+    //                         {program.waitlist.toLocaleString()}
+    //                     </div>
+    //                     <span className="text-primary font-bold">{program.progress}%</span>
+    //                 </div>
+    //                 <div className="w-full bg-gray-200 h-1.5 rounded-full mt-1">
+    //                     <div
+    //                         className="bg-[#FFCA00] h-1.5 rounded-full"
+    //                         style={{ width: `${program.progress}%` }}
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div className="flex items-center gap-2 bg-gray-100 rounded-md p-2 mb-3">
+    //                 <FaClock className="text-primary" />
+    //                 <div>
+    //                     <p className="text-xs font-semibold ff-font">
+    //                         Starts in {program.startDays} days
+    //                     </p>
+    //                     <p className="text-[10px] ff-font">{program.duration}</p>
+    //                 </div>
+    //             </div>
+    //             <p className="text-xs ff-font-bold mb-4">{program.description}</p>
+    //             <CommonButton
+    //                 pyClass="py-0"
+    //                 pxClass="px-16"
+    //                 fontWeight={600}
+    //                 fontSize={13}
+    //                 className="ff-font-bold"
+    //             >
+    //                 Join Waitlist
+    //             </CommonButton>
+    //             <p className="text-[11px] ff-font text-center mt-2">
+    //                 No payment now · Email reminder before launch
+    //             </p>
+    //         </div>
+    //     ))}
+    // </div>
+    <UpcomingCourse />
 );
+
 
 const Section = ({
     title,
@@ -638,7 +796,16 @@ const Section = ({
 const ProgramSkeleton = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
         {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} height={300} borderRadius={16} className="rounded-xl" />
+            <Skeleton key={i} height={500} borderRadius={16} className="rounded-xl" />
+        ))}
+    </div>
+);
+
+
+const UpcomeingProgramSkeleton = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
+        {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} height={600} borderRadius={16} className="rounded-xl" />
         ))}
     </div>
 );

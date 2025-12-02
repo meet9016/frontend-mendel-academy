@@ -24,7 +24,7 @@ function Pathology() {
       {/* <PathologyMasterySeries /> */}
 
       {/* UPCOMING COURSE */}
-      <UpcomingCourse />
+      {/* <UpcomingCourse /> */}
 
       {/* MENDEL STUDENT */}
       <MendelStudent />

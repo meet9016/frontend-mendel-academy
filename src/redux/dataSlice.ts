@@ -13,7 +13,7 @@ const initialState: DataState = {
 };
 
 // GET API
-export const getData = createAsyncThunk("data/get", async () => {
+export const  getData = createAsyncThunk("data/get", async () => {
   const res = await api.get(`${endPointApi.getAllLiveCourses}`);
   return await res.data;
 });

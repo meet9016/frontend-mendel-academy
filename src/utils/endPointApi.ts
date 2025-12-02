@@ -22,7 +22,7 @@ export interface EndPointApi {
     //my cart
     getCart?: string;
     postCreateAddToCart?: string;
-    cartCount?:string;
+    cartCount?: string;
 
     //faq
     getAllFaq?: string;
@@ -35,8 +35,8 @@ export interface EndPointApi {
     createStripePaymentIntent: string;
     getPlan: string;
 
-    //UpComing
-    getUpComingCourses: string;
+    //UpComing Program
+    getUpComingProgram: string;
 
     //LiveCourses
     getAllLiveCourses?: string;
@@ -69,7 +69,7 @@ const endPointApi: EndPointApi = {
     //my cart
     getCart: 'cart/get',
     postCreateAddToCart: 'cart/create',
-    cartCount:'cart/count',
+    cartCount: 'cart/count',
 
     //faq
     getAllFaq: 'faq/getall',
@@ -82,8 +82,8 @@ const endPointApi: EndPointApi = {
     createStripePaymentIntent: 'payment/create-payment-intent',
     getPlan: 'examlist/get-plan',
 
-    //UpComing
-    getUpComingCourses: 'upcomming/getall',
+    //UpComing Program
+    getUpComingProgram: 'upcomming-program/getall',
 
     //LiveCourses
     getAllLiveCourses: 'livecourses/getLiveData',
