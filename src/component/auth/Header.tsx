@@ -125,12 +125,12 @@ export default function Header() {
             <button
               onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-  ${pathname === "/" ? "text-primary" : "hover:text-[#ffca00]"}
+  ${pathname === "/" ? "" : "hover:text-[#FFCA00]"}
 `}
             >
               Home
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
         ${pathname === "/" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
@@ -141,12 +141,12 @@ export default function Header() {
                 id="exam-button"
                 onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
-    ${isExamActive ? "text-primary" : "hover:text-[#ffca00]"}
+    ${isExamActive ? "" : "hover:text-[#FFCA00]"}
   `}
               >
                 PG Medical Entrance Exams
                 <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
     ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
   `}
                 ></span>
@@ -187,7 +187,7 @@ export default function Header() {
                       onClick={() => {
                         setIsExamDropdownOpen(false);
                       }}
-                      className="text-primary font-medium text-sm hover:underline"
+                      className=" font-medium text-sm hover:underline"
                     >
                       View All Exam Services →
                     </button>
@@ -198,12 +198,12 @@ export default function Header() {
             <button
               onClick={() => router.push("/pathology")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/pathology" ? "text-primary" : "hover:text-[#ffca00]"}
+      ${pathname === "/pathology" ? "" : "hover:text-[#FFCA00]"}
     `}
             >
               Advanced Pathology Prep
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
         ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
@@ -211,12 +211,12 @@ export default function Header() {
             <button
               onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/aboutUs" ? "text-primary" : "hover:text-[#ffca00]"}
+      ${pathname === "/aboutUs" ? "" : "hover:text-[#FFCA00]"}
     `}
             >
               About Us
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
         ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
@@ -224,12 +224,12 @@ export default function Header() {
             <button
               onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/blog" ? "text-primary" : "hover:text-[#ffca00]"}
+      ${pathname === "/blog" ? "" : "hover:text-[#FFCA00]"}
     `}
             >
               Blog
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
         ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
@@ -237,12 +237,12 @@ export default function Header() {
             <button
               onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/studentTestimonials" ? "text-primary" : "hover:text-[#ffca00]"}
+      ${pathname === "/studentTestimonials" ? "" : "hover:text-[#FFCA00]"}
     `}
             >
               Student Testimonials
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#ffca00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
         ${pathname === "/studentTestimonials" ? "w-full" : "w-0 group-hover:w-full"}
       `}
               ></span>
@@ -281,7 +281,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-[#ffca00] ff-font-bold  hover:bg-yellow"
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold  hover:bg-yellow"
                 >
                   Sign Up
                 </button>
