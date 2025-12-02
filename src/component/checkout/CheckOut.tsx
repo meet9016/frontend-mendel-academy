@@ -64,7 +64,7 @@ const StripeCheckoutForm = ({
           amount: plan.plan_pricing,
         })
         .then((res) => {
-           localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
+          localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
         });
 
       onSuccess();
@@ -103,10 +103,9 @@ const StripeCheckoutForm = ({
           type="submit"
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${
-              loading || !stripe
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            ${loading || !stripe
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 shadow-md"
             }`}
         >
           {loading ? (
@@ -180,17 +179,17 @@ const CheckOut = () => {
 
   const handlePaymentSelect = (method: string) =>
     setBilling((prev) => ({ ...prev, selectedPayment: method }));
-
   const handleChange = (field: keyof BillingInformation, value: string) => {
     setBilling((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   // =============================
-  // 🔹 Razorpay Handler
+  // Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
-    if (!validateForm()) return;
+    const isValid = validateForm();
+    if (!isValid) return;
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         full_name: billing.fullName,
@@ -233,11 +232,11 @@ const CheckOut = () => {
             `${endPointApi.postPaymentVerify}`,
             verifyBody
           );
-          
-          if (verifyRes.data.success){
+
+          if (verifyRes.data.success) {
             localStorage.setItem("stripdata", JSON.stringify(verifyRes.data.payment));
             router.push("/paymentsuccess");
-          } 
+          }
         },
       };
 
@@ -252,8 +251,8 @@ const CheckOut = () => {
   // 💰 Stripe Handler
   // =============================
   const handleStripePayment = async () => {
-    // if (!validateForm()) return;
-    
+    const isValid = validateForm();
+    if (!isValid) return;
     try {
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
         amount: plan?.plan_pricing,
@@ -352,11 +351,10 @@ const CheckOut = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
-                  billing.selectedPayment === "Razorpay"
-                    ? "border-yellow-400 bg-yellow-50"
-                    : "border-gray-200"
-                }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
               >
                 <FaCreditCard className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Razorpay
@@ -364,11 +362,10 @@ const CheckOut = () => {
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
-                  billing.selectedPayment === "Stripe"
-                    ? "border-yellow-400 bg-yellow-50"
-                    : "border-gray-200"
-                }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
               >
                 <FaWallet className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Stripe
