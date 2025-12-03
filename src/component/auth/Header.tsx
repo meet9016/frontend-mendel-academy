@@ -5,7 +5,7 @@ import endPointApi from "@/utils/endPointApi";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import {  BiShoppingBag } from "react-icons/bi";
+import { BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import CommonButton from "@/comman/Button";
@@ -443,19 +443,9 @@ export default function Header() {
                 </div>
 
                 {/* Animated Cart Items */}
-                <motion.div
-                  className="flex-1 overflow-y-auto p-4 space-y-2"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="show"
-                >
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
                   {cartData.map((item) => (
-                    <motion.div
-                      key={item._id}
-                      variants={itemVariants}
-                      whileHover={{ scale: 1.02, rotateX: 1 }}
-                      className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
-                    >
+                    <div className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
                       {/* Delete Icon */}
                       <button
                         onClick={() => console.log("Delete:", item._id)}
@@ -464,7 +454,7 @@ export default function Header() {
                         <FiTrash2 className="w-4 h-4" />
                       </button>
 
-                      <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl border border-primary">
+                      <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl ">
                         <div className="flex flex-col flex-1">
                           {/* Name */}
                           <h3 className="font-semibold ff-font-bold mb-1 line-clamp-2">
@@ -488,9 +478,9 @@ export default function Header() {
                           ₹{item.price}
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
+                </div>
 
                 {/* Footer */}
                 <motion.div
