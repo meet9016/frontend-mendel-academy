@@ -2,7 +2,6 @@ import React from 'react'
 import { motion } from "framer-motion";
 import { BsAward, BsShieldCheck } from 'react-icons/bs';
 import { MdOutlineSchool, MdTrendingUp, MdVerifiedUser } from 'react-icons/md';
-import { FaEarthAmericas } from 'react-icons/fa6';
 import { FiAlertCircle, FiCheck, FiMail } from 'react-icons/fi';
 import CommonButton from '@/comman/Button';
 
@@ -234,7 +233,6 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({ data })
                             <FiMail />
                             Contact Our Team
                         </CommonButton>
-
                     </motion.div>
                 </div>
             </section >
