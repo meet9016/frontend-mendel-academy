@@ -1,7 +1,7 @@
 'use client';
 import CommonButton from '@/comman/Button';
 import React, { useEffect, useState } from 'react'
-import { FaArrowRight, FaAward, FaBookOpen, FaChevronDown, FaClock, FaMoneyBillWave, FaRegStar, FaStar, FaUsers, FaVideo } from 'react-icons/fa';
+import { FaArrowRight, FaChevronDown, FaMoneyBillWave, FaRegStar, FaUsers } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { RootState } from "@/redux/store";
 import Skeleton from 'react-loading-skeleton';
@@ -13,9 +13,8 @@ import EndometrialPathology from './EndometrialPathology';
 import { api } from '@/utils/axiosInstance';
 import endPointApi from '@/utils/endPointApi';
 import { toast } from 'react-toastify';
-import { GiSparkles } from 'react-icons/gi';
-import "react-loading-skeleton/dist/skeleton.css";
 import UpcomingCourse from './UpcomingCourse';
+import "react-loading-skeleton/dist/skeleton.css";
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -93,19 +92,7 @@ const addToCart = async (item: Program) => {
     if (res.data.success) toast.success(res.data.message);
 };
 
-
-
-
-
 const PathologyMasterySeries = () => {
-    const upcomingProgram = {
-        title: "MENDEL MASTERY SERIES™: BRAIN TUMORS",
-        description: "Advanced CNS pathology and molecular markers",
-        waitlist: 1200,
-        progress: 79,
-        duration: "6-week program",
-        startDays: "Early access",
-    };
     const { loadings, list } = useSelector((state: RootState) => state.data);
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -165,11 +152,10 @@ const PathologyMasterySeries = () => {
                 title="Upcoming Programs"
                 subtitle="Join the waitlist and get early access"
             >
-                {/* <UpcomingGrid program={upcomingProgram} /> */}
                 {loading ? (
                     <UpcomeingProgramSkeleton />
                 ) : (
-                    <UpcomingGrid />
+                     <UpcomingCourse />
                 )}
             </Section>
 
@@ -468,89 +454,6 @@ const RecordedGrid = ({
     onCart: (p: Program) => void;
 }) => (
     <>
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
-            {programs.slice(0, 4).map((p) => (
-                <div
-                    key={p.id}
-                    className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow hover:shadow-lg hover:-translate-y-1 transition"
-                >
-                    <div className="relative h-48">
-                        <img
-                            src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
-                            alt={p.title}
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute bottom-2 left-2 flex items-center bg-white/90 px-2 py-0.5 rounded-full">
-                            <FaStar className="text-primary w-3 h-3 mr-1" />
-                            <span className="text-xs font-semibold">{p.rating}</span>
-                        </div>
-                        <div className="absolute bottom-2 right-2 ff-font-bold flex items-center bg-white/90 px-2 py-0.5 rounded-full">
-                            <span className="text-xs font-semibold">
-                                {p.total_reviews}+ learners
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="p-4">
-                        <h3
-                            className="font-bold ff-font-bold text-sm mb-1 line-clamp-2 overflow-hidden text-ellipsis"
-                            style={{
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                lineHeight: "1.4rem",
-                                height: "2.8rem",
-                            }}
-                        >
-                            {p.title}
-                        </h3>
-
-                        <p
-                            className="text-xs ff-font mb-3 overflow-hidden text-ellipsis line-clamp-2"
-                            style={{
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                lineHeight: "1.2rem",
-                                height: "2.4rem",
-                            }}
-                        >
-                            {p.subtitle}
-                        </p>
-                        <div className="border-t border-gray-200 my-3"></div>
-                        <div className="flex items-end justify-between">
-                            <div>
-                                <p className="text-xs ff-font">{p.duration} month access</p>
-                                <p className="text-sm font-bold ff-font-bold">${p.price}</p>
-                            </div>
-
-                            <CommonButton
-                                pyClass="py-0"
-                                pxClass="px-2"
-                                fontWeight={700}
-                                fontSize={14}
-                                onClick={() => onCart(p)}
-                            >
-                                Add to cart
-                            </CommonButton>
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </div>
-
-        <div className="flex justify-center mt-8">
-            <CommonButton
-                pyClass="py-0"
-                pxClass="px-8"
-                fontWeight={700}
-                fontSize={18}
-                onClick={learnMore}
-            >
-                View More
-            </CommonButton>
-        </div> */}
-
         {/* Course Cards */}
         <div className="relative mb-10">
             {/* Left Arrow */}
@@ -579,7 +482,7 @@ const RecordedGrid = ({
 
                         <div className="relative z-10 flex flex-col h-full">
                             {/* Image Section */}
-                            <div className="relative h-48 w-full overflow-hidden">
+                            <div className="relative h-42 w-full overflow-hidden">
                                 <img
                                     src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
                                     alt={p.title}
@@ -587,7 +490,7 @@ const RecordedGrid = ({
                                 />
                                 {/* <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div> */}
                                 <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
-                                    Hitarthi
+                                    test
                                 </div>
                             </div>
 
@@ -712,67 +615,6 @@ const RecordedGrid = ({
     </>
 );
 
-
-
-const UpcomingGrid = ({ program }: { program: Record<string, any> }) => (
-    // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  relative overflow-hidden cursor-pointer">
-    //     {[...Array(3)].map((_, i) => (
-    //         <div
-    //             key={i}
-    //             className="group from-gray-100 to-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md hover:-translate-y-1 transition relative"
-    //         >
-    //             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl" />
-    //             <div className="flex items-center justify-between mb-2">
-    //                 <div className="text-[10px] font-bold px-2 py-1 bg-white text-primary ff-font rounded-md uppercase">
-    //                     LAUNCHING SOON
-    //                 </div>
-    //                 <GiSparkles className="w-4 h-4 text-primary" />
-    //             </div>
-    //             <h3 className="text-sm font-bold ff-font-bold mb-2">{program.title}</h3>
-    //             <div className="bg-gray-100 rounded-md p-2 mb-3">
-    //                 <div className="flex items-center justify-between">
-    //                     <div className="flex items-center gap-1.5 text-sm ff-font">
-    //                         <FaUsers className="text-primary" />
-    //                         {program.waitlist.toLocaleString()}
-    //                     </div>
-    //                     <span className="text-primary font-bold">{program.progress}%</span>
-    //                 </div>
-    //                 <div className="w-full bg-gray-200 h-1.5 rounded-full mt-1">
-    //                     <div
-    //                         className="bg-[#FFCA00] h-1.5 rounded-full"
-    //                         style={{ width: `${program.progress}%` }}
-    //                     />
-    //                 </div>
-    //             </div>
-    //             <div className="flex items-center gap-2 bg-gray-100 rounded-md p-2 mb-3">
-    //                 <FaClock className="text-primary" />
-    //                 <div>
-    //                     <p className="text-xs font-semibold ff-font">
-    //                         Starts in {program.startDays} days
-    //                     </p>
-    //                     <p className="text-[10px] ff-font">{program.duration}</p>
-    //                 </div>
-    //             </div>
-    //             <p className="text-xs ff-font-bold mb-4">{program.description}</p>
-    //             <CommonButton
-    //                 pyClass="py-0"
-    //                 pxClass="px-16"
-    //                 fontWeight={600}
-    //                 fontSize={13}
-    //                 className="ff-font-bold"
-    //             >
-    //                 Join Waitlist
-    //             </CommonButton>
-    //             <p className="text-[11px] ff-font text-center mt-2">
-    //                 No payment now · Email reminder before launch
-    //             </p>
-    //         </div>
-    //     ))}
-    // </div>
-    <UpcomingCourse />
-);
-
-
 const Section = ({
     title,
     subtitle,
@@ -800,7 +642,6 @@ const ProgramSkeleton = () => (
         ))}
     </div>
 );
-
 
 const UpcomeingProgramSkeleton = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
