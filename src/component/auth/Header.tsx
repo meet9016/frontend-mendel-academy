@@ -9,6 +9,8 @@ import { BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import CommonButton from "@/comman/Button";
+import { FaUser } from "react-icons/fa";
+import { FaRightFromBracket } from "react-icons/fa6";
 type Exam = {
   exam_name: string;
   link: string;
@@ -42,6 +44,8 @@ export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [cartData, setCartData] = useState<CartItem[]>([]);
   const [cartTotalAmount, setCartTotalAmount] = useState<number>(0);
+  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+
 
   const router = useRouter();
   const pathname = usePathname();
@@ -121,7 +125,7 @@ export default function Header() {
     }
   };
 
-  const MdRemoveShoppingCart = async (cartId: string) => { 
+  const MdRemoveShoppingCart = async (cartId: string) => {
     try {
       const res = await api.delete(
         `${endPointApi.removeCart}/${cartId}`
@@ -134,12 +138,12 @@ export default function Header() {
       console.error("Error removing cart item:", error);
     }
   };
-  
+
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-8xl mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* ✅ Logo */}
+          {/*  Logo */}
           <div
             onClick={() => router.push("/")}
             className="flex items-center gap-2 cursor-pointer"
@@ -317,6 +321,18 @@ export default function Header() {
                 >
                   Sign Up
                 </button>
+                <button
+                  onClick={() => {
+                    setIsProfileOpen(!isProfileOpen);
+                  }}
+                  className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:scale-105 transition-all"
+                >
+                  <img
+                    src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+                    className="w-full h-full object-cover"
+                    alt="Guest User"
+                  />
+                </button>
               </>
             )}
           </div>
@@ -348,7 +364,7 @@ export default function Header() {
                     if (item === "Pathology") router.push("/pathology");
                     if (item === "About Us") router.push("/aboutUs");
                   }}
-                  className="text-gray-800 hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+                  className="ff-font  hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
                 >
                   {item}
                 </button>
@@ -358,7 +374,7 @@ export default function Header() {
               <div className="px-4">
                 <button
                   onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
-                  className="text-gray-800 font-medium py-2 w-full text-left hover:text-yellow-500"
+                  className="ff-font font-medium py-2 w-full text-left hover:text-yellow-500"
                 >
                   PG Medical Entrance Exams
                 </button>
@@ -388,18 +404,30 @@ export default function Header() {
 
               {/* Buttons (Mobile) */}
               <div className="flex flex-col gap-3 px-4">
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+                <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font ">
                   Login
                 </button>
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600">
+                <button className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font ">
                   Sign Up
+                </button>
+
+                {/* ✅ Profile Button with Image */}
+                <button
+                  className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                >
+                  <img
+                    src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+                    alt="User"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span className="font-medium ff-font ">My Profile</span>
                 </button>
                 <button
                   onClick={() => {
                     setIsCartOpen(true);
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                  className="flex ff-font  items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
                 >
                   <FiShoppingCart className="w-5 h-5" />
                   Cart
@@ -409,6 +437,33 @@ export default function Header() {
           </div>
         )}
       </div>
+
+
+
+      {isProfileOpen && (
+        <div className="absolute right-0 mt-3 w-56 bg-white shadow-xl rounded-xl border border-gray-300 py-2 z-50 animate-fadeIn">
+          {/* Edit Profile */}
+          <button
+            onClick={() => router.push("/editProfile")}
+            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
+          >
+            <FaUser className="text-gray-500  w-5 h-5" />
+            <span className="text-sm font-medium ff-font">Edit Profile</span>
+          </button>
+          <hr className="my-2 border-gray-200" />
+          {/* Logout */}
+          <button
+            onClick={() => router.push("/auth/register")}
+            className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-red-50 text-red-600 w-full text-left font-semibold transition-colors duration-200"
+          >
+            <FaRightFromBracket className="text-red-500 ff-font w-5 h-5" />
+            <span className="text-sm">Logout</span>
+          </button>
+        </div>
+      )
+      }
+
+
 
       <AnimatePresence>
         {isCartOpen && (
@@ -580,6 +635,6 @@ export default function Header() {
           </>
         )}
       </AnimatePresence>
-    </header>
+    </header >
   );
 }
