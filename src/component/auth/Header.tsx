@@ -63,6 +63,23 @@ export default function Header() {
     fetchExams();
   }, []);
 
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get(`${endPointApi.getAppMedicalExam}`);
+        if (res.data.data) {
+          setExamCategories(res.data.data || []);
+        }
+      } catch (error) {
+        console.error("Error fetching exam data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExams();
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
     router.push("/auth/login");
@@ -104,6 +121,20 @@ export default function Header() {
     }
   };
 
+  const MdRemoveShoppingCart = async (cartId: string) => { 
+    try {
+      const res = await api.delete(
+        `${endPointApi.removeCart}/${cartId}`
+      );
+      if (res.data) {
+        // Refresh cart data after removal
+        handleCartOpen();
+      }
+    } catch (error) {
+      console.error("Error removing cart item:", error);
+    }
+  };
+  
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-8xl mx-auto px-4">
@@ -448,7 +479,7 @@ export default function Header() {
                     <div className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
                       {/* Delete Icon */}
                       <button
-                        onClick={() => console.log("Delete:", item._id)}
+                        onClick={() => MdRemoveShoppingCart(item._id)}
                         className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
                       >
                         <FiTrash2 className="w-4 h-4" />

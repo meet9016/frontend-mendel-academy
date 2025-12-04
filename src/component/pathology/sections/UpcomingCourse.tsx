@@ -14,6 +14,16 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import DOMPurify from 'dompurify';
 
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  waitlistCount: number;
+  image: string;
+  // add other fields if needed
+}
+
 const UpcomingCourse = () => {
   const [openCourseDetails, setOpenCourseDetails] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -65,7 +75,7 @@ const UpcomingCourse = () => {
 
         {/* Course Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 ">
-          {courseData?.map((course, index) => (
+          {courseData?.map((course: Course, index: number) => (
             <div
               key={course.id}
               className="group relative animate-fade-in-up flex flex-col h-full "

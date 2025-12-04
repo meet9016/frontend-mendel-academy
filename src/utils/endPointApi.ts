@@ -23,6 +23,7 @@ export interface EndPointApi {
     getCart?: string;
     postCreateAddToCart?: string;
     cartCount?: string;
+    removeCart?: string;
 
     //faq
     getAllFaq?: string;
@@ -70,6 +71,7 @@ const endPointApi: EndPointApi = {
     getCart: 'cart/get',
     postCreateAddToCart: 'cart/create',
     cartCount: 'cart/count',
+    removeCart: 'cart/remove',
 
     //faq
     getAllFaq: 'faq/getall',
