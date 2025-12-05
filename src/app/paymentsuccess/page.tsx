@@ -112,7 +112,8 @@ const OrderDetails = ({ data }: { data: StripeData | null }) => {
   const rows: { label: string; value: string; chip?: boolean }[] = [
     { label: 'Order ID', value: data.id, chip: true },
     { label: 'Transaction ID', value: data.transaction_id, chip: true },
-    { label: 'Amount Paid', value: formatCurrency(data.amount, data.currency) },
+   { label: 'Amount Paid', value: data.amount.toString() },
+    // { label: 'Amount Paid', value: formatCurrency(data.amount, data.currency) },
     { label: 'Date', value: formatDate(data.createdAt) },
     { label: 'Name', value: data.full_name },
     { label: 'Email', value: data.email, chip: true },
@@ -233,4 +234,4 @@ const Chip = ({ text, onClick }: { text: string; onClick: () => void }) => (
 /* ------------------------------------------------------------------ */
 /* Utils                                                              */
 /* ------------------------------------------------------------------ */
-const truncate = (s: string, n: number) => (s.length > n ? `${s.slice(0, n)}…` : s);
+const truncate = (s: string, n: number) => (s?.length > n ? `${s?.slice(0, n)}…` : s);

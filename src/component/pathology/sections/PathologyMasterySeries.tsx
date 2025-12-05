@@ -87,6 +87,7 @@ const addToCart = async (item: Program) => {
         price: item.price,
         quantity: 1,
         duration: item.duration,
+        bucket_type: true,
     };
     const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
     if (res.data.success) toast.success(res.data.message);

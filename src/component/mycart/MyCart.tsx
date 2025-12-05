@@ -1,256 +1,198 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  FiArrowRight,
-} from "react-icons/fi";
-import { useParams, useRouter } from "next/navigation";
-import { BiShield } from "react-icons/bi";
-import { BsPercent, BsTruck } from "react-icons/bs";
-import { CgClose } from "react-icons/cg";
-import { FaShoppingCart } from "react-icons/fa";
-import { api } from "@/utils/axiosInstance";
-import endPointApi from "@/utils/endPointApi";
-import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import CommonButton from "@/comman/Button";
+import { BiShoppingBag } from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
+import { FiTrash2 } from "react-icons/fi";
+import { Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
 
-interface CartItem {
-  id: number;
-  image: string;
-  title: string;
-  basePrice: number;
-  quantity: number;
-  period: "30" | "60" | "90";
+interface MyCartProps {
+  cartData: any[]; // change to your actual type
+  cartTotalAmount: number;
+  setIsCartOpen: Dispatch<SetStateAction<boolean>>;
+  MdRemoveShoppingCart: (cartId: string) => Promise<void>;
 }
 
-const MyCart = () => {
+const MyCart: React.FC<MyCartProps> = ({
+  cartData,
+  cartTotalAmount,
+  setIsCartOpen,
+  MdRemoveShoppingCart,
+}) => {
+   const tempIdGet = sessionStorage.getItem("temp_id");
   const router = useRouter();
-  const [plan, setPlan] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { id } = useParams();
-
-  useEffect(() => {
-    if (id) fetchPlan();
-  }, [id]);
-
-  const fetchPlan = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get(`${endPointApi.getPlan}/${id}`)
-      if (res.data) {
-        setPlan(res?.data?.data)
-      } else {
-        console.log("DATA FAILED")
-      }
-    } catch (error) {
-      console.error("Error fetching exam data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop",
-      title: "Premium Wireless Headphones",
-      basePrice: 800,
-      quantity: 1,
-      period: "30",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop",
-      title: "Smart Watch Pro Series",
-      basePrice: 1200,
-      quantity: 1,
-      period: "30",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=500&fit=crop",
-      title: "Designer Sunglasses",
-      basePrice: 600,
-      quantity: 1,
-      period: "30",
-    },
-  ]);
- 
-  const handleProceedToCheckout = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get(`${endPointApi.getPlan}/${id}`);
-
-      if (res.data) {
-        setPlan(res.data.data);
-        if (res.data.message) {
-          toast.success(res.data.message);
-        } else {
-          toast.success("Plan details fetched successfully!");
-        }
-        setTimeout(() => {
-          router.push(`/checkout/${id}`);
-        }, 500);
-      } else {
-        toast.error("Failed to fetch plan details!");
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Server error!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const calculateItemPrice = (item: CartItem) => {
-    const multiplier = item.period === "30" ? 1 : item.period === "60" ? 2 : 3;
-    return item.basePrice * multiplier * item.quantity;
-  };
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + calculateItemPrice(item),
-    0
-  );
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50">
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
-          {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-black text-gray-900 mb-2">
-              Shopping Cart
-            </h1>
-            <p className="text-gray-500">
-              {/* {cartItems.length} {cartItems.length === 1 ? "item" : "items"}{" "} */}
-              ready for checkout
-            </p>
+      {/* Overlay */}
+      <motion.div
+        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        animate={{ opacity: 1, backdropFilter: "blur(6px)" }}
+        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        className="fixed inset-0 bg-black/50 z-40"
+        onClick={() => setIsCartOpen(false)}
+      />
+
+      {/* Sidebar */}
+      <motion.div
+        key="cart-sidebar"
+        initial={{ x: "100%", opacity: 0, rotateY: -25, scale: 0.95 }}
+        animate={{ x: 0, opacity: 1, rotateY: 0, scale: 1 }}
+        exit={{ x: "100%", opacity: 0, rotateY: -25, scale: 0.95 }}
+        transition={{
+          type: "spring",
+          stiffness: 80,
+          damping: 14,
+          duration: 0.7,
+        }}
+        className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl z-50 rounded-l-3xl overflow-hidden perspective-1000"
+      >
+        <motion.div
+          className="flex flex-col h-full relative overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          {/* Header */}
+          <div className="relative flex items-center justify-between p-6 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="bg-white  border-primary p-3 rounded-xl shadow-lg">
+                  <BiShoppingBag className="w-6 h-6 text-primary" />
+                </div>
+                {/* <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold ff-font-bold text-white">
+                    5
+                  </span>
+                </div> */}
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold ff-font-bold flex items-center gap-2">
+                  My Cart
+                </h2>
+                <p className="text-sm ff-font">
+                  {/* {cartItems.length} courses selected */}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsCartOpen(false)}
+              className="p-2 hover:bg-yellow-50 rounded-xl cursor-pointer transition-all duration-200 hover:scale-110"
+            >
+              <AiOutlineClose className="w-6 h-6 ff-font-bold" />
+            </button>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8">
-            {/* Cart Items */}
-            <div className="lg:col-span-8 space-y-6">
-              {plan && (
-                <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex gap-5 relative">
-                  {/*  Close Button */}
-                  <button
-                    onClick={() => setPlan(null)} // clears plan from state
-                    className="absolute top-3 right-3 p-2 rounded-full hover:bg-red-100 hover:text-red-600 transition"
+          {/* Animated Cart Items */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            {cartData.map((item) => (
+              <div className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                {/* Delete Icon */}
+                <button
+                  onClick={() => MdRemoveShoppingCart(item._id)}
+                  className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
+                >
+                  <FiTrash2 className="w-4 h-4" />
+                </button>
+
+                <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl ">
+                  <div className="flex flex-col flex-1">
+                    {/* Name */}
+                    <h3 className="font-semibold ff-font-bold mb-1 line-clamp-2">
+                      {/* {item.title} */}
+                      {item.category_name}
+                    </h3>
+
+                    {/* Duration */}
+                    <p className="text-xs text-black bg-white ff-font border border-primary px-2 py-0.5 rounded-full w-fit font-medium mb-1">
+                      Duration: {item.duration} Days
+                    </p>
+
+                    {/* Quantity */}
+                    <p className="text-xs ff-font-bold font-medium">
+                      Quantity: {item.quantity}
+                    </p>
+                  </div>
+
+                  {/* Price */}
+                  <div className="text-lg font-bold ff-font-bold text-primary">
+                    ₹{item.price}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="border-t border-gray-200 p-6 bg-white space-y-4"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 ff-font-bold font-medium">
+                Subtotal
+              </span>
+              <span className="font-bold ff-font-bold text-lg">
+                ₹{cartTotalAmount}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500 ff-font-bold font-medium">
+                Discount
+              </span>
+              <span className="font-bold ff-font-bold text-green-600 text-lg">
+                ₹0.00
+              </span>
+            </div>
+            {/* <div className="flex justify-between items-center bg-white rounded-xl p-4 border-2 border-primary">
+                    <div>
+                      <p className="text-xs text-gray-500 ff-font-bold font-medium">Total Amount</p>
+                      <span className="text-3xl font-bold text-primary ff-font-bold">
+                        ₹{cartTotalAmount}
+                      </span>
+                    </div>
+                    <GiSparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
+                  </div> */}
+            {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
+                    Checkout Now
+                  </button> */}
+            <CommonButton
+              pyClass="py-3"
+              pxClass="px-39"
+              fontWeight={700}
+              fontSize={15}
+              className="ml-2"
+              onClick={() => {router.push(`/checkout/${tempIdGet}`); setIsCartOpen(false)}}
+            >
+              Checkout Now
+            </CommonButton>
+            {/* <button
+                    className="w-full border border-primary ff-font-bold rounded-xl py-4 font-semibold"
+                    onClick={() => setIsCartOpen(false)}
                   >
-                    <CgClose className="h-5 w-5" />
-                  </button>
-
-                  {/* 🖼️ Static Image */}
-                  <div className="w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
-                    <img
-                      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop"
-                      alt="Plan Image"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* 📄 Plan Details */}
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                          {plan?.plan_type || "Plan"}
-                        </h3>
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-600">
-                        Price: <span className="font-semibold">₹{plan?.plan_pricing}</span>
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Duration: <span className="font-semibold">{plan?.plan_day} Days</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-3 pt-4">
-                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
-                  <BiShield className="h-6 w-6 text-yellow-500 mb-2" />
-                  <p className="text-xs font-semibold text-gray-800">
-                    Secure Payment
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
-                  <BsTruck className="h-6 w-6 text-yellow-500 mb-2" />
-                  <p className="text-xs font-semibold text-gray-800">
-                    Free Delivery
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center p-4 border border-gray-200 bg-white rounded-xl hover:border-yellow-400 transition">
-                  <BsPercent className="h-6 w-6 text-yellow-500 mb-2" />
-                  <p className="text-xs font-semibold text-gray-800">
-                    Best Prices
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Summary Sidebar */}
-            <div className="lg:col-span-4">
-              <div className="sticky top-24 space-y-4">
-                <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-                  <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 p-4 rounded-t-2xl flex items-center gap-2">
-                    <FaShoppingCart className="text-white text-xl" />
-                    <h2 className="text-white font-bold text-xl">
-                      Order Summary
-                    </h2>
-                  </div>
-
-                  <div className="p-6 space-y-5">
-                    {/* Subtotal */}
-                    <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                      <span className="text-base text-gray-600 font-medium">
-                        Subtotal
-                        {/* ({cartItems.length}{" "}
-                        {cartItems.length === 1 ? "item" : "items"}) */}
-                      </span>
-                      <span className="text-xl font-bold text-gray-900">
-                        {/* ₹{subtotal.toLocaleString()}a */}
-                        ₹{plan?.plan_pricing ? Number(plan.plan_pricing).toLocaleString() : "0"}
-                      </span>
-                    </div>
-
-                    {/* Total */}
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                      <p className="text-sm text-gray-500 mb-1">Total Amount</p>
-                      <p className="text-3xl font-extrabold text-yellow-600">
-                        ₹{plan?.plan_pricing ? Number(plan.plan_pricing).toLocaleString() : "0"}
-                      </p>
-                    </div>
-
-                    {/* Checkout Button */}
-                    <button
-                      // onClick={() => router.push(`/checkout/${id}`)}
-                      onClick={handleProceedToCheckout}
-
-                      className="w-full h-12 flex items-center cursor-pointer justify-center rounded-lg bg-gradient-to-r from-yellow-500 to-amber-400 text-white font-semibold hover:opacity-90 transition"
-                    >
-                      Proceed to Checkout
-                      <FiArrowRight className="ml-2 h-5 w-5" />
-                    </button>
-
-                    {/* Continue Shopping */}
-                    <button className="w-full h-12 font-semibold border border-gray-300 rounded-lg text-gray-800 hover:bg-gray-100 transition">
-                      Continue Shopping
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+                    Continue Shopping
+                  </button> */}
+            <CommonButton
+              pyClass="py-3"
+              pxClass="px-44"
+              fontWeight={700}
+              fontSize={15}
+              className="ml-2"
+              onClick={() => setIsCartOpen(false)}
+            >
+              Continue
+            </CommonButton>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </>
   );
 };
 
-export default MyCart;
+export default MyCart; 

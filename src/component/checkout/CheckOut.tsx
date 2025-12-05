@@ -25,6 +25,7 @@ const StripeCheckoutForm = ({
   email,
   plan,
   onSuccess,
+  id,
 }: any) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -60,8 +61,8 @@ const StripeCheckoutForm = ({
           full_name,
           email,
           phone,
-          plan_id: plan._id,
-          amount: plan.plan_pricing,
+          plan_id: id,
+          amount: plan.totalAmount,
         })
         .then((res) => {
           localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
@@ -103,9 +104,10 @@ const StripeCheckoutForm = ({
           type="submit"
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${loading || !stripe
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            ${
+              loading || !stripe
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 shadow-md"
             }`}
         >
           {loading ? (
@@ -132,11 +134,25 @@ interface BillingInformation {
   phone: string;
   selectedPayment: string;
 }
+
+interface PlanItem {
+  temp_id: string;
+  product_id: string;
+  category_name: string;
+  quantity: number;
+  price: number;
+  duration: string;
+  plan_image?: string;
+}
+
 export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 const CheckOut = () => {
   const { id } = useParams();
+
   const router = useRouter();
+
   const [plan, setPlan] = useState<any>(null);
+  console.log("plan", plan);
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [billing, setBilling] = useState<BillingInformation>({
@@ -146,11 +162,24 @@ const CheckOut = () => {
     selectedPayment: "Razorpay",
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const fetchPlan = async () => {
+  // const fetchPlan = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await api.get(`${endPointApi.getPlan}/${id}`);
+  //     setPlan(res?.data?.data);
+  //   } catch (err) {
+  //     console.error("Fetch plan error:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //tempid vise
+  const fetchAddToCart = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`${endPointApi.getPlan}/${id}`);
-      setPlan(res?.data?.data);
+      const res = await api.get(`${endPointApi.getcheckoutTempId}/${id}`);
+      setPlan(res?.data);
     } catch (err) {
       console.error("Fetch plan error:", err);
     } finally {
@@ -174,7 +203,8 @@ const CheckOut = () => {
   };
 
   useEffect(() => {
-    fetchPlan();
+    // fetchPlan();
+    fetchAddToCart();
   }, []);
 
   const handlePaymentSelect = (method: string) =>
@@ -196,7 +226,7 @@ const CheckOut = () => {
         email: billing.email,
         phone: billing.phone,
         plan_id: id,
-        amount: plan?.plan_pricing,
+        amount: plan?.totalAmount,
         payment_method: "Razorpay",
       });
 
@@ -234,7 +264,10 @@ const CheckOut = () => {
           );
 
           if (verifyRes.data.success) {
-            localStorage.setItem("stripdata", JSON.stringify(verifyRes.data.payment));
+            localStorage.setItem(
+              "stripdata",
+              JSON.stringify(verifyRes.data.payment)
+            );
             router.push("/paymentsuccess");
           }
         },
@@ -255,8 +288,9 @@ const CheckOut = () => {
     if (!isValid) return;
     try {
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
-        amount: plan?.plan_pricing,
+        amount: plan?.totalAmount,
         email: billing.email,
+        plan_id: id,
       });
       setClientSecret(res.data.clientSecret);
     } catch (err) {
@@ -351,10 +385,11 @@ const CheckOut = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
-                  ? "border-yellow-400 bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Razorpay"
+                    ? "border-yellow-400 bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaCreditCard className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Razorpay
@@ -362,10 +397,11 @@ const CheckOut = () => {
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
-                  ? "border-yellow-400 bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Stripe"
+                    ? "border-yellow-400 bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaWallet className="text-yellow-400 text-2xl mx-auto mb-2" />
                 Stripe
@@ -381,6 +417,7 @@ const CheckOut = () => {
                   email={billing.email}
                   plan={plan}
                   onSuccess={() => router.push("/paymentsuccess")}
+                  id={id}
                 />
               </Elements>
             )}
@@ -392,23 +429,37 @@ const CheckOut = () => {
           <h2 className="text-xl font-bold text-yellow-500 mb-4">
             Order Summary
           </h2>
-          {plan && (
-            <div className="border rounded-lg p-3 flex gap-3 items-center mb-4">
-              <img
-                src={plan.plan_image || "/default.jpg"}
-                className="w-16 h-16 rounded-md object-cover"
-                alt="plan"
-              />
-              <div>
-                <p className="font-semibold">{plan.plan_type}</p>
-                <p className="text-sm text-gray-500">
-                  Duration: {plan.plan_day} days
-                </p>
-                <p className="font-bold text-gray-800">₹{plan.plan_pricing}</p>
+          {plan &&
+            plan?.data?.length > 0 &&
+            plan?.data?.map((item: PlanItem, index: number) => (
+              <div
+                key={index}
+                className="border rounded-lg p-3 flex gap-3 items-center mb-4"
+              >
+                <img
+                  src={item.plan_image || "/default.jpg"}
+                  className="w-16 h-16 rounded-md object-cover"
+                  alt="plan"
+                />
+
+                <div>
+                  <p className="font-semibold">{item.category_name}</p>
+                  <p className="text-sm text-gray-500">
+                    Quantity: {item.quantity}
+                  </p>
+                  <p className="font-bold text-gray-800">₹{item.price}</p>
+                </div>
               </div>
+            ))}
+          <hr className="my-4" />
+          {plan?.totalAmount && (
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-gray-700">Total:</span>
+              <span className="text-xl font-bold text-gray-900">
+                ₹{plan?.totalAmount}
+              </span>
             </div>
           )}
-
           <button
             onClick={
               billing.selectedPayment === "Stripe"
