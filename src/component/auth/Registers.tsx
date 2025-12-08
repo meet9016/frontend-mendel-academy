@@ -91,7 +91,7 @@ export default function Registers() {
 
       {/* ----------  RIGHT PANEL: SIGN-UP FORM  ---------- */}
       <div className="w-full lg:w-1/2 bg-white relative flex items-center justify-center p-10 md:p-12">
-        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-8 md:p-10 relative z-10">
+        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-8 md:p-10 relative z-10 border border-primary">
           <Header />
           <form onSubmit={handleSubmit} className="space-y-5">
             <NameFields formData={formData} errors={errors} onChange={handleChange} />
@@ -182,7 +182,7 @@ const PasswordField = ({ value, error, onChange, show, toggle }: {
     <button
       type="button"
       onClick={toggle}
-      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-black transition"
+      className="absolute right-4 top-5 text-gray-500 cursor-pointer hover:text-black transition"
     >
       {show ? <FiEye className="w-5 h-5" /> : <FiEyeOff className="w-5 h-5" />}
     </button>
