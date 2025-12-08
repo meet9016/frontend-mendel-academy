@@ -21,6 +21,7 @@ import endPointApi from "@/utils/endPointApi";
 import { toast } from "react-toastify";
 import UpcomingCourse from "./UpcomingCourse";
 import "react-loading-skeleton/dist/skeleton.css";
+import { getTempId } from "@/utils/helper";
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -75,26 +76,25 @@ const usePrograms = () => {
 };
 
 /* ----------  UTILS  (same tempId + cart)  ---------- */
-const getTempId = () => {
-  if (typeof window === "undefined") return null; // SSR safeguard
+// const getTempId = () => {
+//   if (typeof window === "undefined") return null; // SSR safeguard
 
-  let tempId = sessionStorage.getItem("temp_id");
+//   let tempId = sessionStorage.getItem("temp_id");
 
-  if (!tempId) {
-    tempId =
-      "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
-    sessionStorage.setItem("temp_id", tempId);
-  }
+//   if (!tempId) {
+//     tempId =
+//       "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+//     sessionStorage.setItem("temp_id", tempId);
+//   }
 
-  return tempId;
-};
+//   return tempId;
+// };
 
 const addToCart = async (item: Program) => {
   const tempId = getTempId();
 
-  if (!tempId) return; // avoid running on SSR
   const body = {
-    temp_id: getTempId(),
+    temp_id: tempId,
     product_id: item.id,
     category_name: item.category,
     price: item.price,
