@@ -33,8 +33,6 @@ type CartItem = {
 
 export default function Header() {
   const tempIdGet = sessionStorage.getItem("temp_id");
-  // const tempIdGet = "";
-  // sessionStorage.getItem("temp_id");
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 

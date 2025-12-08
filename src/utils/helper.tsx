@@ -1,3 +1,4 @@
+"use client";
 import dayjs from "dayjs";
 
 export function formatDateWithDayjs(dateString : string | undefined) {

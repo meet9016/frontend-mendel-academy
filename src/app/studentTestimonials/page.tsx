@@ -136,7 +136,7 @@ const Carousel = ({
       onClick={onNext}
       disabled={currentIndex >= maxIndex}
       icon={FaChevronRight}
-      right
+      // right
     />
 
     {/* Cards */}
