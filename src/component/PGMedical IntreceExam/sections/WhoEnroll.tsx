@@ -68,7 +68,7 @@ export default WhoEnroll;
 
 // Content Section (Image + Text)
 const ContentSection = ({ title, html, image }: { title: string; html: string; image?: string }) => (
-  <div className="mx-auto mb-24 grid max-w-7xl items-center gap-16 px-6 md:grid-cols-2">
+  <div className="mx-auto mb-24 grid max-w-[1380px] items-center gap-16 px-6 md:grid-cols-2">
     <ImageBlock src={image} />
     <TextBlock title={title} html={html} />
   </div>
@@ -105,7 +105,7 @@ const TextBlock = ({ title, html }: { title: string; html: string }) => (
 
 // Pricing Section
 const PricingSection = ({ plans, loading, onEnroll }: { plans: Plan[]; loading: boolean; onEnroll: (id: string) => void }) => (
-  <div className="max-w-7xl mx-auto">
+  <div className="max-w-[1380px] mx-auto">
     <SectionHeading title="Choose Your Plan" />
 
     {loading ? (

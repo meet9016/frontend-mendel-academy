@@ -164,13 +164,12 @@ const MyCart: React.FC<MyCartProps> = ({
                   </button> */}
             <CommonButton
               pyClass="py-3"
-              pxClass="px-39"
+              pxClass="px-41"
               fontWeight={700}
               fontSize={15}
-              className="ml-2"
               onClick={() => {router.push(`/checkout/${tempIdGet}`); setIsCartOpen(false)}}
             >
-              Checkout Now
+              CheckoutNow
             </CommonButton>
             {/* <button
                     className="w-full border border-primary ff-font-bold rounded-xl py-4 font-semibold"
@@ -180,10 +179,9 @@ const MyCart: React.FC<MyCartProps> = ({
                   </button> */}
             <CommonButton
               pyClass="py-3"
-              pxClass="px-44"
+              pxClass="px-46"
               fontWeight={700}
               fontSize={15}
-              className="ml-2"
               onClick={() => setIsCartOpen(false)}
             >
               Continue

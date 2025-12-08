@@ -60,7 +60,7 @@ export default function Login() {
     >
       {/* ----------  RIGHT PANEL: LOGIN FORM  ---------- */}
       <div className="w-full lg:w-1/2 bg-white relative flex items-center justify-center p-10">
-        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-10">
+        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-10 border border-primary">
           <Header />
           <form onSubmit={handleSubmit} className="space-y-5">
             <InputField
@@ -89,6 +89,7 @@ export default function Login() {
             >
               Continue
             </CommonButton>
+
           </form>
           <SocialRow />
           <p className="text-center text-sm ff-font pt-2">
@@ -153,10 +154,11 @@ const PasswordField = ({ value, onChange, error, show, toggle }: {
       error={error}
       icon={<CiLock className={`w-5 h-5 ${error ? "text-red-500" : "text-gray-400"}`} />}
     />
+
     <button
       type="button"
       onClick={toggle}
-      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+      className="absolute right-4 top-5 text-gray-600 cursor-pointer hover:text-gray-800 transition-colors"
     >
       {show ? <FiEye className="w-5 h-5" /> : <FiEyeOff className="w-5 h-5" />}
     </button>

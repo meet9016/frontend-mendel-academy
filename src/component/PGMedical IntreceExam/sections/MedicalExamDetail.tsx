@@ -49,7 +49,7 @@ const HeroContent = ({ data }: { data: Exam | null }) => {
   if (!data) return null;
 
   return (
-    <div className="relative mx-auto max-w-7xl px-6 py-16 md:py-16">
+    <div className="relative mx-auto max-w-[1380px] px-6 py-16 md:py-16">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
         <LeftContent data={data} />
         <RightImage data={data} />
