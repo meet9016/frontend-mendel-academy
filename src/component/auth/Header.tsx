@@ -32,7 +32,13 @@ type CartItem = {
 };
 
 export default function Header() {
-  const tempIdGet = sessionStorage.getItem("temp_id");
+  // const tempIdGet = sessionStorage.getItem("temp_id");
+  let tempIdGet: string | null = null;
+
+  if (typeof window !== "undefined") {
+    tempIdGet = sessionStorage.getItem("temp_id");
+  }
+
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 
@@ -86,11 +92,9 @@ export default function Header() {
   useEffect(() => {
     const getCountCartItems = async () => {
       try {
-        const res = await api.get(
-          `${endPointApi.cartCount}/${tempIdGet}`
-        );
-        console.log("dataaaa",res);
-        
+        const res = await api.get(`${endPointApi.cartCount}/${tempIdGet}`);
+        console.log("dataaaa", res);
+
         if (res.data) {
           setCartItemCount(res.data.count);
         }
@@ -317,7 +321,7 @@ export default function Header() {
 
               {/* Count Badge */}
               <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
-               {cartItemCount}
+                {cartItemCount}
               </span>
             </button>
 
