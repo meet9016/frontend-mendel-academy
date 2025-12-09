@@ -42,7 +42,7 @@ const WhoEnroll = ({ data, loading }: WhoEnrollProps) => {
   });
 
   return (
-    <section className="py-15 bg-white">
+    <section className="py-10 bg-white">
       <div className="container mx-auto px-4">
         {loading ? (
           <HeroSkeleton />
@@ -68,7 +68,7 @@ export default WhoEnroll;
 
 // Content Section (Image + Text)
 const ContentSection = ({ title, html, image }: { title: string; html: string; image?: string }) => (
-  <div className="mx-auto mb-24 grid max-w-[1380px] items-center gap-16 px-6 md:grid-cols-2">
+  <div className="mx-auto mb-20 grid max-w-[1380px] items-center gap-16 px-4 md:grid-cols-2">
     <ImageBlock src={image} />
     <TextBlock title={title} html={html} />
   </div>
@@ -79,11 +79,11 @@ const ImageBlock = ({ src }: { src?: string }) => {
   const fallback = 'https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg';
   return (
     <div className="order-2 flex justify-center md:order-1">
-      <div className="relative overflow-hidden rounded-3xl border-4 border-primary shadow-2xl p-2 w-[320px] h-[300px] md:w-[500px] md:h-[500px]">
+      <div className="relative overflow-hidden rounded-2xl border-4 border-primary shadow-xl p-2 w-[450px] h-[450px]">
         <img
-          src={src || fallback}
+          src={src}
           alt="Medical professional"
-          className="w-full h-full rounded-[1.5rem] object-cover shadow-2xl"
+          className="w-full h-full object-cover rounded-xl"
         />
       </div>
     </div>
@@ -122,7 +122,7 @@ const PricingSection = ({ plans, loading, onEnroll }: { plans: Plan[]; loading: 
 
 // Section Heading
 const SectionHeading = ({ title }: { title: string }) => (
-  <div className="text-center mb-12">
+  <div className="text-center mb-8">
     <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">{title}</h2>
   </div>
 );
@@ -130,10 +130,9 @@ const SectionHeading = ({ title }: { title: string }) => (
 // Single Plan Card
 const PlanCard = ({ plan, onEnroll }: { plan: Plan; onEnroll: () => void }) => (
   <div
-    className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 ${
-      plan.most_popular ? 'border-primary shadow-xl' : 'border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]'
-    }`}
-  >    
+    className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 ${plan.most_popular ? 'border-primary shadow-xl' : 'border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]'
+      }`}
+  >
     {plan.most_popular && (
       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
         <span className="bg-[#ffca00] text-white ff-font-bold px-6 py-2 rounded-full text-xs font-bold shadow-lg">

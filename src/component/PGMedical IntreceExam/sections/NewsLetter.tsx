@@ -79,7 +79,7 @@ const NewsLetter: React.FC = () => {
   };
 
   return (
-    <section className="relative overflow-hidden py-15 bg-[#f9fafb]">
+    <section className="relative overflow-hidden py-10 bg-[#f9fafb]">
       <div className="container relative z-10 mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           <SectionHeader
@@ -111,8 +111,8 @@ export default NewsLetter;
 
 // Section Header
 const SectionHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <div className="mb-12 text-center">
-    <h2 className="mb-4 text-4xl font-bold ff-font-bold md:text-5xl">{title}</h2>
+  <div className="mb-10 text-center">
+    <h2 className="mb-3 text-4xl font-bold ff-font-bold md:text-5xl">{title}</h2>
     <p className="mx-auto max-w-2xl text-xl ff-font">{subtitle}</p>
   </div>
 );
