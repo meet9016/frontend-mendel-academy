@@ -94,6 +94,8 @@ const usePrograms = () => {
 //   return tempId;
 // };
 
+
+
 const addToCart = async (item: Program) => {
   const userId = getAuthId(); // check login first
   const tempId = userId ? null : getTempId(); // only generate when no userId
@@ -677,8 +679,8 @@ const ProgramSkeleton = () => (
 );
 
 const UpcomeingProgramSkeleton = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
-    {[...Array(3)].map((_, i) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+    {[...Array(4)].map((_, i) => (
       <Skeleton key={i} height={600} borderRadius={16} className="rounded-xl" />
     ))}
   </div>

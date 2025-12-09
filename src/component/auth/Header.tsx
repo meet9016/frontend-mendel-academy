@@ -89,22 +89,23 @@ export default function Header() {
     fetchExams();
   }, []);
 
-  useEffect(() => {
-    const fetchExams = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get(`${endPointApi.getAppMedicalExam}`);
-        if (res.data.data) {
-          setExamCategories(res.data.data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching exam data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchExams();
-  }, []);
+  // useEffect(() => {
+  //   const fetchExams = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const res = await api.get(`${endPointApi.getAppMedicalExam}`);
+  //       if (res.data.data) {
+  //         setExamCategories(res.data.data || []);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching exam data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchExams();
+  // }, []);
+
 
   const getCountCartItems = async () => {
     try {
@@ -326,11 +327,10 @@ export default function Header() {
               Student Testimonials
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${
-          pathname === "/studentTestimonials"
-            ? "w-full"
-            : "w-0 group-hover:w-full"
-        }
+        ${pathname === "/studentTestimonials"
+                    ? "w-full"
+                    : "w-0 group-hover:w-full"
+                  }
       `}
               ></span>
             </button>
@@ -491,7 +491,11 @@ export default function Header() {
         <div className="absolute right-0 mt-3 w-56 bg-white shadow-xl rounded-xl border border-gray-300 py-2 z-50 animate-fadeIn">
           {/* Edit Profile */}
           <button
-            onClick={() => router.push("/editProfile")}
+            onClick={() => {
+              router.push("/editProfile")
+              setIsProfileOpen(false);
+            }
+            }
             className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
           >
             <FaUser className="text-gray-500  w-5 h-5" />
