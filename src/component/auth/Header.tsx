@@ -33,12 +33,21 @@ type CartItem = {
 
 export default function Header() {
   // const tempIdGet = sessionStorage.getItem("temp_id");
-  let tempIdGet: string | null = null;
+  // let tempIdGet: string | null = null;
 
-  if (typeof window !== "undefined") {
-    tempIdGet = sessionStorage.getItem("temp_id");
-  }
+  // if (typeof window !== "undefined") {
+  //   tempIdGet = sessionStorage.getItem("temp_id");
+  // }
+  const [tempIdGet, setTempIdGet] = useState<string | null>(null);
 
+  useEffect(() => {
+    const storedId = sessionStorage.getItem("temp_id");
+    if (storedId) {
+      setTempIdGet(storedId);
+    }
+  });
+  console.log("tempIdGet",tempIdGet);
+  
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 
@@ -94,8 +103,6 @@ export default function Header() {
     const getCountCartItems = async () => {
       try {
         const res = await api.get(`${endPointApi.cartCount}/${tempIdGet}`);
-        console.log("dataaaa", res);
-
         if (res.data) {
           setCartItemCount(res.data.count);
         }
@@ -467,7 +474,7 @@ export default function Header() {
           <button
             onClick={() => {
               router.push("/editProfile")
-              setIsMenuOpen(false);
+              setIsProfileOpen(false);
             }
             }
             className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
