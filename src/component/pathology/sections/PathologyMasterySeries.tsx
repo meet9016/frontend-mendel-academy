@@ -8,8 +8,8 @@ import {
   FaRegStar,
   FaUsers,
 } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState, store } from "@/redux/store";
 import Skeleton from "react-loading-skeleton";
 import { CgLock } from "react-icons/cg";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,8 @@ import { toast } from "react-toastify";
 import UpcomingCourse from "./UpcomingCourse";
 import "react-loading-skeleton/dist/skeleton.css";
 import { getTempId } from "@/utils/helper";
+import { getAuthId } from "@/utils/tokenManager";
+import { setCartCount } from "@/redux/cartSlice";
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -55,6 +57,8 @@ export interface ProgramData {
 
 /* ----------  HOOK  (same fetch)  ---------- */
 const usePrograms = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,10 +97,11 @@ const usePrograms = () => {
 
 
 const addToCart = async (item: Program) => {
-  const tempId = getTempId();
+  const userId = getAuthId(); // check login first
+  const tempId = userId ? null : getTempId(); // only generate when no userId
 
   const body = {
-    temp_id: tempId,
+    ...(userId ? { user_id: userId } : { temp_id: tempId }),
     product_id: item.id,
     category_name: item.category,
     price: item.price,
@@ -104,8 +109,14 @@ const addToCart = async (item: Program) => {
     duration: item.duration,
     bucket_type: true,
   };
+
   const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
-  if (res.data.success) toast.success(res.data.message);
+  console.log("res*******", res);
+
+  if (res.data.success)
+    store.dispatch(setCartCount(res.data.count));
+    console.log("res", res.data.count);
+  toast.success(res.data.message);
 };
 
 const PathologyMasterySeries = () => {

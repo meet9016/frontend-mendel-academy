@@ -28,6 +28,10 @@ export const getTempId = () => {
   return tempId;
 };
 
+export const removeTempId = () => {
+  sessionStorage.removeItem("temp_id");
+};
+
 export const formatCurrency = (amount: number, currency: string) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: currency.toUpperCase() }).format(amount / 100);
 

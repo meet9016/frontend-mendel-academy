@@ -3,7 +3,7 @@ import CommonButton from "@/comman/Button";
 import InputField from "@/comman/InputField";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { saveToken } from "@/utils/tokenManager";
+import { saveToken, saveUserId } from "@/utils/tokenManager";
 import { loginSchema } from "@/validationSchema/validationSchema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,6 +13,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { removeTempId } from "@/utils/helper";
 
 /* ----------  TYPES  ---------- */
 type FormData = { email: string; password: string };
@@ -43,10 +44,12 @@ export default function Login() {
     }
     api
       .post(endPointApi.login, formData)
-      .then((res) => {
+      .then((res) => {  
         saveToken(res.data.token.access);
+        saveUserId(res.data.user._id);
         toast.success(res.data.message || "User login successfully!");
         router.push("/");
+        removeTempId(); // Remove tmp id on login
       })
       .catch((err) => toast.error(err.response?.data?.message));
   };

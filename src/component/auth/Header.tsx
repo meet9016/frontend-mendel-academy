@@ -12,6 +12,10 @@ import CommonButton from "@/comman/Button";
 import { FaUser } from "react-icons/fa";
 import { FaRightFromBracket } from "react-icons/fa6";
 import MyCart from "../mycart/MyCart";
+import { clearToken, getAuthId } from "@/utils/tokenManager";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { decrementCartCount, resetCartCount, setCartCount } from "@/redux/cartSlice";
 type Exam = {
   exam_name: string;
   link: string;
@@ -38,6 +42,12 @@ export default function Header() {
   // if (typeof window !== "undefined") {
   //   tempIdGet = sessionStorage.getItem("temp_id");
   // }
+  const userId = getAuthId();
+  const dispatch = useDispatch<AppDispatch>();
+  const { count, error } = useSelector(
+    (state: RootState) => state.cart
+  );
+
   const [tempIdGet, setTempIdGet] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,8 +56,7 @@ export default function Header() {
       setTempIdGet(storedId);
     }
   });
-  console.log("tempIdGet",tempIdGet);
-  
+
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
 
@@ -59,7 +68,6 @@ export default function Header() {
   const [cartData, setCartData] = useState<CartItem[]>([]);
   const [cartTotalAmount, setCartTotalAmount] = useState<number>(0);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
-  const [cartItemCount, setCartItemCount] = useState<number>(0);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -99,23 +107,30 @@ export default function Header() {
   // }, []);
 
 
-  useEffect(() => {
-    const getCountCartItems = async () => {
-      try {
-        const res = await api.get(`${endPointApi.cartCount}/${tempIdGet}`);
-        if (res.data) {
-          setCartItemCount(res.data.count);
-        }
-      } catch (error) {
-        console.error("Error fetching cart data:", error);
+  const getCountCartItems = async () => {
+    try {
+      const res = await api.get(
+        `${endPointApi.cartCount}/${tempIdGet || userId}`
+      );
+      if (res.data) {
+        console.log("res.data.count",res.data.count);
+        
+        dispatch(setCartCount(res.data.count));
       }
-    };
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  };
+
+  // Load cart count on mount
+  useEffect(() => {
     getCountCartItems();
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("auth_token");
+    clearToken();
     setIsProfileOpen(false);
+    dispatch(resetCartCount())
     router.push("/auth/login");
   };
 
@@ -144,7 +159,9 @@ export default function Header() {
     setIsCartOpen(true);
 
     try {
-      const res = await api.get(`${endPointApi.getCart}?temp_id=${tempIdGet}`);
+      const res = await api.get(
+        `${endPointApi.getCart}?temp_id=${tempIdGet || userId}`
+      );
 
       if (res.data) {
         setCartData(res.data.cart);
@@ -160,7 +177,9 @@ export default function Header() {
       const res = await api.delete(`${endPointApi.removeCart}/${cartId}`);
       if (res.data) {
         // Refresh cart data after removal
+        dispatch(decrementCartCount(1)); 
         handleCartOpen();
+
       }
     } catch (error) {
       console.error("Error removing cart item:", error);
@@ -328,7 +347,7 @@ export default function Header() {
 
               {/* Count Badge */}
               <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
-                {cartItemCount}
+                {count}
               </span>
             </button>
 
