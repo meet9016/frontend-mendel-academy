@@ -85,9 +85,10 @@ const getTempId = () => {
       "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
     sessionStorage.setItem("temp_id", tempId);
   }
-
   return tempId;
 };
+
+
 
 const addToCart = async (item: Program) => {
   const tempId = getTempId();
@@ -666,8 +667,8 @@ const ProgramSkeleton = () => (
 );
 
 const UpcomeingProgramSkeleton = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 cursor-pointer">
-    {[...Array(3)].map((_, i) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+    {[...Array(4)].map((_, i) => (
       <Skeleton key={i} height={600} borderRadius={16} className="rounded-xl" />
     ))}
   </div>
