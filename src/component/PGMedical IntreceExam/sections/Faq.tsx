@@ -40,7 +40,7 @@ const Faq = () => {
   };
 
   return (
-    <section className="py-15 bg-[#f9fafb]">
+    <section className="py-10 bg-[#f9fafb]">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <SectionHeading title="FAQs" />
@@ -66,10 +66,10 @@ const Faq = () => {
 };
 
 export default Faq;
-
+  
 // Reusable Heading
 const SectionHeading = ({ title }: { title: string }) => (
-  <div className="text-center mb-12">
+  <div className="text-center mb-5">
     <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">{title}</h2>
   </div>
 );

@@ -8,7 +8,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import CommonButton from "@/comman/Button";
 import { FaUser } from "react-icons/fa";
 import { FaRightFromBracket } from "react-icons/fa6";
 import MyCart from "../mycart/MyCart";
@@ -113,8 +112,8 @@ export default function Header() {
         `${endPointApi.cartCount}/${tempIdGet || userId}`
       );
       if (res.data) {
-        console.log("res.data.count",res.data.count);
-        
+        console.log("res.data.count", res.data.count);
+
         dispatch(setCartCount(res.data.count));
       }
     } catch (error) {
@@ -177,7 +176,7 @@ export default function Header() {
       const res = await api.delete(`${endPointApi.removeCart}/${cartId}`);
       if (res.data) {
         // Refresh cart data after removal
-        dispatch(decrementCartCount(1)); 
+        dispatch(decrementCartCount(1));
         handleCartOpen();
 
       }
@@ -339,7 +338,14 @@ export default function Header() {
           {/* ✅ Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             <button
-              onClick={handleCartOpen}
+              // onClick={handleCartOpen}
+              onClick={() => {
+                if (count > 0) {
+                  handleCartOpen();
+                } else {
+                  console.log("Cart is empty, popup not opened");
+                }
+              }}
               className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200"
             >
               {/* Cart Icon */}

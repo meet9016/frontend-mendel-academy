@@ -18,6 +18,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import { paySchema } from "@/validationSchema/validationSchema";
+import { MdOutlinePhone } from "react-icons/md";
 
 const StripeCheckoutForm = ({
   full_name,
@@ -104,10 +105,9 @@ const StripeCheckoutForm = ({
           type="submit"
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${
-              loading || !stripe
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            ${loading || !stripe
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 shadow-md"
             }`}
         >
           {loading ? (
@@ -148,7 +148,6 @@ interface PlanItem {
 export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 const CheckOut = () => {
   const { id } = useParams();
-
   const router = useRouter();
 
   const [plan, setPlan] = useState<any>(null);
@@ -303,27 +302,27 @@ const CheckOut = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
+      <div className="max-w-[1380px] mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
         {/* Left: Billing Info */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-xl font-bold text-yellow-500 mb-4">
+            <h2 className="text-xl font-bold ff-font-bold text-primary mb-4">
               Billing Information
             </h2>
             <div className="p-6 space-y-4">
               {/* Full Name */}
               <div className="mb-1">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm ff-font mb-2">
                   Full Name *
                 </label>
 
                 <div className="relative h-[52px] flex items-center">
-                  <FaUser className="absolute left-4 text-[#feda4c] pointer-events-none" />
+                  <FaUser className="absolute left-4 text-primary pointer-events-none" />
 
                   <input
                     type="text"
                     placeholder="Enter your full name"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ffca00] outline-none transition"
                     value={billing.fullName}
                     onChange={(e) => handleChange("fullName", e.target.value)}
                   />
@@ -336,15 +335,15 @@ const CheckOut = () => {
               {/* Email & Phone */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="mb-1">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm ff-font mb-2">
                     Email Address *
                   </label>
                   <div className="relative h-[52px] flex items-center">
-                    <FaEnvelope className="absolute left-4 text-[#feda4c] pointer-events-none" />
+                    <FaEnvelope className="absolute left-4 text-primary pointer-events-none" />
                     <input
                       type="email"
                       placeholder="your@email.com"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ffca00] outline-none transition"
                       value={billing.email}
                       onChange={(e) => handleChange("email", e.target.value)}
                     />
@@ -355,15 +354,15 @@ const CheckOut = () => {
                 </div>
 
                 <div className="mb-1">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm ff-font mb-2">
                     Phone Number *
                   </label>
                   <div className="relative h-[52px] flex items-center">
-                    <FaPhone className="absolute left-4 text-[#feda4c] pointer-events-none" />
+                    <MdOutlinePhone className="absolute left-4 text-primary pointer-events-none" />
                     <input
                       type="tel"
                       placeholder="+91 1234567890"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#feda4c] outline-none transition"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ffca00] outline-none transition"
                       value={billing.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
                     />
@@ -378,32 +377,30 @@ const CheckOut = () => {
 
           {/* Payment Method */}
           <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-xl font-bold text-yellow-500 mb-4">
+            <h2 className="text-xl font-bold ff-font-bold text-primary mb-4">
               Select Payment Method
             </h2>
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
-                  billing.selectedPayment === "Razorpay"
-                    ? "border-yellow-400 bg-yellow-50"
-                    : "border-gray-200"
-                }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
+                  ? "border-primary bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
               >
-                <FaCreditCard className="text-yellow-400 text-2xl mx-auto mb-2" />
+                <FaCreditCard className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Razorpay
               </div>
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
-                  billing.selectedPayment === "Stripe"
-                    ? "border-yellow-400 bg-yellow-50"
-                    : "border-gray-200"
-                }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
+                  ? "border-primary bg-yellow-50"
+                  : "border-gray-200"
+                  }`}
               >
-                <FaWallet className="text-yellow-400 text-2xl mx-auto mb-2" />
+                <FaWallet className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Stripe
               </div>
             </div>
@@ -426,7 +423,7 @@ const CheckOut = () => {
 
         {/* Right: Summary */}
         <div className="bg-white rounded-2xl shadow-md p-6 h-fit">
-          <h2 className="text-xl font-bold text-yellow-500 mb-4">
+          <h2 className="text-xl font-bold ff-font-bold text-primary mb-4">
             Order Summary
           </h2>
           {plan &&
@@ -466,7 +463,7 @@ const CheckOut = () => {
                 ? handleStripePayment
                 : handleRazorpayPayment
             }
-            className="w-full bg-yellow-400 text-white font-semibold py-3 rounded-xl cursor-pointer hover:bg-yellow-500 transition-all duration-300 mt-2 shadow-md"
+            className="w-full bg-[#ffca00]  font-semibold py-3 rounded-xl cursor-pointer  transition-all duration-300 mt-2 shadow-md"
           >
             {billing.selectedPayment === "Stripe"
               ? "Proceed with Stripe"
