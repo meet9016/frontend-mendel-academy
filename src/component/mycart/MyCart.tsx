@@ -7,6 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { FiTrash2 } from "react-icons/fi";
 import { Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/navigation";
+import { getAuthId } from "@/utils/tokenManager";
 
 interface MyCartProps {
   cartData: any[]; // change to your actual type
@@ -21,7 +22,9 @@ const MyCart: React.FC<MyCartProps> = ({
   setIsCartOpen,
   MdRemoveShoppingCart,
 }) => {
-   const tempIdGet = sessionStorage.getItem("temp_id");
+  const tempIdGet = sessionStorage.getItem("temp_id");
+  const userId = getAuthId();
+  const finalId = userId ? userId : tempIdGet;
   const router = useRouter();
 
   return (
@@ -167,7 +170,10 @@ const MyCart: React.FC<MyCartProps> = ({
               pxClass="px-41"
               fontWeight={700}
               fontSize={15}
-              onClick={() => {router.push(`/checkout/${tempIdGet}`); setIsCartOpen(false)}}
+              onClick={() => {
+                router.push(`/checkout/${finalId}`);
+                setIsCartOpen(false);
+              }}
             >
               CheckoutNow
             </CommonButton>
@@ -193,4 +199,4 @@ const MyCart: React.FC<MyCartProps> = ({
   );
 };
 
-export default MyCart; 
+export default MyCart;

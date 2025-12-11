@@ -1,31 +1,29 @@
 export const saveToken = (token: string) => {
-  // const encrypted = encrypt(token)
-  localStorage.setItem('auth_token', token)
-}
+  if (typeof window === "undefined") return;
+  localStorage.setItem('auth_token', token);
+};
 
 export const getToken = (): string | null => {
-  const encrypted = localStorage.getItem('auth_token')
-
-  // return encrypted ? decrypt(encrypted) : null
-  return encrypted
-}
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem('auth_token');
+};
 
 export const clearToken = () => {
-  localStorage.removeItem('auth_token')
-}
+  if (typeof window === "undefined") return;
+  localStorage.removeItem('auth_token');
+};
 
-export const saveUserId = (token: string) => {
-  // const encrypted = encrypt(token)
-  localStorage.setItem('auth_id', token)
-}
+export const saveUserId = (id: string) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem('auth_id', id);
+};
 
 export const getAuthId = (): string | null => {
-  const encrypted = localStorage.getItem('auth_id')
-
-  // return encrypted ? decrypt(encrypted) : null
-  return encrypted
-}
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem('auth_id');
+};
 
 export const clearAuthId = () => {
-  localStorage.removeItem('auth_id')
-}
+  if (typeof window === "undefined") return;
+  localStorage.removeItem('auth_id');
+};

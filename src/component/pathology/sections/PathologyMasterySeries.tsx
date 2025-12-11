@@ -94,8 +94,6 @@ const usePrograms = () => {
 //   return tempId;
 // };
 
-
-
 const addToCart = async (item: Program) => {
   const userId = getAuthId(); // check login first
   const tempId = userId ? null : getTempId(); // only generate when no userId
@@ -111,11 +109,8 @@ const addToCart = async (item: Program) => {
   };
 
   const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
-  console.log("res*******", res);
 
-  if (res.data.success)
-    store.dispatch(setCartCount(res.data.count));
-    console.log("res", res.data.count);
+  if (res.data.success) store.dispatch(setCartCount(res.data.count));
   toast.success(res.data.message);
 };
 

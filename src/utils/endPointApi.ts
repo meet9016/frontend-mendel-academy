@@ -2,7 +2,8 @@ export interface EndPointApi {
     login: string;
     register: string;
     logout: string;
-
+    getProfile: string;
+    
     //Blogs
     getAllBlogs?: string;
     getBlogById?: string;
@@ -51,6 +52,7 @@ const endPointApi: EndPointApi = {
     login: 'auth/login',
     register: 'auth/register',
     logout: 'auth/logout',
+    getProfile: 'auth/profile',
 
     //Blogs
     getAllBlogs: 'blogs/getall',

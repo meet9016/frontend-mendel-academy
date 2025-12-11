@@ -19,6 +19,10 @@ import {
 } from "react-icons/fa";
 import { paySchema } from "@/validationSchema/validationSchema";
 import { MdOutlinePhone } from "react-icons/md";
+import { resetCartCount } from "@/redux/cartSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { getAuthId } from "@/utils/tokenManager";
 
 const StripeCheckoutForm = ({
   full_name,
@@ -105,9 +109,10 @@ const StripeCheckoutForm = ({
           type="submit"
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${loading || !stripe
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            ${
+              loading || !stripe
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 shadow-md"
             }`}
         >
           {loading ? (
@@ -147,11 +152,13 @@ interface PlanItem {
 
 export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 const CheckOut = () => {
+  const userId = getAuthId();
+
   const { id } = useParams();
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [plan, setPlan] = useState<any>(null);
-  console.log("plan", plan);
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const [billing, setBilling] = useState<BillingInformation>({
@@ -217,14 +224,20 @@ const CheckOut = () => {
   // Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
-    const isValid = validateForm();
-    if (!isValid) return;
+    console.log("*****111",userId);
+    
+    if (userId) {
+      console.log("*****222");
+      const isValid = validateForm();
+      if (!isValid) return;
+    }
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         full_name: billing.fullName,
         email: billing.email,
         phone: billing.phone,
-        plan_id: id,
+        user_id: id,
+        // plan_id: id,
         amount: plan?.totalAmount,
         payment_method: "Razorpay",
       });
@@ -255,6 +268,7 @@ const CheckOut = () => {
             razorpay_signature: response.razorpay_signature,
             amount: data.amount / 100,
             plan_id: id,
+            user_id: id,
             status: "captured",
           };
           const verifyRes = await api.post(
@@ -268,6 +282,7 @@ const CheckOut = () => {
               JSON.stringify(verifyRes.data.payment)
             );
             router.push("/paymentsuccess");
+            dispatch(resetCartCount());
           }
         },
       };
@@ -384,10 +399,11 @@ const CheckOut = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
-                  ? "border-primary bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Razorpay"
+                    ? "border-primary bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaCreditCard className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Razorpay
@@ -395,10 +411,11 @@ const CheckOut = () => {
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
-                  ? "border-primary bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Stripe"
+                    ? "border-primary bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaWallet className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Stripe

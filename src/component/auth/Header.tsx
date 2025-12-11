@@ -11,7 +11,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { FaUser } from "react-icons/fa";
 import { FaRightFromBracket } from "react-icons/fa6";
 import MyCart from "../mycart/MyCart";
-import { clearToken, getAuthId } from "@/utils/tokenManager";
+import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { decrementCartCount, resetCartCount, setCartCount } from "@/redux/cartSlice";
@@ -112,8 +112,6 @@ export default function Header() {
         `${endPointApi.cartCount}/${tempIdGet || userId}`
       );
       if (res.data) {
-        console.log("res.data.count", res.data.count);
-
         dispatch(setCartCount(res.data.count));
       }
     } catch (error) {
@@ -128,6 +126,7 @@ export default function Header() {
 
   const handleLogout = () => {
     clearToken();
+    clearAuthId();
     setIsProfileOpen(false);
     dispatch(resetCartCount())
     router.push("/auth/login");
