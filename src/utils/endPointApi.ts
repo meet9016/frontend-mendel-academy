@@ -19,6 +19,7 @@ export interface EndPointApi {
     //medical exam
     getAppMedicalExam?: string;
     getMedicalById?: string;
+    getAllMedical?: string;
 
     //my cart
     getCart?: string;
@@ -71,6 +72,7 @@ const endPointApi: EndPointApi = {
     //medical exam
     getAppMedicalExam: 'examlist/exam-category-list',
     getMedicalById: 'examlist/getById',
+    getAllMedical: 'examlist/getall',
 
     //my cart
     getCart: 'cart/get',

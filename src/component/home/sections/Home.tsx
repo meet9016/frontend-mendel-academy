@@ -1,84 +1,77 @@
 "use client";
-import {
-  FiSearch,
-  FiFileText,
-  FiChevronLeft,
-  FiChevronRight,
-  FiStar,
-  FiUsers,
-} from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useEffect, useState } from "react";
 import CommonButton from "@/comman/Button";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRouter } from "next/navigation";
 
 /* ----------  TYPES  ---------- */
-export interface QBank {
+export interface Exam {
   _id: string;
   title: string;
   tag: string;
   rating: number;
   total_reviews: number;
   features: string[];
-  sort_description: string;
+  exam_name: string;
 }
 
 /* ----------  HOOK  (keeps your exact fetch)  ---------- */
-const useQBank = () => {
-  const [questionBank, setQuestionBank] = useState<QBank[]>([]);
+const useExam = () => {
+  const [examBank, setExamBank] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getQuestionBank = async () => {
+    const fetchExams = async () => {
       try {
         setLoading(true);
-        const res = await api.get(`${endPointApi.getAllQuestion}`);
-        if (res.data) setQuestionBank(res.data.data);
-        else console.log("DATA FAILED");
+        const res = await api.get(`${endPointApi.getAppMedicalExam}`);
+        if (res.data.data) {
+          const allExams = res.data.data.flatMap((cat: any) =>
+            cat.exams.map((exam: any) => ({
+              ...exam, // existing exam data
+              category_name: cat.category_name, // add category name
+              category_id: cat.id || cat._id, // add outer category id
+            }))
+          );
+
+          setExamBank(allExams);
+        }
       } catch (error) {
-        console.log("ERROR", error);
+        console.error("Error fetching exam data:", error);
       } finally {
-        setTimeout(() => setLoading(false), 100);
+        setLoading(false);
       }
     };
-    getQuestionBank();
+    fetchExams();
   }, []);
 
-  return { questionBank, loading };
-};
-
-/* ----------  SCROLL  (your original logic)  ---------- */
-const scroll = (direction: "left" | "right") => {
-  const container = document.getElementById("course-scroll-container");
-  if (!container) return;
-  const scrollAmount = 360;
-  container.scrollTo({
-    left: container.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount),
-    behavior: "smooth",
-  });
+  return { examBank, loading };
 };
 
 /* ----------  MAIN PAGE  ---------- */
 export default function Home() {
-  const { questionBank, loading } = useQBank();
   const router = useRouter();
+  const { examBank, loading } = useExam();
+  console.log("examBank*****", examBank);
 
   return (
     <>
       {/* ----------------  HERO  ---------------- */}
       <main className="flex justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center py-10">
         <div className="flex flex-col items-center space-y-7 max-w-[1380px] max-auto">
-
           {/* <p className="text-sm md:text-base ff-font-bold border-primary px-4 py-2 rounded-full shadow-md inline-block">
             Trusted by 10,000+ Medical Students
           </p> */}
 
           <h1 className="ff-font-bold -mt-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">
             We simplify learning, <br />
-            <span className="bg-[#FFCA00] px-2 py-1 rounded-lg">amplify</span> success
+            <span className="bg-[#FFCA00] px-2 py-1 rounded-lg">
+              amplify
+            </span>{" "}
+            success
           </h1>
 
           <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
@@ -86,7 +79,10 @@ export default function Home() {
           </p>
 
           <div className="w-full max-w-xl relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <FiSearch
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <input
               type="text"
               placeholder="What do you want to learn today?"
@@ -94,25 +90,16 @@ export default function Home() {
             />
           </div>
 
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-2 w-full max-w-3xl">
             {/* PG Entrance Exam Prep Box */}
             <div className="bg-white border-gray-300 border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
-              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">PG Entrance Exam Prep</h3>
+              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">
+                PG Entrance Exam Prep
+              </h3>
               <ul className="space-y-2 ff-font text-center text-black">
-                {[
-                  "USMLE - 1, 2 & 3",
-                  "NEET-PG",
-                  "INI-CET",
-                  "FMGE",
-                  "AMC",
-                  "UKMLE (PLAB)",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="relative pl-4 group cursor-pointer"
-                  >
-                    {item}
+                {examBank?.map((item, idx) => (
+                  <li key={idx} className="relative pl-4 group cursor-pointer" onClick={() => router.push(`/medicalexam/${item?.exam_id}`)}>
+                    {item?.exam_name}
                   </li>
                 ))}
               </ul>
@@ -125,6 +112,7 @@ export default function Home() {
                   className="transition shadow-md w-fit !rounded-full"
                   fontWeight={700}
                   fontSize={15}
+                  onClick={() => router.push(`/medicalexam`)}
                 >
                   Learn more
                 </CommonButton>
@@ -133,7 +121,9 @@ export default function Home() {
 
             {/* Advanced Pathology Box */}
             <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
-              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">Advanced Pathology</h3>
+              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">
+                Advanced Pathology
+              </h3>
               <ul className="space-y-2 ff-font text-center text-black">
                 {[
                   "Pathology Residents",
@@ -141,10 +131,7 @@ export default function Home() {
                   "DNBs",
                   "Fellows",
                 ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="relative pl-4 group cursor-pointer"
-                  >
+                  <li key={idx} className="relative pl-4 group cursor-pointer">
                     {item}
                   </li>
                 ))}
@@ -158,7 +145,7 @@ export default function Home() {
                   className="transition shadow-md w-fit !rounded-full"
                   fontWeight={700}
                   fontSize={15}
-                  onClick={() => router.push("/studentTestimonials")}
+                  onClick={() => router.push("/pathology")}
                 >
                   Learn more
                 </CommonButton>
@@ -167,7 +154,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
 
       {/* ----------------  QBANK SECTION  ---------------- */}
       {/* <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
@@ -203,7 +189,7 @@ export default function Home() {
                   id="course-scroll-container"
                   className="flex gap-6 overflow-x-auto  scrollbar-hide snap-x snap-mandatory scroll-smooth px-4"
                 >
-                  {questionBank.map((course, index) => (
+                  {examBank.map((course, index) => (
                     <CourseCard key={index} {...course} />
                   ))}
                 </div>
@@ -226,59 +212,3 @@ export default function Home() {
     </>
   );
 }
-
-/* ----------  COURSE CARD  (your original JSX)  ---------- */
-const CourseCard = (course: QBank) => {
-  const router = useRouter();
-  const { title, tag, rating, total_reviews, features, sort_description } = course;
-
-  return (
-    <div className="group flex-shrink-0 w-[300px] cursor-pointer bg-white border-2 border-gray-200 rounded-3xl p-6 transition-all duration-500 flex flex-col relative overflow-hidden">
-      {tag && (
-        <div className="absolute top-0 right-0 bg-[#FFCA00] ff-font text-xs font-semibold px-6 py-1 rounded-bl-2xl shadow-md">
-          {tag}
-        </div>
-      )}
-
-      <div className="relative z-10">
-        <div className="flex items-start gap-3 ">
-          <div className="w-15 h-15 bg-white border-primary text-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-            <FiFileText className="w-7 h-7" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-bold ff-font-bold group-hover:text-primary transition-colors duration-300 leading-snug min-h-[1rem] line-clamp-1">
-              {title}
-            </h3>
-            <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-1.5 rounded-md">
-                <FiStar className="text-primary" />
-                <span className="text-sm ff-font font-bold">{rating}</span>
-              </div>
-              <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
-                <FiUsers />
-                <span className="text-sm ff-font font-medium">{total_reviews}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-3">
-          {features.slice(0, 3).map((f, idx) => (
-            <span key={idx} className="text-xs px-3 py-1.5 bg-[#f3f6fa] rounded-full whitespace-nowrap">
-              {f}
-            </span>
-          ))}
-        </div>
-
-        <p className="text-sm ff-font line-clamp-2 mb-6 flex-grow leading-relaxed min-h-[3.2rem]">
-          {sort_description}
-        </p>
-
-        <CommonButton pyClass="py-3" pxClass="px-21.5" fontWeight={700} fontSize={14}>
-          Enroll Now
-        </CommonButton>
-        <p className="text-xs ff-font text-center mt-3 font-sm">Instant access • Secure checkout</p>
-      </div>
-    </div>
-  );
-};

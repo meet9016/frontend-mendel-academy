@@ -163,7 +163,7 @@ const PathologyMasterySeries = () => {
           <ProgramSkeleton />
         ) : (
           // <RecordedGrid programs={programs} onCart={addToCart} learnMore={() => router.push("/recordedprograms")} />
-          <RecordedGrid programs={programs} onCart={addToCart} />
+          <RecordedGrid programs={programs} onCart={addToCart} router={router}/>
         )}
       </Section>
 
@@ -464,11 +464,15 @@ const FeaturedLive = ({
 const RecordedGrid = ({
   programs,
   onCart,
+  router,
 }: {
   programs: Program[];
   onCart: (p: Program) => void;
+  router: any;
 }) => (
   <>
+  {console.log("programs***-----",programs)}
+  
     {/* Course Cards */}
     <div className="relative mb-10">
       {/* Left Arrow */}
@@ -492,7 +496,8 @@ const RecordedGrid = ({
         {programs.map((p, i) => (
           <div
             key={p.id || i}
-            className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500"
+            className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
+            onClick={() => router.push(`/pathology/${p?.id}`)}
           >
             {/* Glow Border on Hover */}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />

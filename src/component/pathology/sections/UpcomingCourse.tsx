@@ -77,7 +77,7 @@ const UpcomingCourse = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 ">
           {courseData?.map((course: Course, index: number) => (
             <div
-              key={course.id}
+              key={course?.id}
               className="group relative animate-fade-in-up flex flex-col h-full "
               style={{ animationDelay: `${index * 0.2}s` }}
             >
@@ -326,84 +326,6 @@ const UpcomingCourse = () => {
               <div className="absolute -top-6 -left-6 w-16 h-16 bg-[#ffca00]/10 rounded-full group-hover:scale-125 transition-all duration-700" />
             </div>
           ))}
-        </div>
-
-        {/* Newsletter Section */}
-        <div
-          className="relative animate-fade-in-up max-w-5xl mx-auto"
-          style={{ animationDelay: "0.8s" }}
-        >
-          <div className="relative bg-white border-primary rounded-3xl p-1 shadow-2xl ">
-            <div className="bg-card rounded-3xl p-8 md:p-12">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                {/* Left Content */}
-                <div className="space-y-6">
-                  <div className="inline-flex p-4 border-primary rounded-2xl">
-                    <div className="relative">
-                      <FaBell className="w-8 h-8 text-primary animate-pulse" />
-                      <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FACC00] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FACC00]"></span>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-3xl md:text-4xl ff-font-bold font-bold text-foreground">
-                      Never Miss a <span className="">Course Launch</span>
-                    </h3>
-                    <p className="ff-font leading-relaxed">
-                      Get the latest updates on our upcoming courses, early
-                      bird pricing, and exclusive content from our expert
-                      instructors.
-                    </p>
-                  </div>
-
-                  {/* Trust Badge */}
-                  <div className="flex items-center gap-3 pt-4">
-                    {/* <div className="flex -space-x-2">
-                                                {[1, 2, 3, 4].map((i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="w-10 h-10 rounded-full bg-[#FACC00] border-2 border-card flex items-center justify-center text-white font-bold text-sm"
-                                                    >
-                                                        {i}
-                                                    </div>
-                                                ))}
-                                            </div> */}
-                    <div className="text-sm ff-font-bold">
-                      Join{" "}
-                      <span className=" text-foreground">
-                        10,000+ medical professionals
-                      </span>{" "}
-                      •{" "}
-                      <span className="ff-font font-semibold">
-                        Unsubscribe anytime
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right CTA */}
-                <div className="space-y-4 ml-45">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    {/* <button className="bg-gradient-to-r from-[#ffca00] to-[#f0b100] hover:from-[#f0b100] hover:to-[#e0a100] text-white font-bold px-10 py-5 rounded-full flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl">
-                                                <FaEnvelope />
-                                                Subscribe to Newsletter
-                                            </button> */}
-                    <CommonButton
-                      pyClass="py-3"
-                      pxClass="px-8"
-                      fontWeight={700}
-                      fontSize={16}
-                    >
-                      Subscribe to Newsletter
-                    </CommonButton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>

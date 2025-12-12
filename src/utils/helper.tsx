@@ -39,3 +39,9 @@ export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(new Date(iso));
 
 export const copyToClip = (text: string) => navigator.clipboard.writeText(text);
+
+// Word Limit Function
+export const limitChars = (text: string, limit: number) => {
+  if (!text) return "";
+  return text.length > limit ? text.substring(0, limit) + "..." : text;
+};
