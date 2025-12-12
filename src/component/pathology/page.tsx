@@ -6,10 +6,13 @@ import UpcomingCourse from "./sections/UpcomingCourse";
 import MendelStudent from "./sections/MendelStudent";
 import MeetYourMentor from "./sections/MeetYourMentor";
 import AdvancedPathology from "./sections/AdvancedPathology";
+import HyperspecialistSection from "./sections/HyperspecialistSection";
 
 function Pathology() {
   return (
     <div>
+      <HyperspecialistSection/>
+
       <PathologyMasterySeries />
 
       <AdvancedPathology />

@@ -224,20 +224,16 @@ const CheckOut = () => {
   // Razorpay Handler
   // =============================
   const handleRazorpayPayment = async () => {
-    console.log("*****111",userId);
-    
-    if (userId) {
-      console.log("*****222");
+    if (!userId) {
       const isValid = validateForm();
       if (!isValid) return;
     }
     try {
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
+        ...(userId ? { user_id: id } : { guest_id: id }),
         full_name: billing.fullName,
         email: billing.email,
         phone: billing.phone,
-        user_id: id,
-        // plan_id: id,
         amount: plan?.totalAmount,
         payment_method: "Razorpay",
       });
@@ -268,7 +264,8 @@ const CheckOut = () => {
             razorpay_signature: response.razorpay_signature,
             amount: data.amount / 100,
             plan_id: id,
-            user_id: id,
+            // user_id: id,
+            ...(userId ? { user_id: id } : { guest_id: id }),
             status: "captured",
           };
           const verifyRes = await api.post(
