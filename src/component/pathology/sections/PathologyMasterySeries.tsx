@@ -583,7 +583,8 @@ const RecordedGrid = ({
                     fontSize={14}
                     onClick={() => onCart(p)}
                   >
-                    Add to cart
+                    {/* Add to cart */}
+                    Enroll Now
                   </CommonButton>
                 </div>
               </div>
