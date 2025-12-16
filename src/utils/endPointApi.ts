@@ -13,6 +13,7 @@ export interface EndPointApi {
 
     //Pre-Recorded
     getAllPreRecorded?: string;
+    getPreRecordedById?: string;
     postPaymentCreate?: string;
     postPaymentVerify?: string;
 
@@ -64,6 +65,7 @@ const endPointApi: EndPointApi = {
 
     //Pre-Recorded
     getAllPreRecorded: 'prerecorded/getall',
+    getPreRecordedById: 'prerecorded/getById',
 
     //Add to cart
     postPaymentCreate: 'payment/create',

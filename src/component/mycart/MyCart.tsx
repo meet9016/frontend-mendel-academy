@@ -1,31 +1,99 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import CommonButton from "@/comman/Button";
 import { BiShoppingBag } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
-import { FiTrash2 } from "react-icons/fi";
-import { Dispatch, SetStateAction } from "react";
+import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { getAuthId } from "@/utils/tokenManager";
 
-interface MyCartProps {
-  cartData: any[]; // change to your actual type
-  cartTotalAmount: number;
-  setIsCartOpen: Dispatch<SetStateAction<boolean>>;
-  MdRemoveShoppingCart: (cartId: string) => Promise<void>;
-}
+// ✅ Helper function to get icon for option type
+const getOptionIcon = (type) => {
+  switch (type) {
+    case "record-book":
+      return <FiBook className="w-3 h-3" />;
+    case "video":
+      return <FiVideo className="w-3 h-3" />;
+    case "writing-book":
+      return <FiEdit3 className="w-3 h-3" />;
+    default:
+      return <FiBook className="w-3 h-3" />;
+  }
+};
 
-const MyCart: React.FC<MyCartProps> = ({
+// ✅ Helper function to get title for option type
+const getOptionTitle = (type) => {
+  switch (type) {
+    case "record-book":
+      return "Record Book";
+    case "video":
+      return "Video Course";
+    case "writing-book":
+      return "Writing Book";
+    default:
+      return type;
+  }
+};
+
+// ✅ Smart URL Generator based on product type
+const getProductUrl = (item) => {
+  // Priority 1: Use stored redirect_url if available
+  if (item.redirect_url) {
+    return item.redirect_url;
+  }
+
+  // Priority 2: Construct URL based on category/type
+  const productId = item.product_id?._id || item.product_id;
+
+  if (!productId) {
+    console.warn("No product ID available for cart item:", item);
+    return null;
+  }
+
+  // Match category to URL pattern
+  const category = item.category_name?.toLowerCase() || "";
+
+  if (category.includes("pathology")) {
+    return `/pathology/${productId}`;
+  } else if (category.includes("medical") || category.includes("exam")) {
+    // For medical exams, you might need exam_id too
+    const examId = item.exam_id || "default-exam";
+    return `/medicalexam/${examId}/course/${productId}`;
+  } else if (item.product_type === "course") {
+    return `/course/${productId}`;
+  }
+
+  // Fallback: generic product page
+  return `/product/${productId}`;
+};
+
+const MyCart = ({
   cartData,
   cartTotalAmount,
   setIsCartOpen,
   MdRemoveShoppingCart,
+  removeCartOption,
 }) => {
-  const tempIdGet = sessionStorage.getItem("temp_id");
-  const userId = getAuthId();
-  const finalId = userId ? userId : tempIdGet;
   const router = useRouter();
+
+  // ✅ Handle cart item click
+  const handleCartItemClick = (item, e) => {
+    // Prevent navigation if clicking on delete button or option pills
+    if (
+      e.target.closest('[data-action="delete"]') ||
+      e.target.closest('[data-action="remove-option"]')
+    ) {
+      return;
+    }
+
+    const url = getProductUrl(item);
+
+    if (url) {
+      setIsCartOpen(false); // Close cart
+      router.push(url); // Navigate to product
+    } else {
+      console.error("Could not determine URL for item:", item);
+    }
+  };
 
   return (
     <>
@@ -63,21 +131,14 @@ const MyCart: React.FC<MyCartProps> = ({
           <div className="relative flex items-center justify-between p-6 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="bg-white  border-primary p-3 rounded-xl shadow-lg">
+                <div className="bg-white border-primary p-3 rounded-xl shadow-lg">
                   <BiShoppingBag className="w-6 h-6 text-primary" />
                 </div>
-                {/* <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold ff-font-bold text-white">
-                    5
-                  </span>
-                </div> */}
               </div>
               <div>
-                <h2 className="text-2xl font-bold ff-font-bold flex items-center gap-2">
-                  My Cart
-                </h2>
-                <p className="text-sm ff-font">
-                  {/* {cartItems.length} courses selected */}
+                <h2 className="text-2xl font-bold">My Cart</h2>
+                <p className="text-sm">
+                  {cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'course' : 'courses'} selected`}
                 </p>
               </div>
             </div>
@@ -85,114 +146,145 @@ const MyCart: React.FC<MyCartProps> = ({
               onClick={() => setIsCartOpen(false)}
               className="p-2 hover:bg-yellow-50 rounded-xl cursor-pointer transition-all duration-200 hover:scale-110"
             >
-              <AiOutlineClose className="w-6 h-6 ff-font-bold" />
+              <AiOutlineClose className="w-6 h-6" />
             </button>
           </div>
 
           {/* Animated Cart Items */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {cartData.map((item) => (
-              <div className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                {/* Delete Icon */}
-                <button
-                  onClick={() => MdRemoveShoppingCart(item._id)}
-                  className="absolute top-2 right-2 p-1.5 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200"
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {cartData.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                <BiShoppingBag className="w-16 h-16 mb-4" />
+                <p className="text-lg font-medium">Your cart is empty</p>
+              </div>
+            ) : (
+              cartData.map((item) => (
+                <div
+                  key={item._id}
+                  className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-yellow-400 transition-all duration-300"
                 >
-                  <FiTrash2 className="w-4 h-4" />
-                </button>
+                  {/* Clickable Content Area */}
+                  <div
+                    onClick={(e) => handleCartItemClick(item, e)}
+                    className="cursor-pointer p-4"
+                  >
+                    {/* Header Row: Title + Price + Delete */}
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      {/* Title */}
+                      <h3 className="font-semibold text-base leading-tight flex-1 line-clamp-2 group-hover:text-yellow-600 transition-colors">
+                        {item.product_id?.title || item.category_name}
+                      </h3>
 
-                <div className="flex gap-3 p-3 items-center justify-between bg-white rounded-xl ">
-                  <div className="flex flex-col flex-1">
-                    {/* Name */}
-                    <h3 className="font-semibold ff-font-bold mb-1 line-clamp-2">
-                      {/* {item.title} */}
-                      {item.category_name}
-                    </h3>
+                      {/* Price (Always Visible) */}
+                      <div className="text-lg font-bold text-primary whitespace-nowrap">
+                        ₹{item.total_price || item.price}
+                      </div>
 
-                    {/* Duration */}
-                    <p className="text-xs text-black bg-white ff-font border border-primary px-2 py-0.5 rounded-full w-fit font-medium mb-1">
-                      Duration: {item.duration} Days
-                    </p>
+                      {/* Delete Button (Separate, doesn't overlap) */}
+                      <button
+                        data-action="delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          MdRemoveShoppingCart(item._id);
+                        }}
+                        className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
+                        title="Remove from cart"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+                    </div>
 
-                    {/* Quantity */}
-                    <p className="text-xs ff-font-bold font-medium">
-                      Quantity: {item.quantity}
-                    </p>
+                    {/* Duration Badge */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs text-black bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
+                        Duration: {item.duration} Months
+                      </span>
+                      <span className="text-xs font-medium text-gray-600">
+                        Qty: {item.quantity}
+                      </span>
+                    </div>
+
+                    {/* Selected Bundle Options */}
+                    {item.selected_options && item.selected_options.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.selected_options.map((optionType) => (
+                          <div
+                            key={optionType}
+                            className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
+                          >
+                            {getOptionIcon(optionType)}
+                            <span className="font-medium">
+                              {getOptionTitle(optionType)}
+                            </span>
+
+                            {/* Remove individual option */}
+                            {item.selected_options.length > 1 && removeCartOption && (
+                              <button
+                                data-action="remove-option"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeCartOption(item._id, optionType);
+                                }}
+                                className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
+                                title={`Remove ${getOptionTitle(optionType)}`}
+                              >
+                                <FiX className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Price */}
-                  <div className="text-lg font-bold ff-font-bold text-primary">
-                    ₹{item.price}
+                  {/* Hover Indicator */}
+                  <div className="absolute bottom-2 right-3 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Click to view →
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Footer */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 30 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="border-t border-gray-200 p-6 bg-white space-y-4"
-          >
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 ff-font-bold font-medium">
-                Subtotal
-              </span>
-              <span className="font-bold ff-font-bold text-lg">
-                ₹{cartTotalAmount}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-500 ff-font-bold font-medium">
-                Discount
-              </span>
-              <span className="font-bold ff-font-bold text-green-600 text-lg">
-                ₹0.00
-              </span>
-            </div>
-            {/* <div className="flex justify-between items-center bg-white rounded-xl p-4 border-2 border-primary">
-                    <div>
-                      <p className="text-xs text-gray-500 ff-font-bold font-medium">Total Amount</p>
-                      <span className="text-3xl font-bold text-primary ff-font-bold">
-                        ₹{cartTotalAmount}
-                      </span>
-                    </div>
-                    <GiSparkles className="w-8 h-8 text-yellow-400 animate-pulse" />
-                  </div> */}
-            {/* <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-[1.03] hover:shadow-md transition-all">
-                    Checkout Now
-                  </button> */}
-            <CommonButton
-              pyClass="py-3"
-              pxClass="px-41"
-              fontWeight={700}
-              fontSize={15}
-              onClick={() => {
-                router.push(`/checkout/${finalId}`);
-                setIsCartOpen(false);
-              }}
+          {cartData.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="border-t border-gray-200 p-6 bg-white space-y-4"
             >
-              CheckoutNow
-            </CommonButton>
-            {/* <button
-                    className="w-full border border-primary ff-font-bold rounded-xl py-4 font-semibold"
-                    onClick={() => setIsCartOpen(false)}
-                  >
-                    Continue Shopping
-                  </button> */}
-            <CommonButton
-              pyClass="py-3"
-              pxClass="px-46"
-              fontWeight={700}
-              fontSize={15}
-              onClick={() => setIsCartOpen(false)}
-            >
-              Continue
-            </CommonButton>
-          </motion.div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Subtotal</span>
+                <span className="font-bold text-lg">₹{cartTotalAmount}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Discount</span>
+                <span className="font-bold text-green-600 text-lg">₹0.00</span>
+              </div>
+
+              <button
+                onClick={() => {
+                  const tempIdGet = sessionStorage.getItem("temp_id");
+                  const userId = localStorage.getItem("user_id");
+                  const finalId = userId || tempIdGet;
+                  router.push(`/checkout/${finalId}`);
+                  setIsCartOpen(false);
+                }}
+                className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 rounded-lg font-bold text-black transition-colors"
+              >
+                Checkout Now
+              </button>
+
+              <button
+                onClick={() => setIsCartOpen(false)}
+                className="w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 transition-colors"
+              >
+                Continue Shopping
+              </button>
+            </motion.div>
+          )}
         </motion.div>
       </motion.div>
     </>

@@ -15,6 +15,7 @@ import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { decrementCartCount, resetCartCount, setCartCount } from "@/redux/cartSlice";
+
 type Exam = {
   exam_name: string;
   link: string;
@@ -35,26 +36,13 @@ type CartItem = {
 };
 
 export default function Header() {
-  // const tempIdGet = sessionStorage.getItem("temp_id");
-  // let tempIdGet: string | null = null;
-
-  // if (typeof window !== "undefined") {
-  //   tempIdGet = sessionStorage.getItem("temp_id");
-  // }
   const userId = getAuthId();
   const dispatch = useDispatch<AppDispatch>();
-  const { count, error } = useSelector(
-    (state: RootState) => state.cart
-  );
+  const { count, error } = useSelector((state: RootState) => state.cart);
 
+  // ✅ FIX 1: State management for IDs
   const [tempIdGet, setTempIdGet] = useState<string | null>(null);
-
-  useEffect(() => {
-    const storedId = sessionStorage.getItem("temp_id");
-    if (storedId) {
-      setTempIdGet(storedId);
-    }
-  });
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const authToken =
     typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
@@ -67,10 +55,21 @@ export default function Header() {
   const [cartData, setCartData] = useState<CartItem[]>([]);
   const [cartTotalAmount, setCartTotalAmount] = useState<number>(0);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+  const [isCartLoading, setIsCartLoading] = useState<boolean>(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
+  // ✅ FIX 2: Initialize tempIdGet ONCE on mount
+  useEffect(() => {
+    const storedId = sessionStorage.getItem("temp_id");
+    if (storedId) {
+      setTempIdGet(storedId);
+    }
+    setIsInitialized(true);
+  }, []); // Empty dependency array - runs only once
+
+  // ✅ FIX 3: Fetch exams once on mount
   useEffect(() => {
     const fetchExams = async () => {
       try {
@@ -88,47 +87,39 @@ export default function Header() {
     fetchExams();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchExams = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const res = await api.get(`${endPointApi.getAppMedicalExam}`);
-  //       if (res.data.data) {
-  //         setExamCategories(res.data.data || []);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching exam data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchExams();
-  // }, []);
-
-
+  // ✅ FIX 4: Get cart count with proper ID handling
   const getCountCartItems = async () => {
     try {
-      const res = await api.get(
-        `${endPointApi.cartCount}/${tempIdGet || userId}`
-      );
+      const finalId = userId || tempIdGet;
+
+      if (!finalId) {
+        console.log("No ID available yet, skipping cart count fetch");
+        return;
+      }
+
+      const res = await api.get(`${endPointApi.cartCount}/${finalId}`);
+
       if (res.data) {
         dispatch(setCartCount(res.data.count));
       }
     } catch (error) {
-      console.error("Error fetching cart data:", error);
+      console.error("Error fetching cart count:", error);
+      dispatch(setCartCount(0));
     }
   };
 
-  // Load cart count on mount
+  // ✅ FIX 5: Load cart count only when ID is available
   useEffect(() => {
-    getCountCartItems();
-  }, []);
+    if (isInitialized && (userId || tempIdGet)) {
+      getCountCartItems();
+    }
+  }, [isInitialized, userId, tempIdGet]);
 
   const handleLogout = () => {
     clearToken();
     clearAuthId();
     setIsProfileOpen(false);
-    dispatch(resetCartCount())
+    dispatch(resetCartCount());
     router.push("/auth/login");
   };
 
@@ -154,19 +145,34 @@ export default function Header() {
   const isExamActive = pathname.startsWith("/medicalexam");
 
   const handleCartOpen = async () => {
-    setIsCartOpen(true);
+    // ✅ Prevent multiple clicks
+    if (isCartLoading) return;
 
     try {
-      const res = await api.get(
-        `${endPointApi.getCart}?temp_id=${tempIdGet || userId}`
-      );
+      setIsCartLoading(true);
+      const finalId = userId || tempIdGet;
+
+      if (!finalId) {
+        console.error("No ID available for cart fetch");
+        return;
+      }
+
+      // ✅ Fetch cart data FIRST
+      const res = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
 
       if (res.data) {
         setCartData(res.data.cart);
         setCartTotalAmount(res.data.total || 0);
       }
+
+      // ✅ THEN open the cart (smooth animation with data ready)
+      setIsCartOpen(true);
     } catch (error) {
       console.error("Error fetching cart data:", error);
+      // Still open cart even if fetch fails (show empty state)
+      setIsCartOpen(true);
+    } finally {
+      setIsCartLoading(false);
     }
   };
 
@@ -174,13 +180,48 @@ export default function Header() {
     try {
       const res = await api.delete(`${endPointApi.removeCart}/${cartId}`);
       if (res.data) {
-        // Refresh cart data after removal
         dispatch(decrementCartCount(1));
-        handleCartOpen();
 
+        // ✅ Just refresh cart data without closing/reopening
+        const finalId = userId || tempIdGet;
+        if (finalId) {
+          const cartRes = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
+          if (cartRes.data) {
+            setCartData(cartRes.data.cart);
+            setCartTotalAmount(cartRes.data.total || 0);
+          }
+        }
       }
     } catch (error) {
       console.error("Error removing cart item:", error);
+    }
+  };
+
+  // ✅ FIX 6: Add removeCartOption function
+  const removeCartOption = async (cartId: string, optionType: string) => {
+    try {
+      const res = await api.delete(`${endPointApi.removeCartOption}`, {
+        data: { cart_id: cartId, option_type: optionType }
+      });
+
+      if (res.data) {
+        // If last option was removed (cart item deleted), decrement count
+        if (res.data.data === null) {
+          dispatch(decrementCartCount(1));
+        }
+
+        // ✅ Just refresh cart data without closing/reopening
+        const finalId = userId || tempIdGet;
+        if (finalId) {
+          const cartRes = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
+          if (cartRes.data) {
+            setCartData(cartRes.data.cart);
+            setCartTotalAmount(cartRes.data.total || 0);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error removing cart option:", error);
     }
   };
 
@@ -188,14 +229,13 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-8xl mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/*  Logo */}
+          {/* Logo */}
           <div
             onClick={() => router.push("/")}
             className="flex items-center gap-2 cursor-pointer"
           >
             <img
               src={"../../../images/main logo.png"}
-              // src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
               alt="Mendel Academy Logo"
               className="w-40 h-40 object-contain"
             />
@@ -206,30 +246,31 @@ export default function Header() {
             <button
               onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-  ${pathname === "/" ? "" : "hover:text-[#FFCA00]"}
-`}
+                ${pathname === "/" ? "" : "hover:text-[#FFCA00]"}
+              `}
             >
               Home
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${pathname === "/" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
+                  ${pathname === "/" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
               ></span>
             </button>
+
             {/* ✅ Dropdown Menu */}
             <div className="relative">
               <button
                 id="exam-button"
                 onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
-    ${isExamActive ? "" : "hover:text-[#FFCA00]"}
-  `}
+                  ${isExamActive ? "" : "hover:text-[#FFCA00]"}
+                `}
               >
                 PG Medical Entrance Exams
                 <span
                   className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-    ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
-  `}
+                    ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
+                  `}
                 ></span>
               </button>
 
@@ -250,7 +291,6 @@ export default function Header() {
                             <li key={exam?._id}>
                               <button
                                 className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md cursor-pointer transition-all"
-                                // onClick={() => router.push("/medicalexam")}
                                 onClick={() => {
                                   router.push(`/medicalexam/${exam?.exam_id}`);
                                   setIsExamDropdownOpen(false);
@@ -269,7 +309,7 @@ export default function Header() {
                       onClick={() => {
                         setIsExamDropdownOpen(false);
                       }}
-                      className=" font-medium text-sm hover:underline"
+                      className="font-medium text-sm hover:underline"
                     >
                       View All Exam Services →
                     </button>
@@ -277,59 +317,60 @@ export default function Header() {
                 </div>
               )}
             </div>
+
             <button
               onClick={() => router.push("/pathology")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/pathology" ? "" : "hover:text-[#FFCA00]"}
-    `}
+                ${pathname === "/pathology" ? "" : "hover:text-[#FFCA00]"}
+              `}
             >
               Advanced Pathology Prep
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
+                  ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
               ></span>
             </button>
+
             <button
               onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/aboutUs" ? "" : "hover:text-[#FFCA00]"}
-    `}
+                ${pathname === "/aboutUs" ? "" : "hover:text-[#FFCA00]"}
+              `}
             >
               About Us
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
+                  ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
               ></span>
             </button>
+
             <button
               onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/blog" ? "" : "hover:text-[#FFCA00]"}
-    `}
+                ${pathname === "/blog" ? "" : "hover:text-[#FFCA00]"}
+              `}
             >
               Blog
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
-      `}
+                  ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
               ></span>
             </button>
+
             <button
               onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-      ${pathname === "/studentTestimonials" ? "" : "hover:text-[#FFCA00]"}
-    `}
+                ${pathname === "/studentTestimonials" ? "" : "hover:text-[#FFCA00]"}
+              `}
             >
               Student Testimonials
               <span
                 className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-        ${pathname === "/studentTestimonials"
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
-                  }
-      `}
+                  ${pathname === "/studentTestimonials" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
               ></span>
             </button>
           </nav>
@@ -337,18 +378,16 @@ export default function Header() {
           {/* ✅ Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             <button
-              // onClick={handleCartOpen}
               onClick={() => {
                 if (count > 0) {
                   handleCartOpen();
-                } else {
-                  console.log("Cart is empty, popup not opened");
                 }
               }}
-              className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200"
+              disabled={isCartLoading}
+              className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {/* Cart Icon */}
-              <FiShoppingCart className="w-5 h-5" />
+              <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
 
               {/* Count Badge */}
               <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
@@ -357,12 +396,6 @@ export default function Header() {
             </button>
 
             {authToken ? (
-              // <button
-              //   onClick={() => handleLogout()}
-              //   className="px-4 py-2 cursor-pointer rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600"
-              // >
-              //   Logout
-              // </button>
               <button
                 onClick={() => {
                   setIsProfileOpen(!isProfileOpen);
@@ -385,7 +418,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold  hover:bg-yellow"
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold hover:bg-yellow"
                 >
                   Sign Up
                 </button>
@@ -420,7 +453,7 @@ export default function Header() {
                     if (item === "Pathology") router.push("/pathology");
                     if (item === "About Us") router.push("/aboutUs");
                   }}
-                  className="ff-font  hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+                  className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
                 >
                   {item}
                 </button>
@@ -460,31 +493,48 @@ export default function Header() {
 
               {/* Buttons (Mobile) */}
               <div className="flex flex-col gap-3 px-4">
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font ">
-                  Login
-                </button>
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font ">
-                  Sign Up
-                </button>
+                {!authToken && (
+                  <>
+                    <button
+                      onClick={() => router.push("/auth/login")}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => router.push("/auth/register")}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                )}
 
                 {/* ✅ Profile Button with Image */}
-                <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
-                  <img
-                    src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
-                    alt="User"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <span className="font-medium ff-font ">My Profile</span>
-                </button>
+                {authToken && (
+                  <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+                    <img
+                      src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+                      alt="User"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <span className="font-medium ff-font">My Profile</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => {
-                    setIsCartOpen(true);
-                    setIsMenuOpen(false);
+                    if (count > 0) {
+                      setIsCartOpen(true);
+                      setIsMenuOpen(false);
+                      handleCartOpen();
+                    }
                   }}
-                  className="flex ff-font  items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                  disabled={isCartLoading}
+                  className="flex ff-font items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium disabled:opacity-50"
                 >
-                  <FiShoppingCart className="w-5 h-5" />
-                  Cart
+                  <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
+                  Cart ({count})
                 </button>
               </div>
             </nav>
@@ -497,13 +547,12 @@ export default function Header() {
           {/* Edit Profile */}
           <button
             onClick={() => {
-              router.push("/editProfile")
+              router.push("/editProfile");
               setIsProfileOpen(false);
-            }
-            }
+            }}
             className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
           >
-            <FaUser className="text-gray-500  w-5 h-5" />
+            <FaUser className="text-gray-500 w-5 h-5" />
             <span className="text-sm font-medium ff-font">Edit Profile</span>
           </button>
           <hr className="my-2 border-gray-200" />
@@ -520,15 +569,13 @@ export default function Header() {
 
       <AnimatePresence>
         {isCartOpen && (
-          <>
-            {/* <MyCart /> */}
-            <MyCart
-              cartTotalAmount={cartTotalAmount}
-              cartData={cartData}
-              setIsCartOpen={setIsCartOpen}
-              MdRemoveShoppingCart={MdRemoveShoppingCart}
-            />
-          </>
+          <MyCart
+            cartTotalAmount={cartTotalAmount}
+            cartData={cartData}
+            setIsCartOpen={setIsCartOpen}
+            MdRemoveShoppingCart={MdRemoveShoppingCart}
+            removeCartOption={removeCartOption}
+          />
         )}
       </AnimatePresence>
     </header>
