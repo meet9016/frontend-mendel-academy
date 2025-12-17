@@ -5,6 +5,7 @@ import { BiShoppingBag } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import CommonButton from "@/comman/Button";
 
 // ✅ Helper function to get icon for option type
 const getOptionIcon = (type) => {
@@ -136,8 +137,8 @@ const MyCart = ({
                 </div>
               </div>
               <div>
-                <h2 className="text-2xl font-bold">My Cart</h2>
-                <p className="text-sm">
+                <h2 className="text-2xl ff-font-bold font-bold">My Cart</h2>
+                <p className="text-sm ff-font">
                   {cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'course' : 'courses'} selected`}
                 </p>
               </div>
@@ -161,7 +162,7 @@ const MyCart = ({
               cartData.map((item) => (
                 <div
                   key={item._id}
-                  className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-yellow-400 transition-all duration-300"
+                  className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
                 >
                   {/* Clickable Content Area */}
                   <div
@@ -171,7 +172,7 @@ const MyCart = ({
                     {/* Header Row: Title + Price + Delete */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       {/* Title */}
-                      <h3 className="font-semibold text-base leading-tight flex-1 line-clamp-2 group-hover:text-yellow-600 transition-colors">
+                      <h3 className=" ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
                         {item.product_id?.title || item.category_name}
                       </h3>
 
@@ -195,11 +196,11 @@ const MyCart = ({
                     </div>
 
                     {/* Duration Badge */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs text-black bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
+                    <div className="flex ff-font-bold items-center gap-2 mb-3">
+                      <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
                         Duration: {item.duration} Months
                       </span>
-                      <span className="text-xs font-medium text-gray-600">
+                      <span className="text-xs font-medium ff-font-bold">
                         Qty: {item.quantity}
                       </span>
                     </div>
@@ -238,7 +239,7 @@ const MyCart = ({
                   </div>
 
                   {/* Hover Indicator */}
-                  <div className="absolute bottom-2 right-3 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     Click to view →
                   </div>
                 </div>
@@ -256,15 +257,15 @@ const MyCart = ({
               className="border-t border-gray-200 p-6 bg-white space-y-4"
             >
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Subtotal</span>
+                <span className="ff-font-bold font-medium">Subtotal</span>
                 <span className="font-bold text-lg">₹{cartTotalAmount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Discount</span>
+                <span className="ff-font-bold font-medium">Discount</span>
                 <span className="font-bold text-green-600 text-lg">₹0.00</span>
               </div>
 
-              <button
+              {/* <button
                 onClick={() => {
                   const tempIdGet = sessionStorage.getItem("temp_id");
                   const userId = localStorage.getItem("user_id");
@@ -275,14 +276,38 @@ const MyCart = ({
                 className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 rounded-lg font-bold text-black transition-colors"
               >
                 Checkout Now
-              </button>
+              </button> */}
 
-              <button
+              <CommonButton
+                pyClass="py-3"
+                pxClass="px-38"
+                fontSize={18}
+                onClick={() => {
+                  const tempIdGet = sessionStorage.getItem("temp_id");
+                  const userId = localStorage.getItem("user_id");
+                  const finalId = userId || tempIdGet;
+                  router.push(`/checkout/${finalId}`);
+                  setIsCartOpen(false);
+                }}
+              >
+                Checkout Now
+              </CommonButton>
+
+              {/* <button
                 onClick={() => setIsCartOpen(false)}
                 className="w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 transition-colors"
               >
                 Continue Shopping
-              </button>
+              </button> */}
+              <CommonButton
+              className="bg-white border border-primary"
+                pyClass="py-3"
+                pxClass="px-34"
+                fontSize={18}
+                onClick={() => setIsCartOpen(false)}
+              >
+                ContinueShopping
+              </CommonButton>
             </motion.div>
           )}
         </motion.div>
