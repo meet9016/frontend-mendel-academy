@@ -37,12 +37,10 @@ const getOptionTitle = (type) => {
 
 // ✅ Smart URL Generator based on product type
 const getProductUrl = (item) => {
-  // Priority 1: Use stored redirect_url if available
   if (item.redirect_url) {
     return item.redirect_url;
   }
 
-  // Priority 2: Construct URL based on category/type
   const productId = item.product_id?._id || item.product_id;
 
   if (!productId) {
@@ -50,20 +48,17 @@ const getProductUrl = (item) => {
     return null;
   }
 
-  // Match category to URL pattern
   const category = item.category_name?.toLowerCase() || "";
 
   if (category.includes("pathology")) {
     return `/pathology/${productId}`;
   } else if (category.includes("medical") || category.includes("exam")) {
-    // For medical exams, you might need exam_id too
     const examId = item.exam_id || "default-exam";
     return `/medicalexam/${examId}/course/${productId}`;
   } else if (item.product_type === "course") {
     return `/course/${productId}`;
   }
 
-  // Fallback: generic product page
   return `/product/${productId}`;
 };
 
@@ -73,12 +68,12 @@ const MyCart = ({
   setIsCartOpen,
   MdRemoveShoppingCart,
   removeCartOption,
+  isLoading = false, // ✅ NEW: Loading prop
 }) => {
   const router = useRouter();
 
   // ✅ Handle cart item click
   const handleCartItemClick = (item, e) => {
-    // Prevent navigation if clicking on delete button or option pills
     if (
       e.target.closest('[data-action="delete"]') ||
       e.target.closest('[data-action="remove-option"]')
@@ -89,8 +84,8 @@ const MyCart = ({
     const url = getProductUrl(item);
 
     if (url) {
-      setIsCartOpen(false); // Close cart
-      router.push(url); // Navigate to product
+      setIsCartOpen(false);
+      router.push(url);
     } else {
       console.error("Could not determine URL for item:", item);
     }
@@ -139,7 +134,8 @@ const MyCart = ({
               <div>
                 <h2 className="text-2xl ff-font-bold font-bold">My Cart</h2>
                 <p className="text-sm ff-font">
-                  {cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'course' : 'courses'} selected`}
+                  {!isLoading && cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'course' : 'courses'} selected`}
+                  {isLoading && "Loading..."}
                 </p>
               </div>
             </div>
@@ -151,104 +147,116 @@ const MyCart = ({
             </button>
           </div>
 
-          {/* Animated Cart Items */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {cartData.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                <BiShoppingBag className="w-16 h-16 mb-4" />
-                <p className="text-lg font-medium">Your cart is empty</p>
+          {/* ✅ LOADING STATE */}
+          {isLoading ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-8">
+              <div className="relative">
+                {/* Spinning cart icon */}
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#FFCA00]"></div>
+                <BiShoppingBag className="w-8 h-8 text-[#FFCA00] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               </div>
-            ) : (
-              cartData.map((item) => (
-                <div
-                  key={item._id}
-                  className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
-                >
-                  {/* Clickable Content Area */}
-                  <div
-                    onClick={(e) => handleCartItemClick(item, e)}
-                    className="cursor-pointer p-4"
-                  >
-                    {/* Header Row: Title + Price + Delete */}
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      {/* Title */}
-                      <h3 className=" ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
-                        {item.product_id?.title || item.category_name}
-                      </h3>
-
-                      {/* Price (Always Visible) */}
-                      <div className="text-lg font-bold text-primary whitespace-nowrap">
-                        ₹{item.total_price || item.price}
-                      </div>
-
-                      {/* Delete Button (Separate, doesn't overlap) */}
-                      <button
-                        data-action="delete"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          MdRemoveShoppingCart(item._id);
-                        }}
-                        className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
-                        title="Remove from cart"
-                      >
-                        <FiTrash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    {/* Duration Badge */}
-                    <div className="flex ff-font-bold items-center gap-2 mb-3">
-                      <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
-                        Duration: {item.duration} Months
-                      </span>
-                      <span className="text-xs font-medium ff-font-bold">
-                        Qty: {item.quantity}
-                      </span>
-                    </div>
-
-                    {/* Selected Bundle Options */}
-                    {item.selected_options && item.selected_options.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {item.selected_options.map((optionType) => (
-                          <div
-                            key={optionType}
-                            className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
-                          >
-                            {getOptionIcon(optionType)}
-                            <span className="font-medium">
-                              {getOptionTitle(optionType)}
-                            </span>
-
-                            {/* Remove individual option */}
-                            {item.selected_options.length > 1 && removeCartOption && (
-                              <button
-                                data-action="remove-option"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  removeCartOption(item._id, optionType);
-                                }}
-                                className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
-                                title={`Remove ${getOptionTitle(optionType)}`}
-                              >
-                                <FiX className="w-3 h-3" />
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Hover Indicator */}
-                  <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    Click to view →
-                  </div>
+              <p className="mt-4 text-gray-500 ff-font">Loading your cart...</p>
+            </div>
+          ) : (
+            /* ✅ CART ITEMS (Only show when not loading) */
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              {cartData.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                  <BiShoppingBag className="w-16 h-16 mb-4" />
+                  <p className="text-lg font-medium">Your cart is empty</p>
                 </div>
-              ))
-            )}
-          </div>
+              ) : (
+                cartData.map((item) => (
+                  <div
+                    key={item._id}
+                    className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
+                  >
+                    {/* Clickable Content Area */}
+                    <div
+                      onClick={(e) => handleCartItemClick(item, e)}
+                      className="cursor-pointer p-4"
+                    >
+                      {/* Header Row: Title + Price + Delete */}
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        {/* Title */}
+                        <h3 className="ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
+                          {item.product_id?.title || item.category_name}
+                        </h3>
 
-          {/* Footer */}
-          {cartData.length > 0 && (
+                        {/* Price (Always Visible) */}
+                        <div className="text-lg font-bold text-primary whitespace-nowrap">
+                          ₹{item.total_price || item.price}
+                        </div>
+
+                        {/* Delete Button (Separate, doesn't overlap) */}
+                        <button
+                          data-action="delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            MdRemoveShoppingCart(item._id);
+                          }}
+                          className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
+                          title="Remove from cart"
+                        >
+                          <FiTrash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Duration Badge */}
+                      <div className="flex ff-font-bold items-center gap-2 mb-3">
+                        <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
+                          Duration: {item.duration} Months
+                        </span>
+                        <span className="text-xs font-medium ff-font-bold">
+                          Qty: {item.quantity}
+                        </span>
+                      </div>
+
+                      {/* Selected Bundle Options */}
+                      {item.selected_options && item.selected_options.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {item.selected_options.map((optionType) => (
+                            <div
+                              key={optionType}
+                              className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
+                            >
+                              {getOptionIcon(optionType)}
+                              <span className="font-medium">
+                                {getOptionTitle(optionType)}
+                              </span>
+
+                              {/* Remove individual option */}
+                              {item.selected_options.length > 1 && removeCartOption && (
+                                <button
+                                  data-action="remove-option"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeCartOption(item._id, optionType);
+                                  }}
+                                  className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
+                                  title={`Remove ${getOptionTitle(optionType)}`}
+                                >
+                                  <FiX className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Hover Indicator */}
+                    <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Click to view →
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {/* ✅ Footer (Only show when NOT loading AND has items) */}
+          {!isLoading && cartData.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -265,19 +273,6 @@ const MyCart = ({
                 <span className="font-bold text-green-600 text-lg">₹0.00</span>
               </div>
 
-              {/* <button
-                onClick={() => {
-                  const tempIdGet = sessionStorage.getItem("temp_id");
-                  const userId = localStorage.getItem("user_id");
-                  const finalId = userId || tempIdGet;
-                  router.push(`/checkout/${finalId}`);
-                  setIsCartOpen(false);
-                }}
-                className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 rounded-lg font-bold text-black transition-colors"
-              >
-                Checkout Now
-              </button> */}
-
               <CommonButton
                 pyClass="py-3"
                 pxClass="px-38"
@@ -293,20 +288,14 @@ const MyCart = ({
                 Checkout Now
               </CommonButton>
 
-              {/* <button
-                onClick={() => setIsCartOpen(false)}
-                className="w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-bold text-gray-700 transition-colors"
-              >
-                Continue Shopping
-              </button> */}
               <CommonButton
-              className="bg-white border border-primary"
+                className="bg-white border border-primary"
                 pyClass="py-3"
                 pxClass="px-34"
                 fontSize={18}
                 onClick={() => setIsCartOpen(false)}
               >
-                ContinueShopping
+                Continue Shopping
               </CommonButton>
             </motion.div>
           )}

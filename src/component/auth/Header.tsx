@@ -15,6 +15,7 @@ import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { decrementCartCount, resetCartCount, setCartCount } from "@/redux/cartSlice";
+import { getTempId } from "@/utils/helper";
 
 type Exam = {
   exam_name: string;
@@ -62,12 +63,11 @@ export default function Header() {
 
   // ✅ FIX 2: Initialize tempIdGet ONCE on mount
   useEffect(() => {
-    const storedId = sessionStorage.getItem("temp_id");
-    if (storedId) {
-      setTempIdGet(storedId);
-    }
+    // ✅ Use the helper function which checks localStorage first
+    const storedId = getTempId();
+    setTempIdGet(storedId);
     setIsInitialized(true);
-  }, []); // Empty dependency array - runs only once
+  }, []);
 
   // ✅ FIX 3: Fetch exams once on mount
   useEffect(() => {
@@ -115,6 +115,27 @@ export default function Header() {
     }
   }, [isInitialized, userId, tempIdGet]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        isExamDropdownOpen &&
+        !target.closest("#exam-button") &&
+        !target.closest("#exam-dropdown")
+      ) {
+        setIsExamDropdownOpen(false);
+      }
+    };
+
+    if (isExamDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isExamDropdownOpen]);
+
   const handleLogout = () => {
     clearToken();
     clearAuthId();
@@ -150,27 +171,28 @@ export default function Header() {
 
     try {
       setIsCartLoading(true);
+
+      // ✅ OPEN THE CART IMMEDIATELY (with loading state)
+      setIsCartOpen(true);
+
       const finalId = userId || tempIdGet;
 
       if (!finalId) {
         console.error("No ID available for cart fetch");
+        setIsCartLoading(false);
         return;
       }
 
-      // ✅ Fetch cart data FIRST
+      // ✅ Fetch cart data AFTER opening (user sees loading state)
       const res = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
 
       if (res.data) {
         setCartData(res.data.cart);
         setCartTotalAmount(res.data.total || 0);
       }
-
-      // ✅ THEN open the cart (smooth animation with data ready)
-      setIsCartOpen(true);
     } catch (error) {
       console.error("Error fetching cart data:", error);
-      // Still open cart even if fetch fails (show empty state)
-      setIsCartOpen(true);
+      // Cart is already open, just show empty state or error
     } finally {
       setIsCartLoading(false);
     }
@@ -575,6 +597,7 @@ export default function Header() {
             setIsCartOpen={setIsCartOpen}
             MdRemoveShoppingCart={MdRemoveShoppingCart}
             removeCartOption={removeCartOption}
+            isLoading={isCartLoading} // ✅ Pass loading state
           />
         )}
       </AnimatePresence>

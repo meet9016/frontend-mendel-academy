@@ -1,7 +1,7 @@
 "use client";
 import dayjs from "dayjs";
 
-export function formatDateWithDayjs(dateString : string | undefined) {
+export function formatDateWithDayjs(dateString: string | undefined) {
   return dayjs(dateString).format("DD-MM-YYYY");
 }
 
@@ -19,16 +19,29 @@ export function formatPrice(value: string | number) {
 
 //temp_Id generate pc wise
 export const getTempId = () => {
-  let tempId = sessionStorage.getItem("temp_id");
+  // ✅ Try localStorage first (persists across browser sessions)
+  let tempId = localStorage.getItem("temp_id");
 
+  // ✅ Fallback to sessionStorage
+  if (!tempId) {
+    tempId = sessionStorage.getItem("temp_id");
+  }
+
+  // ✅ Generate new ID only if none exists
   if (!tempId) {
     tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+
+    // ✅ Store in BOTH for redundancy
+    localStorage.setItem("temp_id", tempId);
     sessionStorage.setItem("temp_id", tempId);
   }
+
   return tempId;
 };
 
+// ✅ Clear both storages on logout
 export const removeTempId = () => {
+  localStorage.removeItem("temp_id");
   sessionStorage.removeItem("temp_id");
 };
 

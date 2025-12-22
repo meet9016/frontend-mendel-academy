@@ -24,6 +24,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 } */
+
+/* Prevent click issues during hydration */
+html:not(.hydrated) {
+  pointer-events: none;
+}
+
+html.hydrated {
+  pointer-events: auto;
+}
+
+/* Ensure interactive elements are always clickable after hydration */
+html.hydrated button,
+html.hydrated a,
+html.hydrated [role="button"] {
+  pointer-events: auto;
+}
+
+
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);
@@ -87,7 +105,7 @@ body {
   font-family: 'Helvetica', sans-serif;
 }
 
-/* override family only for bold title*/ 
+/* override family only for bold title*/
 .ff-font-bold {
   font-family: 'Arial', sans-serif;
 }
