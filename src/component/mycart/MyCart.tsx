@@ -7,8 +7,19 @@ import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import CommonButton from "@/comman/Button";
 
+// ✅ Helper function to format currency with null checks
+const formatCurrency = (amount: number | undefined | null, currency: string) => {
+  // Handle undefined, null, or NaN values
+  const safeAmount = Number(amount) || 0;
+
+  if (currency === 'INR') {
+    return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
+  return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
+
 // ✅ Helper function to get icon for option type
-const getOptionIcon = (type) => {
+const getOptionIcon = (type: string) => {
   switch (type) {
     case "record-book":
       return <FiBook className="w-3 h-3" />;
@@ -22,7 +33,7 @@ const getOptionIcon = (type) => {
 };
 
 // ✅ Helper function to get title for option type
-const getOptionTitle = (type) => {
+const getOptionTitle = (type: string) => {
   switch (type) {
     case "record-book":
       return "Record Book";
@@ -36,7 +47,7 @@ const getOptionTitle = (type) => {
 };
 
 // ✅ Smart URL Generator based on product type
-const getProductUrl = (item) => {
+const getProductUrl = (item: any) => {
   if (item.redirect_url) {
     return item.redirect_url;
   }
@@ -62,21 +73,32 @@ const getProductUrl = (item) => {
   return `/product/${productId}`;
 };
 
-const MyCart = ({
+interface MyCartProps {
+  cartData: any[];
+  cartTotalAmount: number;
+  setIsCartOpen: (open: boolean) => void;
+  MdRemoveShoppingCart: (id: string) => void;
+  removeCartOption?: (cartId: string, optionType: string) => void;
+  isLoading?: boolean;
+  currency?: string;
+}
+
+const MyCart: React.FC<MyCartProps> = ({
   cartData,
   cartTotalAmount,
   setIsCartOpen,
   MdRemoveShoppingCart,
   removeCartOption,
-  isLoading = false, // ✅ NEW: Loading prop
+  isLoading = false,
+  currency = 'USD',
 }) => {
   const router = useRouter();
 
   // ✅ Handle cart item click
-  const handleCartItemClick = (item, e) => {
+  const handleCartItemClick = (item: any, e: React.MouseEvent) => {
     if (
-      e.target.closest('[data-action="delete"]') ||
-      e.target.closest('[data-action="remove-option"]')
+      (e.target as HTMLElement).closest('[data-action="delete"]') ||
+      (e.target as HTMLElement).closest('[data-action="remove-option"]')
     ) {
       return;
     }
@@ -151,14 +173,13 @@ const MyCart = ({
           {isLoading ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8">
               <div className="relative">
-                {/* Spinning cart icon */}
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#FFCA00]"></div>
                 <BiShoppingBag className="w-8 h-8 text-[#FFCA00] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               </div>
               <p className="mt-4 text-gray-500 ff-font">Loading your cart...</p>
             </div>
           ) : (
-            /* ✅ CART ITEMS (Only show when not loading) */
+            /* ✅ CART ITEMS */
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {cartData.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -166,96 +187,102 @@ const MyCart = ({
                   <p className="text-lg font-medium">Your cart is empty</p>
                 </div>
               ) : (
-                cartData.map((item) => (
-                  <div
-                    key={item._id}
-                    className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
-                  >
-                    {/* Clickable Content Area */}
+                cartData.map((item) => {
+                  // ✅ Get currency from item or fallback to prop
+                  const itemCurrency = item.currency || currency;
+                  const itemPrice = item.total_price || item.price || 0;
+
+                  return (
                     <div
-                      onClick={(e) => handleCartItemClick(item, e)}
-                      className="cursor-pointer p-4"
+                      key={item._id}
+                      className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
                     >
-                      {/* Header Row: Title + Price + Delete */}
-                      <div className="flex items-start justify-between gap-3 mb-3">
-                        {/* Title */}
-                        <h3 className="ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
-                          {item.product_id?.title || item.category_name}
-                        </h3>
+                      {/* Clickable Content Area */}
+                      <div
+                        onClick={(e) => handleCartItemClick(item, e)}
+                        className="cursor-pointer p-4"
+                      >
+                        {/* Header Row: Title + Price + Delete */}
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          {/* Title */}
+                          <h3 className="ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
+                            {item.product_id?.title || item.category_name}
+                          </h3>
 
-                        {/* Price (Always Visible) */}
-                        <div className="text-lg font-bold text-primary whitespace-nowrap">
-                          ₹{item.total_price || item.price}
+                          {/* ✅ Price with correct currency */}
+                          <div className="text-lg font-bold text-primary whitespace-nowrap">
+                            {formatCurrency(itemPrice, itemCurrency)}
+                          </div>
+
+                          {/* Delete Button */}
+                          <button
+                            data-action="delete"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              MdRemoveShoppingCart(item._id);
+                            }}
+                            className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
+                            title="Remove from cart"
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
                         </div>
 
-                        {/* Delete Button (Separate, doesn't overlap) */}
-                        <button
-                          data-action="delete"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            MdRemoveShoppingCart(item._id);
-                          }}
-                          className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
-                          title="Remove from cart"
-                        >
-                          <FiTrash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                      {/* Duration Badge */}
-                      <div className="flex ff-font-bold items-center gap-2 mb-3">
-                        <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
-                          Duration: {item.duration} Months
-                        </span>
-                        <span className="text-xs font-medium ff-font-bold">
-                          Qty: {item.quantity}
-                        </span>
-                      </div>
-
-                      {/* Selected Bundle Options */}
-                      {item.selected_options && item.selected_options.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {item.selected_options.map((optionType) => (
-                            <div
-                              key={optionType}
-                              className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
-                            >
-                              {getOptionIcon(optionType)}
-                              <span className="font-medium">
-                                {getOptionTitle(optionType)}
-                              </span>
-
-                              {/* Remove individual option */}
-                              {item.selected_options.length > 1 && removeCartOption && (
-                                <button
-                                  data-action="remove-option"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeCartOption(item._id, optionType);
-                                  }}
-                                  className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
-                                  title={`Remove ${getOptionTitle(optionType)}`}
-                                >
-                                  <FiX className="w-3 h-3" />
-                                </button>
-                              )}
-                            </div>
-                          ))}
+                        {/* Duration Badge */}
+                        <div className="flex ff-font-bold items-center gap-2 mb-3">
+                          <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
+                            Duration: {item.duration} Months
+                          </span>
+                          <span className="text-xs font-medium ff-font-bold">
+                            Qty: {item.quantity}
+                          </span>
                         </div>
-                      )}
-                    </div>
 
-                    {/* Hover Indicator */}
-                    <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      Click to view →
+                        {/* Selected Bundle Options */}
+                        {item.selected_options && item.selected_options.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {item.selected_options.map((optionType: string) => (
+                              <div
+                                key={optionType}
+                                className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
+                              >
+                                {getOptionIcon(optionType)}
+                                <span className="font-medium">
+                                  {getOptionTitle(optionType)}
+                                </span>
+
+                                {/* Remove individual option */}
+                                {item.selected_options.length > 1 && removeCartOption && (
+                                  <button
+                                    data-action="remove-option"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      removeCartOption(item._id, optionType);
+                                    }}
+                                    className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
+                                    title={`Remove ${getOptionTitle(optionType)}`}
+                                  >
+                                    <FiX className="w-3 h-3" />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Hover Indicator */}
+                      <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Click to view →
+                      </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           )}
 
-          {/* ✅ Footer (Only show when NOT loading AND has items) */}
+          {/* ✅ Footer */}
           {!isLoading && cartData.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -266,11 +293,15 @@ const MyCart = ({
             >
               <div className="flex justify-between items-center">
                 <span className="ff-font-bold font-medium">Subtotal</span>
-                <span className="font-bold text-lg">₹{cartTotalAmount}</span>
+                <span className="font-bold text-lg">
+                  {formatCurrency(cartTotalAmount, cartData[0]?.currency || currency)}
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="ff-font-bold font-medium">Discount</span>
-                <span className="font-bold text-green-600 text-lg">₹0.00</span>
+                <span className="font-bold text-green-600 text-lg">
+                  {formatCurrency(0, cartData[0]?.currency || currency)}
+                </span>
               </div>
 
               <CommonButton

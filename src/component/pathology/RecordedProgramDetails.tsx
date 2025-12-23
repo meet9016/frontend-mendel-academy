@@ -47,6 +47,7 @@ interface ProgramDetail {
   status: string;
   date: string;
   createdAt: string;
+  currency: string;
   options?: Option[];
 }
 
@@ -67,6 +68,16 @@ const getTitleForType = (type: OptionType): string => {
     "writing-book": "Writing Book",
   };
   return titleMap[type] || type;
+};
+
+// ✅ Helper to format currency with null checks
+const formatCurrency = (amount: number | undefined | null, currency: string) => {
+  const safeAmount = Number(amount) || 0;
+
+  if (currency === 'INR') {
+    return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
+  return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
 
 /* ---------- ADD TO CART FUNCTION ---------- */
@@ -269,6 +280,8 @@ export default function RecordedProgramDetails() {
     );
   }
 
+  const programCurrency = program.currency || 'USD';
+
   return (
     <main className="min-h-screen bg-[#f9fafb]">
       <Hero />
@@ -303,7 +316,7 @@ export default function RecordedProgramDetails() {
             </span>
 
             <span className="text-2xl font-bold ff-font-bold">
-              Starting at ${program.price}{" "}
+              Starting at {formatCurrency(program.price, programCurrency)}
             </span>
 
             <span className="flex items-center gap-2 text-sm ff-font">
@@ -324,7 +337,7 @@ export default function RecordedProgramDetails() {
 
           <hr className="my-8 text-gray-200" />
 
-          {/* Show badge if already in cart */}
+          {/* Options */}
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl font-semibold ff-font-bold">
               Choose Your Learning Path
@@ -352,7 +365,7 @@ export default function RecordedProgramDetails() {
                         : "border-gray-200 hover:border-[#FFCA00]"
                       }`}
                   >
-                    {/* RADIO / CHECK ICON */}
+                    {/* Check Icon */}
                     <div className="absolute top-4 right-4">
                       {active ? (
                         <div className="w-6 h-6 rounded-full bg-[#FFCA00] flex items-center justify-center">
@@ -363,7 +376,7 @@ export default function RecordedProgramDetails() {
                       )}
                     </div>
 
-                    {/* ICON */}
+                    {/* Icon */}
                     <div className="w-12 h-12 mb-3 rounded-xl bg-white border border-primary flex items-center justify-center ff-font-bold">
                       <Icon className="text-xl" />
                     </div>
@@ -389,9 +402,9 @@ export default function RecordedProgramDetails() {
                       ))}
                     </ul>
 
-                    {/* Price */}
+                    {/* ✅ Price with correct currency */}
                     <span className="text-primary font-bold">
-                      ${opt.price}{" "}
+                      {formatCurrency(opt.price, programCurrency)}{" "}
                       <span className="text-lg font-normal">/one-time</span>
                     </span>
                   </div>
@@ -405,7 +418,9 @@ export default function RecordedProgramDetails() {
           <div className="flex items-center justify-between">
             <div>
               <span className="text-sm ff-font-bold">Total Price</span>
-              <div className="text-2xl font-bold ff-font-bold">${total}</div>
+              <div className="text-2xl font-bold ff-font-bold">
+                {formatCurrency(total, programCurrency)}
+              </div>
             </div>
 
             <CommonButton

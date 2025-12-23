@@ -27,7 +27,8 @@ import { setCartCount } from "@/redux/cartSlice";
 
 /* ----------  TYPES  ---------- */
 type Program = {
-  id: number;
+  _id: string; // ✅ Changed from 'id' to '_id' to match backend response
+  id?: string; // ✅ Keep optional for backward compatibility
   title: string;
   subtitle: string;
   rating: number;
@@ -35,6 +36,7 @@ type Program = {
   price: number;
   duration: string;
   category: string;
+  currency?: string;
 };
 
 export interface ProgramData {
@@ -55,6 +57,16 @@ export interface ProgramData {
   createdAt: string;
 }
 
+// ✅ Helper to format currency with null checks
+const formatCurrency = (amount: number | undefined | null, currency: string) => {
+  const safeAmount = Number(amount) || 0;
+
+  if (currency === 'INR') {
+    return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  }
+  return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
+
 /* ----------  HOOK  (same fetch)  ---------- */
 const usePrograms = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,8 +80,16 @@ const usePrograms = () => {
         setLoading(true);
         const res = await api.get(`${endPointApi.getAllPreRecorded}`);
 
-        if (res?.data?.data?.length) setPrograms(res.data.data);
-      } catch {
+        if (res?.data?.data?.length) {
+          // ✅ Map the response to ensure we have both _id and id fields
+          const mappedPrograms = res.data.data.map((program: any) => ({
+            ...program,
+            id: program._id || program.id, // Ensure 'id' exists
+          }));
+          setPrograms(mappedPrograms);
+        }
+      } catch (error) {
+        console.error("Error fetching programs:", error);
         setPrograms([]);
       } finally {
         setLoading(false);
@@ -80,27 +100,21 @@ const usePrograms = () => {
 };
 
 /* ----------  UTILS  (same tempId + cart)  ---------- */
-// const getTempId = () => {
-//   if (typeof window === "undefined") return null; // SSR safeguard
-
-//   let tempId = sessionStorage.getItem("temp_id");
-
-//   if (!tempId) {
-//     tempId =
-//       "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
-//     sessionStorage.setItem("temp_id", tempId);
-//   }
-
-//   return tempId;
-// };
-
 const addToCart = async (item: Program) => {
-  const userId = getAuthId(); // check login first
-  const tempId = userId ? null : getTempId(); // only generate when no userId
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+
+  // ✅ Use _id or id, whichever is available
+  const productId = item._id || item.id;
+
+  if (!productId) {
+    toast.error("Product ID is missing");
+    return;
+  }
 
   const body = {
     ...(userId ? { user_id: userId } : { temp_id: tempId }),
-    product_id: item.id,
+    product_id: productId,
     category_name: item.category,
     price: item.price,
     quantity: 1,
@@ -108,10 +122,14 @@ const addToCart = async (item: Program) => {
     bucket_type: true,
   };
 
-  const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
+  try {
+    const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
 
-  if (res.data.success) store.dispatch(setCartCount(res.data.count));
-  toast.success(res.data.message);
+    if (res.data.success) store.dispatch(setCartCount(res.data.count));
+    toast.success(res.data.message);
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || "Failed to add to cart");
+  }
 };
 
 const PathologyMasterySeries = () => {
@@ -162,8 +180,7 @@ const PathologyMasterySeries = () => {
         {loading ? (
           <ProgramSkeleton />
         ) : (
-          // <RecordedGrid programs={programs} onCart={addToCart} learnMore={() => router.push("/recordedprograms")} />
-          <RecordedGrid programs={programs} onCart={addToCart} router={router}/>
+          <RecordedGrid programs={programs} onCart={addToCart} router={router} />
         )}
       </Section>
 
@@ -174,213 +191,6 @@ const PathologyMasterySeries = () => {
       >
         {loading ? <UpcomeingProgramSkeleton /> : <UpcomingCourse />}
       </Section>
-
-      {/* <section className="relative py-10 overflow-hidden bg-[#f9fafb]">
-                <div
-                    className="absolute bottom-0 right-1/3 w-96 h-96 bg-[#f0b100]/10 rounded-full blur-3xl animate-float"
-                    style={{ animationDelay: "1s" }}
-                />
-
-                <div className="relative max-w-[1380px] mx-auto px-6">
-                    <div className="text-center mb-10  animate-fade-in-up">
-                        <div className=" text-center">
-                            <h2 className="text-2xl md:text-4xl font-bold ">
-                                <span className="ff-font-bold ">
-                                    Pathology Mendel Mastery Series™
-                                </span>{' '}
-                            </h2>
-                        </div>
-
-                        <p className="text-xl mt-2 md:text-2xl text-black ff-font max-w-3xl mx-auto">
-                            Watch & Learn Anytime
-                        </p>
-
-                        <p className="text-base mt-2 text-black ff-font max-w-2xl mx-auto">
-                            Your all-in-one, deep-dive into each pathology subject—covering everything you need to master topics like Lymphomas, case by case.
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-4 pt-6">
-                            <div className="flex items-center gap-2 px-4 py-2  rounded-full border border-primary">
-                                <FaVideo className="w-4 h-4 text-primary" />
-                                <span className="text-sm font-medium ">HD Video Lectures</span>
-                            </div>
-                            <div className="flex items-center gap-2 px-4 py-2  rounded-full border border-primary">
-                                <FaClock className="w-4 h-4 text-primary" />
-                                <span className="text-sm font-medium ">23+ Hours Content</span>
-                            </div>
-                            <div className="flex items-center gap-2 px-4 py-2  rounded-full border border-primary">
-                                <FaAward className="w-4 h-4 text-primary" />
-                                <span className="text-sm font-medium ">CME Certified</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative mb-10">
-                      
-                        <button
-                            onClick={() =>
-                                document.getElementById("courseScroll")?.scrollBy({ left: -350, behavior: "smooth" })
-                            }
-                            className="absolute cursor-pointer left-1 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
-                        >
-                            <FaChevronDown className="rotate-90 w-5 h-5" />
-                        </button>
-
-                        <div
-                            id="courseScroll"
-                            className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
-                            style={{ scrollSnapType: "x mandatory" }}
-                        >
-                            {Array(8) 
-                                .fill({
-                                    id: 1,
-                                    category: "HEMATOPATHOLOGY",
-                                    title: "MENDEL MASTERY SERIES™: LYMPHOMAS",
-                                    desc: "Curriculum aligned with WHO 5th Ed. Blue Book",
-                                    rating: 4.3,
-                                    learners: "50+ learners",
-                                    duration: "6 months access",
-                                    price: "59.99",
-                                    color: "from-[#f0b100] to-[#ffcc33]",
-                                    icon: "https://www.snexplores.org/wp-content/uploads/2020/05/1030_SS_amoeba-1028x579.png",
-                                    features: [
-                                        { name: "E-certificate included", icon: "🎓" },
-                                        { name: "CV + CME friendly", icon: "🎥" },
-                                        { name: "One-time payment", icon: "💳" },
-                                    ],
-                                })
-                                .map((course, i) => (
-                                    <div
-                                        key={i}
-                                        className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500"
-                                    >
-                                  
-                                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
-
-                                        <div className="relative z-10 flex flex-col h-full">
-                                      
-                                            <div className="relative h-48 w-full overflow-hidden">
-                                                <img
-                                                    src={course.icon}
-                                                    alt={course.title}
-                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                                />
-                                            
-                                                <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
-                                                    {course.category}
-                                                </div>
-                                            </div>
-
-                           
-                                            <div className="p-6 flex flex-col justify-between flex-1 bg-white">
-                                                <div>
-                                                    <h3 className="text-lg  leading-tight ff-font-bold  min-h-[48px] mb-2">
-                                                        {course.title}
-                                                    </h3>
-
-                                                    <div className="mb-3">
-                                                        <p className="text-sm text-black ff-font flex items-center gap-2 mb-2">
-                                                            <FaBookOpen className="w-4 h-4 text-primary" />
-                                                            {course.desc}
-                                                        </p>
-                                                        <div className="border-b border-[#f0b100]/20"></div>
-                                                    </div>
-
-                                                   
-                                                    <div className="mb-3">
-                                                        <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
-                                                            <div className="flex items-center gap-2 text-primary">
-                                                                <FaRegStar className="w-4 h-4" />
-                                                                <span className="font-medium ff-font text-black">{course.rating}</span>
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                <FaUsers className="w-4 h-4 text-primary" />
-                                                                <span className="text-black ff-font" >{course.learners}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-3 border-b border-[#f0b100]/20"></div>
-                                                    </div>
-
-                                            
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <p className="text-sm text-black ff-font">{course.duration}</p>
-                                                        <p className="text-2xl font-bold ff-font-bold  text-black">{`$${course.price}`}</p>
-                                                    </div>
-
-                                               
-                                                    <div className="flex items-center justify-center text-xs text-black mt-3 gap-5">
-                                                        {course.features.map((f: any) => (
-                                                            <div key={f.name} className="flex flex-col items-center text-center my-1">
-                                                                <span className="py-1 ff-font">{f.name}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-
-                                        
-                                                <div className="flex flex-col gap-3 mt-4">
-                                                    <button className="flex items-center justify-between w-full border border-[#f0b100]/40 rounded-md px-4 py-2 text-sm text-black ff-font hover:bg-[#fff9e6] transition-all">
-                                                        What You'll Learn <FaChevronDown className="w-4 h-4 text-primary" />
-                                                    </button>
-                                                
-                                                    <CommonButton pyClass="py-3" pxClass="px-22" fontWeight={700} fontSize={15}>
-                                                        Enroll Now
-                                                    </CommonButton>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                        </div>
-
-                        
-                        <button
-                            onClick={() =>
-                                document.getElementById("courseScroll")?.scrollBy({ left: 350, behavior: "smooth" })
-                            }
-                            className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
-                        >
-                            <FaChevronDown className="-rotate-90 w-5 h-5" />
-                        </button>
-                    </div>
-
-
-
-                    <div className="relative animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-                     
-                        <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
-                            <div className="flex flex-col md:flex-row items-center gap-6">
-                               
-                                <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
-                                    <FaMoneyBillWave className="w-8 h-8 text-primary" />
-                                </div>
-                                <div className="text-center md:text-left">
-                                    <h3 className="text-2xl md:text-3xl font-bold mb-2 ff-font-bold ">
-                                        Bundle more. Save more.
-                                    </h3>
-                                    <p className="text-lg ff-font mb-4">
-                                        Add one more Mendel Mastery course and get{" "}
-                                        <span className="font-bold ff-font-bold ">10% OFF</span>. Bundle all 3
-                                        and save up to <span className="font-bold ff-font-bold ">20%</span>.
-                                    </p>
-                                    <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                                        <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-medium">
-                                            1 course = regular price
-                                        </span>
-                                        <span className="px-4 py-2 ff-font-bold  rounded-full border-primary text-sm font-bold">
-                                            2 courses = 10% off
-                                        </span>
-                                        <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-bold">
-                                            3 courses = 20% off
-                                        </span>
-                                    </div>
-                                    <p className="text-sm ff-font mt-4">
-                                        Discount applied automatically at checkout.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> */}
     </>
   );
 };
@@ -469,187 +279,211 @@ const RecordedGrid = ({
   programs: Program[];
   onCart: (p: Program) => void;
   router: any;
-}) => (
-  <>
-  {console.log("programs***-----",programs)}
-  
-    {/* Course Cards */}
-    <div className="relative mb-10">
-      {/* Left Arrow */}
-      <button
-        onClick={() =>
-          document
-            .getElementById("courseScroll")
-            ?.scrollBy({ left: -350, behavior: "smooth" })
-        }
-        className="absolute cursor-pointer left-1 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
-      >
-        <FaChevronDown className="rotate-90 w-5 h-5" />
-      </button>
+}) => {
+  // ✅ Helper function to get product ID
+  const getProductId = (program: Program) => {
+    return program._id || program.id;
+  };
 
-      {/* Scrollable Container */}
-      <div
-        id="courseScroll"
-        className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
-        style={{ scrollSnapType: "x mandatory" }}
-      >
-        {programs.map((p, i) => (
-          <div
-            key={p.id || i}
-            className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
-            onClick={() => router.push(`/pathology/${p?.id}`)}
-          >
-            {/* Glow Border on Hover */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
+  return (
+    <>
+      {/* Course Cards */}
+      <div className="relative mb-10">
+        {/* Left Arrow */}
+        <button
+          onClick={() =>
+            document
+              .getElementById("courseScroll")
+              ?.scrollBy({ left: -350, behavior: "smooth" })
+          }
+          className="absolute cursor-pointer left-1 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+        >
+          <FaChevronDown className="rotate-90 w-5 h-5" />
+        </button>
 
-            <div className="relative z-10 flex flex-col h-full">
-              {/* Image Section */}
-              <div className="relative h-42 w-full overflow-hidden">
-                <img
-                  src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
-                  alt={p.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-white/20 to-transparent"></div> */}
-                <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
-                  test
+        {/* Scrollable Container */}
+        <div
+          id="courseScroll"
+          className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
+          style={{ scrollSnapType: "x mandatory" }}
+        >
+          {programs.map((p, i) => {
+            // ✅ Get currency for each program
+            const programCurrency = p.currency || 'USD';
+            const productId = getProductId(p);
+
+            // ✅ Debug log to check IDs
+            if (!productId) {
+              console.warn("Program missing ID:", p);
+            }
+
+            return (
+              <div
+                key={productId || i}
+                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
+                onClick={(e) => {
+                  // ✅ Prevent navigation if clicking on button
+                  if ((e.target as HTMLElement).closest('button')) {
+                    return;
+                  }
+
+                  if (productId) {
+                    router.push(`/pathology/${productId}`);
+                  } else {
+                    toast.error("Product ID not found");
+                    console.error("Missing product ID for program:", p);
+                  }
+                }}
+              >
+                {/* Glow Border on Hover */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
+
+                <div className="relative z-10 flex flex-col h-full">
+                  {/* Image Section */}
+                  <div className="relative h-42 w-full overflow-hidden">
+                    <img
+                      src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
+                      {p.category || "Pathology"}
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-6 flex flex-col justify-between flex-1 bg-white">
+                    <div>
+                      <h3 className="text-lg leading-tight ff-font-bold min-h-[48px] mb-2 line-clamp-2">
+                        {p.title}
+                      </h3>
+
+                      <div className="mb-3">
+                        <p className="text-sm text-black ff-font mb-2 line-clamp-2 min-h-[40px]">
+                          {p.subtitle}
+                        </p>
+
+                        <div className="border-b border-[#f0b100]/20"></div>
+                      </div>
+
+                      {/* Rating & Learners */}
+                      <div className="mb-3">
+                        <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
+                          <div className="flex items-center gap-2 text-primary">
+                            <FaRegStar className="w-4 h-4" />
+                            <span className="font-medium ff-font text-black">
+                              {p.rating || 4.5}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <FaUsers className="w-4 h-4 text-primary" />
+                            <span className="text-black ff-font">
+                              {p.total_reviews || 100}+ learners
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-3 border-b border-[#f0b100]/20"></div>
+                      </div>
+
+                      {/* Duration & Price */}
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm text-black ff-font">
+                          {p.duration} month access
+                        </p>
+                        <p className="text-2xl font-bold ff-font-bold  text-black">
+                          {formatCurrency(p.price, programCurrency)}
+                        </p>
+                      </div>
+
+                      {/* Features */}
+                      <div className="flex items-center justify-between text-xs text-black mt-3 gap-3 border-t border-[#f0b100]/20 pt-3">
+                        <div className="flex-1 text-center">
+                          <span className="ff-font">E-certificate included</span>
+                        </div>
+                        <div className="flex-1 text-center">
+                          <span className="ff-font">CV + CME friendly</span>
+                        </div>
+                        <div className="flex-1 text-center">
+                          <span className="ff-font">One-time payment</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Buttons */}
+                    <div className="flex flex-col gap-3 mt-3">
+                      <CommonButton
+                        pyClass="py-0"
+                        pxClass="px-2"
+                        fontWeight={700}
+                        fontSize={14}
+                        onClick={(e: any) => {
+                          e.stopPropagation();
+                          onCart(p);
+                        }}
+                      >
+                        Enroll Now
+                      </CommonButton>
+                    </div>
+                  </div>
                 </div>
               </div>
+            );
+          })}
+        </div>
 
-              {/* Content Section */}
-              <div className="p-6 flex flex-col justify-between flex-1 bg-white">
-                <div>
-                  <h3 className="text-lg leading-tight ff-font-bold min-h-[48px] mb-2 line-clamp-2">
-                    {p.title}
-                  </h3>
-
-                  <div className="mb-3">
-                    <p className="text-sm text-black ff-font mb-2 line-clamp-2 min-h-[40px]">
-                      {p.subtitle}
-                    </p>
-
-                    <div className="border-b border-[#f0b100]/20"></div>
-                  </div>
-
-                  {/* Rating & Learners */}
-                  <div className="mb-3">
-                    <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
-                      <div className="flex items-center gap-2 text-primary">
-                        <FaRegStar className="w-4 h-4" />
-                        <span className="font-medium ff-font text-black">
-                          {p.rating}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <FaUsers className="w-4 h-4 text-primary" />
-                        <span className="text-black ff-font">
-                          {" "}
-                          {p.total_reviews}+ learners
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mt-3 border-b border-[#f0b100]/20"></div>
-                  </div>
-
-                  {/* Duration & Price */}
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm text-black ff-font">
-                      {p.duration} month access
-                    </p>
-                    <p className="text-2xl font-bold ff-font-bold  text-black">
-                      ${p.price}
-                    </p>
-                  </div>
-
-                  {/* Features */}
-                  <div className="flex items-center justify-between text-xs text-black mt-3 gap-3 border-t border-[#f0b100]/20 pt-3">
-                    <div className="flex-1 text-center">
-                      <span className="ff-font">E-certificate included</span>
-                    </div>
-                    <div className="flex-1 text-center">
-                      <span className="ff-font">CV + CME friendly</span>
-                    </div>
-                    <div className="flex-1 text-center">
-                      <span className="ff-font">One-time payment</span>
-                    </div>
-                  </div>
-                </div>
-                {/* Buttons */}
-                <div className="flex flex-col gap-3 mt-3">
-                  <CommonButton
-                    pyClass="py-0"
-                    pxClass="px-2"
-                    fontWeight={700}
-                    fontSize={14}
-                    onClick={() => onCart(p)}
-                  >
-                    {/* Add to cart */}
-                    Enroll Now
-                  </CommonButton>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+        {/* Right Arrow */}
+        <button
+          onClick={() =>
+            document
+              .getElementById("courseScroll")
+              ?.scrollBy({ left: 350, behavior: "smooth" })
+          }
+          className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+        >
+          <FaChevronDown className="-rotate-90 w-5 h-5" />
+        </button>
       </div>
 
-      {/* Right Arrow */}
-      <button
-        onClick={() =>
-          document
-            .getElementById("courseScroll")
-            ?.scrollBy({ left: 350, behavior: "smooth" })
-        }
-        className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+      {/* Bundle Offer */}
+      <div
+        className="relative animate-fade-in-up"
+        style={{ animationDelay: "0.3s" }}
       >
-        <FaChevronDown className="-rotate-90 w-5 h-5" />
-      </button>
-    </div>
-
-    {/* Bundle Offer */}
-    <div
-      className="relative animate-fade-in-up"
-      style={{ animationDelay: "0.3s" }}
-    >
-      {/* <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl blur-lg opacity-20" /> */}
-      <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          {/* <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-lg">
-                                    <FaMoneyBillWave className="w-8 h-8" />
-                                </div> */}
-          <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
-            <FaMoneyBillWave className="w-8 h-8 text-primary" />
-          </div>
-          <div className="text-center md:text-left">
-            <h3 className="text-2xl md:text-3xl font-bold mb-2 ff-font-bold ">
-              Bundle more. Save more.
-            </h3>
-            <p className="text-lg ff-font mb-4">
-              Add one more Mendel Mastery course and get{" "}
-              <span className="font-bold ff-font-bold ">10% OFF</span>. Bundle
-              all 3 and save up to{" "}
-              <span className="font-bold ff-font-bold ">20%</span>.
-            </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-              <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-medium">
-                1 course = regular price
-              </span>
-              <span className="px-4 py-2 ff-font-bold  rounded-full border-primary text-sm font-bold">
-                2 courses = 10% off
-              </span>
-              <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-bold">
-                3 courses = 20% off
-              </span>
+        <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
+              <FaMoneyBillWave className="w-8 h-8 text-primary" />
             </div>
-            <p className="text-sm ff-font mt-4">
-              Discount applied automatically at checkout.
-            </p>
+            <div className="text-center md:text-left">
+              <h3 className="text-2xl md:text-3xl font-bold mb-2 ff-font-bold ">
+                Bundle more. Save more.
+              </h3>
+              <p className="text-lg ff-font mb-4">
+                Add one more Mendel Mastery course and get{" "}
+                <span className="font-bold ff-font-bold ">10% OFF</span>. Bundle
+                all 3 and save up to{" "}
+                <span className="font-bold ff-font-bold ">20%</span>.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-medium">
+                  1 course = regular price
+                </span>
+                <span className="px-4 py-2 ff-font-bold  rounded-full border-primary text-sm font-bold">
+                  2 courses = 10% off
+                </span>
+                <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-bold">
+                  3 courses = 20% off
+                </span>
+              </div>
+              <p className="text-sm ff-font mt-4">
+                Discount applied automatically at checkout.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
+};
 
 const Section = ({
   title,
