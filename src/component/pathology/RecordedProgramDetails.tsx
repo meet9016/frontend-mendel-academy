@@ -28,7 +28,9 @@ type OptionType = "record-book" | "video" | "writing-book";
 interface Option {
   type: OptionType;
   description: string;
-  price: number;
+  price: number;           // Display price (already converted by backend)
+  price_usd?: number;      // Original USD price
+  price_inr?: number;      // Original INR price
   features: string[];
   is_available: boolean;
 }
@@ -39,7 +41,9 @@ interface ProgramDetail {
   subtitle: string;
   category: string;
   description: string;
-  price: number;
+  price: number;           // Display price (already converted by backend)
+  price_usd?: number;      // Original USD price
+  price_inr?: number;      // Original INR price
   duration: string;
   rating: number;
   total_reviews: number;
@@ -47,7 +51,8 @@ interface ProgramDetail {
   status: string;
   date: string;
   createdAt: string;
-  currency: string;
+  currency: string;        // 'INR' or 'USD' based on user location
+  user_country?: string;
   options?: Option[];
 }
 
@@ -70,7 +75,7 @@ const getTitleForType = (type: OptionType): string => {
   return titleMap[type] || type;
 };
 
-// ✅ Helper to format currency with null checks
+// ✅ Helper to format currency based on user's location
 const formatCurrency = (amount: number | undefined | null, currency: string) => {
   const safeAmount = Number(amount) || 0;
 
@@ -78,6 +83,19 @@ const formatCurrency = (amount: number | undefined | null, currency: string) => 
     return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   }
   return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
+
+// ✅ Helper to get the correct price based on currency
+const getPriceForCurrency = (option: Option, currency: string): number => {
+  // If backend sent both prices, use the appropriate one
+  if (currency === 'INR' && option.price_inr) {
+    return option.price_inr;
+  }
+  if (currency === 'USD' && option.price_usd) {
+    return option.price_usd;
+  }
+  // Fallback to display price (already converted by backend)
+  return option.price;
 };
 
 /* ---------- ADD TO CART FUNCTION ---------- */
@@ -226,12 +244,12 @@ export default function RecordedProgramDetails() {
     );
   };
 
-  const total =
-    selectedOptions.length === 0
-      ? program?.price || 0
-      : program?.options
-        ?.filter(o => selectedOptions.includes(o.type))
-        .reduce((sum, o) => sum + o.price, 0) || 0;
+  // ✅ Calculate total using the correct currency prices
+  const total = selectedOptions.length === 0
+    ? program?.price || 0
+    : program?.options
+      ?.filter(o => selectedOptions.includes(o.type))
+      .reduce((sum, o) => sum + getPriceForCurrency(o, program.currency), 0) || 0;
 
   const handleAddToCart = async () => {
     if (!program) return;
@@ -280,6 +298,7 @@ export default function RecordedProgramDetails() {
     );
   }
 
+  // ✅ Currency is determined by backend based on user's IP location
   const programCurrency = program.currency || 'USD';
 
   return (
@@ -355,6 +374,9 @@ export default function RecordedProgramDetails() {
                 const Icon = getIconForType(opt.type);
                 const title = getTitleForType(opt.type);
 
+                // ✅ Get the correct price based on user's currency
+                const displayPrice = getPriceForCurrency(opt, programCurrency);
+
                 return (
                   <div
                     key={opt.type}
@@ -404,7 +426,7 @@ export default function RecordedProgramDetails() {
 
                     {/* ✅ Price with correct currency */}
                     <span className="text-primary font-bold">
-                      {formatCurrency(opt.price, programCurrency)}{" "}
+                      {formatCurrency(displayPrice, programCurrency)}{" "}
                       <span className="text-lg font-normal">/one-time</span>
                     </span>
                   </div>

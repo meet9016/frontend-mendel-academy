@@ -1,25 +1,20 @@
-"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { BiShoppingBag } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import CommonButton from "@/comman/Button";
 
-// ✅ Helper function to format currency with null checks
-const formatCurrency = (amount: number | undefined | null, currency: string) => {
-  // Handle undefined, null, or NaN values
+// Helper function to format currency
+const formatCurrency = (amount, currency) => {
   const safeAmount = Number(amount) || 0;
-
   if (currency === 'INR') {
     return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   }
   return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
 
-// ✅ Helper function to get icon for option type
-const getOptionIcon = (type: string) => {
+// Helper function to get icon for option type
+const getOptionIcon = (type) => {
   switch (type) {
     case "record-book":
       return <FiBook className="w-3 h-3" />;
@@ -32,8 +27,8 @@ const getOptionIcon = (type: string) => {
   }
 };
 
-// ✅ Helper function to get title for option type
-const getOptionTitle = (type: string) => {
+// Helper function to get title for option type
+const getOptionTitle = (type) => {
   switch (type) {
     case "record-book":
       return "Record Book";
@@ -46,14 +41,13 @@ const getOptionTitle = (type: string) => {
   }
 };
 
-// ✅ Smart URL Generator based on product type
-const getProductUrl = (item: any) => {
+// Smart URL Generator based on product type
+const getProductUrl = (item) => {
   if (item.redirect_url) {
     return item.redirect_url;
   }
 
   const productId = item.product_id?._id || item.product_id;
-
   if (!productId) {
     console.warn("No product ID available for cart item:", item);
     return null;
@@ -73,44 +67,48 @@ const getProductUrl = (item: any) => {
   return `/product/${productId}`;
 };
 
-interface MyCartProps {
-  cartData: any[];
-  cartTotalAmount: number;
-  setIsCartOpen: (open: boolean) => void;
-  MdRemoveShoppingCart: (id: string) => void;
-  removeCartOption?: (cartId: string, optionType: string) => void;
-  isLoading?: boolean;
-  currency?: string;
-}
-
-const MyCart: React.FC<MyCartProps> = ({
-  cartData,
-  cartTotalAmount,
+const MyCart = ({
+  cartData = [],
+  cartTotalAmount = 0,
   setIsCartOpen,
   MdRemoveShoppingCart,
   removeCartOption,
   isLoading = false,
   currency = 'USD',
+  onCartUpdate
 }) => {
-  const router = useRouter();
-
-  // ✅ Handle cart item click
-  const handleCartItemClick = (item: any, e: React.MouseEvent) => {
+  const handleCartItemClick = (item, e) => {
     if (
-      (e.target as HTMLElement).closest('[data-action="delete"]') ||
-      (e.target as HTMLElement).closest('[data-action="remove-option"]')
+      e.target.closest('[data-action="delete"]') ||
+      e.target.closest('[data-action="remove-option"]')
     ) {
       return;
     }
 
     const url = getProductUrl(item);
-
     if (url) {
       setIsCartOpen(false);
-      router.push(url);
+      window.location.href = url;
     } else {
       console.error("Could not determine URL for item:", item);
     }
+  };
+
+  const handleRemoveOption = async (cartId, optionType) => {
+    if (removeCartOption) {
+      const success = await removeCartOption(cartId, optionType);
+      if (success && onCartUpdate) {
+        onCartUpdate();
+      }
+    }
+  };
+
+  const handleCheckout = () => {
+    const tempIdGet = sessionStorage.getItem("temp_id");
+    const userId = localStorage.getItem("user_id");
+    const finalId = userId || tempIdGet;
+    window.location.href = `/checkout/${finalId}`;
+    setIsCartOpen(false);
   };
 
   return (
@@ -137,7 +135,7 @@ const MyCart: React.FC<MyCartProps> = ({
           damping: 14,
           duration: 0.7,
         }}
-        className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl z-50 rounded-l-3xl overflow-hidden perspective-1000"
+        className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl z-50 rounded-l-3xl overflow-hidden"
       >
         <motion.div
           className="flex flex-col h-full relative overflow-hidden"
@@ -148,38 +146,36 @@ const MyCart: React.FC<MyCartProps> = ({
           {/* Header */}
           <div className="relative flex items-center justify-between p-6 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="bg-white border-primary p-3 rounded-xl shadow-lg">
-                  <BiShoppingBag className="w-6 h-6 text-primary" />
-                </div>
+              <div className="bg-white border-2 border-yellow-400 p-3 rounded-xl shadow-lg">
+                <BiShoppingBag className="w-6 h-6 text-yellow-500" />
               </div>
               <div>
-                <h2 className="text-2xl ff-font-bold font-bold">My Cart</h2>
-                <p className="text-sm ff-font">
-                  {!isLoading && cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'course' : 'courses'} selected`}
+                <h2 className="text-2xl font-bold">My Cart</h2>
+                <p className="text-sm text-gray-600">
+                  {!isLoading && cartData.length > 0 && `${cartData.length} ${cartData.length === 1 ? 'item' : 'items'}`}
                   {isLoading && "Loading..."}
                 </p>
               </div>
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
-              className="p-2 hover:bg-yellow-50 rounded-xl cursor-pointer transition-all duration-200 hover:scale-110"
+              className="p-2 hover:bg-yellow-50 rounded-xl transition-all duration-200 hover:scale-110"
             >
               <AiOutlineClose className="w-6 h-6" />
             </button>
           </div>
 
-          {/* ✅ LOADING STATE */}
+          {/* Loading State */}
           {isLoading ? (
             <div className="flex-1 flex flex-col items-center justify-center p-8">
               <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-[#FFCA00]"></div>
-                <BiShoppingBag className="w-8 h-8 text-[#FFCA00] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-yellow-500"></div>
+                <BiShoppingBag className="w-8 h-8 text-yellow-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <p className="mt-4 text-gray-500 ff-font">Loading your cart...</p>
+              <p className="mt-4 text-gray-500">Loading your cart...</p>
             </div>
           ) : (
-            /* ✅ CART ITEMS */
+            /* Cart Items */
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {cartData.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -188,33 +184,29 @@ const MyCart: React.FC<MyCartProps> = ({
                 </div>
               ) : (
                 cartData.map((item) => {
-                  // ✅ Get currency from item or fallback to prop
                   const itemCurrency = item.currency || currency;
                   const itemPrice = item.total_price || item.price || 0;
 
                   return (
                     <div
                       key={item._id}
-                      className="group relative bg-white border border-primary rounded-2xl overflow-hidden hover:shadow-lg hover:border-[#FFCA00] transition-all duration-300"
+                      className="group relative bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-yellow-400 transition-all duration-300"
                     >
                       {/* Clickable Content Area */}
                       <div
                         onClick={(e) => handleCartItemClick(item, e)}
                         className="cursor-pointer p-4"
                       >
-                        {/* Header Row: Title + Price + Delete */}
+                        {/* Header: Title + Price + Delete */}
                         <div className="flex items-start justify-between gap-3 mb-3">
-                          {/* Title */}
-                          <h3 className="ff-font-bold font-bold flex-1 line-clamp-2 transition-colors">
+                          <h3 className="font-bold flex-1 line-clamp-2">
                             {item.product_id?.title || item.category_name}
                           </h3>
 
-                          {/* ✅ Price with correct currency */}
-                          <div className="text-lg font-bold text-primary whitespace-nowrap">
+                          <div className="text-lg font-bold text-yellow-600 whitespace-nowrap">
                             {formatCurrency(itemPrice, itemCurrency)}
                           </div>
 
-                          {/* Delete Button */}
                           <button
                             data-action="delete"
                             onClick={(e) => {
@@ -229,11 +221,11 @@ const MyCart: React.FC<MyCartProps> = ({
                         </div>
 
                         {/* Duration Badge */}
-                        <div className="flex ff-font-bold items-center gap-2 mb-3">
-                          <span className="text-xs bg-white border border-primary px-2.5 py-1 rounded-full font-medium">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-xs bg-white border border-yellow-400 px-2.5 py-1 rounded-full font-medium">
                             Duration: {item.duration} Months
                           </span>
-                          <span className="text-xs font-medium ff-font-bold">
+                          <span className="text-xs font-medium">
                             Qty: {item.quantity}
                           </span>
                         </div>
@@ -241,23 +233,22 @@ const MyCart: React.FC<MyCartProps> = ({
                         {/* Selected Bundle Options */}
                         {item.selected_options && item.selected_options.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
-                            {item.selected_options.map((optionType: string) => (
+                            {item.selected_options.map((optionType) => (
                               <div
                                 key={optionType}
-                                className="flex items-center gap-1.5 bg-yellow-50 border border-primary px-2.5 py-1 rounded-full text-xs group/option"
+                                className="flex items-center gap-1.5 bg-yellow-50 border border-yellow-400 px-2.5 py-1 rounded-full text-xs group/option"
                               >
                                 {getOptionIcon(optionType)}
                                 <span className="font-medium">
                                   {getOptionTitle(optionType)}
                                 </span>
 
-                                {/* Remove individual option */}
-                                {item.selected_options.length > 1 && removeCartOption && (
+                                {item.selected_options.length > 1 && (
                                   <button
                                     data-action="remove-option"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      removeCartOption(item._id, optionType);
+                                      handleRemoveOption(item._id, optionType);
                                     }}
                                     className="ml-0.5 p-0.5 rounded-full hover:bg-red-100 hover:text-red-500 opacity-0 group-hover/option:opacity-100 transition-all"
                                     title={`Remove ${getOptionTitle(optionType)}`}
@@ -272,7 +263,7 @@ const MyCart: React.FC<MyCartProps> = ({
                       </div>
 
                       {/* Hover Indicator */}
-                      <div className="absolute bottom-2 right-3 text-xs ff-font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      <div className="absolute bottom-2 right-3 text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         Click to view →
                       </div>
                     </div>
@@ -282,7 +273,7 @@ const MyCart: React.FC<MyCartProps> = ({
             </div>
           )}
 
-          {/* ✅ Footer */}
+          {/* Footer */}
           {!isLoading && cartData.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -292,42 +283,31 @@ const MyCart: React.FC<MyCartProps> = ({
               className="border-t border-gray-200 p-6 bg-white space-y-4"
             >
               <div className="flex justify-between items-center">
-                <span className="ff-font-bold font-medium">Subtotal</span>
+                <span className="font-medium">Subtotal</span>
                 <span className="font-bold text-lg">
                   {formatCurrency(cartTotalAmount, cartData[0]?.currency || currency)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="ff-font-bold font-medium">Discount</span>
+                <span className="font-medium">Discount</span>
                 <span className="font-bold text-green-600 text-lg">
                   {formatCurrency(0, cartData[0]?.currency || currency)}
                 </span>
               </div>
 
-              <CommonButton
-                pyClass="py-3"
-                pxClass="px-38"
-                fontSize={18}
-                onClick={() => {
-                  const tempIdGet = sessionStorage.getItem("temp_id");
-                  const userId = localStorage.getItem("user_id");
-                  const finalId = userId || tempIdGet;
-                  router.push(`/checkout/${finalId}`);
-                  setIsCartOpen(false);
-                }}
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl transition-all duration-300 shadow-md"
               >
                 Checkout Now
-              </CommonButton>
+              </button>
 
-              <CommonButton
-                className="bg-white border border-primary"
-                pyClass="py-3"
-                pxClass="px-34"
-                fontSize={18}
+              <button
                 onClick={() => setIsCartOpen(false)}
+                className="w-full bg-white border-2 border-yellow-400 text-black font-semibold py-3 rounded-xl hover:bg-yellow-50 transition-all duration-300"
               >
                 Continue Shopping
-              </CommonButton>
+              </button>
             </motion.div>
           )}
         </motion.div>

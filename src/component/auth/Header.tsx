@@ -222,17 +222,19 @@ export default function Header() {
   // ✅ FIX 6: Add removeCartOption function
   const removeCartOption = async (cartId: string, optionType: string) => {
     try {
-      const res = await api.delete(`${endPointApi.removeCartOption}`, {
-        data: { cart_id: cartId, option_type: optionType }
+      // ✅ Changed from DELETE to POST
+      const res = await api.post(`${endPointApi.removeCartOption}`, {
+        cart_id: cartId,
+        option_type: optionType
       });
 
       if (res.data) {
         // If last option was removed (cart item deleted), decrement count
-        if (res.data.data === null) {
+        if (res.data.deleted) {
           dispatch(decrementCartCount(1));
         }
 
-        // ✅ Just refresh cart data without closing/reopening
+        // Refresh cart data
         const finalId = userId || tempIdGet;
         if (finalId) {
           const cartRes = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);

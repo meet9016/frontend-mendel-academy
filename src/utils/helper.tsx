@@ -17,31 +17,21 @@ export function formatPrice(value: string | number) {
   return num.toLocaleString("en-IN");
 }
 
-//temp_Id generate pc wise
+// ✅ Session-only temp_id (resets on browser close)
 export const getTempId = () => {
-  // ✅ Try localStorage first (persists across browser sessions)
-  let tempId = localStorage.getItem("temp_id");
+  let tempId = sessionStorage.getItem("temp_id");
 
-  // ✅ Fallback to sessionStorage
-  if (!tempId) {
-    tempId = sessionStorage.getItem("temp_id");
-  }
-
-  // ✅ Generate new ID only if none exists
+  // ✅ Generate new ID if none exists in session
   if (!tempId) {
     tempId = "guest_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
-
-    // ✅ Store in BOTH for redundancy
-    localStorage.setItem("temp_id", tempId);
     sessionStorage.setItem("temp_id", tempId);
   }
 
   return tempId;
 };
 
-// ✅ Clear both storages on logout
+// ✅ Clear session storage on logout
 export const removeTempId = () => {
-  localStorage.removeItem("temp_id");
   sessionStorage.removeItem("temp_id");
 };
 

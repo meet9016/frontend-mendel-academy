@@ -3,7 +3,7 @@ export interface EndPointApi {
     register: string;
     logout: string;
     getProfile: string;
-    
+
     //Blogs
     getAllBlogs?: string;
     getBlogById?: string;
@@ -27,6 +27,7 @@ export interface EndPointApi {
     postCreateAddToCart?: string;
     cartCount?: string;
     removeCart?: string;
+    removeCartOption?: string;
 
     //checkout
     getcheckoutTempId: string,
@@ -81,6 +82,7 @@ const endPointApi: EndPointApi = {
     postCreateAddToCart: 'cart/create',
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
+    removeCartOption: '/cart/remove-option',
 
     //checkout
     getcheckoutTempId: 'cart/get-checkout',
