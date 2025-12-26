@@ -41,30 +41,77 @@ const getOptionTitle = (type) => {
   }
 };
 
-// Smart URL Generator based on product type
+// ✅ ENHANCED: Helper to format duration with better fallback logic
+const formatDuration = (item) => {
+  if (item.cart_type === 'exam_plan') {
+    // For exam plans, try multiple sources
+    let months = item.plan_details?.plan_month ||
+      item.plan_details?.plan_day ||
+      item.duration;
+
+    // Clean up the value (remove "months", "undefined", etc.)
+    if (typeof months === 'string') {
+      months = months.replace(/[^\d]/g, ''); // Remove non-numeric characters
+    }
+
+    const monthValue = Number(months);
+
+    // If still invalid, try to get from exam_category_id
+    if (isNaN(monthValue) || monthValue === 0) {
+      if (item.exam_category_id?.choose_plan_list) {
+        const matchingPlan = item.exam_category_id.choose_plan_list.find(
+          p => p._id === item.plan_id
+        );
+        if (matchingPlan) {
+          const planDuration = Number(matchingPlan.plan_month || matchingPlan.plan_day);
+          if (!isNaN(planDuration) && planDuration > 0) {
+            return `${planDuration} Month${planDuration !== 1 ? 's' : ''}`;
+          }
+        }
+      }
+      return 'Duration not specified';
+    }
+
+    return `${monthValue} Month${monthValue !== 1 ? 's' : ''}`;
+  } else {
+    // For PreRecord products
+    const duration = item.duration;
+    const durationValue = Number(duration);
+
+    if (isNaN(durationValue) || durationValue === 0) {
+      return 'Duration not specified';
+    }
+
+    return `${durationValue} Month${durationValue !== 1 ? 's' : ''}`;
+  }
+};
+
+// ✅ FIXED: Smart URL Generator based on product type
 const getProductUrl = (item) => {
   if (item.redirect_url) {
     return item.redirect_url;
   }
 
-  const productId = item.product_id?._id || item.product_id;
-  if (!productId) {
-    console.warn("No product ID available for cart item:", item);
+  // ✅ Handle exam_plan type (Medical Exam Programs)
+  if (item.cart_type === 'exam_plan') {
+    const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
+    if (examCategoryId) {
+      return `/medicalexam/${examCategoryId}`;
+    }
+    console.warn("No exam_category_id available for exam_plan item:", item);
     return null;
   }
 
-  const category = item.category_name?.toLowerCase() || "";
-
-  if (category.includes("pathology")) {
-    return `/pathology/${productId}`;
-  } else if (category.includes("medical") || category.includes("exam")) {
-    const examId = item.exam_id || "default-exam";
-    return `/medicalexam/${examId}/course/${productId}`;
-  } else if (item.product_type === "course") {
-    return `/course/${productId}`;
+  if (item.cart_type === 'prerecord') {
+    const productId = item.product_id?._id || item.product_id;
+    if (productId) {
+      return `/pathology/${productId}`;
+    }
+    console.warn("No exam_category_id available for exam_plan item:", item);
+    return null;
   }
-
-  return `/product/${productId}`;
+  
+  return null;
 };
 
 const MyCart = ({
@@ -220,10 +267,10 @@ const MyCart = ({
                           </button>
                         </div>
 
-                        {/* Duration Badge */}
+                        {/* Duration Badge - ✅ FIXED */}
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-xs bg-white border border-yellow-400 px-2.5 py-1 rounded-full font-medium">
-                            Duration: {item.duration} Months
+                            Duration: {formatDuration(item)}
                           </span>
                           <span className="text-xs font-medium">
                             Qty: {item.quantity}

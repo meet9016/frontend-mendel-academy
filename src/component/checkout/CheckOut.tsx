@@ -13,7 +13,6 @@ import endPointApi from "@/utils/endPointApi";
 import {
   FaCreditCard,
   FaEnvelope,
-  FaPhone,
   FaUser,
   FaWallet,
 } from "react-icons/fa";
@@ -24,6 +23,54 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId } from "@/utils/helper";
+
+// ✅ Helper function to format duration for checkout
+const formatDuration = (item: any) => {
+  // For exam plans
+  if (item.cart_type === 'exam_plan') {
+    // Try multiple sources in order of priority
+    let months =
+      item.plan_details?.plan_month ||
+      item.duration;
+
+    // Clean string values
+    if (typeof months === 'string') {
+      months = months.replace(/[^\d]/g, '');
+    }
+
+    const monthValue = parseInt(months) || 0;
+
+    // If still zero, try to get from the populated exam_category_id
+    if (monthValue === 0 && item.exam_category_id?.choose_plan_list) {
+      const matchingPlan = item.exam_category_id.choose_plan_list.find(
+        (p: any) => p._id === item.plan_id
+      );
+
+      if (matchingPlan) {
+        const planDuration = parseInt(matchingPlan.plan_month || matchingPlan.plan_day) || 0;
+        if (planDuration > 0) {
+          return `${planDuration} Month${planDuration !== 1 ? 's' : ''}`;
+        }
+      }
+    }
+
+    if (monthValue === 0) {
+      return 'Not specified';
+    }
+
+    return `${monthValue} Month${monthValue !== 1 ? 's' : ''}`;
+  }
+
+  // For PreRecord products
+  const duration = item.duration;
+  const durationValue = parseInt(duration) || 0;
+
+  if (durationValue === 0) {
+    return 'Not specified';
+  }
+
+  return `${durationValue} Month${durationValue !== 1 ? 's' : ''}`;
+};
 
 const StripeCheckoutForm = ({
   full_name,
@@ -38,46 +85,45 @@ const StripeCheckoutForm = ({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = (e: any) => {
     if (!stripe || !elements) return;
 
     setLoading(true);
     setMessage("");
 
-    const result: any = await stripe.confirmPayment({
+    stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url: window.location.origin + "/paymentsuccess",
         receipt_email: email,
       },
       redirect: "if_required",
-    });
+    }).then(async (result: any) => {
+      if (result.error) {
+        setMessage(result.error.message);
+        setLoading(false);
+        return;
+      }
 
-    if (result.error) {
-      setMessage(result.error.message);
+      if (result.paymentIntent?.status === "succeeded") {
+        await api
+          .post(`${endPointApi.verifyStripePayment}`, {
+            paymentIntentId: result.paymentIntent.id,
+            full_name,
+            email,
+            phone,
+            plan_id: id,
+            amount: plan.totalAmount,
+          })
+          .then((res) => {
+            localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
+          });
+
+        onSuccess();
+      }
+
       setLoading(false);
-      return;
-    }
-
-    if (result.paymentIntent?.status === "succeeded") {
-      await api
-        .post(`${endPointApi.verifyStripePayment}`, {
-          paymentIntentId: result.paymentIntent.id,
-          full_name,
-          email,
-          phone,
-          plan_id: id,
-          amount: plan.totalAmount,
-        })
-        .then((res) => {
-          localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
-        });
-
-      onSuccess();
-    }
-
-    setLoading(false);
+    });
   };
 
   return (
@@ -95,7 +141,7 @@ const StripeCheckoutForm = ({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-4">
         <div className="p-4 bg-gray-50 border rounded-xl">
           <PaymentElement />
         </div>
@@ -107,7 +153,7 @@ const StripeCheckoutForm = ({
         )}
 
         <button
-          type="submit"
+          onClick={handleSubmit}
           disabled={!stripe || loading}
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
             ${loading || !stripe
@@ -124,7 +170,7 @@ const StripeCheckoutForm = ({
             "Pay Now"
           )}
         </button>
-      </form>
+      </div>
     </div>
   );
 };
@@ -192,6 +238,7 @@ const CheckOut = () => {
 
       setLoading(true);
       const res = await api.get(`${endPointApi.getcheckoutTempId}/${actualId}`);
+      console.log('📦 Checkout data received:', res?.data);
       setPlan(res?.data);
     } catch (err) {
       console.error("Fetch checkout error:", err);
@@ -472,6 +519,7 @@ const CheckOut = () => {
           </div>
         </div>
 
+        {/* ✅ FIXED ORDER SUMMARY */}
         <div className="bg-white rounded-2xl shadow-md p-6 h-fit">
           <h2 className="text-xl font-bold ff-font-bold text-primary mb-4">
             Order Summary
@@ -493,8 +541,10 @@ const CheckOut = () => {
                   <p className="font-semibold text-sm">
                     {item.product_id?.title || item.category_name}
                   </p>
+
+                  {/* ✅ FIXED: Duration display */}
                   <p className="text-xs text-gray-500 mt-1">
-                    Duration: {item.duration} Months
+                    Duration: {formatDuration(item)}
                   </p>
 
                   {item.selected_options && item.selected_options.length > 0 && (
