@@ -1,5 +1,5 @@
 // WhoEnroll.tsx
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
 import Skeleton from "react-loading-skeleton";
@@ -18,59 +18,87 @@ import { toast } from "react-toastify";
 interface WhoEnrollProps {
   data: WhoEnrollData | null;
   loading: boolean;
+  examCategoryId?: string; // ✅ NEW: Pass exam category ID from parent
 }
 
-// WhoEnroll.types.ts
 export interface Plan {
   _id: string;
-  id: number;
-  name: string;
-  price: number;
+  id?: number;
+  name?: string;
   most_popular?: boolean;
   plan_type?: string;
-  plan_month?: number;
-  plan_pricing?: string;
+  plan_day?: number;
+  plan_pricing_dollar?: number;
+  plan_pricing_inr?: number;
   plan_sub_title?: string[];
 }
 
 export interface WhoEnrollData {
+  _id?: string;
   who_can_enroll_title?: string;
   who_can_enroll_description?: string;
   who_can_enroll_image?: string;
   choose_plan_list?: Plan[];
+  user_currency?: string; // ✅ Backend provides this based on IP
+  user_country?: string;
 }
 
-const WhoEnroll = ({ data, loading }: WhoEnrollProps) => {
-  console.log("data0000***",data);
-  
+const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const router = useRouter();
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
 
   const cleanHtml = DOMPurify.sanitize(data?.who_can_enroll_description || "", {
     USE_PROFILES: { html: true },
   });
 
-  const addToCart = async (data: string) => {
-    console.log("idddd****",data);
-    
-    const body = {
-      ...(userId ? { user_id: userId } : { temp_id: tempId }),
-      product_id: data?._id,
-      selected_options: ["writing-book"],
-      category_name: data.plan_type,
-      duration: data.plan_month,
-      bucket_type: true,
-    };
+  // ✅ Use backend-provided currency (based on IP detection)
+  // Fallback to isIndia() only if backend doesn't provide currency
+  const backendCurrency = data?.user_currency;
+  const fallbackCurrency = isIndia() ? "INR" : "USD";
+  const userCurrency = backendCurrency || fallbackCurrency;
 
-    const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
+  console.log("Currency Detection:", { backendCurrency, fallbackCurrency, userCurrency });
 
-    if (res.data.success) {
-      const identifier = userId || tempId;
-      const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+  const addToCart = async (plan: Plan) => {
+    try {
+      setLoadingPlanId(plan._id);
 
-      store.dispatch(setCartCount(countRes.data.count));
-      toast.success("Product added to cart successfully!");
+      // ✅ Use exam category ID from parent component
+      const categoryId = examCategoryId || data?._id;
+
+      if (!categoryId) {
+        toast.error("Category ID is missing");
+        return;
+      }
+
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: categoryId,
+        plan_id: plan._id,
+        bucket_type: true,
+      };
+
+      const res = await api.post(`${endPointApi.postAddExamPlanToCart}`, body);
+
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+
+        store.dispatch(setCartCount(countRes.data.count));
+        toast.success("Plan added to cart successfully!");
+      }
+    } catch (error: any) {
+      console.error("Error adding to cart:", error);
+
+      if (error.response?.status === 409) {
+        toast.info("This plan is already in your cart");
+      } else {
+        toast.error(error.response?.data?.message || "Failed to add plan to cart");
+      }
+    } finally {
+      setLoadingPlanId(null);
     }
   };
 
@@ -90,8 +118,9 @@ const WhoEnroll = ({ data, loading }: WhoEnrollProps) => {
         <PricingSection
           plans={data?.choose_plan_list || []}
           loading={loading}
-          onEnroll={(data) => addToCart(data)}
-          // onEnroll={(id) => router.push(`/checkout/${id}`)}
+          loadingPlanId={loadingPlanId}
+          userCurrency={userCurrency}
+          onEnroll={(plan) => addToCart(plan)}
         />
       </div>
     </section>
@@ -124,9 +153,12 @@ const ImageBlock = ({ src }: { src?: string }) => {
     <div className="order-2 flex justify-center md:order-1">
       <div className="relative overflow-hidden rounded-2xl border-4 border-primary shadow-xl p-2 w-[450px] h-[450px]">
         <img
-          src={src}
+          src={src || fallback}
           alt="Medical professional"
           className="w-full h-full object-cover rounded-xl"
+          onError={(e) => {
+            e.currentTarget.src = fallback;
+          }}
         />
       </div>
     </div>
@@ -152,11 +184,15 @@ const TextBlock = ({ title, html }: { title: string; html: string }) => (
 const PricingSection = ({
   plans,
   loading,
+  loadingPlanId,
+  userCurrency,
   onEnroll,
 }: {
   plans: Plan[];
   loading: boolean;
-  onEnroll: (id: string) => void;
+  loadingPlanId: string | null;
+  userCurrency: string;
+  onEnroll: (plan: Plan) => void;
 }) => (
   <div className="max-w-[1380px] mx-auto">
     <SectionHeading title="Choose Your Plan" />
@@ -169,6 +205,8 @@ const PricingSection = ({
           <PlanCard
             key={plan._id}
             plan={plan}
+            userCurrency={userCurrency}
+            isLoading={loadingPlanId === plan._id}
             onEnroll={() => onEnroll(plan)}
           />
         ))}
@@ -187,22 +225,31 @@ const SectionHeading = ({ title }: { title: string }) => (
 );
 
 // Single Plan Card
-const PlanCard = ({ plan, onEnroll }: { plan: Plan; onEnroll: () => void }) => {
-  const showIndiaPrice = isIndia();
+const PlanCard = ({
+  plan,
+  userCurrency,
+  isLoading,
+  onEnroll,
+}: {
+  plan: Plan;
+  userCurrency: string;
+  isLoading: boolean;
+  onEnroll: () => void;
+}) => {
+  // ✅ Get price based on user's currency (backend already converted this)
+  const price =
+    userCurrency === "INR"
+      ? plan.plan_pricing_inr
+      : plan.plan_pricing_dollar;
 
-  const price = showIndiaPrice
-    ? plan?.plan_pricing_dollar
-    : plan?.plan_pricing_inr;
-
-  const currencySymbol = showIndiaPrice ? "$" : "₹";
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
 
   return (
     <div
-      className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 ${
-        plan.most_popular
+      className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 ${plan.most_popular
           ? "border-primary shadow-xl"
           : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
-      }`}
+        }`}
     >
       {plan.most_popular && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -221,12 +268,12 @@ const PlanCard = ({ plan, onEnroll }: { plan: Plan; onEnroll: () => void }) => {
           </div>
 
           <h3 className="text-2xl font-bold ff-font-bold text-center">
-            {plan.plan_month} Month
+            {plan.plan_day} Month{plan.plan_day && plan.plan_day > 1 ? "s" : ""}
           </h3>
 
           <div className="space-y-2 text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? "")}
+              {currencySymbol} {formatPrice(price ?? 0)}
             </p>
           </div>
 
@@ -246,8 +293,9 @@ const PlanCard = ({ plan, onEnroll }: { plan: Plan; onEnroll: () => void }) => {
           pxClass="px-20"
           fontWeight={700}
           fontSize={14}
+          disabled={isLoading}
         >
-          Enroll Now
+          {isLoading ? "Adding..." : "Enroll Now"}
         </CommonButton>
       </div>
     </div>
