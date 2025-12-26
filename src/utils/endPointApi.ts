@@ -48,6 +48,10 @@ export interface EndPointApi {
 
     //LiveCourses
     getAllLiveCourses?: string;
+
+    //Hyper-Specialist
+    createHyperSpecialist?: string;
+    getAllHyperSpecialist?: string;
 }
 
 // Define and export the API endpoint object
@@ -103,6 +107,9 @@ const endPointApi: EndPointApi = {
 
     //LiveCourses
     getAllLiveCourses: 'livecourses/getLiveData',
+
+    //Hyper-Specialist
+    getAllHyperSpecialist: 'hyperspecialist/getall',
 };
 
 export default endPointApi;

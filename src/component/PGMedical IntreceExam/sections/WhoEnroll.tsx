@@ -189,7 +189,6 @@ const SectionHeading = ({ title }: { title: string }) => (
 // Single Plan Card
 const PlanCard = ({ plan, onEnroll }: { plan: Plan; onEnroll: () => void }) => {
   const showIndiaPrice = isIndia();
-  console.log("showIndiaPrice", showIndiaPrice);
 
   const price = showIndiaPrice
     ? plan?.plan_pricing_dollar
