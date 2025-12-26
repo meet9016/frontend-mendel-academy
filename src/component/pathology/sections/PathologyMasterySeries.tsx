@@ -321,19 +321,6 @@ const RecordedGrid = ({
               <div
                 key={productId || i}
                 className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
-                onClick={(e) => {
-                  // ✅ Prevent navigation if clicking on button
-                  if ((e.target as HTMLElement).closest('button')) {
-                    return;
-                  }
-
-                  if (productId) {
-                    router.push(`/pathology/${productId}`);
-                  } else {
-                    toast.error("Product ID not found");
-                    console.error("Missing product ID for program:", p);
-                  }
-                }}
               >
                 {/* Glow Border on Hover */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
@@ -417,7 +404,8 @@ const RecordedGrid = ({
                         fontSize={14}
                         onClick={(e: any) => {
                           e.stopPropagation();
-                          onCart(p);
+                          // onCart(p);
+                          router.push(`/pathology/${productId}`);
                         }}
                       >
                         Enroll Now

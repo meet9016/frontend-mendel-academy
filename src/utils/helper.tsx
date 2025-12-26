@@ -48,3 +48,9 @@ export const limitChars = (text: string, limit: number) => {
   if (!text) return "";
   return text.length > limit ? text.substring(0, limit) + "..." : text;
 };
+
+// Country detect
+export const isIndia = () => {
+  if (typeof window === "undefined") return false;
+  return Intl.DateTimeFormat().resolvedOptions().timeZone === "Asia/Kolkata";
+};
