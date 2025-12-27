@@ -3,6 +3,8 @@ export interface EndPointApi {
     register: string;
     logout: string;
     getProfile: string;
+    updateProfile: string;
+    updateProfilePhoto: string;
 
     //Blogs
     getAllBlogs?: string;
@@ -26,19 +28,19 @@ export interface EndPointApi {
     getCart?: string;
     postCreateAddToCart?: string;
     postAddExamPlanToCart?: string;
-    postAddHyperSpecialistToCart?: string; // ✅ NEW
+    postAddHyperSpecialistToCart?: string;
     cartCount?: string;
     removeCart?: string;
     removeCartOption?: string;
 
     //checkout
-    getcheckoutTempId: string,
+    getcheckoutTempId: string;
 
     //faq
     getAllFaq?: string;
 
     //User Reagister
-    userRagisterCreate?: string
+    userRagisterCreate?: string;
 
     //Payment
     verifyStripePayment: string;
@@ -62,6 +64,8 @@ const endPointApi: EndPointApi = {
     register: 'auth/register',
     logout: 'auth/logout',
     getProfile: 'auth/profile',
+    updateProfile: 'auth/profile',
+    updateProfilePhoto: 'auth/profile-photo',
 
     //Blogs
     getAllBlogs: 'blogs/getall',
@@ -87,7 +91,7 @@ const endPointApi: EndPointApi = {
     getCart: 'cart/get',
     postCreateAddToCart: 'cart/create',
     postAddExamPlanToCart: 'cart/add-exam-plan',
-    postAddHyperSpecialistToCart: 'cart/add-hyperspecialist', // ✅ NEW
+    postAddHyperSpecialistToCart: 'cart/add-hyperspecialist',
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
     removeCartOption: '/cart/remove-option',
