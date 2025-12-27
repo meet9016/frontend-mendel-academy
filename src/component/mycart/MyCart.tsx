@@ -76,6 +76,11 @@ const formatDuration = (item: any) => {
   else if (item.cart_type === 'hyperspecialist') {
     return 'Lifetime Access';
   }
+  // ✅ NEW: Handle LiveCourses duration
+  else if (item.cart_type === 'livecourses') {
+    // LiveCourses duration is stored as string like "8 weeks"
+    return item.duration || item.livecourse_id?.duration || 'Duration not specified';
+  }
   else {
     const duration = item.duration;
     const durationValue = Number(duration);
@@ -116,13 +121,17 @@ const getProductUrl = (item: any) => {
     return '/pathology/hyperspecialist';
   }
 
+  // ✅ NEW: Handle LiveCourses URL
+  if (item.cart_type === 'livecourses') {
+      return `/subscription`; 
+  }
+
   return null;
 };
 
 // ✅ NEW: Get title and subtitle for cart item based on type
 const getCartItemTitles = (item: any) => {
   if (item.cart_type === 'exam_plan') {
-    // For exam plans: Show exam name as primary, category as secondary
     const examName = item.exam_category_id?.exams?.[0]?.exam_name ||
       item.exam_category_id?.exams?.[0]?.title ||
       'Exam';
@@ -138,6 +147,17 @@ const getCartItemTitles = (item: any) => {
     return {
       primary: item.hyperspecialist_id?.title || item.title || item.category_name || 'Hyperspecialist Module',
       secondary: null
+    };
+  }
+
+  // ✅ NEW: Handle LiveCourses titles
+  if (item.cart_type === 'livecourses') {
+    const courseTitle = item.livecourse_id?.course_title || item.category_name;
+    const moduleTitle = item.livecourse_details?.title;
+
+    return {
+      primary: moduleTitle || courseTitle || 'Live Course Module',
+      secondary: moduleTitle ? courseTitle : null // Show course title as secondary if module title is primary
     };
   }
 
@@ -169,9 +189,9 @@ const MyCart: React.FC<MyCartProps> = ({
   currency = 'USD',
   onCartUpdate
 }) => {
-    const router = useRouter();
+  const router = useRouter();
 
-   const handleCartItemClick = (item: any, e: React.MouseEvent) => {
+  const handleCartItemClick = (item: any, e: React.MouseEvent) => {
     if (
       (e.target as HTMLElement).closest('[data-action="delete"]') ||
       (e.target as HTMLElement).closest('[data-action="remove-option"]')
