@@ -1,52 +1,31 @@
-import { api } from "@/utils/axiosInstance";
-import endPointApi from "@/utils/endPointApi";
 import React, { useEffect, useState } from "react";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
+import he from "he";
 import Skeleton from "react-loading-skeleton";
 
-const decodeHtml = (html: string) => {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
-};
-
-
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
 const TermsCondition = () => {
-  const [loading, setLoading] = useState(false);
-  const [terms, setTerms] = useState("");
+  const [data, setData] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const res = await api.get(`${endPointApi.getAllTermsAndConditions}`);
-
-        if (res?.data?.data?.description) {
-          setTerms(res.data.data.description);
-        }
+        setData(res?.data?.data?.description || "");
       } catch (error) {
-        console.error("Error fetching Terms & Conditions", error);
+        console.error("Error fetching T&C", error);
       } finally {
         setLoading(false);
       }
     })();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <span className="text-gray-500 text-lg">Loading...</span>
-      </div>
-    );
-  }
-
-    // 🔥 Step 1: Decode HTML
-  const decodedHtml = decodeHtml(terms);
-
-  // 🔒 Step 2: Sanitize
-  const cleanHtml = DOMPurify.sanitize(decodedHtml, {
-    USE_PROFILES: { html: true },
-  });
+  // ✅ SSR SAFE
+  const decodedHtml = he.decode(data);
+  const cleanHtml = DOMPurify.sanitize(decodedHtml);
 
   return (
     <section className="py-12 bg-gray-50">
