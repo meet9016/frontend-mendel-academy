@@ -54,6 +54,9 @@ export interface EndPointApi {
     //Hyper-Specialist
     createHyperSpecialist?: string;
     getAllHyperSpecialist?: string;
+
+    //Terms & Conditions
+    getAllTermsAndConditions?: string;
 }
 
 // Define and export the API endpoint object
@@ -114,6 +117,9 @@ const endPointApi: EndPointApi = {
 
     //Hyper-Specialist
     getAllHyperSpecialist: 'hyperspecialist/getall',
+
+    //Terms & Conditions
+    getAllTermsAndConditions: 'terms-conditions/get', 
 };
 
 export default endPointApi;

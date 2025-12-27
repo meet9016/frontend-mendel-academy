@@ -21,6 +21,7 @@ const navLinks: NavLink[] = [
   { name: "Blog", path: "/blog" },
   { name: "About Us", path: "/aboutUs" },
   { name: "PG Medical Entrance Exams", path: "/" },
+  { name: "Terms & Condition", path: "/terms-condition" },
 ];
 
 const socials: Social[] = [
