@@ -36,6 +36,13 @@ type CartItem = {
   quantity: number;
 };
 
+type UserProfile = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  profile_photo?: string;
+};
+
 export default function Header() {
   const userId = getAuthId();
   const dispatch = useDispatch<AppDispatch>();
@@ -57,6 +64,7 @@ export default function Header() {
   const [cartTotalAmount, setCartTotalAmount] = useState<number>(0);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [isCartLoading, setIsCartLoading] = useState<boolean>(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -67,6 +75,24 @@ export default function Header() {
     setTempIdGet(storedId);
     setIsInitialized(true);
   }, []);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!userId || !authToken) return;
+
+      try {
+        const response = await api.get(`${endPointApi.getProfile}/${userId}`);
+        if (response?.data?.user) {
+          setUserProfile(response.data.user);
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [userId, authToken]);
 
   // Fetch exams once on mount
   useEffect(() => {
@@ -139,8 +165,27 @@ export default function Header() {
     clearToken();
     clearAuthId();
     setIsProfileOpen(false);
+    setUserProfile(null);
     dispatch(resetCartCount());
     router.push("/auth/login");
+  };
+
+  // Helper function to get profile photo URL
+  const getProfilePhotoUrl = () => {
+    if (!userProfile?.profile_photo) {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+    }
+
+    const photoPath = userProfile.profile_photo;
+    const rawBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3699';
+    const baseUrl = rawBaseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+
+    if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+      return photoPath;
+    }
+
+    const cleanPath = photoPath.startsWith('/') ? photoPath.slice(1) : photoPath;
+    return `${baseUrl}/${cleanPath}`;
   };
 
   const containerVariants = {
@@ -213,7 +258,6 @@ export default function Header() {
     }
   };
 
-  // ✅ FIXED: Remove cart option function
   const removeCartOption = async (cartId: string, optionType: string): Promise<boolean> => {
     try {
       const res = await api.post(`${endPointApi.removeCartOption}`, {
@@ -222,12 +266,10 @@ export default function Header() {
       });
 
       if (res.data && res.data.success) {
-        // If the entire cart item was deleted (last option removed)
         if (res.data.deleted) {
           dispatch(decrementCartCount(1));
         }
 
-        // Refresh cart data
         const finalId = userId || tempIdGet;
         if (finalId) {
           const cartRes = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
@@ -418,12 +460,15 @@ export default function Header() {
                 onClick={() => {
                   setIsProfileOpen(!isProfileOpen);
                 }}
-                className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:scale-105 transition-all"
+                className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:border-gray-400 transition-all"
               >
                 <img
-                  src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+                  src={getProfilePhotoUrl()}
                   className="w-full h-full object-cover"
-                  alt="Guest User"
+                  alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User Profile"}
+                  onError={(e) => {
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                  }}
                 />
               </button>
             ) : (
@@ -529,13 +574,24 @@ export default function Header() {
                 )}
 
                 {authToken && (
-                  <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+                  <button
+                    onClick={() => {
+                      router.push("/editProfile");
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                  >
                     <img
-                      src="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
-                      alt="User"
-                      className="w-10 h-10 rounded-full object-cover"
+                      src={getProfilePhotoUrl()}
+                      alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                      }}
                     />
-                    <span className="font-medium ff-font">My Profile</span>
+                    <span className="font-medium ff-font">
+                      {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
+                    </span>
                   </button>
                 )}
 
@@ -560,7 +616,7 @@ export default function Header() {
       </div>
 
       {isProfileOpen && (
-        <div className="absolute right-0 mt-3 w-56 bg-white shadow-xl rounded-xl border border-gray-300 py-2 z-50 animate-fadeIn">
+        <div className="absolute right-4 mt-2 w-56 bg-white shadow-xl rounded-xl border border-gray-300 py-2 z-50 animate-fadeIn">
           <button
             onClick={() => {
               router.push("/editProfile");
