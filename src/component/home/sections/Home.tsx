@@ -2,7 +2,7 @@
 import { FiSearch } from "react-icons/fi";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CommonButton from "@/comman/Button";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRouter } from "next/navigation";
@@ -16,14 +16,20 @@ export interface Exam {
   total_reviews: number;
   features: string[];
   exam_name: string;
+  exam_id: string;
+  category_name: string;
 }
 
 /* ----------  HOOK  (keeps your exact fetch)  ---------- */
 const useExam = () => {
   const [examBank, setExamBank] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchExams = async () => {
       try {
         setLoading(true);
@@ -55,7 +61,85 @@ const useExam = () => {
 export default function Home() {
   const router = useRouter();
   const { examBank, loading } = useExam();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [filteredExams, setFilteredExams] = useState<Exam[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const searchRef = useRef<HTMLDivElement>(null);
+
   console.log("examBank*****", examBank);
+
+  // Handle search
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredExams([]);
+      setShowDropdown(false);
+      setSelectedIndex(-1);
+      return;
+    }
+
+    const filtered = examBank.filter((exam) =>
+      exam.exam_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredExams(filtered);
+    setShowDropdown(true);
+    setSelectedIndex(-1);
+  }, [searchTerm, examBank]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleExamClick = (examId: string) => {
+    router.push(`/medicalexam/${examId}`);
+    setShowDropdown(false);
+    setSearchTerm("");
+    setSelectedIndex(-1);
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown || filteredExams.length === 0) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex((prev) =>
+          prev < filteredExams.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedIndex >= 0) {
+          handleExamClick(filteredExams[selectedIndex].exam_id);
+        }
+        break;
+      case "Escape":
+        setShowDropdown(false);
+        setSelectedIndex(-1);
+        break;
+    }
+  };
+
+  // Scroll selected item into view
+  useEffect(() => {
+    if (selectedIndex >= 0) {
+      const element = document.getElementById(`exam-item-${selectedIndex}`);
+      element?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, [selectedIndex]);
 
   return (
     <>
@@ -78,16 +162,50 @@ export default function Home() {
             Personalized Medical Coaching
           </p>
 
-          <div className="w-full max-w-xl relative">
+          <div ref={searchRef} className="w-full max-w-xl relative">
             <FiSearch
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
               size={20}
             />
             <input
               type="text"
               placeholder="What do you want to learn today?"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => searchTerm && setShowDropdown(true)}
+              onKeyDown={handleKeyDown}
               className="w-full border border-gray-300 rounded-lg px-10 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-gray-700 placeholder-gray-400 transition"
             />
+
+            {/* Dropdown Results */}
+            {showDropdown && filteredExams.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-60 overflow-y-auto z-50">
+                {filteredExams.map((exam, index) => (
+                  <div
+                    id={`exam-item-${index}`}
+                    key={exam._id}
+                    onClick={() => handleExamClick(exam.exam_id)}
+                    className={`px-5 py-3.5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 ${selectedIndex === index
+                        ? 'bg-yellow-50 border-l-4 border-l-[#FFCA00]'
+                        : 'hover:bg-gray-50'
+                      }`}
+                  >
+                    <p className="ff-font text-sm text-gray-800 text-left">
+                      {exam.exam_name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* No Results */}
+            {showDropdown && searchTerm && filteredExams.length === 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-50">
+                <p className="ff-font text-sm text-gray-500 text-left">
+                  No exams found
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-2 w-full max-w-3xl">
