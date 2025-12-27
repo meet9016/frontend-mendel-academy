@@ -464,7 +464,7 @@ const CheckOut = () => {
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ffca00] outline-none transition"
                       value={billing.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
-                      disabled={!!userId}
+                      // disabled={!!userId}
                     />
                   </div>
                   {errors.phone && (

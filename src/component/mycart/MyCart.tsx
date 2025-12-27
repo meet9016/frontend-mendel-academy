@@ -1,11 +1,13 @@
+"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { BiShoppingBag } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 // Helper function to format currency
-const formatCurrency = (amount, currency) => {
+const formatCurrency = (amount: any, currency: any) => {
   const safeAmount = Number(amount) || 0;
   if (currency === 'INR') {
     return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
@@ -124,6 +126,8 @@ const MyCart = ({
   currency = 'USD',
   onCartUpdate
 }) => {
+    const router = useRouter();
+
   const handleCartItemClick = (item, e) => {
     if (
       e.target.closest('[data-action="delete"]') ||
@@ -154,7 +158,8 @@ const MyCart = ({
     const tempIdGet = sessionStorage.getItem("temp_id");
     const userId = localStorage.getItem("user_id");
     const finalId = userId || tempIdGet;
-    window.location.href = `/checkout/${finalId}`;
+    // window.location.href = `/checkout/${finalId}`;
+    router.push(`/checkout/${finalId}`)
     setIsCartOpen(false);
   };
 

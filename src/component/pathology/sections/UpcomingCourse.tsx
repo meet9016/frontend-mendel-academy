@@ -77,7 +77,7 @@ const UpcomingCourse = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 ">
           {courseData?.map((course: Course, index: number) => (
             <div
-              key={course?.id}
+              key={index}
               className="group relative animate-fade-in-up flex flex-col h-full "
               style={{ animationDelay: `${index * 0.2}s` }}
             >

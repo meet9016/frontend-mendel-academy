@@ -133,6 +133,29 @@ const EditProfile = () => {
     };
   }, []);
 
+  const downloadUserPayments = async () => {
+    try {
+      const response = await api.get(`/payment/user-download-excel`, {
+        params: {
+          user_id: userId, // required
+          // start_date & end_date not passed
+        },
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "user-payments.xlsx";
+      link.click();
+    } catch (error) {
+      console.error("Excel download failed", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-[1380px] mx-auto space-y-8">
@@ -313,19 +336,31 @@ const EditProfile = () => {
 
           {/* Payment History */}
           <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-[#fff9df] text-primary">
-                <FaCreditCard className="w-5 h-5" />
+            <div className="flex items-center justify-between gap-3 mb-6">
+              {/* Left side */}
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[#fff9df] text-primary">
+                  <FaCreditCard className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold ff-font-bold">
+                    Payment History
+                  </h3>
+                  <p className="text-xs ff-font text-gray-500">
+                    {payments.length} transactions
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-lg font-bold ff-font-bold">
-                  Payment History
-                </h3>
-                <p className="text-xs ff-font text-gray-500">
-                  {payments.length} transactions
-                </p>
-              </div>
+
+              {/* Right side */}
+              <button
+                onClick={downloadUserPayments}
+                className="bg-[#ffca00] px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 whitespace-nowrap cursor-pointer"
+              >
+                Download
+              </button>
             </div>
+
             <div className="space-y-4">
               {profileData?.payment?.map((p: any) => (
                 <div
