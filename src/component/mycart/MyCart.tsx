@@ -7,7 +7,7 @@ import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
 // Helper function to format currency
-const formatCurrency = (amount: any, currency: any) => {
+const formatCurrency = (amount: number, currency: string) => {
   const safeAmount = Number(amount) || 0;
   if (currency === 'INR') {
     return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
@@ -16,7 +16,7 @@ const formatCurrency = (amount: any, currency: any) => {
 };
 
 // Helper function to get icon for option type
-const getOptionIcon = (type) => {
+const getOptionIcon = (type: string) => {
   switch (type) {
     case "record-book":
       return <FiBook className="w-3 h-3" />;
@@ -30,7 +30,7 @@ const getOptionIcon = (type) => {
 };
 
 // Helper function to get title for option type
-const getOptionTitle = (type) => {
+const getOptionTitle = (type: string) => {
   switch (type) {
     case "record-book":
       return "Record Book";
@@ -44,25 +44,22 @@ const getOptionTitle = (type) => {
 };
 
 // ✅ ENHANCED: Helper to format duration with better fallback logic
-const formatDuration = (item) => {
+const formatDuration = (item: any) => {
   if (item.cart_type === 'exam_plan') {
-    // For exam plans, try multiple sources
     let months = item.plan_details?.plan_month ||
       item.plan_details?.plan_day ||
       item.duration;
 
-    // Clean up the value (remove "months", "undefined", etc.)
     if (typeof months === 'string') {
-      months = months.replace(/[^\d]/g, ''); // Remove non-numeric characters
+      months = months.replace(/[^\d]/g, '');
     }
 
     const monthValue = Number(months);
 
-    // If still invalid, try to get from exam_category_id
     if (isNaN(monthValue) || monthValue === 0) {
       if (item.exam_category_id?.choose_plan_list) {
         const matchingPlan = item.exam_category_id.choose_plan_list.find(
-          p => p._id === item.plan_id
+          (p: any) => p._id === item.plan_id
         );
         if (matchingPlan) {
           const planDuration = Number(matchingPlan.plan_month || matchingPlan.plan_day);
@@ -75,8 +72,11 @@ const formatDuration = (item) => {
     }
 
     return `${monthValue} Month${monthValue !== 1 ? 's' : ''}`;
-  } else {
-    // For PreRecord products
+  }
+  else if (item.cart_type === 'hyperspecialist') {
+    return 'Lifetime Access';
+  }
+  else {
     const duration = item.duration;
     const durationValue = Number(duration);
 
@@ -89,12 +89,11 @@ const formatDuration = (item) => {
 };
 
 // ✅ FIXED: Smart URL Generator based on product type
-const getProductUrl = (item) => {
+const getProductUrl = (item: any) => {
   if (item.redirect_url) {
     return item.redirect_url;
   }
 
-  // ✅ Handle exam_plan type (Medical Exam Programs)
   if (item.cart_type === 'exam_plan') {
     const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
     if (examCategoryId) {
@@ -109,14 +108,58 @@ const getProductUrl = (item) => {
     if (productId) {
       return `/pathology/${productId}`;
     }
-    console.warn("No exam_category_id available for exam_plan item:", item);
+    console.warn("No product_id available for prerecord item:", item);
     return null;
   }
-  
+
+  if (item.cart_type === 'hyperspecialist') {
+    return '/pathology/hyperspecialist';
+  }
+
   return null;
 };
 
-const MyCart = ({
+// ✅ NEW: Get title and subtitle for cart item based on type
+const getCartItemTitles = (item: any) => {
+  if (item.cart_type === 'exam_plan') {
+    // For exam plans: Show exam name as primary, category as secondary
+    const examName = item.exam_category_id?.exams?.[0]?.exam_name ||
+      item.exam_category_id?.exams?.[0]?.title ||
+      'Exam';
+    const categoryName = item.category_name || item.exam_category_id?.category_name;
+
+    return {
+      primary: examName,
+      secondary: categoryName
+    };
+  }
+
+  if (item.cart_type === 'hyperspecialist') {
+    return {
+      primary: item.hyperspecialist_id?.title || item.title || item.category_name || 'Hyperspecialist Module',
+      secondary: null
+    };
+  }
+
+  // For prerecord
+  return {
+    primary: item.product_id?.title || item.category_name || 'Product',
+    secondary: null
+  };
+};
+
+interface MyCartProps {
+  cartData?: any[];
+  cartTotalAmount?: number;
+  setIsCartOpen: (isOpen: boolean) => void;
+  MdRemoveShoppingCart: (cartId: string) => void;
+  removeCartOption?: (cartId: string, optionType: string) => Promise<boolean>;
+  isLoading?: boolean;
+  currency?: string;
+  onCartUpdate?: () => void;
+}
+
+const MyCart: React.FC<MyCartProps> = ({
   cartData = [],
   cartTotalAmount = 0,
   setIsCartOpen,
@@ -128,10 +171,10 @@ const MyCart = ({
 }) => {
     const router = useRouter();
 
-  const handleCartItemClick = (item, e) => {
+   const handleCartItemClick = (item: any, e: React.MouseEvent) => {
     if (
-      e.target.closest('[data-action="delete"]') ||
-      e.target.closest('[data-action="remove-option"]')
+      (e.target as HTMLElement).closest('[data-action="delete"]') ||
+      (e.target as HTMLElement).closest('[data-action="remove-option"]')
     ) {
       return;
     }
@@ -145,7 +188,7 @@ const MyCart = ({
     }
   };
 
-  const handleRemoveOption = async (cartId, optionType) => {
+  const handleRemoveOption = async (cartId: string, optionType: string) => {
     if (removeCartOption) {
       const success = await removeCartOption(cartId, optionType);
       if (success && onCartUpdate) {
@@ -238,6 +281,7 @@ const MyCart = ({
                 cartData.map((item) => {
                   const itemCurrency = item.currency || currency;
                   const itemPrice = item.total_price || item.price || 0;
+                  const { primary, secondary } = getCartItemTitles(item);
 
                   return (
                     <div
@@ -250,10 +294,17 @@ const MyCart = ({
                         className="cursor-pointer p-4"
                       >
                         {/* Header: Title + Price + Delete */}
-                        <div className="flex items-start justify-between gap-3 mb-3">
-                          <h3 className="font-bold flex-1 line-clamp-2">
-                            {item.product_id?.title || item.category_name}
-                          </h3>
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div className="flex-1">
+                            <h3 className="font-bold line-clamp-2">
+                              {primary}
+                            </h3>
+                            {secondary && (
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                {secondary}
+                              </p>
+                            )}
+                          </div>
 
                           <div className="text-lg font-bold text-yellow-600 whitespace-nowrap">
                             {formatCurrency(itemPrice, itemCurrency)}
@@ -272,20 +323,20 @@ const MyCart = ({
                           </button>
                         </div>
 
-                        {/* Duration Badge - ✅ FIXED */}
+                        {/* Duration Badge */}
                         <div className="flex items-center gap-2 mb-3">
                           <span className="text-xs bg-white border border-yellow-400 px-2.5 py-1 rounded-full font-medium">
-                            Duration: {formatDuration(item)}
+                            {formatDuration(item)}
                           </span>
                           <span className="text-xs font-medium">
                             Qty: {item.quantity}
                           </span>
                         </div>
 
-                        {/* Selected Bundle Options */}
-                        {item.selected_options && item.selected_options.length > 0 && (
+                        {/* Selected Bundle Options (for prerecord items only) */}
+                        {item.cart_type === 'prerecord' && item.selected_options && item.selected_options.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
-                            {item.selected_options.map((optionType) => (
+                            {item.selected_options.map((optionType: string) => (
                               <div
                                 key={optionType}
                                 className="flex items-center gap-1.5 bg-yellow-50 border border-yellow-400 px-2.5 py-1 rounded-full text-xs group/option"
@@ -295,6 +346,7 @@ const MyCart = ({
                                   {getOptionTitle(optionType)}
                                 </span>
 
+                                {/* ✅ Show remove button if more than 1 option */}
                                 {item.selected_options.length > 1 && (
                                   <button
                                     data-action="remove-option"
