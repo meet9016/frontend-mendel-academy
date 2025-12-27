@@ -29,6 +29,7 @@ export interface EndPointApi {
     postCreateAddToCart?: string;
     postAddExamPlanToCart?: string;
     postAddHyperSpecialistToCart?: string;
+    postAddLiveCoursesToCart?: string; // ✅ NEW
     cartCount?: string;
     removeCart?: string;
     removeCartOption?: string;
@@ -52,6 +53,7 @@ export interface EndPointApi {
 
     //LiveCourses
     getAllLiveCourses?: string;
+    getLiveCourseById?: string; // ✅ NEW (optional, for fetching single course)
 
     //Hyper-Specialist
     createHyperSpecialist?: string;
@@ -95,6 +97,7 @@ const endPointApi: EndPointApi = {
     postCreateAddToCart: 'cart/create',
     postAddExamPlanToCart: 'cart/add-exam-plan',
     postAddHyperSpecialistToCart: 'cart/add-hyperspecialist',
+    postAddLiveCoursesToCart: 'cart/add-livecourse', // ✅ NEW
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
     removeCartOption: '/cart/remove-option',
@@ -118,12 +121,13 @@ const endPointApi: EndPointApi = {
 
     //LiveCourses
     getAllLiveCourses: 'livecourses/getLiveData',
+    getLiveCourseById: 'livecourses/getById', // ✅ NEW (optional)
 
     //Hyper-Specialist
     getAllHyperSpecialist: 'hyperspecialist/getall',
 
     //Terms & Conditions
-    getAllTermsAndConditions: 'terms-conditions/get', 
+    getAllTermsAndConditions: 'terms-conditions/get',
 };
 
 export default endPointApi;
