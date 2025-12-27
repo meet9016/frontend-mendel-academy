@@ -25,7 +25,8 @@ export interface EndPointApi {
     //my cart
     getCart?: string;
     postCreateAddToCart?: string;
-    postAddExamPlanToCart?: string; // ✅ NEW
+    postAddExamPlanToCart?: string;
+    postAddHyperSpecialistToCart?: string; // ✅ NEW
     cartCount?: string;
     removeCart?: string;
     removeCartOption?: string;
@@ -85,7 +86,8 @@ const endPointApi: EndPointApi = {
     //my cart
     getCart: 'cart/get',
     postCreateAddToCart: 'cart/create',
-    postAddExamPlanToCart: 'cart/add-exam-plan', // ✅ NEW
+    postAddExamPlanToCart: 'cart/add-exam-plan',
+    postAddHyperSpecialistToCart: 'cart/add-hyperspecialist', // ✅ NEW
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
     removeCartOption: '/cart/remove-option',

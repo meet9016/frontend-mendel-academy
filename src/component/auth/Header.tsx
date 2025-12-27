@@ -41,7 +41,7 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const { count, error } = useSelector((state: RootState) => state.cart);
 
-  // ✅ FIX 1: State management for IDs
+  // State management for IDs
   const [tempIdGet, setTempIdGet] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -61,15 +61,14 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // ✅ FIX 2: Initialize tempIdGet ONCE on mount
+  // Initialize tempIdGet ONCE on mount
   useEffect(() => {
-    // ✅ Use the helper function which checks localStorage first
     const storedId = getTempId();
     setTempIdGet(storedId);
     setIsInitialized(true);
   }, []);
 
-  // ✅ FIX 3: Fetch exams once on mount
+  // Fetch exams once on mount
   useEffect(() => {
     const fetchExams = async () => {
       try {
@@ -87,7 +86,7 @@ export default function Header() {
     fetchExams();
   }, []);
 
-  // ✅ FIX 4: Get cart count with proper ID handling
+  // Get cart count with proper ID handling
   const getCountCartItems = async () => {
     try {
       const finalId = userId || tempIdGet;
@@ -108,7 +107,7 @@ export default function Header() {
     }
   };
 
-  // ✅ FIX 5: Load cart count only when ID is available
+  // Load cart count only when ID is available
   useEffect(() => {
     if (isInitialized && (userId || tempIdGet)) {
       getCountCartItems();
@@ -166,13 +165,10 @@ export default function Header() {
   const isExamActive = pathname.startsWith("/medicalexam");
 
   const handleCartOpen = async () => {
-    // ✅ Prevent multiple clicks
     if (isCartLoading) return;
 
     try {
       setIsCartLoading(true);
-
-      // ✅ OPEN THE CART IMMEDIATELY (with loading state)
       setIsCartOpen(true);
 
       const finalId = userId || tempIdGet;
@@ -183,7 +179,6 @@ export default function Header() {
         return;
       }
 
-      // ✅ Fetch cart data AFTER opening (user sees loading state)
       const res = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
 
       if (res.data) {
@@ -192,7 +187,6 @@ export default function Header() {
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
-      // Cart is already open, just show empty state or error
     } finally {
       setIsCartLoading(false);
     }
@@ -204,7 +198,7 @@ export default function Header() {
       if (res.data) {
         dispatch(decrementCartCount(1));
 
-        // ✅ Just refresh cart data without closing/reopening
+        // Refresh cart data
         const finalId = userId || tempIdGet;
         if (finalId) {
           const cartRes = await api.get(`${endPointApi.getCart}?temp_id=${finalId}`);
@@ -219,17 +213,16 @@ export default function Header() {
     }
   };
 
-  // ✅ FIX 6: Add removeCartOption function
-  const removeCartOption = async (cartId: string, optionType: string) => {
+  // ✅ FIXED: Remove cart option function
+  const removeCartOption = async (cartId: string, optionType: string): Promise<boolean> => {
     try {
-      // ✅ Changed from DELETE to POST
       const res = await api.post(`${endPointApi.removeCartOption}`, {
         cart_id: cartId,
         option_type: optionType
       });
 
-      if (res.data) {
-        // If last option was removed (cart item deleted), decrement count
+      if (res.data && res.data.success) {
+        // If the entire cart item was deleted (last option removed)
         if (res.data.deleted) {
           dispatch(decrementCartCount(1));
         }
@@ -243,9 +236,13 @@ export default function Header() {
             setCartTotalAmount(cartRes.data.total || 0);
           }
         }
+
+        return true;
       }
+      return false;
     } catch (error) {
       console.error("Error removing cart option:", error);
+      return false;
     }
   };
 
@@ -265,7 +262,7 @@ export default function Header() {
             />
           </div>
 
-          {/* ✅ Links (Desktop) */}
+          {/* Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-12">
             <button
               onClick={() => router.push("/")}
@@ -281,7 +278,7 @@ export default function Header() {
               ></span>
             </button>
 
-            {/* ✅ Dropdown Menu */}
+            {/* Dropdown Menu */}
             <div className="relative">
               <button
                 id="exam-button"
@@ -399,7 +396,7 @@ export default function Header() {
             </button>
           </nav>
 
-          {/* ✅ Buttons (Desktop) */}
+          {/* Buttons (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             <button
               onClick={() => {
@@ -410,10 +407,7 @@ export default function Header() {
               disabled={isCartLoading}
               className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {/* Cart Icon */}
               <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
-
-              {/* Count Badge */}
               <span className="absolute -top-1.5 -right-1.5 bg-[#ffcb04] text-black text-[11px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-md">
                 {count}
               </span>
@@ -450,7 +444,7 @@ export default function Header() {
             )}
           </div>
 
-          {/* ✅ Mobile Menu Button */}
+          {/* Mobile Menu Button */}
           <button
             className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -463,7 +457,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* ✅ Mobile Menu */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col gap-4">
@@ -483,7 +477,7 @@ export default function Header() {
                 </button>
               ))}
 
-              {/* ✅ Mobile Exam Dropdown */}
+              {/* Mobile Exam Dropdown */}
               <div className="px-4">
                 <button
                   onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
@@ -534,7 +528,6 @@ export default function Header() {
                   </>
                 )}
 
-                {/* ✅ Profile Button with Image */}
                 {authToken && (
                   <button className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
                     <img
@@ -568,7 +561,6 @@ export default function Header() {
 
       {isProfileOpen && (
         <div className="absolute right-0 mt-3 w-56 bg-white shadow-xl rounded-xl border border-gray-300 py-2 z-50 animate-fadeIn">
-          {/* Edit Profile */}
           <button
             onClick={() => {
               router.push("/editProfile");
@@ -580,7 +572,6 @@ export default function Header() {
             <span className="text-sm font-medium ff-font">Edit Profile</span>
           </button>
           <hr className="my-2 border-gray-200" />
-          {/* Logout */}
           <button
             onClick={() => handleLogout()}
             className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-red-50 text-red-600 w-full text-left font-semibold transition-colors duration-200"
@@ -599,7 +590,7 @@ export default function Header() {
             setIsCartOpen={setIsCartOpen}
             MdRemoveShoppingCart={MdRemoveShoppingCart}
             removeCartOption={removeCartOption}
-            isLoading={isCartLoading} // ✅ Pass loading state
+            isLoading={isCartLoading}
           />
         )}
       </AnimatePresence>
