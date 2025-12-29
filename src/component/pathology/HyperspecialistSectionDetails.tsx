@@ -64,10 +64,13 @@ export default function Hero() {
       if (res.data && res.data.cart) {
         // Extract hyperspecialist IDs from cart
         const hyperspecialistIds = res.data.cart
-          .filter((item: CartItem) => item.cart_type === 'hyperspecialist')
+          .filter((item: CartItem) => item.cart_type === "hyperspecialist")
           .map((item: CartItem) => {
             // Handle both object and string format
-            if (typeof item.hyperspecialist_id === 'object' && item.hyperspecialist_id?._id) {
+            if (
+              typeof item.hyperspecialist_id === "object" &&
+              item.hyperspecialist_id?._id
+            ) {
               return item.hyperspecialist_id._id;
             }
             return item.hyperspecialist_id;
@@ -76,7 +79,6 @@ export default function Hero() {
 
         if (hyperspecialistIds.length > 0) {
           setSelected(hyperspecialistIds);
-          console.log(`Preselected ${hyperspecialistIds.length} hyperspecialist modules from cart`);
         }
       }
     } catch (error) {
@@ -143,9 +145,9 @@ export default function Hero() {
       };
 
       // Prioritize user_id over temp_id
-      if (userId && userId !== 'null') {
+      if (userId && userId !== "null") {
         cartPayload.user_id = userId;
-      } else if (tempId && tempId !== 'null') {
+      } else if (tempId && tempId !== "null") {
         cartPayload.temp_id = tempId;
       } else {
         toast.error("Session expired. Please refresh the page.");
@@ -164,9 +166,9 @@ export default function Hero() {
       const results = await Promise.all(promises);
 
       // ✅ Count successes
-      const successResults = results.filter(r => r.data.success);
-      const newAdditions = successResults.filter(r => !r.data.alreadyInCart);
-      const alreadyInCart = successResults.filter(r => r.data.alreadyInCart);
+      const successResults = results.filter((r) => r.data.success);
+      const newAdditions = successResults.filter((r) => !r.data.alreadyInCart);
+      const alreadyInCart = successResults.filter((r) => r.data.alreadyInCart);
 
       if (successResults.length === selected.length) {
         // ✅ Update cart count from the last response
@@ -181,24 +183,31 @@ export default function Hero() {
         // Show appropriate message
         if (newAdditions.length > 0 && alreadyInCart.length > 0) {
           toast.success(
-            `${newAdditions.length} module${newAdditions.length > 1 ? 's' : ''} added to cart. ${alreadyInCart.length} ${alreadyInCart.length > 1 ? 'were' : 'was'} already in cart.`
+            `${newAdditions.length} module${
+              newAdditions.length > 1 ? "s" : ""
+            } added to cart. ${alreadyInCart.length} ${
+              alreadyInCart.length > 1 ? "were" : "was"
+            } already in cart.`
           );
         } else if (alreadyInCart.length === selected.length) {
           toast.info(`All selected modules are already in your cart!`);
         } else {
           toast.success(
-            `${newAdditions.length} module${newAdditions.length > 1 ? 's' : ''} added to cart!`
+            `${newAdditions.length} module${
+              newAdditions.length > 1 ? "s" : ""
+            } added to cart!`
           );
         }
 
         // ✅ Don't clear selection - keep items selected to show they're in cart
         // setSelected([]);
       } else {
-        toast.warning(`${successResults.length} of ${selected.length} modules processed`);
+        toast.warning(
+          `${successResults.length} of ${selected.length} modules processed`
+        );
         // ✅ Still update cart count
         await fetchCartCount();
       }
-
     } catch (error: any) {
       console.error("Error adding to cart:", error);
       toast.error(error.response?.data?.message || "Failed to add to cart");
@@ -259,8 +268,8 @@ export default function Hero() {
                     onClick={() => toggle(m._id || m.id)}
                     className={`relative cursor-pointer rounded-2xl border p-6 transition-all duration-300
                       ${active
-                        ? "border-primary bg-yellow-50 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
-                        : "border-gray-200 bg-white hover:border-[#FFCA00]"
+                          ? "border-primary bg-yellow-50 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
+                          : "border-gray-200 bg-white hover:border-[#FFCA00]"
                       }`}
                   >
                     {/* Active Check */}
@@ -295,13 +304,16 @@ export default function Hero() {
 
                     <div className="flex items-center justify-between">
                       <span className="text-xl font-bold">
-                        {currencySymbol}{m.display_price || (currency === "INR" ? m.price_inr : m.price_dollar)}
+                        {currencySymbol}
+                        {m.display_price ||
+                          (currency === "INR" ? m.price_inr : m.price_dollar)}
                       </span>
                       <span
                         className={`text-sm font-medium transition-colors
-                          ${active
-                            ? "text-yellow-600"
-                            : "text-gray-500 group-hover:text-yellow-600"
+                          ${
+                            active
+                              ? "text-yellow-600"
+                              : "text-gray-500 group-hover:text-yellow-600"
                           }`}
                       >
                         {active ? "Selected" : "Click to select"}
@@ -321,10 +333,14 @@ export default function Hero() {
               <CommonButton
                 pyClass="py-2"
                 pxClass="px-7"
+                fontWeight={700}
+                fontSize={14}
                 onClick={addToCart}
                 disabled={selected.length === 0 || addingToCart}
               >
-                {addingToCart ? "Adding..." : `Add ${selected.length > 0 ? selected.length : ''} to Cart`}
+                {addingToCart
+                  ? "Adding..."
+                  : `Add ${selected.length > 0 ? selected.length : ""} to Cart`}
               </CommonButton>
             </div>
           </>

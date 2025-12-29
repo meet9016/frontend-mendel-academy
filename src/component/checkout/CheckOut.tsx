@@ -10,12 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import {
-  FaCreditCard,
-  FaEnvelope,
-  FaUser,
-  FaWallet,
-} from "react-icons/fa";
+import { FaCreditCard, FaEnvelope, FaUser, FaWallet } from "react-icons/fa";
 import { paySchema } from "@/validationSchema/validationSchema";
 import { MdOutlinePhone } from "react-icons/md";
 import { resetCartCount } from "@/redux/cartSlice";
@@ -27,15 +22,13 @@ import { getTempId } from "@/utils/helper";
 // ✅ Helper function to format duration for checkout
 const formatDuration = (item: any) => {
   // For exam plans
-  if (item.cart_type === 'exam_plan') {
+  if (item.cart_type === "exam_plan") {
     // Try multiple sources in order of priority
-    let months =
-      item.plan_details?.plan_month ||
-      item.duration;
+    let months = item.plan_details?.plan_month || item.duration;
 
     // Clean string values
-    if (typeof months === 'string') {
-      months = months.replace(/[^\d]/g, '');
+    if (typeof months === "string") {
+      months = months.replace(/[^\d]/g, "");
     }
 
     const monthValue = parseInt(months) || 0;
@@ -47,18 +40,19 @@ const formatDuration = (item: any) => {
       );
 
       if (matchingPlan) {
-        const planDuration = parseInt(matchingPlan.plan_month || matchingPlan.plan_day) || 0;
+        const planDuration =
+          parseInt(matchingPlan.plan_month || matchingPlan.plan_day) || 0;
         if (planDuration > 0) {
-          return `${planDuration} Month${planDuration !== 1 ? 's' : ''}`;
+          return `${planDuration} Month${planDuration !== 1 ? "s" : ""}`;
         }
       }
     }
 
     if (monthValue === 0) {
-      return 'Not specified';
+      return "Not specified";
     }
 
-    return `${monthValue} Month${monthValue !== 1 ? 's' : ''}`;
+    return `${monthValue} Month${monthValue !== 1 ? "s" : ""}`;
   }
 
   // For PreRecord products
@@ -66,113 +60,10 @@ const formatDuration = (item: any) => {
   const durationValue = parseInt(duration) || 0;
 
   if (durationValue === 0) {
-    return 'Not specified';
+    return "Not specified";
   }
 
-  return `${durationValue} Month${durationValue !== 1 ? 's' : ''}`;
-};
-
-const StripeCheckoutForm = ({
-  full_name,
-  phone,
-  email,
-  plan,
-  onSuccess,
-  id,
-}: any) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e: any) => {
-    if (!stripe || !elements) return;
-
-    setLoading(true);
-    setMessage("");
-
-    stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + "/paymentsuccess",
-        receipt_email: email,
-      },
-      redirect: "if_required",
-    }).then(async (result: any) => {
-      if (result.error) {
-        setMessage(result.error.message);
-        setLoading(false);
-        return;
-      }
-
-      if (result.paymentIntent?.status === "succeeded") {
-        await api
-          .post(`${endPointApi.verifyStripePayment}`, {
-            paymentIntentId: result.paymentIntent.id,
-            full_name,
-            email,
-            phone,
-            plan_id: id,
-            amount: plan.totalAmount,
-          })
-          .then((res) => {
-            localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
-          });
-
-        onSuccess();
-      }
-
-      setLoading(false);
-    });
-  };
-
-  return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-        Complete Your Payment
-      </h2>
-
-      <div className="border rounded-lg p-4 bg-gray-50 mb-4">
-        <p className="text-sm text-gray-600">
-          <span className="font-semibold">Plan:</span> {plan?.plan_type}
-        </p>
-        <p className="text-sm text-gray-600">
-          <span className="font-semibold">Price:</span> ${plan?.plan_pricing}
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <div className="p-4 bg-gray-50 border rounded-xl">
-          <PaymentElement />
-        </div>
-
-        {message && (
-          <p className="text-red-600 text-sm bg-red-50 p-2 rounded-md border border-red-200">
-            {message}
-          </p>
-        )}
-
-        <button
-          onClick={handleSubmit}
-          disabled={!stripe || loading}
-          className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
-            ${loading || !stripe
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-md"
-            }`}
-        >
-          {loading ? (
-            <div className="flex items-center justify-center gap-2">
-              <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></span>
-              Processing…
-            </div>
-          ) : (
-            "Pay Now"
-          )}
-        </button>
-      </div>
-    </div>
-  );
+  return `${durationValue} Month${durationValue !== 1 ? "s" : ""}`;
 };
 
 const stripePromise = loadStripe(
@@ -191,7 +82,11 @@ export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 const CheckOut = () => {
   const userId = getAuthId();
   const { id: paramId } = useParams();
-  const actualId = userId || (paramId && paramId !== 'null' && paramId !== 'undefined' ? paramId : getTempId());
+  const actualId =
+    userId ||
+    (paramId && paramId !== "null" && paramId !== "undefined"
+      ? paramId
+      : getTempId());
 
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -218,7 +113,8 @@ const CheckOut = () => {
         setUserProfile(res.data.data || res.data.user);
 
         setBilling({
-          fullName: res.data.user?.first_name || res.data.user?.first_name || "",
+          fullName:
+            res.data.user?.first_name || res.data.user?.first_name || "",
           email: res.data.data?.email || res.data.user?.email || "",
           phone: res.data.data?.phone || res.data.user?.phone || "",
           selectedPayment: "Razorpay",
@@ -231,14 +127,14 @@ const CheckOut = () => {
 
   const fetchAddToCart = async () => {
     try {
-      if (!actualId || actualId === 'null' || actualId === 'undefined') {
-        router.push('/');
+      if (!actualId || actualId === "null" || actualId === "undefined") {
+        router.push("/");
         return;
       }
 
       setLoading(true);
       const res = await api.get(`${endPointApi.getcheckoutTempId}/${actualId}`);
-      console.log('📦 Checkout data received:', res?.data);
+      console.log("📦 Checkout data received:", res?.data);
       setPlan(res?.data);
     } catch (err) {
       console.error("Fetch checkout error:", err);
@@ -354,6 +250,116 @@ const CheckOut = () => {
     }
   };
 
+  const StripeCheckoutForm = ({
+    full_name,
+    phone,
+    email,
+    plan,
+    onSuccess,
+    id,
+  }: any) => {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleSubmit = (e: any) => {
+      if (!stripe || !elements) return;
+
+      setLoading(true);
+      setMessage("");
+
+      stripe
+        .confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: window.location.origin + "/paymentsuccess",
+            receipt_email: email,
+          },
+          redirect: "if_required",
+        })
+        .then(async (result: any) => {
+          if (result.error) {
+            setMessage(result.error.message);
+            setLoading(false);
+            return;
+          }
+
+          if (result.paymentIntent?.status === "succeeded") {
+            await api
+              .post(`${endPointApi.verifyStripePayment}`, {
+                paymentIntentId: result.paymentIntent.id,
+                full_name,
+                email,
+                phone,
+                plan_id: id,
+                user_id: id,
+                amount: plan.totalAmount,
+              })
+              .then((res) => {
+                localStorage.setItem(
+                  "stripdata",
+                  JSON.stringify(res.data.payment)
+                );
+              });
+            dispatch(resetCartCount());
+            onSuccess();
+          }
+
+          setLoading(false);
+        });
+    };
+
+    return (
+      <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+          Complete Your Payment
+        </h2>
+
+        <div className="border rounded-lg p-4 bg-gray-50 mb-4">
+          <p className="text-sm text-gray-600">
+            <span className="font-semibold">Plan:</span> {plan?.plan_type}
+          </p>
+          <p className="text-sm text-gray-600">
+            <span className="font-semibold">Price:</span> ${plan?.plan_pricing}
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="p-4 bg-gray-50 border rounded-xl">
+            <PaymentElement />
+          </div>
+
+          {message && (
+            <p className="text-red-600 text-sm bg-red-50 p-2 rounded-md border border-red-200">
+              {message}
+            </p>
+          )}
+
+          <button
+            onClick={handleSubmit}
+            disabled={!stripe || loading}
+            className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
+            ${
+              loading || !stripe
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 shadow-md"
+            }`}
+          >
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></span>
+                Processing…
+              </div>
+            ) : (
+              "Pay Now"
+            )}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const handleStripePayment = async () => {
     const isValid = validateForm();
     if (!isValid) return;
@@ -386,13 +392,13 @@ const CheckOut = () => {
     );
   }
 
-  if (!actualId || actualId === 'null') {
+  if (!actualId || actualId === "null") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">No checkout session found</p>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
           >
             Go to Home
@@ -483,10 +489,11 @@ const CheckOut = () => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div
                 onClick={() => handlePaymentSelect("Razorpay")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Razorpay"
-                  ? "border-primary bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Razorpay"
+                    ? "border-primary bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaCreditCard className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Razorpay
@@ -494,10 +501,11 @@ const CheckOut = () => {
 
               <div
                 onClick={() => handlePaymentSelect("Stripe")}
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${billing.selectedPayment === "Stripe"
-                  ? "border-primary bg-yellow-50"
-                  : "border-gray-200"
-                  }`}
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center ${
+                  billing.selectedPayment === "Stripe"
+                    ? "border-primary bg-yellow-50"
+                    : "border-gray-200"
+                }`}
               >
                 <FaWallet className="text-primary ff-font text-2xl mx-auto mb-2" />
                 Stripe
@@ -547,25 +555,30 @@ const CheckOut = () => {
                     Duration: {formatDuration(item)}
                   </p>
 
-                  {item.selected_options && item.selected_options.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {item.selected_options.map((opt: string) => (
-                        <span
-                          key={opt}
-                          className="text-[10px] bg-yellow-50 border border-yellow-400 px-2 py-0.5 rounded-full"
-                        >
-                          {opt === 'record-book' ? 'Record Book' : opt === 'video' ? 'Video' : 'Writing Book'}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {item.selected_options &&
+                    item.selected_options.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {item.selected_options.map((opt: string) => (
+                          <span
+                            key={opt}
+                            className="text-[10px] bg-yellow-50 border border-yellow-400 px-2 py-0.5 rounded-full"
+                          >
+                            {opt === "record-book"
+                              ? "Record Book"
+                              : opt === "video"
+                              ? "Video"
+                              : "Writing Book"}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
                   <div className="flex items-center justify-between mt-2">
                     <p className="text-xs text-gray-500">
                       Qty: {item.quantity}
                     </p>
                     <p className="font-bold text-sm text-gray-800">
-                      {item.currency === 'INR' ? '₹' : '$'}
+                      {item.currency === "INR" ? "₹" : "$"}
                       {item.total_price?.toLocaleString()}
                     </p>
                   </div>
@@ -578,7 +591,7 @@ const CheckOut = () => {
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-600">Subtotal:</span>
             <span className="text-sm font-semibold text-gray-800">
-              {plan?.currency === 'INR' ? '₹' : '$'}
+              {plan?.currency === "INR" ? "₹" : "$"}
               {plan?.totalAmount?.toLocaleString()}
             </span>
           </div>
@@ -586,7 +599,7 @@ const CheckOut = () => {
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-600">Tax & Fees:</span>
             <span className="text-sm font-semibold text-gray-800">
-              {plan?.currency === 'INR' ? '₹' : '$'}0
+              {plan?.currency === "INR" ? "₹" : "$"}0
             </span>
           </div>
 
@@ -596,7 +609,7 @@ const CheckOut = () => {
             <div className="flex justify-between items-center mb-4">
               <span className="text-lg font-bold text-gray-700">Total:</span>
               <span className="text-2xl font-bold text-primary">
-                {plan?.currency === 'INR' ? '₹' : '$'}
+                {plan?.currency === "INR" ? "₹" : "$"}
                 {plan?.totalAmount?.toLocaleString()}
               </span>
             </div>

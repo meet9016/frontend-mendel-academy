@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -28,9 +28,9 @@ type OptionType = "record-book" | "video" | "writing-book";
 interface Option {
   type: OptionType;
   description: string;
-  price: number;           // Display price (already converted by backend)
-  price_usd?: number;      // Original USD price
-  price_inr?: number;      // Original INR price
+  price: number; // Display price (already converted by backend)
+  price_usd?: number; // Original USD price
+  price_inr?: number; // Original INR price
   features: string[];
   is_available: boolean;
 }
@@ -41,9 +41,9 @@ interface ProgramDetail {
   subtitle: string;
   category: string;
   description: string;
-  price: number;           // Display price (already converted by backend)
-  price_usd?: number;      // Original USD price
-  price_inr?: number;      // Original INR price
+  price: number; // Display price (already converted by backend)
+  price_usd?: number; // Original USD price
+  price_inr?: number; // Original INR price
   duration: string;
   rating: number;
   total_reviews: number;
@@ -51,7 +51,7 @@ interface ProgramDetail {
   status: string;
   date: string;
   createdAt: string;
-  currency: string;        // 'INR' or 'USD' based on user location
+  currency: string; // 'INR' or 'USD' based on user location
   user_country?: string;
   options?: Option[];
 }
@@ -60,7 +60,7 @@ interface ProgramDetail {
 const getIconForType = (type: OptionType): React.ElementType => {
   const iconMap: Record<OptionType, React.ElementType> = {
     "record-book": FiBook,
-    "video": FiVideo,
+    video: FiVideo,
     "writing-book": FiEdit3,
   };
   return iconMap[type] || FiBook;
@@ -69,29 +69,38 @@ const getIconForType = (type: OptionType): React.ElementType => {
 const getTitleForType = (type: OptionType): string => {
   const titleMap: Record<OptionType, string> = {
     "record-book": "Record Book",
-    "video": "Video Course",
+    video: "Video Course",
     "writing-book": "Writing Book",
   };
   return titleMap[type] || type;
 };
 
 // ✅ Helper to format currency based on user's location
-const formatCurrency = (amount: number | undefined | null, currency: string) => {
+const formatCurrency = (
+  amount: number | undefined | null,
+  currency: string
+) => {
   const safeAmount = Number(amount) || 0;
 
-  if (currency === 'INR') {
-    return `₹${safeAmount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  if (currency === "INR") {
+    return `₹${safeAmount.toLocaleString("en-IN", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
   }
-  return `$${safeAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  return `$${safeAmount.toLocaleString("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
 };
 
 // ✅ Helper to get the correct price based on currency
 const getPriceForCurrency = (option: Option, currency: string): number => {
   // If backend sent both prices, use the appropriate one
-  if (currency === 'INR' && option.price_inr) {
+  if (currency === "INR" && option.price_inr) {
     return option.price_inr;
   }
-  if (currency === 'USD' && option.price_usd) {
+  if (currency === "USD" && option.price_usd) {
     return option.price_usd;
   }
   // Fallback to display price (already converted by backend)
@@ -99,7 +108,10 @@ const getPriceForCurrency = (option: Option, currency: string): number => {
 };
 
 /* ---------- ADD TO CART FUNCTION ---------- */
-const addToCart = async (program: ProgramDetail, selectedOptions: OptionType[]) => {
+const addToCart = async (
+  program: ProgramDetail,
+  selectedOptions: OptionType[]
+) => {
   try {
     const userId = getAuthId();
     const tempId = userId ? null : getTempId();
@@ -134,7 +146,6 @@ const addToCart = async (program: ProgramDetail, selectedOptions: OptionType[]) 
       store.dispatch(setCartCount(countRes.data.count));
       toast.success("Product added to cart successfully!");
     }
-
   } catch (error: any) {
     toast.error(error?.response?.data?.message || "Failed to add to cart");
   }
@@ -155,10 +166,10 @@ export default function RecordedProgramDetails() {
     if (!program?.description) return;
 
     const timer = setTimeout(() => {
-      const images = document.querySelectorAll('.prose img');
+      const images = document.querySelectorAll(".prose img");
       images.forEach((img: any) => {
         img.onerror = () => {
-          img.style.display = 'none';
+          img.style.display = "none";
         };
       });
     }, 100);
@@ -173,18 +184,24 @@ export default function RecordedProgramDetails() {
       const tempId = userId || getTempId();
 
       const cartRes = await api.get(`${endPointApi.getCart}`, {
-        params: { temp_id: userId || tempId }
+        params: { temp_id: userId || tempId },
       });
 
-      if (cartRes.data.success && cartRes.data.cart && cartRes.data.cart.length > 0) {
-        const cartItem = cartRes.data.cart.find(
-          (item: any) => {
-            const itemProductId = item.product_id?._id || item.product_id;
-            return itemProductId === productId;
-          }
-        );
+      if (
+        cartRes.data.success &&
+        cartRes.data.cart &&
+        cartRes.data.cart.length > 0
+      ) {
+        const cartItem = cartRes.data.cart.find((item: any) => {
+          const itemProductId = item.product_id?._id || item.product_id;
+          return itemProductId === productId;
+        });
 
-        if (cartItem && cartItem.selected_options && cartItem.selected_options.length > 0) {
+        if (
+          cartItem &&
+          cartItem.selected_options &&
+          cartItem.selected_options.length > 0
+        ) {
           setSelectedOptions(cartItem.selected_options);
           setCartItemId(cartItem._id);
         } else {
@@ -226,7 +243,9 @@ export default function RecordedProgramDetails() {
           router.push("/pathology");
         }
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Failed to load program details");
+        toast.error(
+          error?.response?.data?.message || "Failed to load program details"
+        );
         router.push("/pathology");
       } finally {
         setLoading(false);
@@ -237,24 +256,30 @@ export default function RecordedProgramDetails() {
   }, [params?.id, router]);
 
   const toggleOption = (type: OptionType) => {
-    setSelectedOptions(prev =>
-      prev.includes(type)
-        ? prev.filter(o => o !== type)
-        : [...prev, type]
+    setSelectedOptions((prev) =>
+      prev.includes(type) ? prev.filter((o) => o !== type) : [...prev, type]
     );
   };
 
   // ✅ Calculate total using the correct currency prices
-  const total = selectedOptions.length === 0
-    ? program?.price || 0
-    : program?.options
-      ?.filter(o => selectedOptions.includes(o.type))
-      .reduce((sum, o) => sum + getPriceForCurrency(o, program.currency), 0) || 0;
+  const total =
+    selectedOptions.length === 0
+      ? program?.price || 0
+      : program?.options
+          ?.filter((o) => selectedOptions.includes(o.type))
+          .reduce(
+            (sum, o) => sum + getPriceForCurrency(o, program.currency),
+            0
+          ) || 0;
 
   const handleAddToCart = async () => {
     if (!program) return;
 
-    if (program.options && program.options.length > 0 && selectedOptions.length === 0) {
+    if (
+      program.options &&
+      program.options.length > 0 &&
+      selectedOptions.length === 0
+    ) {
       toast.warning("Please select at least one learning path option");
       return;
     }
@@ -274,7 +299,7 @@ export default function RecordedProgramDetails() {
             <Skeleton height={20} width="80%" className="mb-6" />
             <Skeleton height={100} className="mb-8" />
             <div className="grid md:grid-cols-3 gap-6">
-              {[1, 2, 3].map(i => (
+              {[1, 2, 3].map((i) => (
                 <Skeleton key={i} height={300} borderRadius={12} />
               ))}
             </div>
@@ -288,8 +313,12 @@ export default function RecordedProgramDetails() {
     return (
       <main className="min-h-screen bg-[#f9fafb] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Program Not Found</h2>
-          <p className="text-gray-600 mb-4">The program you're looking for doesn't exist.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Program Not Found
+          </h2>
+          <p className="text-gray-600 mb-4">
+            The program you're looking for doesn't exist.
+          </p>
           <CommonButton onClick={() => router.push("/pathology")}>
             Back to Programs
           </CommonButton>
@@ -299,7 +328,7 @@ export default function RecordedProgramDetails() {
   }
 
   // ✅ Currency is determined by backend based on user's IP location
-  const programCurrency = program.currency || 'USD';
+  const programCurrency = program.currency || "USD";
 
   return (
     <main className="min-h-screen bg-[#f9fafb]">
@@ -318,11 +347,11 @@ export default function RecordedProgramDetails() {
               <span
                 dangerouslySetInnerHTML={{
                   __html: program.description
-                    .replace(/&lt;/g, '<')
-                    .replace(/&gt;/g, '>')
-                    .replace(/&amp;/g, '&')
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&amp;/g, "&")
                     .replace(/&quot;/g, '"')
-                    .replace(/&#39;/g, "'")
+                    .replace(/&#39;/g, "'"),
                 }}
               />
             )}
@@ -345,7 +374,10 @@ export default function RecordedProgramDetails() {
 
             <span className="flex items-center gap-2 text-sm ff-font">
               <FiUsers className="ff-font-bold text-primary" />
-              {program.total_reviews > 0 ? `${program.total_reviews}+` : '10,000+'} Students Enrolled
+              {program.total_reviews > 0
+                ? `${program.total_reviews}+`
+                : "10,000+"}{" "}
+              Students Enrolled
             </span>
 
             <span className="flex items-center gap-2 text-sm ff-font">
@@ -367,71 +399,74 @@ export default function RecordedProgramDetails() {
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {program.options && program.options
-              .filter(opt => opt.is_available)
-              .map(opt => {
-                const active = selectedOptions.includes(opt.type);
-                const Icon = getIconForType(opt.type);
-                const title = getTitleForType(opt.type);
+            {program.options &&
+              program.options
+                .filter((opt) => opt.is_available)
+                .map((opt) => {
+                  const active = selectedOptions.includes(opt.type);
+                  const Icon = getIconForType(opt.type);
+                  const title = getTitleForType(opt.type);
 
-                // ✅ Get the correct price based on user's currency
-                const displayPrice = getPriceForCurrency(opt, programCurrency);
+                  // ✅ Get the correct price based on user's currency
+                  const displayPrice = getPriceForCurrency(
+                    opt,
+                    programCurrency
+                  );
 
-                return (
-                  <div
-                    key={opt.type}
-                    onClick={() => toggleOption(opt.type)}
-                    className={`relative cursor-pointer rounded-xl border p-6 transition-all duration-300
-                      ${active
-                        ? "border-[#FFCA00] bg-[#FFCA00]/10"
-                        : "border-gray-200 hover:border-[#FFCA00]"
+                  return (
+                    <div
+                      key={opt.type}
+                      onClick={() => toggleOption(opt.type)}
+                      className={`relative cursor-pointer rounded-xl border p-6 transition-all duration-300
+                      ${
+                        active
+                          ? "border-[#FFCA00] bg-[#FFCA00]/10"
+                          : "border-gray-200 hover:border-[#FFCA00]"
                       }`}
-                  >
-                    {/* Check Icon */}
-                    <div className="absolute top-4 right-4">
-                      {active ? (
-                        <div className="w-6 h-6 rounded-full bg-[#FFCA00] flex items-center justify-center">
-                          <FiCheck className="text-white text-sm" />
-                        </div>
-                      ) : (
-                        <div className="w-6 h-6 rounded-full border border-gray-300 bg-white" />
-                      )}
+                    >
+                      {/* Check Icon */}
+                      <div className="absolute top-4 right-4">
+                        {active ? (
+                          <div className="w-6 h-6 rounded-full bg-[#FFCA00] flex items-center justify-center">
+                            <FiCheck className="text-white text-sm" />
+                          </div>
+                        ) : (
+                          <div className="w-6 h-6 rounded-full border border-gray-300 bg-white" />
+                        )}
+                      </div>
+
+                      {/* Icon */}
+                      <div className="w-12 h-12 mb-3 rounded-xl bg-white border border-primary flex items-center justify-center ff-font-bold">
+                        <Icon className="text-xl" />
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-semibold ff-font-bold">{title}</h3>
+
+                      {/* Description */}
+                      <p className="text-sm ff-font mb-4">{opt.description}</p>
+
+                      {/* Features */}
+                      <ul className="space-y-2 mb-4">
+                        {opt.features.map((f, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-sm ff-font"
+                          >
+                            <FiCheck className="text-primary" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* ✅ Price with correct currency */}
+                      <span className="text-primary font-bold">
+                        {formatCurrency(displayPrice, programCurrency)}{" "}
+                        <span className="text-lg font-normal">/one-time</span>
+                      </span>
                     </div>
-
-                    {/* Icon */}
-                    <div className="w-12 h-12 mb-3 rounded-xl bg-white border border-primary flex items-center justify-center ff-font-bold">
-                      <Icon className="text-xl" />
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-semibold ff-font-bold">{title}</h3>
-
-                    {/* Description */}
-                    <p className="text-sm ff-font mb-4">
-                      {opt.description}
-                    </p>
-
-                    {/* Features */}
-                    <ul className="space-y-2 mb-4">
-                      {opt.features.map((f, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center gap-2 text-sm ff-font"
-                        >
-                          <FiCheck className="text-primary" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* ✅ Price with correct currency */}
-                    <span className="text-primary font-bold">
-                      {formatCurrency(displayPrice, programCurrency)}{" "}
-                      <span className="text-lg font-normal">/one-time</span>
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
           </div>
 
           <hr className="my-8 text-gray-200" />
@@ -448,10 +483,16 @@ export default function RecordedProgramDetails() {
             <CommonButton
               pyClass="py-2"
               pxClass="px-7"
+              fontWeight={700}
+              fontSize={14}
               onClick={handleAddToCart}
               disabled={addingToCart}
             >
-              {addingToCart ? "Adding..." : cartItemId ? "Update Cart" : "Add to Cart"}
+              {addingToCart
+                ? "Adding..."
+                : cartItemId
+                ? "Update Cart"
+                : "Add to Cart"}
             </CommonButton>
           </div>
         </div>
