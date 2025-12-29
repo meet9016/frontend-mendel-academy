@@ -193,11 +193,11 @@ const EditProfile = () => {
     if (!isDragging || !cropContainerRef.current || !imageDimensions.width) return;
 
     const rect = cropContainerRef.current.getBoundingClientRect();
-    
+
     // Calculate how much the mouse moved
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    
+
     const deltaX = mouseX - dragStart.x;
     const deltaY = mouseY - dragStart.y;
 
@@ -342,21 +342,31 @@ const EditProfile = () => {
     }
 
     const photoPath = profileData.user.profile_photo;
-    const rawBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3699';
-    const baseUrl = rawBaseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
 
+    // If it's already a full URL, return as is
     if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
       return photoPath;
     }
 
+    // Get base URL and clean it properly
+    const rawBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3699';
+
+    // Remove /api/v1 and trailing slashes
+    const baseUrl = rawBaseUrl
+      .replace(/\/api\/v1\/?$/, '')  // Remove /api/v1 or /api/v1/
+      .replace(/\/$/, '');            // Remove any trailing slash
+
+    // Clean the photo path
     const cleanPath = photoPath.startsWith('/') ? photoPath.slice(1) : photoPath;
+
+    // Construct the full URL
     return `${baseUrl}/${cleanPath}`;
-  };
+  };  
 
   const hasProfilePhoto = () => {
-    return profileData?.user?.profile_photo && 
-           !profileData.user.profile_photo.includes('ui-avatars.com') &&
-           profileData.user.profile_photo.trim() !== '';
+    return profileData?.user?.profile_photo &&
+      !profileData.user.profile_photo.includes('ui-avatars.com') &&
+      profileData.user.profile_photo.trim() !== '';
   };
 
   if (loading) {
@@ -376,7 +386,7 @@ const EditProfile = () => {
         {/* Student Profile Card */}
         <div className="bg-white rounded-2xl shadow-md p-8 flex flex-col lg:flex-row items-start lg:items-center gap-8">
           <div className="relative">
-            <div 
+            <div
               className="w-28 h-28 rounded-2xl overflow-hidden ring-4 ring-[#FFCA00] cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => hasProfilePhoto() && setShowPhotoPreview(true)}
             >
@@ -721,7 +731,7 @@ const EditProfile = () => {
 
       {/* Photo Preview Modal */}
       {showPhotoPreview && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fadeIn"
           onClick={() => setShowPhotoPreview(false)}
         >
@@ -733,7 +743,7 @@ const EditProfile = () => {
             >
               <FaTimes className="w-6 h-6 text-white group-hover:rotate-90 transition-transform duration-300" />
             </button>
-            
+
             {/* User info header */}
             <div className="absolute -top-20 left-0 text-white">
               <h3 className="text-2xl font-bold ff-font-bold mb-1">
@@ -752,7 +762,7 @@ const EditProfile = () => {
                   e.currentTarget.src = `https://ui-avatars.com/api/?name=${profileData?.user?.first_name}+${profileData?.user?.last_name}&background=ffca00&color=000&size=600`;
                 }}
               />
-              
+
               {/* Decorative corner borders */}
               <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-[#ffca00] rounded-tl-lg"></div>
               <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-[#ffca00] rounded-tr-lg"></div>
@@ -821,13 +831,13 @@ const EditProfile = () => {
                   }}
                   draggable={false}
                 />
-                
+
                 {/* Dark overlay for non-crop area */}
                 <div className="absolute inset-0 pointer-events-none">
                   <svg width="100%" height="100%" className="absolute inset-0">
                     <defs>
                       <mask id="cropMask">
-                        <rect width="100%" height="100%" fill="white"/>
+                        <rect width="100%" height="100%" fill="white" />
                         <rect
                           x={`${(cropData.x / imageDimensions.width) * 100}%`}
                           y={`${(cropData.y / imageDimensions.height) * 100}%`}
@@ -837,7 +847,7 @@ const EditProfile = () => {
                         />
                       </mask>
                     </defs>
-                    <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#cropMask)"/>
+                    <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#cropMask)" />
                   </svg>
                 </div>
 
@@ -855,11 +865,11 @@ const EditProfile = () => {
                   {/* Rule of thirds grid (9-box frame) */}
                   <svg width="100%" height="100%" className="absolute inset-0">
                     {/* Vertical lines */}
-                    <line x1="33.33%" y1="0" x2="33.33%" y2="100%" stroke="white" strokeWidth="1" opacity="0.5"/>
-                    <line x1="66.66%" y1="0" x2="66.66%" y2="100%" stroke="white" strokeWidth="1" opacity="0.5"/>
+                    <line x1="33.33%" y1="0" x2="33.33%" y2="100%" stroke="white" strokeWidth="1" opacity="0.5" />
+                    <line x1="66.66%" y1="0" x2="66.66%" y2="100%" stroke="white" strokeWidth="1" opacity="0.5" />
                     {/* Horizontal lines */}
-                    <line x1="0" y1="33.33%" x2="100%" y2="33.33%" stroke="white" strokeWidth="1" opacity="0.5"/>
-                    <line x1="0" y1="66.66%" x2="100%" y2="66.66%" stroke="white" strokeWidth="1" opacity="0.5"/>
+                    <line x1="0" y1="33.33%" x2="100%" y2="33.33%" stroke="white" strokeWidth="1" opacity="0.5" />
+                    <line x1="0" y1="66.66%" x2="100%" y2="66.66%" stroke="white" strokeWidth="1" opacity="0.5" />
                   </svg>
 
                   {/* Corner handles */}
@@ -888,7 +898,7 @@ const EditProfile = () => {
                 </button>
                 <div className="flex items-center gap-2">
                   <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full bg-[#ffca00] transition-all duration-200"
                       style={{ width: `${((cropData.scale - 0.5) / 2.5) * 100}%` }}
                     ></div>
