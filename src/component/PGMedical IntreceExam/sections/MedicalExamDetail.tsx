@@ -1,13 +1,13 @@
 // MedicalExamDetail.tsx
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { FaCheckCircle, FaStar } from 'react-icons/fa';
-import { IoMdCall } from 'react-icons/io';
-import { BsArrowRight } from 'react-icons/bs';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-import CommonButton from '@/comman/Button';
+import { motion } from "framer-motion";
+import { FaCheckCircle, FaStar } from "react-icons/fa";
+import { IoMdCall } from "react-icons/io";
+import { BsArrowRight } from "react-icons/bs";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import CommonButton from "@/comman/Button";
 
 // types.ts
 export type SubTitle = string;
@@ -33,7 +33,7 @@ const MedicalExamDetail = ({ data, loading = false }: Props) => {
       <motion.section
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
         className="relative min-h-screen overflow-hidden bg-[#f9fafb]"
       >
         {loading ? <HeroSkeleton /> : <HeroContent data={data} />}
@@ -84,7 +84,9 @@ const FeatureCard = ({ text }: { text: string }) => (
         <FaCheckCircle className="text-primary text-sm" />
       </div>
     </div>
-    <span className="text-base md:text-lg ff-font font-medium leading-relaxed">{text}</span>
+    <span className="text-base md:text-lg ff-font font-medium leading-relaxed">
+      {text}
+    </span>
   </div>
 );
 
@@ -95,14 +97,25 @@ const CTASection = () => (
       <div className="flex flex-col md:flex-row md:items-center gap-2 text-gray-700">
         <div className="flex items-center gap-2">
           <IoMdCall className="text-primary text-base" />
-          <span className="text-sm ff-font-bold font-medium">For more information, call</span>
+          <span className="text-sm ff-font-bold font-medium">
+            For more information, call
+          </span>
         </div>
-        <a href="tel:+919925511631" className="text-base md:text-lg font-bold text-primary ff-font hover:text-yellow-500">
+        <a
+          href="tel:+919925511631"
+          className="text-base md:text-lg font-bold text-primary ff-font hover:text-yellow-500"
+        >
           +91-99255-11631
         </a>
       </div>
 
-      <CommonButton size="xxl" fontWeight={700} fontSize={16} pyClass="py-3" pxClass="px-10">
+      <CommonButton
+        size="xxl"
+        fontWeight={700}
+        fontSize={16}
+        pyClass="py-3"
+        pxClass="px-10"
+      >
         Enroll Now <BsArrowRight className="w-5 h-5" />
       </CommonButton>
     </div>
@@ -111,14 +124,20 @@ const CTASection = () => (
 
 // Right Image
 const RightImage = ({ data }: { data: Exam }) => {
-  const imageUrl = data.exams?.[0]?.image || 'https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg';
+  // const imageUrl =
+  //   data?.image ||
+  //   "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg";
+  const DEFAULT_IMAGE =
+    "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg";
+
+  const imageUrl = (data as Exam & { image?: string })?.image || DEFAULT_IMAGE;
 
   return (
     <div className="relative order-first lg:order-last">
       <div className="relative overflow-hidden rounded-3xl border-4 border-primary shadow-2xl p-2 w-[550px] h-[440px] mx-auto">
         <img
           src={imageUrl}
-          alt={data.exams?.[0]?.exam_name || 'Exam Image'}
+          alt={data.exams?.[0]?.exam_name || "Exam Image"}
           className="w-full h-full rounded-[1.5rem] object-cover shadow-2xl"
         />
       </div>

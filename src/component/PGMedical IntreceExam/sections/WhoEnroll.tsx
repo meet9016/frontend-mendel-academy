@@ -48,7 +48,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
-
   const cleanHtml = DOMPurify.sanitize(data?.who_can_enroll_description || "", {
     USE_PROFILES: { html: true },
   });
@@ -58,8 +57,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const backendCurrency = data?.user_currency;
   const fallbackCurrency = isIndia() ? "INR" : "USD";
   const userCurrency = backendCurrency || fallbackCurrency;
-
-  console.log("Currency Detection:", { backendCurrency, fallbackCurrency, userCurrency });
 
   const addToCart = async (plan: Plan) => {
     try {
