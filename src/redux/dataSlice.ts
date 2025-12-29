@@ -25,13 +25,7 @@ export const getData = createAsyncThunk("data/get", async () => {
 
   // ✅ Verify that modules have _id fields
   if (courseData.length > 0) {
-    console.log('📊 First Course Modules:', courseData[0].choose_plan_list);
     courseData[0].choose_plan_list?.forEach((module: any, index: number) => {
-      console.log(`Module ${index}:`, {
-        _id: module._id,
-        title: module.title,
-        hasId: !!module._id
-      });
     });
   }
 
@@ -51,11 +45,6 @@ const dataSlice = createSlice({
         state.loadings = false;
         // ✅ Now action.payload contains the courses array directly
         state.list = action.payload;
-
-        console.log('✅ Redux State Updated:', {
-          coursesCount: action.payload.length,
-          firstCourse: action.payload[0]
-        });
       })
       .addCase(getData.rejected, (state, action) => {
         state.loadings = false;

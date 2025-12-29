@@ -64,6 +64,18 @@ const formatDuration = (item: any) => {
   return `${durationValue} Month${durationValue !== 1 ? 's' : ''}`;
 };
 
+// Payment Processing Loader Component with blur background
+const PaymentLoader = () => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-gray-900/30">
+    <div className="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary mx-auto mb-4"></div>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">Processing Payment</h3>
+      <p className="text-gray-600 text-sm">Please wait while we confirm your payment...</p>
+      <p className="text-gray-500 text-xs mt-4">Do not close or refresh this page</p>
+    </div>
+  </div>
+);
+
 const StripeCheckoutForm = ({
   full_name,
   phone,
@@ -157,7 +169,7 @@ const StripeCheckoutForm = ({
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
             ${loading || !stripe
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 shadow-md"
+              : "bg-primary hover:bg-[#e6b800] shadow-md"
             }`}
         >
           {loading ? (
@@ -187,6 +199,39 @@ interface BillingInformation {
 
 export type FormErrors = Partial<Record<keyof BillingInformation, string>>;
 
+// Enhanced Phone validation function
+const validatePhone = (phone: string): string | null => {
+  if (!phone || phone.trim() === '') {
+    return 'Phone number is required';
+  }
+
+  // Allow only digits, spaces, +, -, (, )
+  const validCharsRegex = /^[\d\s()+-]+$/;
+  if (!validCharsRegex.test(phone)) {
+    return 'Phone number contains invalid characters';
+  }
+
+  // Remove non-digit characters
+  const digitsOnly = phone.replace(/\D/g, '');
+
+  // E.164 standard: 10–15 digits
+  if (digitsOnly.length < 10) {
+    return 'Phone number must be at least 10 digits';
+  }
+
+  if (digitsOnly.length > 15) {
+    return 'Phone number must not exceed 15 digits';
+  }
+
+  // Optional: must not start with 0 (common rule)
+  if (/^0+$/.test(digitsOnly)) {
+    return 'Invalid phone number';
+  }
+
+  return null;
+};
+
+
 const CheckOut = () => {
   const userId = getAuthId();
   const { id: paramId } = useParams();
@@ -198,6 +243,7 @@ const CheckOut = () => {
   const [plan, setPlan] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [billing, setBilling] = useState<BillingInformation>({
     fullName: "",
@@ -246,18 +292,29 @@ const CheckOut = () => {
   };
 
   const validateForm = (): boolean => {
-    const { error } = paySchema.validate(billing, { abortEarly: false });
-    if (!error) {
-      setErrors({});
-      return true;
-    }
     const newErrors: FormErrors = {};
-    error.details.forEach((detail) => {
-      const key = detail.path[0] as keyof BillingInformation;
-      newErrors[key] = detail.message;
-    });
+
+    // Validate full name
+    if (!billing.fullName || billing.fullName.trim() === '') {
+      newErrors.fullName = 'Full name is required';
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!billing.email || billing.email.trim() === '') {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(billing.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Validate phone
+    const phoneError = validatePhone(billing.phone);
+    if (phoneError) {
+      newErrors.phone = phoneError;
+    }
+
     setErrors(newErrors);
-    return false;
+    return Object.keys(newErrors).length === 0;
   };
 
   useEffect(() => {
@@ -271,17 +328,38 @@ const CheckOut = () => {
     setBilling((prev) => ({ ...prev, selectedPayment: method }));
 
   const handleChange = (field: keyof BillingInformation, value: string) => {
-    setBilling((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+    // For phone field, restrict input to numbers and common phone characters
+    if (field === 'phone') {
+      // Allow only numbers, +, -, (, ), and spaces
+      const sanitized = value.replace(/[^\d\+\-\(\)\s]/g, '');
+      // Limit to 15 digits (excluding formatting characters)
+      const digitsOnly = sanitized.replace(/\D/g, '');
+      if (digitsOnly.length <= 15) {
+        setBilling((prev) => ({ ...prev, [field]: sanitized }));
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    } else {
+      setBilling((prev) => ({ ...prev, [field]: value }));
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
   const handleRazorpayPayment = async () => {
     if (!userId) {
       const isValid = validateForm();
       if (!isValid) return;
+    } else {
+      // Still validate phone for logged-in users
+      const phoneError = validatePhone(billing.phone);
+      if (phoneError) {
+        setErrors({ phone: phoneError });
+        return;
+      }
     }
 
     try {
+      setPaymentProcessing(true);
+
       const res = await api.post(`${endPointApi.postPaymentCreate}`, {
         ...(userId ? { user_id: userId } : { guest_id: actualId }),
         full_name: billing.fullName,
@@ -304,7 +382,10 @@ const CheckOut = () => {
         document.body.appendChild(script);
       });
 
-      if (!scriptLoaded) return alert("Failed to load Razorpay.");
+      if (!scriptLoaded) {
+        setPaymentProcessing(false);
+        return alert("Failed to load Razorpay.");
+      }
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -335,8 +416,14 @@ const CheckOut = () => {
               "stripdata",
               JSON.stringify(verifyRes.data.payment)
             );
-            router.push("/paymentsuccess");
             dispatch(resetCartCount());
+
+            // Keep loader visible during redirect
+            setTimeout(() => {
+              router.push("/paymentsuccess");
+            }, 1000);
+          } else {
+            setPaymentProcessing(false);
           }
         },
         prefill: {
@@ -344,12 +431,18 @@ const CheckOut = () => {
           email: billing.email,
           contact: billing.phone,
         },
+        modal: {
+          ondismiss: () => {
+            setPaymentProcessing(false);
+          }
+        }
       };
 
       const paymentObject = new (window as any).Razorpay(options);
       paymentObject.open();
     } catch (error) {
       console.error("Razorpay Error:", error);
+      setPaymentProcessing(false);
     }
   };
 
@@ -358,6 +451,8 @@ const CheckOut = () => {
     if (!isValid) return;
 
     try {
+      setPaymentProcessing(true);
+
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
         amount: plan?.totalAmount,
         email: billing.email,
@@ -367,8 +462,10 @@ const CheckOut = () => {
       });
 
       setClientSecret(res.data.clientSecret);
+      setPaymentProcessing(false);
     } catch (err) {
       console.error("Stripe Payment Intent Error:", err);
+      setPaymentProcessing(false);
     }
   };
 
@@ -379,7 +476,7 @@ const CheckOut = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading checkout...</p>
         </div>
       </div>
@@ -393,7 +490,7 @@ const CheckOut = () => {
           <p className="text-red-600 mb-4">No checkout session found</p>
           <button
             onClick={() => router.push('/')}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#e6b800]"
           >
             Go to Home
           </button>
@@ -404,6 +501,8 @@ const CheckOut = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {paymentProcessing && <PaymentLoader />}
+
       <div className="max-w-[1380px] mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white p-6 rounded-2xl shadow-md">
@@ -427,7 +526,7 @@ const CheckOut = () => {
                   />
                 </div>
                 {errors.fullName && (
-                  <p className="text-red-500 text-sm ml-2">{errors.fullName}</p>
+                  <p className="text-red-500 text-sm ml-2 mt-1">{errors.fullName}</p>
                 )}
               </div>
 
@@ -448,7 +547,7 @@ const CheckOut = () => {
                     />
                   </div>
                   {errors.email && (
-                    <p className="text-red-500 text-sm ml-2">{errors.email}</p>
+                    <p className="text-red-500 text-sm ml-2 mt-1">{errors.email}</p>
                   )}
                 </div>
 
@@ -464,10 +563,11 @@ const CheckOut = () => {
                       className="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ffca00] outline-none transition"
                       value={billing.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
+                      maxLength={18}
                     />
                   </div>
                   {errors.phone && (
-                    <p className="text-red-500 text-sm ml-2">{errors.phone}</p>
+                    <p className="text-red-500 text-sm ml-2 mt-1">{errors.phone}</p>
                   )}
                 </div>
               </div>
@@ -511,7 +611,13 @@ const CheckOut = () => {
                   email={billing.email}
                   plan={plan}
                   currency={plan?.currency}
-                  onSuccess={() => router.push("/paymentsuccess")}
+                  onSuccess={() => {
+                    setPaymentProcessing(true);
+                    dispatch(resetCartCount());
+                    setTimeout(() => {
+                      router.push("/paymentsuccess");
+                    }, 1000);
+                  }}
                   id={actualId}
                 />
               </Elements>
@@ -606,11 +712,22 @@ const CheckOut = () => {
                 ? handleStripePayment
                 : handleRazorpayPayment
             }
-            className="w-full bg-[#ffca00] hover:bg-[#e6b800] font-semibold py-3 rounded-xl cursor-pointer transition-all duration-300 mt-2 shadow-md"
+            disabled={paymentProcessing}
+            className={`w-full font-semibold py-3 rounded-xl cursor-pointer transition-all duration-300 mt-2 shadow-md ${paymentProcessing
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-[#ffca00] hover:bg-[#e6b800]'
+              }`}
           >
-            {billing.selectedPayment === "Stripe"
-              ? `Proceed with Stripe (${plan?.currency === 'INR' ? '₹' : '$'}${plan?.totalAmount})`
-              : `Pay with Razorpay (${plan?.currency === 'INR' ? '₹' : '$'}${plan?.totalAmount})`}
+            {paymentProcessing ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></span>
+                Processing...
+              </div>
+            ) : (
+              billing.selectedPayment === "Stripe"
+                ? `Proceed with Stripe (${plan?.currency === 'INR' ? '₹' : '$'}${plan?.totalAmount})`
+                : `Pay with Razorpay (${plan?.currency === 'INR' ? '₹' : '$'}${plan?.totalAmount})`
+            )}
           </button>
         </div>
       </div>
