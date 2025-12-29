@@ -183,18 +183,15 @@ export default function Hero() {
         // Show appropriate message
         if (newAdditions.length > 0 && alreadyInCart.length > 0) {
           toast.success(
-            `${newAdditions.length} module${
-              newAdditions.length > 1 ? "s" : ""
-            } added to cart. ${alreadyInCart.length} ${
-              alreadyInCart.length > 1 ? "were" : "was"
+            `${newAdditions.length} module${newAdditions.length > 1 ? "s" : ""
+            } added to cart. ${alreadyInCart.length} ${alreadyInCart.length > 1 ? "were" : "was"
             } already in cart.`
           );
         } else if (alreadyInCart.length === selected.length) {
           toast.info(`All selected modules are already in your cart!`);
         } else {
           toast.success(
-            `${newAdditions.length} module${
-              newAdditions.length > 1 ? "s" : ""
+            `${newAdditions.length} module${newAdditions.length > 1 ? "s" : ""
             } added to cart!`
           );
         }
@@ -268,8 +265,8 @@ export default function Hero() {
                     onClick={() => toggle(m._id || m.id)}
                     className={`relative cursor-pointer rounded-2xl border p-6 transition-all duration-300
                       ${active
-                          ? "border-primary bg-yellow-50 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
-                          : "border-gray-200 bg-white hover:border-[#FFCA00]"
+                        ? "border-primary bg-yellow-50 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
+                        : "border-gray-200 bg-white hover:border-[#FFCA00]"
                       }`}
                   >
                     {/* Active Check */}
@@ -282,7 +279,7 @@ export default function Hero() {
                     </div>
 
                     <div className="flex items-center gap-4 mb-4 mt-6">
-                      <h3 className="text-lg font-semibold ff-font-bold">
+                      <h3 className="text-lg font-semibold ff-font-bold truncate">
                         {m.title}
                       </h3>
                     </div>
@@ -296,7 +293,9 @@ export default function Hero() {
                         {m.tags.map((tag, idx) => (
                           <li key={idx} className="flex gap-2 text-md ff-font">
                             <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FFCA00]" />
-                            {tag}
+                            <span className="truncate">
+                              {tag}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -310,10 +309,9 @@ export default function Hero() {
                       </span>
                       <span
                         className={`text-sm font-medium transition-colors
-                          ${
-                            active
-                              ? "text-yellow-600"
-                              : "text-gray-500 group-hover:text-yellow-600"
+                          ${active
+                            ? "text-yellow-600"
+                            : "text-gray-500 group-hover:text-yellow-600"
                           }`}
                       >
                         {active ? "Selected" : "Click to select"}

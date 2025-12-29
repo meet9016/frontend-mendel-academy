@@ -370,6 +370,7 @@ export default function Header() {
                   <div className="border-t border-gray-200 mt-4 pt-3 text-right">
                     <button
                       onClick={() => {
+                        router.push('/medicalexam')
                         setIsExamDropdownOpen(false);
                       }}
                       className="font-medium text-sm hover:underline"

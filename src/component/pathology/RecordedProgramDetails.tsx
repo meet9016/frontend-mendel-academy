@@ -266,11 +266,11 @@ export default function RecordedProgramDetails() {
     selectedOptions.length === 0
       ? program?.price || 0
       : program?.options
-          ?.filter((o) => selectedOptions.includes(o.type))
-          .reduce(
-            (sum, o) => sum + getPriceForCurrency(o, program.currency),
-            0
-          ) || 0;
+        ?.filter((o) => selectedOptions.includes(o.type))
+        .reduce(
+          (sum, o) => sum + getPriceForCurrency(o, program.currency),
+          0
+        ) || 0;
 
   const handleAddToCart = async () => {
     if (!program) return;
@@ -337,12 +337,12 @@ export default function RecordedProgramDetails() {
       <section className="relative -mt-40 px-4 pb-24 z-10">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-10">
           {/* Header */}
-          <h1 className="text-4xl font-serif font-bold ff-font-bold mt-2">
+          <h1 className="text-4xl font-serif font-bold ff-font-bold mt-2 ">
             {program.title}
           </h1>
 
           {/* Description */}
-          <p className="ff-font max-w-3xl mt-3">
+          <p className="ff-font max-w-3xl mt-3 line-clamp-3">
             {program.description && (
               <span
                 dangerouslySetInnerHTML={{
@@ -356,6 +356,7 @@ export default function RecordedProgramDetails() {
               />
             )}
           </p>
+
 
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-6 mt-6">
@@ -418,11 +419,10 @@ export default function RecordedProgramDetails() {
                       key={opt.type}
                       onClick={() => toggleOption(opt.type)}
                       className={`relative cursor-pointer rounded-xl border p-6 transition-all duration-300
-                      ${
-                        active
+                      ${active
                           ? "border-[#FFCA00] bg-[#FFCA00]/10"
                           : "border-gray-200 hover:border-[#FFCA00]"
-                      }`}
+                        }`}
                     >
                       {/* Check Icon */}
                       <div className="absolute top-4 right-4">
@@ -444,7 +444,10 @@ export default function RecordedProgramDetails() {
                       <h3 className="font-semibold ff-font-bold">{title}</h3>
 
                       {/* Description */}
-                      <p className="text-sm ff-font mb-4">{opt.description}</p>
+                      <p className="text-sm ff-font mb-4 line-clamp-3">
+                        {opt.description}
+                      </p>
+
 
                       {/* Features */}
                       <ul className="space-y-2 mb-4">
@@ -454,7 +457,9 @@ export default function RecordedProgramDetails() {
                             className="flex items-center gap-2 text-sm ff-font"
                           >
                             <FiCheck className="text-primary" />
-                            {f}
+                            <span className="line-clamp-2">
+                              {f}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -491,8 +496,8 @@ export default function RecordedProgramDetails() {
               {addingToCart
                 ? "Adding..."
                 : cartItemId
-                ? "Update Cart"
-                : "Add to Cart"}
+                  ? "Update Cart"
+                  : "Add to Cart"}
             </CommonButton>
           </div>
         </div>
