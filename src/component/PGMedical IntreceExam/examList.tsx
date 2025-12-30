@@ -11,7 +11,7 @@ import {
 } from "react-icons/fi";
 import Skeleton from "react-loading-skeleton";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { limitChars } from "@/utils/helper";
@@ -50,7 +50,7 @@ const useQBank = () => {
           const allExams = categories.flatMap((cat: any) =>
             cat.exams.map((exam: any) => ({
               ...exam,
-              exam_id: cat.id, 
+              exam_id: cat.id,
             }))
           );
 
@@ -103,22 +103,22 @@ const Hero = () => (
   </section>
 );
 
-/* ------------------ SCROLL FUNCTION ------------------ */
-const scroll = (direction: "left" | "right") => {
-  const container = document.getElementById("course-scroll-container");
-  if (!container) return;
-
-  const scrollAmount = 340;
-
-  if (direction === "left") {
-    container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-  } else {
-    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-  }
-};
 
 /* ------------------ QBANK LIST SECTION ------------------ */
 const CourseList = ({ questionBank, loading }: CourseListProps) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return;
+    const scrollAmount = 340;
+
+    if (direction === "left") {
+      scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
       <div className="max-w-[1025px] mx-auto py-14 space-y-7">
@@ -156,7 +156,7 @@ const CourseList = ({ questionBank, loading }: CourseListProps) => {
             </div>
           ) : (
             <div
-              id="course-scroll-container"
+              ref={scrollContainerRef}
               className="flex gap-6 overflow-x-auto pb-8 px-2 scrollbar-hide snap-x snap-mandatory scroll-smooth"
             >
               {questionBank?.map((exam: QBank) => (

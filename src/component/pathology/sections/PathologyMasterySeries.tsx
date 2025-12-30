@@ -288,7 +288,7 @@ const RecordedGrid = ({
   return (
     <>
       {/* Course Cards */}
-      <div className="relative mb-10">
+      <div className="relative px-12 mb-10">
         {/* Left Arrow */}
         <button
           onClick={() =>
@@ -296,7 +296,7 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: -350, behavior: "smooth" })
           }
-          className="absolute cursor-pointer left-1 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
         >
           <FaChevronDown className="rotate-90 w-5 h-5" />
         </button>
@@ -304,8 +304,8 @@ const RecordedGrid = ({
         {/* Scrollable Container */}
         <div
           id="courseScroll"
-          className="flex gap-8 overflow-x-hidden scroll-smooth no-scrollbar"
-          style={{ scrollSnapType: "x mandatory" }}
+          className="flex gap-8 overflow-x-auto scroll-smooth"
+          style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {programs.map((p, i) => {
             // ✅ Get currency for each program
@@ -425,50 +425,11 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: 350, behavior: "smooth" })
           }
-          className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
         >
           <FaChevronDown className="-rotate-90 w-5 h-5" />
         </button>
       </div>
-
-      {/* Bundle Offer */}
-      {/* <div
-        className="relative animate-fade-in-up"
-        style={{ animationDelay: "0.3s" }}
-      >
-        <div className="relative bg-white rounded-2xl border border-primary p-8 md:p-12 shadow-md">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="mt-1 p-3 w-16 h-16 rounded-xl flex items-center justify-center border-primary group-hover:scale-110 transition-transform duration-300">
-              <FaMoneyBillWave className="w-8 h-8 text-primary" />
-            </div>
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl md:text-3xl font-bold mb-2 ff-font-bold ">
-                Bundle more. Save more.
-              </h3>
-              <p className="text-lg ff-font mb-4">
-                Add one more Mendel Mastery course and get{" "}
-                <span className="font-bold ff-font-bold ">10% OFF</span>. Bundle
-                all 3 and save up to{" "}
-                <span className="font-bold ff-font-bold ">20%</span>.
-              </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-medium">
-                  1 course = regular price
-                </span>
-                <span className="px-4 py-2 ff-font-bold  rounded-full border-primary text-sm font-bold">
-                  2 courses = 10% off
-                </span>
-                <span className="px-4 py-2 ff-font rounded-full border-primary text-sm font-bold">
-                  3 courses = 20% off
-                </span>
-              </div>
-              <p className="text-sm ff-font mt-4">
-                Discount applied automatically at checkout.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

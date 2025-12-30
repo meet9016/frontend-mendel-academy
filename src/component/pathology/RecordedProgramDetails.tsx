@@ -399,7 +399,7 @@ export default function RecordedProgramDetails() {
             Select one or more options to customize your learning experience
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6 items-stretch">
             {program.options &&
               program.options
                 .filter((opt) => opt.is_available)
@@ -419,6 +419,7 @@ export default function RecordedProgramDetails() {
                       key={opt.type}
                       onClick={() => toggleOption(opt.type)}
                       className={`relative cursor-pointer rounded-xl border p-6 transition-all duration-300
+                      flex flex-col h-full
                       ${active
                           ? "border-[#FFCA00] bg-[#FFCA00]/10"
                           : "border-gray-200 hover:border-[#FFCA00]"
@@ -457,7 +458,7 @@ export default function RecordedProgramDetails() {
                             className="flex items-center gap-2 text-sm ff-font"
                           >
                             <FiCheck className="text-primary" />
-                            <span className="line-clamp-2">
+                            <span className="truncate">
                               {f}
                             </span>
                           </li>
@@ -465,10 +466,13 @@ export default function RecordedProgramDetails() {
                       </ul>
 
                       {/* ✅ Price with correct currency */}
-                      <span className="text-primary font-bold">
-                        {formatCurrency(displayPrice, programCurrency)}{" "}
-                        <span className="text-lg font-normal">/one-time</span>
-                      </span>
+                      <div className="mt-auto pt-6">
+                        <span className="font-bold text-lg">
+                          {formatCurrency(displayPrice, programCurrency)}{" "}
+                          <span className="font-normal">/one-time</span>
+                        </span>
+                      </div>
+
                     </div>
                   );
                 })}

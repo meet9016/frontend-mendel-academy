@@ -118,7 +118,16 @@ html.hydrated [role="button"] {
   border: 1px solid #FFCA00;
 }
 
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
 
 /* ff-font: // font-Helvetica */
 /* ff-font-bold: // font-Arial */
