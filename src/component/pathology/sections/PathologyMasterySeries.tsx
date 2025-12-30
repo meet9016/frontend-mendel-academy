@@ -432,7 +432,7 @@ const RecordedGrid = ({
       </div>
 
       {/* Bundle Offer */}
-      <div
+      {/* <div
         className="relative animate-fade-in-up"
         style={{ animationDelay: "0.3s" }}
       >
@@ -468,7 +468,7 @@ const RecordedGrid = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
@@ -496,7 +496,7 @@ const Section = ({
 const ProgramSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
     {[...Array(4)].map((_, i) => (
-      <Skeleton key={i} height={500} borderRadius={16} className="rounded-xl" />
+      <Skeleton key={i} height={450} borderRadius={16} className="rounded-xl" />
     ))}
   </div>
 );
@@ -504,7 +504,7 @@ const ProgramSkeleton = () => (
 const UpcomeingProgramSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
     {[...Array(4)].map((_, i) => (
-      <Skeleton key={i} height={600} borderRadius={16} className="rounded-xl" />
+      <Skeleton key={i} height={450} borderRadius={16} className="rounded-xl" />
     ))}
   </div>
 );

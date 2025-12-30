@@ -12,7 +12,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 interface Course {
   id: string;
@@ -50,29 +50,7 @@ const UpcomingCourse = () => {
         className="absolute bottom-20 right-10 w-96 h-96 bg-[#ffca00]/5 rounded-full blur-3xl animate-float"
         style={{ animationDelay: "2s" }}
       />
-
       <div className="relative z-10 max-w-[1380px] mx-auto">
-        {/* Header */}
-        {/* <div className="text-center mb-10 space-y-4 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#ffca00]/10 border border-[#ffca00]/30 rounded-full backdrop-blur-sm">
-                            <FaGraduationCap className="w-4 h-4 text-primary" />
-                            <span className="text-sm font-semibold text-primary">
-                                2025 Course Calendar
-                            </span>
-                        </div>
-            <div className="text-center w-full">
-              <h2 className="text-2xl md:text-4xl ff-font-bold font-bold inline-block">
-                <span>Upcoming</span>{" "}
-                Courses
-              </h2>
-            </div>
-            <p className="text-lg  ff-font max-w-4xl mx-auto ">
-              Expand your expertise with additional subspeciality training
-              courses launching throughout 2025. Join the waitlist to get early
-              access and exclusive updates.
-            </p>
-          </div> */}
-
         {/* Course Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 ">
           {courseData?.map((course: Course, index: number) => (
@@ -148,10 +126,9 @@ const UpcomingCourse = () => {
                     <div
                       className="text-sm ff-font text-muted-foreground leading-relaxed pl-4 line-clamp-3 mt-2 min-h-[4.5rem]"
                       dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(course.description)
+                        __html: DOMPurify.sanitize(course.description),
                       }}
                     />
-
 
                     {/* --- Info Boxes --- */}
                     <div className="space-y-3 pl-1 mt-2">
