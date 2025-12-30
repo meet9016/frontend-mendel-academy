@@ -20,7 +20,7 @@ const navLinks: NavLink[] = [
   { name: "Pathology", path: "/pathology" },
   { name: "Blog", path: "/blog" },
   { name: "About Us", path: "/aboutUs" },
-  { name: "PG Medical Entrance Exams", path: "/" },
+  { name: "PG Medical Entrance Exams", path: "/medicalexam" },
   { name: "Terms & Condition", path: "/terms-condition" },
 ];
 
