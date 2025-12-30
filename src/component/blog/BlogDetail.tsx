@@ -1,5 +1,5 @@
 "use client";
-import { FaFacebookF, FaLinkedinIn, FaTiktok, FaWhatsapp } from "react-icons/fa";
+import { FaFacebookF, FaLinkedinIn, FaTiktok, FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FiCalendar, FiClock, FiTag } from "react-icons/fi";
 
@@ -8,10 +8,10 @@ type Social = { Icon: React.ElementType; href: string };
 
 /* ----------  DATA  ---------- */
 const socials: Social[] = [
-  { Icon: FaFacebookF, href: "#" },
-  { Icon: FaLinkedinIn, href: "#" },
-  { Icon: FaWhatsapp, href: "#" },
-  { Icon: FaTiktok, href: "#" },
+  { Icon: FaFacebookF, href: "https://www.facebook.com/" },
+  { Icon: FaLinkedinIn, href: "https://www.linkedin.com/" },
+  { Icon: FaWhatsapp, href: "https://www.whatsapp.com/" },
+  { Icon: FaInstagram, href: "https://www.instagram.com/" },
 ];
 
 /* ----------  MAIN PAGE  ---------- */
