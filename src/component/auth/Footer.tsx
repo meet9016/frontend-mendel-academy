@@ -25,13 +25,12 @@ const navLinks: NavLink[] = [
 ];
 
 const socials: Social[] = [
-  { Icon: FaFacebookF, href: "#" },
-  { Icon: FaInstagram, href: "#" },
-  { Icon: FaWhatsapp, href: "#" },
-  { Icon: FaYoutube, href: "#" },
-  { Icon: FaTiktok, href: "#" },
-  { Icon: FaPinterestP, href: "#" },
-  { Icon: FaLinkedinIn, href: "#" },
+ { Icon: FaFacebookF, href: "https://www.facebook.com/" },
+  { Icon: FaLinkedinIn, href: "https://www.linkedin.com/" },
+  { Icon: FaWhatsapp, href: "https://www.whatsapp.com/" },
+  { Icon: FaInstagram, href: "https://www.instagram.com/" },
+  { Icon: FaYoutube, href: "https://www.youtube.com/" },
+  { Icon: FaPinterestP, href: "https://www.pinterest.com/" },
 ];
 
 /* ----------  MAIN FOOTER  ---------- */
@@ -60,7 +59,7 @@ const LogoDesc = ({ socials }: { socials: Social[] }) => (
     </p>
     <div className="flex items-center gap-4 text-xl pt-2">
       {socials.map(({ Icon, href }, i) => (
-        <a key={i} href={href} className="hover:text-[#ffca00] transition">
+        <a key={i} href={href} target="_blank" className="hover:text-[#ffca00] transition">
           <Icon />
         </a>
       ))}

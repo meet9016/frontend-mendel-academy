@@ -163,6 +163,7 @@ const Share = () => (
           className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-[#ffca00] hover:text-white transition-all"
           whileHover={{ scale: 1.15, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
+          target="_blank"
         >
           <Icon />
         </motion.a>
