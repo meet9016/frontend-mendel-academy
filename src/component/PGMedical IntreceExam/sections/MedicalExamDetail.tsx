@@ -29,12 +29,12 @@ interface Props {
 
 const MedicalExamDetail = ({ data, loading = false }: Props) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50">
       <motion.section
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative min-h-screen overflow-hidden bg-[#f9fafb]"
+        className="relative overflow-hidden bg-[#f9fafb]"
       >
         {loading ? <HeroSkeleton /> : <HeroContent data={data} />}
       </motion.section>

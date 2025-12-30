@@ -92,7 +92,14 @@ const FaqCard = ({ faq, isOpen, onToggle }: { faq: FaqItem; isOpen: boolean; onT
         <div className="pt-4 border-t border-gray-200">
           <div
             className="text-gray-600 ff-font"
-            dangerouslySetInnerHTML={{ __html: faq.description || '' }}
+             dangerouslySetInnerHTML={{
+                  __html: faq.description
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&amp;/g, "&")
+                    .replace(/&quot;/g, '"')
+                    .replace(/&#39;/g, "'"),
+                }}
           />
         </div>
       </div>

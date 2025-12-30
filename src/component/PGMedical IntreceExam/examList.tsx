@@ -15,6 +15,7 @@ import { useEffect, useState, useRef } from "react";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { limitChars } from "@/utils/helper";
+import DOMPurify from "dompurify";
 
 /* ------------------ TYPES ------------------ */
 export interface QBank {
@@ -103,7 +104,6 @@ const Hero = () => (
   </section>
 );
 
-
 /* ------------------ QBANK LIST SECTION ------------------ */
 const CourseList = ({ questionBank, loading }: CourseListProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -113,9 +113,15 @@ const CourseList = ({ questionBank, loading }: CourseListProps) => {
     const scrollAmount = 340;
 
     if (direction === "left") {
-      scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      scrollContainerRef.current.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
     } else {
-      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+      scrollContainerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -237,10 +243,16 @@ const CourseCard = (course: QBank) => {
         </div>
 
         {/* Description */}
-        <p className="text-sm ff-font mb-6 min-h-[3.2rem]">
+        {/* <p className="text-sm ff-font mb-6 min-h-[3.2rem]" >
           {limitChars(String(description), 60)}
-        </p>
 
+        </p> */}
+        <p
+          className="text-sm ff-font mb-6 line-clamp-2"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(description),
+          }}
+        />
         {/* Button */}
         <CommonButton
           pyClass="py-3"

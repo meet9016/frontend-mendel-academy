@@ -70,7 +70,11 @@ const UpcomingCourse = () => {
           <div
             id="upcomingScroll"
             className="flex gap-8 overflow-x-auto overflow-y-hidden"
-            style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none", msOverflowStyle: "none" }}
+            style={{
+              scrollSnapType: "x mandatory",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           >
             {courseData?.map((course: Course, index: number) => (
               <div
@@ -84,15 +88,18 @@ const UpcomingCourse = () => {
                 {/* Main Card */}
                 <div
                   className="relative h-full bg-card border-2 border-[#ffca00]/30 
-    overflow-hidden shadow-lg hover:shadow-none
+    overflow-hidden hover:shadow-none
     transition-all duration-500 rounded-2xl
     group-hover:border-[#fae7b2]"
                 >
                   {/* --- IMAGE SECTION WITH BADGES + WAVE --- */}
-                  <div className="relative h-56 overflow-hidden">
+                  <div className="relative h-42 overflow-hidden">
                     {/* Course Image */}
                     <img
-                      src={course.image || 'https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg'}
+                      src={
+                        course.image ||
+                        "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
+                      }
                       alt={course.title}
                       className="w-full h-full object-cover transition-all duration-700 group-hover:scale-125"
                     />
@@ -105,13 +112,14 @@ const UpcomingCourse = () => {
                       <span className="bg-white/90 ff-font-bold  text-[10px] font-bold tracking-wide px-3 py-1 rounded-full shadow-md uppercase border border-[#f0b100]/30 backdrop-blur-sm">
                         Advanced Level
                       </span>
-                      <span className="bg-[#FFCA00] ff-font-bold  text-[10px] font-bold tracking-wide px-3 py-1 rounded-full shadow-md uppercase border border-white/20">
+                      
+                      {/* <span className="bg-[#FFCA00] ff-font-bold  text-[10px] font-bold tracking-wide px-3 py-1 rounded-full shadow-md uppercase border border-white/20">
                         Case-Based Learning
-                      </span>
+                      </span> */}
                     </div>
 
                     {/* --- CURVED WAVE FIXED (NO WHITE LINE) --- */}
-                    <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+                    {/* <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
                       <svg
                         className="relative block w-full h-[60px]"
                         viewBox="0 0 500 60"
@@ -122,7 +130,7 @@ const UpcomingCourse = () => {
                           fill="white"
                         />
                       </svg>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* --- CONTENT SECTION --- */}
@@ -142,7 +150,7 @@ const UpcomingCourse = () => {
                     </p> */}
                       {/* --- Description (HTML Render Like CourseDes) --- */}
                       <div
-                        className="text-sm ff-font text-muted-foreground leading-relaxed pl-4 line-clamp-3 mt-2 min-h-[4.5rem]"
+                        className="text-sm ff-font text-muted-foreground leading-relaxed pl-4 line-clamp-2 mt-2 min-h-[3.5rem]"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(course.description),
                         }}
@@ -190,15 +198,17 @@ const UpcomingCourse = () => {
                                             </button> */}
                       <CommonButton
                         pyClass="py-3"
-                        pxClass="px-19"
+                        pxClass="px-22"
                         fontWeight={700}
                         fontSize={14}
                         onClick={() => setOpenCourseDetails(!openCourseDetails)}
                       >
-                        <div className="flex items-center gap-2 ff-font-bold">
+                        <div className="flex items-center gap-2 ff-font-bold w-full">
                           {/* <FaBell className="w-4 h-4" /> */}
-                          <span>Get Notified</span>
-                          <FaArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                          <div className="flex gap-1">
+                            <span>Get Notified</span>
+                            <FaArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                          </div>
                         </div>
                       </CommonButton>
                     </div>
@@ -317,8 +327,8 @@ const UpcomingCourse = () => {
                 </AnimatePresence>
 
                 {/* Floating Decorations */}
-                <div className="absolute -bottom-5 -right-6 w-18 h-18 border-8 border-[#ffca00]/20 rounded-full group-hover:scale-110 group-hover:border-[#ffca00]/40 transition-all duration-700 " />
-                <div className="absolute -top-6 -left-6 w-16 h-16 bg-[#ffca00]/10 rounded-full group-hover:scale-125 transition-all duration-700" />
+                {/* <div className="absolute -bottom-5 -right-6 w-18 h-18 border-8 border-[#ffca00]/20 rounded-full group-hover:scale-110 group-hover:border-[#ffca00]/40 transition-all duration-700 " />
+                <div className="absolute -top-6 -left-6 w-16 h-16 bg-[#ffca00]/10 rounded-full group-hover:scale-125 transition-all duration-700" /> */}
               </div>
             ))}
           </div>
