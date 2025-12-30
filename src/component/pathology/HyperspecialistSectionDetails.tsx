@@ -250,7 +250,7 @@ export default function Hero() {
         ) : (
           <>
             {/* Modules Grid */}
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 items-stretch">
               {data.map((m, i) => {
                 const active = selected.includes(m._id || m.id);
 
@@ -263,12 +263,13 @@ export default function Hero() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08 }}
                     onClick={() => toggle(m._id || m.id)}
-                    className={`relative cursor-pointer rounded-2xl border p-6 transition-all duration-300
-                      ${active
+                    className={`relative cursor-pointer rounded-2xl border p-6 transition-all duration-300 flex flex-col h-full
+                    ${active
                         ? "border-primary bg-yellow-50 shadow-[0_0_30px_rgba(250,204,21,0.25)]"
                         : "border-gray-200 bg-white hover:border-[#FFCA00]"
                       }`}
                   >
+
                     {/* Active Check */}
                     <div className="absolute top-4 right-4">
                       {active ? (
@@ -301,15 +302,16 @@ export default function Hero() {
                       </ul>
                     )}
 
-                    <div className="flex items-center justify-between">
+                    <div className="mt-auto flex items-center justify-between pt-6 ">
                       <span className="text-xl font-bold">
                         {currencySymbol}
                         {m.display_price ||
                           (currency === "INR" ? m.price_inr : m.price_dollar)}
                       </span>
+
                       <span
                         className={`text-sm font-medium transition-colors
-                          ${active
+                        ${active
                             ? "text-yellow-600"
                             : "text-gray-500 group-hover:text-yellow-600"
                           }`}
@@ -317,6 +319,7 @@ export default function Hero() {
                         {active ? "Selected" : "Click to select"}
                       </span>
                     </div>
+
                   </motion.div>
                 );
               })}
