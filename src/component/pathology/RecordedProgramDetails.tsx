@@ -342,7 +342,7 @@ export default function RecordedProgramDetails() {
           </h1>
 
           {/* Description */}
-          <p className="ff-font max-w-3xl mt-3 line-clamp-3">
+          <p className="ff-font mt-3">
             {program.description && (
               <span
                 dangerouslySetInnerHTML={{
