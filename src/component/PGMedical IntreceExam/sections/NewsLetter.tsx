@@ -213,7 +213,7 @@ const RegistrationForm = ({
       <p className="text-center text-sm text-gray-500 mt-3">
         By registering, you agree to our terms and conditions
       </p>
-    </div>run dev
+    </div>
   </div>
 );
 
