@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from "framer-motion";
-import { BsAward, BsShieldCheck } from 'react-icons/bs';
-import { MdOutlineSchool, MdTrendingUp, MdVerifiedUser } from 'react-icons/md';
-import { FiAlertCircle, FiCheck, FiMail } from 'react-icons/fi';
 import CommonButton from '@/comman/Button';
-import { toast } from 'react-toastify';
-import endPointApi from '@/utils/endPointApi';
-import { store } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
+import { store } from "@/redux/store";
+import endPointApi from '@/utils/endPointApi';
+import { getTempId } from '@/utils/helper';
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import { BsAward, BsShieldCheck } from 'react-icons/bs';
+import { FiAlertCircle, FiCheck, FiMail } from 'react-icons/fi';
+import { MdOutlineSchool, MdTrendingUp, MdVerifiedUser } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 
 // TypeScript interfaces
@@ -90,6 +91,7 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
     }, [data]);
 
     const handleAddToCart = async (module: ModuleData, moduleIndex: number) => {
+        
         if (!livecourseId) {
             toast.error('Course information is missing');
             return;
@@ -109,7 +111,7 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
         setLoadingModuleId(String(moduleId));
 
         try {
-            const tempId = sessionStorage.getItem('temp_id');
+            const tempId = getTempId()
             const userId = localStorage.getItem('auth_id');
 
             const requestPayload = {
@@ -154,7 +156,7 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
                     toast.success('Module added to cart successfully!');
                 }
 
-                if (onAddToCart) {
+                if (onAddToCart && typeof onAddToCart === 'function') {
                     onAddToCart(String(moduleId));
                 }
             } else {
