@@ -21,7 +21,12 @@ const navLinks: NavLink[] = [
   { name: "Blog", path: "/blog" },
   { name: "About Us", path: "/aboutUs" },
   { name: "PG Medical Entrance Exams", path: "/medicalexam" },
-  { name: "Terms & Condition", path: "/terms-condition" },
+];
+
+const resourcesLinks: NavLink[] = [
+  { name: "Terms & Conditions", path: "/terms-condition" },
+  { name: "Privacy Policy", path: "/privacy-policy" },
+  { name: "Refund Policy", path: "/refund-policy" },
 ];
 
 const socials: Social[] = [
@@ -39,9 +44,10 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#1a1a18] text-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <LogoDesc socials={socials} />
         <QuickLinks links={navLinks} onNav={(path) => router.push(path)} />
+        <ResourcesLinks links={resourcesLinks} onNav={(path) => router.push(path)} />
         <Contact />
       </div>
 
@@ -70,6 +76,18 @@ const LogoDesc = ({ socials }: { socials: Social[] }) => (
 const QuickLinks = ({ links, onNav }: { links: NavLink[]; onNav: (path: string) => void }) => (
   <div>
     <h4 className="font-semibold ff-font-bold text-lg mb-4">Quick Links</h4>
+    <ul className="space-y-2 ff-font text-sm">
+      {links.map((l) => (
+        <li key={l.name} onClick={() => onNav(l.path)} className="hover:text-[#ffca00] cursor-pointer transition">
+          {l.name}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+const ResourcesLinks = ({ links, onNav }: { links: NavLink[]; onNav: (path: string) => void }) => (
+  <div>
+    <h4 className="font-semibold ff-font-bold text-lg mb-4">Resources</h4>
     <ul className="space-y-2 ff-font text-sm">
       {links.map((l) => (
         <li key={l.name} onClick={() => onNav(l.path)} className="hover:text-[#ffca00] cursor-pointer transition">
