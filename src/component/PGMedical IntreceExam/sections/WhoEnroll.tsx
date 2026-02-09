@@ -29,6 +29,7 @@ export interface Plan {
   most_popular?: boolean;
   plan_type?: string;
   plan_day?: number;
+  plan_month?: number;
   plan_pricing_dollar?: number;
   plan_pricing_inr?: number;
   plan_sub_title?: string[];
@@ -278,7 +279,7 @@ const PlanCard = ({
     m-3 my-8 p-6 
     flex flex-col 
     h-full               // ← important
-    min-h-[480px] 
+    min-h-[420px] 
     transition-all duration-300
     ${plan.most_popular
       ? "border-primary shadow-xl"
@@ -303,7 +304,7 @@ const PlanCard = ({
           </div>
 
           <h3 className="text-2xl font-bold ff-font-bold text-center">
-            {plan.plan_day} Month{plan.plan_day && plan.plan_day > 1 ? "s" : ""}
+            {plan.plan_month} Month{(plan.plan_month) && (plan.plan_month) > 1 ? "s" : ""}
           </h3>
 
           <div className="space-y-2 text-center">
@@ -410,9 +411,9 @@ const RapidToolCard = ({
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
 
   return (
-    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[280px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
-      <div className="flex flex-col flex-grow justify-between space-y-6">
-        <div className="space-y-4">
+    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[180px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+      <div className="flex flex-col flex-grow justify-between">
+        <div className="space-y-2">
           <div className="text-center">
             <h3 className="text-xl font-bold ff-font-bold capitalize">
               {tool.tool_type}
