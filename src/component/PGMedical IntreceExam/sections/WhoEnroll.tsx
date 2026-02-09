@@ -34,12 +34,20 @@ export interface Plan {
   plan_sub_title?: string[];
 }
 
+export interface RapidTool {
+  _id?: string;
+  tool_type?: string;
+  price_usd?: number;
+  price_inr?: number;
+}
+
 export interface WhoEnrollData {
   _id?: string;
   who_can_enroll_title?: string;
   who_can_enroll_description?: string;
   who_can_enroll_image?: string;
   choose_plan_list?: Plan[];
+  rapid_learning_tools?: RapidTool[];
   user_currency?: string; // ✅ Backend provides this based on IP
   user_country?: string;
 }
@@ -100,6 +108,8 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
     }
   };
 
+          console.log("DEBUG : WhoEnroll : data:", data);
+
   return (
     <section className="py-10 bg-white">
       <div className="container mx-auto px-4">
@@ -119,6 +129,12 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           loadingPlanId={loadingPlanId}
           userCurrency={userCurrency}
           onEnroll={(plan) => addToCart(plan)}
+        />
+
+        <RapidToolsSection
+          tools={data?.rapid_learning_tools || []}
+          loading={loading}
+          userCurrency={userCurrency}
         />
       </div>
     </section>
@@ -339,3 +355,87 @@ const PlanSkeleton = () => (
     ))}
   </div>
 );
+
+// Rapid Learning Tools Section
+const RapidToolsSection = ({
+  tools,
+  loading,
+  userCurrency,
+}: {
+  tools: RapidTool[];
+  loading: boolean;
+  userCurrency: string;
+}) => (
+  <div className="max-w-[1380px] mx-auto mt-16">
+    <SectionHeading title="Rapid Learning Tools" />
+
+    {loading ? (
+      <PlanSkeleton />
+    ) : (
+      <div>
+        <Sliders
+          settings={{
+            accessibility: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: true,
+          }}
+        >
+          {tools.map((tool) => (
+            <RapidToolCard
+              key={tool._id}
+              tool={tool}
+              userCurrency={userCurrency}
+            />
+          ))}
+        </Sliders>
+      </div>
+    )}
+  </div>
+);
+
+// Single Rapid Tool Card
+const RapidToolCard = ({
+  tool,
+  userCurrency,
+}: {
+  tool: RapidTool;
+  userCurrency: string;
+}) => {
+  const price = userCurrency === "INR" ? tool.price_inr : tool.price_usd;
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  return (
+    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[280px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+      <div className="flex flex-col flex-grow justify-between space-y-6">
+        <div className="space-y-4">
+          <div className="text-center">
+            <h3 className="text-xl font-bold ff-font-bold capitalize">
+              {tool.tool_type}
+            </h3>
+          </div>
+
+          <div className="text-center">
+            <p className="text-3xl ff-font-bold font-bold text-primary">
+              {currencySymbol} {formatPrice(price ?? 0)}
+            </p>
+          </div>
+        </div>
+
+        <CommonButton
+          onClick={() => console.log("Cart added")}
+          pyClass="py-3"
+          pxClass="px-20"
+          fontWeight={700}
+          fontSize={14}
+        >
+          Enroll Now
+        </CommonButton>
+      </div>
+    </div>
+  );
+};

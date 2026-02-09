@@ -401,7 +401,13 @@ const CheckOut = () => {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
             amount: data.amount / 100,
-            plan_id: plan.data[0].livecourse_id ? plan.data[0].livecourse_id._id : plan.data[0].hyperspecialist_id ? plan.data[0].hyperspecialist_id._id : '',
+            plan_id: plan.data[0].livecourse_id
+              ? plan.data[0].livecourse_id._id
+              : plan.data[0].hyperspecialist_id
+                ? plan.data[0].hyperspecialist_id._id
+                : plan.data[0].product_id?._id
+                  ? plan.data[0].product_id._id
+                  : '',
             ...(userId ? { user_id: userId } : { guest_id: actualId }),
             status: "captured",
             currency: plan?.currency,
