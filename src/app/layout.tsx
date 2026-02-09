@@ -8,7 +8,8 @@ import Footer from "@/component/auth/Footer";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

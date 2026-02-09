@@ -14,6 +14,7 @@ import { api } from "@/utils/axiosInstance";
 import { store } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
 import { toast } from "react-toastify";
+import Sliders from "@/comman/Sliders";
 
 interface WhoEnrollProps {
   data: WhoEnrollData | null;
@@ -197,19 +198,33 @@ const PricingSection = ({
     {loading ? (
       <PlanSkeleton />
     ) : (
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {plans.map((plan) => (
-          <PlanCard
-            key={plan._id}
-            plan={plan}
-            userCurrency={userCurrency}
-            isLoading={loadingPlanId === plan._id}
-            onEnroll={() => onEnroll(plan)}
-          />
-        ))}
+      <div >
+        <Sliders
+          settings={{
+            // dots: true,
+            accessibility: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: true
+          }}
+        >
+          {plans.map((plan) => (
+            <PlanCard
+              key={plan._id}
+              plan={plan}
+              userCurrency={userCurrency}
+              isLoading={loadingPlanId === plan._id}
+              onEnroll={() => onEnroll(plan)}
+            />
+          ))}
+        </Sliders>
       </div>
     )}
-  </div>
+  </div >
 );
 
 // Section Heading
@@ -233,7 +248,6 @@ const PlanCard = ({
   isLoading: boolean;
   onEnroll: () => void;
 }) => {
-  // ✅ Get price based on user's currency (backend already converted this)
   const price =
     userCurrency === "INR"
       ? plan.plan_pricing_inr
@@ -243,10 +257,18 @@ const PlanCard = ({
 
   return (
     <div
-      className={`relative bg-white border-2 rounded-2xl p-6 flex flex-col h-full min-h-[480px] transition-all duration-300 ${plan.most_popular
-          ? "border-primary shadow-xl"
-          : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
-        }`}
+      className={`
+    relative bg-white border-2 rounded-2xl 
+    m-3 my-8 p-6 
+    flex flex-col 
+    h-full               // ← important
+    min-h-[480px] 
+    transition-all duration-300
+    ${plan.most_popular
+      ? "border-primary shadow-xl"
+      : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
+    }
+  `}
     >
       {plan.most_popular && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -256,7 +278,7 @@ const PlanCard = ({
         </div>
       )}
 
-      <div className="flex flex-col justify-between h-full space-y-6 mt-2">
+      <div className="flex flex-col flex-grow justify-between space-y-6 mt-2">
         <div className="space-y-2">
           <div className="text-center">
             <span className="inline-block px-4 py-2 bg-white border-primary rounded-full text-sm font-bold text-primary ff-font-bold uppercase">
