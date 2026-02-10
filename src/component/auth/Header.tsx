@@ -340,42 +340,41 @@ export default function Header() {
               {isExamDropdownOpen && (
                 <div
                   id="exam-dropdown"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[600px] bg-white border border-gray-200 rounded-lg shadow-xl p-6 animate-fadeIn"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
                 >
-                  <div className="grid grid-cols-2 gap-6">
-                    {examCategories.map((category) => (
-                      <div key={category.category_name}>
-                        <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-                          {category.category_name}
-                        </h3>
+                  <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
+                    Medical Exam Prep
+                  </h3>
 
-                        <ul className="space-y-2">
-                          {category?.exams?.map((exam: any) => (
-                            <li key={exam?._id}>
-                              <button
-                                className="w-full text-left text-sm text-gray-800 hover:text-yellow-500 hover:bg-gray-50 px-3 py-2 rounded-md cursor-pointer transition-all"
-                                onClick={() => {
-                                  router.push(`/medicalexam/${exam?.exam_id}`);
-                                  setIsExamDropdownOpen(false);
-                                }}
-                              >
-                                {exam.exam_name}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {examCategories.map((category) => (
+                      <ul key={category.category_name} className="space-y-1">
+                        {category?.exams?.map((exam: any) => (
+                          <li key={exam?._id}>
+                            <button
+                              className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                              onClick={() => {
+                                router.push(`/medicalexam/${exam?.exam_id}`);
+                                setIsExamDropdownOpen(false);
+                              }}
+                            >
+                              {exam.exam_name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
                     ))}
                   </div>
-                  <div className="border-t border-gray-200 mt-4 pt-3 text-right">
+
+                  <div className="border-t border-gray-200 mt-3 pt-3 text-center">
                     <button
                       onClick={() => {
                         router.push('/medicalexam')
                         setIsExamDropdownOpen(false);
                       }}
-                      className="font-medium text-sm hover:underline"
+                      className="ff-font-bold text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200"
                     >
-                      View All Exam Services →
+                      View All →
                     </button>
                   </div>
                 </div>
