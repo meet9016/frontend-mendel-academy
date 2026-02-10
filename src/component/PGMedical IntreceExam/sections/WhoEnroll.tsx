@@ -357,6 +357,14 @@ const PlanSkeleton = () => (
   </div>
 );
 
+const RapidToolSkeleton = () => (
+  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {[...Array(4)].map((_, i) => (
+      <Skeleton key={i} height={200} borderRadius={16} />
+    ))}
+  </div>
+);
+
 // Rapid Learning Tools Section
 const RapidToolsSection = ({
   tools,
@@ -371,7 +379,7 @@ const RapidToolsSection = ({
     <SectionHeading title="Rapid Learning Tools" />
 
     {loading ? (
-      <PlanSkeleton />
+      <RapidToolSkeleton />
     ) : (
       <div>
         <Sliders
