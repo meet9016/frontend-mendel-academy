@@ -99,7 +99,12 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
         const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
 
         store.dispatch(setCartCount(countRes.data.count));
-        toast.success("Plan added to cart successfully!");
+        
+        if (res.data.alreadyInCart) {
+          toast.info("This plan is already in your cart");
+        } else {
+          toast.success("Plan added to cart successfully!");
+        }
       }
     } catch (error: any) {
       console.error("Error adding to cart:", error);
