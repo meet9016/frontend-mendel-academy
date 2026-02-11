@@ -46,7 +46,7 @@ function PgMedicalEntranceExams() {
       <Faq />
 
       {/* Who Can Enroll */}
-      <WhoEnroll data={examData} loading={loading} />
+      <WhoEnroll data={examData} loading={loading} examCategoryId={id as string} />
 
       {/* REGISTER SECTION */}
       <NewsLetter />

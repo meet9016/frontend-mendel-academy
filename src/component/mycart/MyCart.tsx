@@ -132,14 +132,24 @@ const getProductUrl = (item: any) => {
 // ✅ NEW: Get title and subtitle for cart item based on type
 const getCartItemTitles = (item: any) => {
   if (item.cart_type === 'exam_plan') {
+    const categoryName = item.category_name || item.exam_category_id?.category_name || 'Exam Plan';
     const examName = item.exam_category_id?.exams?.[0]?.exam_name ||
-      item.exam_category_id?.exams?.[0]?.title ||
-      'Exam';
-    const categoryName = item.category_name || item.exam_category_id?.category_name;
+      item.exam_category_id?.exams?.[0]?.title;
 
     return {
-      primary: examName,
-      secondary: categoryName
+      primary: categoryName,
+      secondary: examName || null
+    };
+  }
+
+  if (item.cart_type === 'rapid_tool') {
+    const categoryName = item.category_name || item.exam_category_id?.category_name || 'Rapid Learning Tool';
+    const examName = item.exam_category_id?.exams?.[0]?.exam_name ||
+      item.exam_category_id?.exams?.[0]?.title;
+
+    return {
+      primary: categoryName,
+      secondary: examName || null
     };
   }
 
@@ -150,18 +160,16 @@ const getCartItemTitles = (item: any) => {
     };
   }
 
-  // ✅ NEW: Handle LiveCourses titles
   if (item.cart_type === 'livecourses') {
     const courseTitle = item.livecourse_id?.course_title || item.category_name;
     const moduleTitle = item.livecourse_details?.title;
 
     return {
       primary: moduleTitle || courseTitle || 'Live Course Module',
-      secondary: moduleTitle ? courseTitle : null // Show course title as secondary if module title is primary
+      secondary: moduleTitle ? courseTitle : null
     };
   }
 
-  // For prerecord
   return {
     primary: item.product_id?.title || item.category_name || 'Product',
     secondary: null
@@ -382,6 +390,28 @@ const MyCart: React.FC<MyCartProps> = ({
                                 )}
                               </div>
                             ))}
+                          </div>
+                        )}
+
+                        {/* ✅ NEW: Plan Details Chip (for exam_plan) */}
+                        {item.cart_type === 'exam_plan' && item.plan_details && (
+                          <div className="flex flex-wrap gap-1.5">
+                            <div className="flex items-center gap-1.5 bg-blue-50 border border-blue-400 px-2.5 py-1 rounded-full text-xs">
+                              <span className="font-medium">
+                                {item.plan_details.plan_type}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* ✅ NEW: Rapid Tool Details Chip (for rapid_tool) */}
+                        {item.cart_type === 'rapid_tool' && item.tool_details && (
+                          <div className="flex flex-wrap gap-1.5">
+                            <div className="flex items-center gap-1.5 bg-green-50 border border-green-400 px-2.5 py-1 rounded-full text-xs">
+                              <span className="font-medium capitalize">
+                                Rapid Tool - {item.tool_details.tool_type}
+                              </span>
+                            </div>
                           </div>
                         )}
                       </div>
