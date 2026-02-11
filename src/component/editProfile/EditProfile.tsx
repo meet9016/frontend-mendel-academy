@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import { MdEmail, MdPhone, MdCalendarToday, MdPerson } from "react-icons/md";
+import { ProfileSkeleton } from "../Skeletons";
 import { toast } from "react-toastify";
 
 const EditProfile = () => {
@@ -370,14 +371,7 @@ const EditProfile = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#ffca00] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="ff-font text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   return (

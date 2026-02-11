@@ -5,6 +5,7 @@ import { BiShoppingBag } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FiTrash2, FiBook, FiVideo, FiEdit3, FiX } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { CartItemSkeleton } from "../Skeletons";
 
 // Helper function to format currency
 const formatCurrency = (amount: number, currency: string) => {
@@ -282,12 +283,10 @@ const MyCart: React.FC<MyCartProps> = ({
 
           {/* Loading State */}
           {isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-8">
-              <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-yellow-500"></div>
-                <BiShoppingBag className="w-8 h-8 text-yellow-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              </div>
-              <p className="mt-4 text-gray-500">Loading your cart...</p>
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              {[1, 2, 3].map((i) => (
+                <CartItemSkeleton key={i} />
+              ))}
             </div>
           ) : (
             /* Cart Items */

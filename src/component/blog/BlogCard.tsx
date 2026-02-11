@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { formatDateWithDayjs } from "@/utils/helper";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { BlogCardSkeleton } from "../Skeletons";
 
 /* ----------  TYPES  ---------- */
 type Blog = {
@@ -200,9 +199,9 @@ const Pagination = ({ pageCount, onPageChange }: { pageCount: number; onPageChan
 
 /* ----------  SKELETON  ---------- */
 const BlogSkeleton = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+  <>
     {[1, 2, 3, 4, 5, 6].map((i) => (
-      <Skeleton key={i} height={380} width={340} borderRadius={24} className="rounded-3xl w-full lg:max-w-[380px]" />
+      <BlogCardSkeleton key={i} />
     ))}
-  </div>
+  </>
 );

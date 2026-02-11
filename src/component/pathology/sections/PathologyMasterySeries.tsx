@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, store } from "@/redux/store";
-import Skeleton from "react-loading-skeleton";
+import { PathologyCardSkeleton, FeaturedLiveSkeleton } from "../../Skeletons";
 import { CgLock } from "react-icons/cg";
 import { useRouter } from "next/navigation";
 import { getData } from "@/redux/dataSlice";
@@ -20,7 +20,6 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { toast } from "react-toastify";
 import UpcomingCourse from "./UpcomingCourse";
-import "react-loading-skeleton/dist/skeleton.css";
 import { getTempId } from "@/utils/helper";
 import { getAuthId } from "@/utils/tokenManager";
 import { setCartCount } from "@/redux/cartSlice";
@@ -455,9 +454,9 @@ const Section = ({
 /* ----------  SKELETON  ---------- */
 
 const ProgramSkeleton = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
+  <div className="flex gap-8 overflow-x-auto scrollbar-hide px-12">
     {[...Array(4)].map((_, i) => (
-      <Skeleton key={i} height={450} borderRadius={16} className="rounded-xl" />
+      <PathologyCardSkeleton key={i} />
     ))}
   </div>
 );
@@ -465,112 +464,8 @@ const ProgramSkeleton = () => (
 const UpcomeingProgramSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 cursor-pointer">
     {[...Array(4)].map((_, i) => (
-      <Skeleton key={i} height={450} borderRadius={16} className="rounded-xl" />
+      <PathologyCardSkeleton key={i} />
     ))}
   </div>
 );
 
-const FeaturedLiveSkeleton = () => {
-  return (
-    <div className="w-full max-w-[1025px] mx-auto bg-gray-900 text-white rounded-2xl p-6 md:p-10 mt-10">
-      {/* TOP BADGES */}
-      <div className="flex flex-wrap items-center justify-between text-sm mb-6">
-        <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
-          <span className="w-2 h-2 bg-gray-700 rounded-full" />
-          <Skeleton
-            width={70}
-            height={14}
-            baseColor="#4b5563"
-            highlightColor="#6b7280"
-          />
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Skeleton
-            width={80}
-            height={20}
-            baseColor="#4b5563"
-            highlightColor="#6b7280"
-            borderRadius={12}
-          />
-          <Skeleton
-            width={60}
-            height={20}
-            baseColor="#4b5563"
-            highlightColor="#6b7280"
-            borderRadius={12}
-          />
-        </div>
-      </div>
-
-      {/* TITLE */}
-      <Skeleton
-        width="60%"
-        height={30}
-        baseColor="#4b5563"
-        highlightColor="#6b7280"
-      />
-
-      {/* INSTRUCTOR */}
-      <div className="flex items-center gap-3 mt-5 mb-5">
-        <Skeleton
-          circle
-          width={48}
-          height={48}
-          baseColor="#4b5563"
-          highlightColor="#6b7280"
-        />
-
-        <div>
-          <Skeleton
-            width={120}
-            height={18}
-            baseColor="#4b5563"
-            highlightColor="#6b7280"
-          />
-          <Skeleton
-            width={90}
-            height={14}
-            baseColor="#4b5563"
-            highlightColor="#6b7280"
-            className="mt-1"
-          />
-        </div>
-      </div>
-
-      {/* TAGS */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <Skeleton
-          width={90}
-          height={28}
-          baseColor="#4b5563"
-          highlightColor="#6b7280"
-          borderRadius={20}
-        />
-        <Skeleton
-          width={110}
-          height={28}
-          baseColor="#4b5563"
-          highlightColor="#6b7280"
-          borderRadius={20}
-        />
-        <Skeleton
-          width={80}
-          height={28}
-          baseColor="#4b5563"
-          highlightColor="#6b7280"
-          borderRadius={20}
-        />
-      </div>
-
-      {/* BUTTON */}
-      <Skeleton
-        width={200}
-        height={40}
-        baseColor="#4b5563"
-        highlightColor="#6b7280"
-        borderRadius={10}
-      />
-    </div>
-  );
-};

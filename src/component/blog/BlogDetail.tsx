@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
-import { formatDate } from "@/utils/helper";
+import { BlogDetailSkeleton } from "../Skeletons";
 
 /* ----------  TYPES  ---------- */
 type Social = { Icon: React.ElementType; href: string };
@@ -62,7 +62,7 @@ export default function BlogDetail() {
   }, [id]);
 
 if (loading) {
-  return <div className="py-40 text-center">Loading...</div>;
+  return <BlogDetailSkeleton />;
 }
 
 if (!blog) {
