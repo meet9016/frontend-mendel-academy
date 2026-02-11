@@ -5,13 +5,12 @@ import ProgramFeatures from "./sections/ProgramFeatures";
 import MeetYourMentor from "../pathology/sections/MeetYourMentor";
 import RegisterMasterClass from "./sections/RegisterMasterClass";
 import MainSection from "./sections/MainSection";
+import { DetailPageSkeleton } from "../Skeletons";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { getData } from "@/redux/dataSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import ChooseYourLearningPath from "./sections/ChooseYourLearningPath";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const UpCommingCourses = () => {
   const dispatch = useAppDispatch();
@@ -28,18 +27,7 @@ const UpCommingCourses = () => {
   const livecourseId = courseData?._id;
 
   if (loadings) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <Skeleton height={400} className="mb-6 rounded-2xl" />
-        <Skeleton height={300} className="mb-6 rounded-2xl" />
-        <Skeleton height={250} className="mb-6 rounded-2xl" />
-        <div className="grid md:grid-cols-3 gap-6">
-          <Skeleton height={500} className="rounded-2xl" />
-          <Skeleton height={500} className="rounded-2xl" />
-          <Skeleton height={500} className="rounded-2xl" />
-        </div>
-      </div>
-    );
+    return <DetailPageSkeleton />;
   }
 
   if (!courseData) {

@@ -21,6 +21,7 @@ import { MdOutlinePhone } from "react-icons/md";
 import { resetCartCount } from "@/redux/cartSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
+import { CheckoutSkeleton } from "../Skeletons";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId } from "@/utils/helper";
 
@@ -496,14 +497,7 @@ const CheckOut = () => {
   const stripeOptions: any = { clientSecret, appearance };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading checkout...</p>
-        </div>
-      </div>
-    );
+    return <CheckoutSkeleton />;
   }
 
   if (!actualId || actualId === 'null') {

@@ -11,6 +11,7 @@ import { setCartCount } from "@/redux/cartSlice";
 import { AppDispatch } from "@/redux/store";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId } from "@/utils/helper";
+import { HyperspecialistCardSkeleton } from "../Skeletons";
 
 export type HyperSpecialistItem = {
   _id: string;
@@ -244,8 +245,10 @@ export default function Hero() {
 
         {/* Loading State */}
         {loading || !cartItemsLoaded ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-yellow-500"></div>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 items-stretch">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <HyperspecialistCardSkeleton key={i} />
+            ))}
           </div>
         ) : (
           <>

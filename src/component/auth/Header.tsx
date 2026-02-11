@@ -366,6 +366,7 @@ export default function Header() {
                     ))}
                   </div>
 
+
                   <div className="border-t border-gray-200 mt-3 pt-3 text-center">
                     <button
                       onClick={() => {

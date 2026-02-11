@@ -9,7 +9,7 @@ import {
   FiStar,
   FiUsers,
 } from "react-icons/fi";
-import Skeleton from "react-loading-skeleton";
+import { CourseCardSkeleton } from "../Skeletons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import endPointApi from "@/utils/endPointApi";
@@ -151,13 +151,7 @@ const CourseList = ({ questionBank, loading }: CourseListProps) => {
           {loading ? (
             <div className="flex gap-6 overflow-x-auto pb-8 px-2 scrollbar-hide">
               {[1, 2, 3, 4].map((i) => (
-                <Skeleton
-                  key={i}
-                  height={380}
-                  width={300}
-                  borderRadius={24}
-                  className="rounded-3xl flex-shrink-0"
-                />
+                <CourseCardSkeleton key={i} />
               ))}
             </div>
           ) : (
