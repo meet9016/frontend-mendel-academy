@@ -396,18 +396,34 @@ const CheckOut = () => {
         description: `Payment for ${userId ? "User" : "Guest"} ${actualId}`,
         order_id: data.order_id,
         handler: async (response: any) => {
+          let plan_id = '';
+          
+          if (plan.data && plan.data.length > 0) {
+            const firstItem = plan.data[0];
+            
+            if (firstItem.cart_type === 'exam_plan') {
+              plan_id = firstItem.plan_id || '';
+            } else if (firstItem.cart_type === 'rapid_tool') {
+              plan_id = firstItem.tool_id || '';
+            } else if (firstItem.cart_type === 'livecourses') {
+              plan_id = firstItem.livecourse_id?._id || firstItem.livecourse_id || '';
+            } else if (firstItem.cart_type === 'hyperspecialist') {
+              plan_id = firstItem.hyperspecialist_id?._id || firstItem.hyperspecialist_id || '';
+            } else if (firstItem.cart_type === 'prerecord') {
+              plan_id = firstItem.product_id?._id || firstItem.product_id || '';
+            }
+          }
+          
+          if (!plan_id) {
+            console.error('❌ plan_id is empty!');
+          }
+
           const verifyBody = {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
             amount: data.amount / 100,
-            plan_id: plan.data[0].livecourse_id
-              ? plan.data[0].livecourse_id._id
-              : plan.data[0].hyperspecialist_id
-                ? plan.data[0].hyperspecialist_id._id
-                : plan.data[0].product_id?._id
-                  ? plan.data[0].product_id._id
-                  : '',
+            plan_id: plan_id,
             ...(userId ? { user_id: userId } : { guest_id: actualId }),
             status: "captured",
             currency: plan?.currency,

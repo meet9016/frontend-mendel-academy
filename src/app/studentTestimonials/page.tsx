@@ -140,7 +140,7 @@ const Carousel = ({
     />
 
     {/* Cards */}
-    <div className="overflow-hidden px-2 cursor-pointer ">
+    <div className="overflow-hidden px-4 cursor-pointer pt-6 ">
       <motion.div
         className="flex gap-6 transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * (100 / 3 + 2)}%)` }}
@@ -188,7 +188,7 @@ const TestimonialCard = ({ name, rating, timeAgo, text }: Testimonial) => (
     whileInView={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5 }}
     viewport={{ once: true }}
-    className="min-w-[calc(33.333%-1rem)] group relative bg-white rounded-2xl border-2 border-primary p-8 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2"
+    className="min-w-[calc(33.333%-1rem)] group relative bg-white rounded-2xl border-2 border-primary p-8 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2 overflow-visible"
   >
     <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#FACC00] rounded-full flex items-center justify-center shadow-lg">
       <FaQuoteRight className="text-white" />

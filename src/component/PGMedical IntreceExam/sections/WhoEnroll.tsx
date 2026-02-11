@@ -80,6 +80,11 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
         return;
       }
 
+      if (!plan._id) {
+        toast.error("Plan ID is missing");
+        return;
+      }
+
       const body = {
         ...(userId ? { user_id: userId } : { temp_id: tempId }),
         exam_category_id: categoryId,
@@ -109,8 +114,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
     }
   };
 
-          console.log("DEBUG : WhoEnroll : data:", data);
-
   return (
     <section className="py-10 bg-white">
       <div className="container mx-auto px-4">
@@ -136,6 +139,7 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           tools={data?.rapid_learning_tools || []}
           loading={loading}
           userCurrency={userCurrency}
+          examCategoryId={examCategoryId}
         />
       </div>
     </section>
@@ -370,10 +374,12 @@ const RapidToolsSection = ({
   tools,
   loading,
   userCurrency,
+  examCategoryId,
 }: {
   tools: RapidTool[];
   loading: boolean;
   userCurrency: string;
+  examCategoryId?: string;
 }) => (
   <div className="max-w-[1380px] mx-auto mt-16">
     <SectionHeading title="Rapid Learning Tools" />
@@ -399,6 +405,7 @@ const RapidToolsSection = ({
               key={tool._id}
               tool={tool}
               userCurrency={userCurrency}
+              examCategoryId={examCategoryId}
             />
           ))}
         </Sliders>
@@ -411,12 +418,66 @@ const RapidToolsSection = ({
 const RapidToolCard = ({
   tool,
   userCurrency,
+  examCategoryId,
 }: {
   tool: RapidTool;
   userCurrency: string;
+  examCategoryId?: string;
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+  
   const price = userCurrency === "INR" ? tool.price_inr : tool.price_usd;
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const addToolToCart = async () => {
+    try {
+      setIsLoading(true);
+
+      if (!examCategoryId) {
+        toast.error("Category ID is missing");
+        return;
+      }
+
+      if (!tool._id) {
+        toast.error("Tool ID is missing");
+        return;
+      }
+
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        tool_id: tool._id,
+        bucket_type: true,
+      };
+
+      const res = await api.post(`${endPointApi.postAddRapidToolToCart}`, body);
+
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+
+        store.dispatch(setCartCount(countRes.data.count));
+        
+        if (res.data.alreadyInCart) {
+          toast.info("This tool is already in your cart");
+        } else {
+          toast.success("Tool added to cart successfully!");
+        }
+      }
+    } catch (error: any) {
+      console.error("Error adding tool to cart:", error);
+
+      if (error.response?.status === 409) {
+        toast.info("This tool is already in your cart");
+      } else {
+        toast.error(error.response?.data?.message || "Failed to add tool to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[180px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
@@ -436,13 +497,14 @@ const RapidToolCard = ({
         </div>
 
         <CommonButton
-          onClick={() => console.log("Cart added")}
+          onClick={addToolToCart}
           pyClass="py-3"
           pxClass="px-20"
           fontWeight={700}
           fontSize={14}
+          disabled={isLoading}
         >
-          Enroll Now
+          {isLoading ? "Adding..." : "Enroll Now"}
         </CommonButton>
       </div>
     </div>
