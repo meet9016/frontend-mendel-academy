@@ -218,7 +218,17 @@ const FeaturedLive = ({
           ) : null}
           <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
             <CgLock className="w-4 h-4" />
+            64 Students
+            {/* {data?.duration} */}
+          </span>
+          <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
+            <CgLock className="w-4 h-4" />
             {data?.duration}
+          </span>
+          <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
+            <CgLock className="w-4 h-4" />
+            36 left this week
+            {/* {data?.duration} */}
           </span>
         </div>
       </div>

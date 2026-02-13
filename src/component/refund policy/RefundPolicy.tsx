@@ -4,11 +4,8 @@ export default function RefundPolicy() {
   return (
     <div className="bg-white min-h-screen px-4 py-10">
       <div className="max-w-3xl mx-auto text-gray-800">
-
         {/* Title */}
-        <h1 className="text-3xl font-semibold mb-6">
-          Return & Refund Policy
-        </h1>
+        <h1 className="text-3xl font-semibold mb-6">Return & Refund Policy</h1>
 
         {/* Intro */}
         <p className="mb-4">
@@ -25,19 +22,18 @@ export default function RefundPolicy() {
         </p>
 
         {/* Nature of Services */}
-        <h2 className="text-xl font-semibold mt-6 mb-2">
-          Nature of Services
-        </h2>
+        <h2 className="text-xl font-semibold mt-6 mb-2">Nature of Services</h2>
         <p>
           Mendel Academy provides digital education services including coaching
-          programs, online and offline training sessions. No physical goods are sold.
+          programs, online and offline training sessions. No physical goods are
+          sold.
         </p>
 
         {/* Refund Policy */}
-        <h2 className="text-xl font-semibold mt-6 mb-2">
-          Refund Policy
-        </h2>
-        <p>No refund will be provided once:</p>
+        <h2 className="text-xl font-semibold mt-6 mb-2">Refund Policy</h2>
+        <p className="font-semibold text-red-600">
+          No refund will be provided under any circumstances once:
+        </p>
         <ul className="list-disc ml-6 mt-2">
           <li>Course access has been provided</li>
           <li>Classes have started</li>
@@ -74,9 +70,7 @@ export default function RefundPolicy() {
         <h2 className="text-xl font-semibold mt-6 mb-2">
           Refund Request Process
         </h2>
-        <p>
-          To request a refund, please contact us at:
-        </p>
+        <p>To request a refund, please contact us at:</p>
         <p className="mt-2">
           Email: drmanagoli@mendelacademy.com <br />
           Phone: 99255 11511
@@ -90,30 +84,28 @@ export default function RefundPolicy() {
         </ul>
 
         {/* Refund Method */}
-        <h2 className="text-xl font-semibold mt-6 mb-2">
-          Refund Method
-        </h2>
+        <h2 className="text-xl font-semibold mt-6 mb-2">Refund Method</h2>
         <p>
           Approved refunds will be processed using the original payment method.
           Processing time may take 7–10 working days.
         </p>
 
         {/* Contact */}
-        <h2 className="text-xl font-semibold mt-6 mb-2">
-          Contact Information
-        </h2>
+        <h2 className="text-xl font-semibold mt-6 mb-2">Contact Information</h2>
         <p>
           Mendel Academy <br />
           Email: drmanagoli@mendelacademy.com <br />
           Phone: 99255 11511
         </p>
         <p className="mt-2">
-          Apt 102, Sangit Sarita Complex,<br />
-          New Rander Rd, near Amidhara Wadi,<br />
-          Near United Hospital, Giriraj Society,<br />
+          Apt 102, Sangit Sarita Complex,
+          <br />
+          New Rander Rd, near Amidhara Wadi,
+          <br />
+          Near United Hospital, Giriraj Society,
+          <br />
           Adajan, Surat, Gujarat – 395009
         </p>
-
       </div>
     </div>
   );

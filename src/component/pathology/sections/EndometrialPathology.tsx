@@ -104,7 +104,7 @@ const HeroSection = () => (
           className="lg:col-span-7 space-y-8"
         >
           <DetailsCard />
-          <CtaCard />
+          {/* <CtaCard /> */}
         </motion.div>
       </div>
     </div>
@@ -183,36 +183,36 @@ const DetailsCard = () => (
   </div>
 );
 
-const CtaCard = () => (
-  <div className="bg-[#FFCA00] rounded-3xl p-8 text-black shadow-md relative overflow-hidden group">
-    <div className="relative z-10 flex flex-col gap-6">
-      <div className="flex flex-row flex-wrap gap-4 justify-center sm:justify-start">
-        <CommonButton
-          onClick={() =>
-            window.open(
-              "https://docs.google.com/forms/d/1yyf1DbaORWmGhkv3wCKL9XMXUrinumuxSv8SyUOcc9Q/edit?usp=forms_home&ouid=107875348860911010529&ths=true",
-              "_blank"
-            )
-          }
-          pyClass="py-4"
-          pxClass="px-10"
-          fontWeight={700}
-          fontSize={14}
-          className="group bg-white hover:bg-white"
-        >
-          <div className="flex items-center gap-2 ff-font-bold">
-            <span>Register Now</span>
-            <FaArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </div>
-        </CommonButton>
-        <CommonButton pyClass="py-4" pxClass="px-8" fontWeight={700} fontSize={14} className="group border border-black ff-font-bold">
-          More Details
-        </CommonButton>
-      </div>
-      <p className="text-sm ff-font opacity-90 text-center sm:text-left">Small cohort sizes ensure personalized attention • Expert-led instruction</p>
-    </div>
-  </div>
-);
+// const CtaCard = () => (
+//   <div className="bg-[#FFCA00] rounded-3xl p-8 text-black shadow-md relative overflow-hidden group">
+//     <div className="relative z-10 flex flex-col gap-6">
+//       <div className="flex flex-row flex-wrap gap-4 justify-center sm:justify-start">
+//         <CommonButton
+//           onClick={() =>
+//             window.open(
+//               "https://docs.google.com/forms/d/1yyf1DbaORWmGhkv3wCKL9XMXUrinumuxSv8SyUOcc9Q/edit?usp=forms_home&ouid=107875348860911010529&ths=true",
+//               "_blank"
+//             )
+//           }
+//           pyClass="py-4"
+//           pxClass="px-10"
+//           fontWeight={700}
+//           fontSize={14}
+//           className="group bg-white hover:bg-white"
+//         >
+//           <div className="flex items-center gap-2 ff-font-bold">
+//             <span>Register Now</span>
+//             <FaArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+//           </div>
+//         </CommonButton>
+//         <CommonButton pyClass="py-4" pxClass="px-8" fontWeight={700} fontSize={14} className="group border border-black ff-font-bold">
+//           More Details
+//         </CommonButton>
+//       </div>
+//       <p className="text-sm ff-font opacity-90 text-center sm:text-left">Small cohort sizes ensure personalized attention • Expert-led instruction</p>
+//     </div>
+//   </div>
+// );
 
 /* ----------  ATOMIC COMPONENTS  ---------- */
 const NextSessionCard = () => (
