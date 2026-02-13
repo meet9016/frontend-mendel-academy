@@ -107,63 +107,113 @@ const Hero = () => (
 /* ------------------ QBANK LIST SECTION ------------------ */
 const CourseList = ({ questionBank, loading }: CourseListProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScrollPosition = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    checkScrollPosition();
+
+    container.addEventListener("scroll", checkScrollPosition);
+    window.addEventListener("resize", checkScrollPosition);
+
+    return () => {
+      container.removeEventListener("scroll", checkScrollPosition);
+      window.removeEventListener("resize", checkScrollPosition);
+    };
+  }, [questionBank, loading]);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollContainerRef.current) return;
-    const scrollAmount = 340;
+    const scrollAmount = 350;
 
-    if (direction === "left") {
-      scrollContainerRef.current.scrollBy({
-        left: -scrollAmount,
-        behavior: "smooth",
-      });
-    } else {
-      scrollContainerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
-    }
+    scrollContainerRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <section className="bg-[#f9fafb] px-4 md:px-8 lg:px-16 relative group/section">
-      <div className="max-w-[1025px] mx-auto py-14 space-y-7">
-        <div className="text-center">
-          <h2 className="text-2xl md:text-3xl font-bold ff-font-bold mb-2">
-            Courses
+    <section className="bg-gradient-to-b from-white to-gray-50 py-16 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#FFCA00] rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFD700] rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+        {/* Header */}
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-2 mb-3">
+            <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#FFCA00]"></div>
+            <span className="text-sm font-semibold ff-font-bold text-[#FFCA00] uppercase tracking-wider">
+              Our Programs
+            </span>
+            <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#FFCA00]"></div>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold ff-font-bold mb-3 text-gray-900">
+            Medical Exam Preparation Courses
           </h2>
-          <p className="ff-font text-base md:text-lg max-w-2xl mx-auto">
-            Crush high-stakes medical exams with data-driven practice & targeted
-            remediation.
+          <p className="ff-font text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+            Comprehensive preparation programs designed by experts to help you excel in your medical career
           </p>
-        </div>
+        </motion.div>
 
+        {/* Carousel Container */}
         <div className="relative">
-          {/* Left Button */}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:bg-gray-100 hover:scale-110 transition-all opacity-0 group-hover/section:opacity-100"
-          >
-            <FiChevronLeft className="w-6 h-6 text-primary" />
-          </button>
+          {/* Left Arrow */}
+            <motion.button
+              onClick={() => scroll("left")}
+              disabled={!canScrollLeft}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-40 w-12 h-12 
+  flex items-center justify-center rounded-full 
+  transition-all duration-300 shadow-xl
+  ${canScrollLeft
+                  ? "bg-white border border-[#FFCA00] hover:bg-[#FFCA00] group"
+                  : "bg-gray-200 cursor-not-allowed"
+                }`}
+            >
+              <FiChevronLeft
+                className={`w-6 h-6 ${canScrollLeft ? "text-[#FFCA00] group-hover:text-white" : "text-gray-400"
+                  }`}
+              />
+            </motion.button>
 
-          {/* CONTENT */}
+          {/* Cards Container */}
           {loading ? (
-            <div className="flex gap-6 overflow-x-auto pb-8 px-2 scrollbar-hide">
+            <div className="flex gap-6 overflow-hidden">
               {[1, 2, 3, 4].map((i) => (
                 <Skeleton
                   key={i}
-                  height={380}
-                  width={300}
+                  height={450}
+                  width={320}
                   borderRadius={24}
-                  className="rounded-3xl flex-shrink-0"
+                  className="flex-shrink-0"
                 />
               ))}
             </div>
           ) : (
             <div
               ref={scrollContainerRef}
-              className="flex gap-6 overflow-x-auto pb-8 px-2 scrollbar-hide snap-x snap-mandatory scroll-smooth"
+              className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth py-4 px-12"
             >
               {questionBank?.map((exam: QBank) => (
                 <CourseCard key={exam.id} {...exam} />
@@ -171,14 +221,39 @@ const CourseList = ({ questionBank, loading }: CourseListProps) => {
             </div>
           )}
 
-          {/* Right Button */}
-          <button
-            onClick={() => scroll("right")}
-            className="absolute cursor-pointer right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-xl border-2 border-primary hover:scale-110 transition-all opacity-0 group-hover/section:opacity-100"
-          >
-            <FiChevronRight className="w-6 h-6 text-primary" />
-          </button>
+          {/* Right Arrow */}
+            <motion.button
+              onClick={() => scroll("right")}
+              disabled={!canScrollRight}
+              className={`absolute right-0 top-1/2 -translate-y-1/2 z-40 w-12 h-12 
+  flex items-center justify-center rounded-full 
+  transition-all duration-300 shadow-xl
+  ${canScrollRight
+                  ? "bg-white border border-[#FFCA00] hover:bg-[#FFCA00] group"
+                  : "bg-gray-200 cursor-not-allowed"
+                }`}
+            >
+              <FiChevronRight
+                className={`w-6 h-6 ${canScrollRight ? "text-[#FFCA00] group-hover:text-white" : "text-gray-400"
+                  }`}
+              />
+            </motion.button>
         </div>
+
+        {/* Bottom indicator */}
+        {!loading && questionBank.length > 0 && (
+          <motion.div
+            className="text-center mt-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+          >
+            <p className="text-sm ff-font text-gray-500">
+              Showing {questionBank.length} course{questionBank.length !== 1 ? 's' : ''} • Scroll to explore more
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   );
@@ -190,83 +265,82 @@ const CourseCard = (course: QBank) => {
   const { exam_name, title, description, sub_titles, exam_id } = course;
 
   return (
-    <div
+    <motion.div
       onClick={() => router.push(`/medicalexam/${exam_id}`)}
-      className="group flex-shrink-0 w-[300px] cursor-pointer bg-white border-2 border-gray-200 rounded-3xl p-6 transition-all duration-500 flex flex-col relative overflow-hidden"
+      className="group flex-shrink-0 w-[320px] h-[520px] cursor-pointer bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col"
+      whileHover={{ y: -10, scale: 1.03 }}
+      transition={{ duration: 0.3 }}
     >
-      {title && (
-        <div className="absolute top-0 right-0 bg-[#FFCA00] ff-font text-xs font-semibold px-6 py-1 rounded-bl-2xl shadow-md">
-          {title}
-        </div>
-      )}
-
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-start gap-3">
-          <div className="w-15 h-15 bg-white border-primary text-primary rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
-            <FiFileText className="w-7 h-7" />
+      {/* Header with gradient background */}
+      <div className="relative bg-gradient-to-br from-[#FFCA00] via-[#FFD700] to-[#FFA500] p-6 pb-8 flex-shrink-0">
+        {/* Country Badge */}
+        {title && (
+          <div className="absolute top-4 right-4">
+            <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold ff-font-bold text-gray-800 shadow-md">
+              {title}
+            </span>
           </div>
+        )}
 
-          <div className="flex-1">
-            <h3 className="text-lg font-bold ff-font-bold group-hover:text-primary transition-colors duration-300 line-clamp-1">
-              {exam_name}
-            </h3>
+        {/* Icon */}
+        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl mb-4 group-hover:scale-110 transition-transform duration-300">
+          <FiFileText className="w-8 h-8 text-[#FFCA00]" />
+        </div>
 
-            {/* <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-1.5 rounded-md">
-                <FiStar className="text-primary" />
-                <span className="text-sm ff-font font-bold">{rating}</span>
-              </div>
+        {/* Exam Name */}
+        <h3 className="text-xl font-bold ff-font-bold text-white drop-shadow-md line-clamp-2 min-h-[3.5rem]">
+          {exam_name}
+        </h3>
+      </div>
 
-              <div className="flex items-center gap-1.5 bg-gray-100 px-3 py-1.5 rounded-full text-gray-700">
-                <FiUsers />
-                <span className="text-sm ff-font font-medium">
-                  {total_reviews}
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-grow -mt-4">
+        {/* Features with icons */}
+        {sub_titles && Array.isArray(sub_titles) && sub_titles.length > 0 && (
+          <div className="bg-gray-50 rounded-2xl p-4 mb-4 space-y-2 flex-shrink-0">
+            {sub_titles.slice(0, 3).map((feature: string, idx: number) => (
+              <div key={idx} className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#FFCA00] flex-shrink-0"></div>
+                <span className="text-xs ff-font text-gray-700 line-clamp-1">
+                  {feature}
                 </span>
               </div>
-            </div> */}
-          </div>
-        </div>
-
-        {/* Features */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide py-3">
-          {sub_titles &&
-            Array.isArray(sub_titles) &&
-            sub_titles.slice(0, 3).map((f: string, idx: number) => (
-              <span
-                key={idx}
-                className="text-xs px-3 py-1.5 bg-[#f3f6fa] rounded-full whitespace-nowrap"
-              >
-                {f}
-              </span>
             ))}
-        </div>
+            {sub_titles.length > 3 && (
+              <p className="text-xs ff-font text-gray-500  pt-1">
+                +{sub_titles.length - 3} more features
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Description */}
-        {/* <p className="text-sm ff-font mb-6 min-h-[3.2rem]" >
-          {limitChars(String(description), 60)}
-
-        </p> */}
-        <p
-          className="text-sm ff-font mb-6 line-clamp-2"
+        <div
+          className="text-sm ff-font text-gray-600 mb-4 line-clamp-3 flex-grow"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(description),
           }}
         />
-        {/* Button */}
-        <CommonButton
-          pyClass="py-3"
-          pxClass="px-21.5"
-          fontWeight={700}
-          fontSize={14}
-        >
-          Enroll Now
-        </CommonButton>
 
-        <p className="text-xs ff-font text-center mt-3">
-          Instant access • Secure checkout
-        </p>
+        {/* CTA Button */}
+        <div className="mt-auto space-y-3 flex-shrink-0">
+          <CommonButton
+            pyClass="py-3"
+            pxClass="px-6"
+            fontWeight={700}
+            fontSize={14}
+          >
+            View Details
+          </CommonButton>
+
+          <div className="flex items-center justify-center gap-2 text-xs ff-font text-gray-500">
+            <span className="w-1 h-1 rounded-full bg-gray-400"></span>
+            <span>Instant Access</span>
+            <span className="w-1 h-1 rounded-full bg-gray-400"></span>
+            <span>Expert Support</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
