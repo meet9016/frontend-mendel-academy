@@ -126,7 +126,11 @@ const BlogSection = ({ loading, blogs, onCard }: { loading: boolean; blogs: Blog
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
         {loading ? (
-          <BlogSkeleton />
+          <>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Skeleton key={i} height={380} width={340} borderRadius={24} className="rounded-3xl w-full lg:max-w-[380px]" />
+            ))}
+          </>
         ) : (
           blogs.map((post, i) => (
             <Card key={post.id} post={post} index={i} onClick={() => onCard(post.id)} />
@@ -197,11 +201,3 @@ const Pagination = ({ pageCount, onPageChange }: { pageCount: number; onPageChan
   </div>
 );
 
-/* ----------  SKELETON  ---------- */
-const BlogSkeleton = () => (
-  <>
-    {[1, 2, 3, 4, 5, 6].map((i) => (
-      <BlogCardSkeleton key={i} />
-    ))}
-  </>
-);

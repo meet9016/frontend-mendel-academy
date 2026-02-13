@@ -110,7 +110,8 @@ const getPriceForCurrency = (option: Option, currency: string): number => {
 /* ---------- ADD TO CART FUNCTION ---------- */
 const addToCart = async (
   program: ProgramDetail,
-  selectedOptions: OptionType[]
+  selectedOptions: OptionType[],
+  isAlreadyInCart: boolean
 ) => {
   try {
     const userId = getAuthId();
@@ -144,7 +145,12 @@ const addToCart = async (
       const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
 
       store.dispatch(setCartCount(countRes.data.count));
-      toast.success("Product added to cart successfully!");
+      
+      if (isAlreadyInCart) {
+        toast.info("Product is already in cart");
+      } else {
+        toast.success("Product added to cart successfully!");
+      }
     }
   } catch (error: any) {
     toast.error(error?.response?.data?.message || "Failed to add to cart");
@@ -285,7 +291,7 @@ export default function RecordedProgramDetails() {
     }
 
     setAddingToCart(true);
-    await addToCart(program, selectedOptions);
+    await addToCart(program, selectedOptions, !!cartItemId);
     setAddingToCart(false);
   };
 
