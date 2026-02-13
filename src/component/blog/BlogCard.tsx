@@ -7,10 +7,12 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { formatDateWithDayjs } from "@/utils/helper";
 import { BlogCardSkeleton } from "../Skeletons";
+import Skeleton from "react-loading-skeleton";
 
 /* ----------  TYPES  ---------- */
 type Blog = {
-  id?: number;
+  id?: string;
+  slug: string;
   title: string;
   image: string;
   category?: string;
@@ -62,7 +64,7 @@ export default function BlogCard() {
   return (
     <>
       <Hero />
-      <BlogSection loading={loading} blogs={currentItems} onCard={(id) => router.push(`/blog/${id}`)} />
+      <BlogSection loading={loading} blogs={currentItems} onCard={(slug) => router.push(`/blog/${slug}`)} />
       <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
     </>
   );
@@ -116,7 +118,7 @@ const Hero = () => (
 );
 
 /* ----------  BLOG SECTION  ---------- */
-const BlogSection = ({ loading, blogs, onCard }: { loading: boolean; blogs: Blog[]; onCard: (id?: number) => void }) => (
+const BlogSection = ({ loading, blogs, onCard }: { loading: boolean; blogs: Blog[]; onCard: (slug: string) => void }) => (
   <section className="py-10 bg-gray-50">
     <div className="max-w-7xl mx-auto px-6 md:px-10">
       <div className="text-center mb-5">
@@ -133,7 +135,7 @@ const BlogSection = ({ loading, blogs, onCard }: { loading: boolean; blogs: Blog
           </>
         ) : (
           blogs.map((post, i) => (
-            <Card key={post.id} post={post} index={i} onClick={() => onCard(post.id)} />
+            <Card key={post.slug} post={post} index={i} onClick={() => onCard(post.slug)} />
           ))
         )}
       </div>

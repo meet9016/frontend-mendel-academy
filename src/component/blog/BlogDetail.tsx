@@ -13,6 +13,7 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { BlogDetailSkeleton } from "../Skeletons";
+import { formatDate } from "@/utils/helper";
 
 /* ----------  TYPES  ---------- */
 type Social = { Icon: React.ElementType; href: string };
@@ -39,7 +40,10 @@ const socials: Social[] = [
 
 /* ----------  MAIN PAGE  ---------- */
 export default function BlogDetail() {
+
   const { id } = useParams();
+
+  console.log(id,'jufghuikghuihuigh')
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
 

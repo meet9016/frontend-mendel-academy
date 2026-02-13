@@ -16,10 +16,12 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { limitChars } from "@/utils/helper";
 import DOMPurify from "dompurify";
+import Skeleton from "react-loading-skeleton";
 
 /* ------------------ TYPES ------------------ */
 export interface QBank {
   id: string;
+  slug: string;
   exam_id: string;
   title: string;
   exam_name: string;
@@ -262,11 +264,18 @@ const CourseList = ({ questionBank, loading }: CourseListProps) => {
 /* ------------------ COURSE CARD ------------------ */
 const CourseCard = (course: QBank) => {
   const router = useRouter();
-  const { exam_name, title, description, sub_titles, exam_id } = course;
+  const { exam_name, title, description, sub_titles, slug, _id, exam_id } = course as any;
+
+  const handleCardClick = () => {
+    const identifier = slug || _id || exam_id;
+    if (identifier) {
+      router.push(`/medicalexam/${identifier}`);
+    }
+  };
 
   return (
     <motion.div
-      onClick={() => router.push(`/medicalexam/${exam_id}`)}
+      onClick={handleCardClick}
       className="group flex-shrink-0 w-[320px] h-[520px] cursor-pointer bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col"
       whileHover={{ y: -10, scale: 1.03 }}
       transition={{ duration: 0.3 }}

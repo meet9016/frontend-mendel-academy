@@ -354,7 +354,8 @@ export default function Header() {
                             <button
                               className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
                               onClick={() => {
-                                router.push(`/medicalexam/${exam?.exam_id}`);
+                                const identifier = exam?.slug || exam?._id;
+                                router.push(`/medicalexam/${identifier}`);
                                 setIsExamDropdownOpen(false);
                               }}
                             >
@@ -456,37 +457,39 @@ export default function Header() {
               </span>
             </button>
 
-            {authToken ? (
-              <button
-                onClick={() => {
-                  setIsProfileOpen(!isProfileOpen);
-                }}
-                className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:border-gray-400 transition-all"
-              >
-                <img
-                  src={getProfilePhotoUrl()}
-                  className="w-full h-full object-cover"
-                  alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User Profile"}
-                  onError={(e) => {
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+            {isInitialized && (
+              authToken ? (
+                <button
+                  onClick={() => {
+                    setIsProfileOpen(!isProfileOpen);
                   }}
-                />
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={() => router.push("/auth/login")}
-                  className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 ff-font-bold hover:bg-gray-100 font-medium"
+                  className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:border-gray-400 transition-all"
                 >
-                  Login
+                  <img
+                    src={getProfilePhotoUrl()}
+                    className="w-full h-full object-cover"
+                    alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User Profile"}
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                    }}
+                  />
                 </button>
-                <button
-                  onClick={() => router.push("/auth/register")}
-                  className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold hover:bg-yellow"
-                >
-                  Sign Up
-                </button>
-              </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => router.push("/auth/login")}
+                    className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 ff-font-bold hover:bg-gray-100 font-medium"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => router.push("/auth/register")}
+                    className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold hover:bg-yellow"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )
             )}
           </div>
 
@@ -541,7 +544,15 @@ export default function Header() {
                         <ul className="space-y-1">
                           {category?.exams?.map((exam: any) => (
                             <li key={exam?._id}>
-                              <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
+                              <button 
+                                onClick={() => {
+                                  const identifier = exam?.slug || exam?._id;
+                                  router.push(`/medicalexam/${identifier}`);
+                                  setIsMenuOpen(false);
+                                  setIsExamDropdownOpen(false);
+                                }}
+                                className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left"
+                              >
                                 {exam.exam_name}
                               </button>
                             </li>
@@ -557,43 +568,43 @@ export default function Header() {
 
               {/* Buttons (Mobile) */}
               <div className="flex flex-col gap-3 px-4">
-                {!authToken && (
-                  <>
+                {isInitialized && (
+                  !authToken ? (
+                    <>
+                      <button
+                        onClick={() => router.push("/auth/login")}
+                        className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
+                      >
+                        Login
+                      </button>
+                      <button
+                        onClick={() => router.push("/auth/register")}
+                        className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  ) : (
                     <button
-                      onClick={() => router.push("/auth/login")}
-                      className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={() => router.push("/auth/register")}
-                      className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
-                    >
-                      Sign Up
-                    </button>
-                  </>
-                )}
-
-                {authToken && (
-                  <button
-                    onClick={() => {
-                      router.push("/editProfile");
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
-                  >
-                    <img
-                      src={getProfilePhotoUrl()}
-                      alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                      onClick={() => {
+                        router.push("/editProfile");
+                        setIsMenuOpen(false);
                       }}
-                    />
-                    <span className="font-medium ff-font">
-                      {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
-                    </span>
-                  </button>
+                      className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                    >
+                      <img
+                        src={getProfilePhotoUrl()}
+                        alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                        }}
+                      />
+                      <span className="font-medium ff-font">
+                        {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
+                      </span>
+                    </button>
+                  )
                 )}
 
                 <button

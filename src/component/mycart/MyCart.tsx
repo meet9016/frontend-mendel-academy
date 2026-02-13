@@ -102,10 +102,13 @@ const getProductUrl = (item: any) => {
 
   if (item.cart_type === 'exam_plan') {
     const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
-    if (examCategoryId) {
-      return `/medicalexam/${examCategoryId}`;
+    const slug = item.exam_category_id?.exams?.[0]?.slug;
+
+    const identifier = slug || examCategoryId;
+    if (identifier) {
+      return `/medicalexam/${identifier}`;
     }
-    console.warn("No exam_category_id available for exam_plan item:", item);
+    console.warn("No exam_category_id or slug available for exam_plan item:", item);
     return null;
   }
 
@@ -116,6 +119,16 @@ const getProductUrl = (item: any) => {
     }
     console.warn("No product_id available for prerecord item:", item);
     return null;
+  }
+
+  if (item.cart_type === 'rapid_tool') {
+    const slug = item.exam_category_id?.exams?.[0]?.slug;
+    const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
+    
+    const identifier = slug || examCategoryId;
+    if (identifier) {
+      return `/medicalexam/${identifier}`;
+    }
   }
 
   if (item.cart_type === 'hyperspecialist') {
