@@ -102,10 +102,13 @@ const getProductUrl = (item: any) => {
 
   if (item.cart_type === 'exam_plan') {
     const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
-    if (examCategoryId) {
-      return `/medicalexam/${examCategoryId}`;
+    const slug = item.exam_category_id?.exams?.[0]?.slug;
+
+    const identifier = slug || examCategoryId;
+    if (identifier) {
+      return `/medicalexam/${identifier}`;
     }
-    console.warn("No exam_category_id available for exam_plan item:", item);
+    console.warn("No exam_category_id or slug available for exam_plan item:", item);
     return null;
   }
 
@@ -116,6 +119,16 @@ const getProductUrl = (item: any) => {
     }
     console.warn("No product_id available for prerecord item:", item);
     return null;
+  }
+
+  if (item.cart_type === 'rapid_tool') {
+    const slug = item.exam_category_id?.exams?.[0]?.slug;
+    const examCategoryId = item.exam_category_id?._id || item.exam_category_id;
+    
+    const identifier = slug || examCategoryId;
+    if (identifier) {
+      return `/medicalexam/${identifier}`;
+    }
   }
 
   if (item.cart_type === 'hyperspecialist') {
@@ -226,13 +239,19 @@ const MyCart: React.FC<MyCartProps> = ({
     }
   };
 
+  const closeCart = () => {
+    setIsCartOpen(false);
+    // ✅ Dispatch event so other components (like WhoEnroll) can refresh their cart state
+    window.dispatchEvent(new Event("cartClosed"));
+  };
+
   const handleCheckout = () => {
     const tempIdGet = sessionStorage.getItem("temp_id");
     const userId = localStorage.getItem("user_id");
     const finalId = userId || tempIdGet;
     // window.location.href = `/checkout/${finalId}`;
     router.push(`/checkout/${finalId}`)
-    setIsCartOpen(false);
+    closeCart();
   };
 
   return (
@@ -244,7 +263,7 @@ const MyCart: React.FC<MyCartProps> = ({
         exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
         className="fixed inset-0 bg-black/50 z-40"
-        onClick={() => setIsCartOpen(false)}
+        onClick={closeCart}
       />
 
       {/* Sidebar */}
@@ -282,7 +301,7 @@ const MyCart: React.FC<MyCartProps> = ({
               </div>
             </div>
             <button
-              onClick={() => setIsCartOpen(false)}
+              onClick={closeCart}
               className="p-2 hover:bg-yellow-50 rounded-xl transition-all duration-200 hover:scale-110"
             >
               <AiOutlineClose className="w-6 h-6" />
@@ -456,7 +475,7 @@ const MyCart: React.FC<MyCartProps> = ({
               </button>
 
               <button
-                onClick={() => setIsCartOpen(false)}
+                onClick={closeCart}
                 className="w-full bg-white border-2 border-yellow-400 text-black font-semibold py-3 rounded-xl hover:bg-yellow-50 transition-all duration-300"
               >
                 Continue Shopping

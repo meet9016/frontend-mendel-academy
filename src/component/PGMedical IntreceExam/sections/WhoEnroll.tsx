@@ -1,5 +1,5 @@
 // WhoEnroll.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
 import Skeleton from "react-loading-skeleton";
@@ -58,6 +58,9 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [isCartLoading, setIsCartLoading] = useState(false);
+
   const cleanHtml = DOMPurify.sanitize(data?.who_can_enroll_description || "", {
     USE_PROFILES: { html: true },
   });
@@ -67,6 +70,35 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const backendCurrency = data?.user_currency;
   const fallbackCurrency = isIndia() ? "INR" : "USD";
   const userCurrency = backendCurrency || fallbackCurrency;
+
+  const fetchCart = useCallback(async () => {
+    try {
+      const identifier = userId || tempId;
+      if (!identifier) return;
+
+      setIsCartLoading(true);
+      const res = await api.get(`${endPointApi.getCart}?temp_id=${identifier}`);
+      if (res.data.success) {
+        setCartItems(res.data.cart || []);
+      }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    } finally {
+      setIsCartLoading(false);
+    }
+  }, [userId, tempId]);
+
+  useEffect(() => {
+    fetchCart();
+
+    // ✅ Listen for cart closure to refresh state (real-time updates)
+    const handleCartClosed = () => {
+      fetchCart();
+    };
+
+    window.addEventListener("cartClosed", handleCartClosed);
+    return () => window.removeEventListener("cartClosed", handleCartClosed);
+  }, [fetchCart]);
 
   const addToCart = async (plan: Plan) => {
     try {
@@ -100,6 +132,9 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
 
         store.dispatch(setCartCount(countRes.data.count));
         
+        // Refresh cart items to update UI
+        await fetchCart();
+
         if (res.data.alreadyInCart) {
           toast.info("This plan is already in your cart");
         } else {
@@ -137,6 +172,7 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           loading={loading}
           loadingPlanId={loadingPlanId}
           userCurrency={userCurrency}
+          cartItems={cartItems}
           onEnroll={(plan) => addToCart(plan)}
         />
 
@@ -145,6 +181,7 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           loading={loading}
           userCurrency={userCurrency}
           examCategoryId={examCategoryId}
+          onCartUpdate={fetchCart}
         />
       </div>
     </section>
@@ -210,48 +247,62 @@ const PricingSection = ({
   loading,
   loadingPlanId,
   userCurrency,
+  cartItems,
   onEnroll,
 }: {
   plans: Plan[];
   loading: boolean;
   loadingPlanId: string | null;
   userCurrency: string;
+  cartItems: any[];
   onEnroll: (plan: Plan) => void;
-}) => (
-  <div className="max-w-[1380px] mx-auto">
-    <SectionHeading title="Choose Your Plan" />
+}) => {
+  const hasAnyPlanInCart = cartItems.some((item) => item.cart_type === "exam_plan");
 
-    {loading ? (
-      <PlanSkeleton />
-    ) : (
-      <div >
-        <Sliders
-          settings={{
-            // dots: true,
-            accessibility: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            autoplay: true,
-            autoplaySpeed: 3000,
-            arrows: true
-          }}
-        >
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan._id}
-              plan={plan}
-              userCurrency={userCurrency}
-              isLoading={loadingPlanId === plan._id}
-              onEnroll={() => onEnroll(plan)}
-            />
-          ))}
-        </Sliders>
-      </div>
-    )}
-  </div >
-);
+  return (
+    <div className="max-w-[1380px] mx-auto">
+      <SectionHeading title="Choose Your Plan" />
+
+      {loading ? (
+        <PlanSkeleton />
+      ) : (
+        <div>
+          <Sliders
+            settings={{
+              // dots: true,
+              accessibility: true,
+              infinite: true,
+              speed: 500,
+              slidesToShow: 4,
+              slidesToScroll: 1,
+              autoplay: true,
+              autoplaySpeed: 3000,
+              arrows: true,
+            }}
+          >
+            {plans.map((plan) => {
+              const isThisPlanInCart = cartItems.some(
+                (item) => item.cart_type === "exam_plan" && item.plan_id === plan._id
+              );
+
+              return (
+                <PlanCard
+                  key={plan._id}
+                  plan={plan}
+                  userCurrency={userCurrency}
+                  isLoading={loadingPlanId === plan._id}
+                  isThisPlanInCart={isThisPlanInCart}
+                  hasAnyPlanInCart={hasAnyPlanInCart}
+                  onEnroll={() => onEnroll(plan)}
+                />
+              );
+            })}
+          </Sliders>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // Section Heading
 const SectionHeading = ({ title }: { title: string }) => (
@@ -267,11 +318,15 @@ const PlanCard = ({
   plan,
   userCurrency,
   isLoading,
+  isThisPlanInCart,
+  hasAnyPlanInCart,
   onEnroll,
 }: {
   plan: Plan;
   userCurrency: string;
   isLoading: boolean;
+  isThisPlanInCart: boolean;
+  hasAnyPlanInCart: boolean;
   onEnroll: () => void;
 }) => {
   const price =
@@ -280,6 +335,16 @@ const PlanCard = ({
       : plan.plan_pricing_dollar;
 
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  // If THIS specific plan is already in cart, show "Already in cart" and disable
+  // If ANOTHER plan is in cart, we allow adding this one (it will replace the old one on backend)
+  const buttonText = isLoading
+    ? "Adding..."
+    : isThisPlanInCart
+    ? "Already in cart"
+    : "Enroll Now";
+
+  const isButtonDisabled = isLoading || isThisPlanInCart;
 
   return (
     <div
@@ -290,10 +355,12 @@ const PlanCard = ({
     h-full               // ← important
     min-h-[420px] 
     transition-all duration-300
-    ${plan.most_popular
-      ? "border-primary shadow-xl"
-      : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
+    ${
+      plan.most_popular
+        ? "border-primary shadow-xl"
+        : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
     }
+    ${isThisPlanInCart ? "opacity-75 grayscale-[0.5]" : ""}
   `}
     >
       {plan.most_popular && (
@@ -313,7 +380,8 @@ const PlanCard = ({
           </div>
 
           <h3 className="text-2xl font-bold ff-font-bold text-center">
-            {plan.plan_month} Month{(plan.plan_month) && (plan.plan_month) > 1 ? "s" : ""}
+            {plan.plan_month} Month
+            {plan.plan_month && plan.plan_month > 1 ? "s" : ""}
           </h3>
 
           <div className="space-y-2 text-center">
@@ -338,9 +406,10 @@ const PlanCard = ({
           pxClass="px-20"
           fontWeight={700}
           fontSize={14}
-          disabled={isLoading}
+          disabled={isButtonDisabled}
+          className={isThisPlanInCart ? "cursor-not-allowed opacity-80" : ""}
         >
-          {isLoading ? "Adding..." : "Enroll Now"}
+          {buttonText}
         </CommonButton>
       </div>
     </div>
@@ -380,11 +449,13 @@ const RapidToolsSection = ({
   loading,
   userCurrency,
   examCategoryId,
+  onCartUpdate,
 }: {
   tools: RapidTool[];
   loading: boolean;
   userCurrency: string;
   examCategoryId?: string;
+  onCartUpdate: () => void;
 }) => (
   <div className="max-w-[1380px] mx-auto mt-16">
     <SectionHeading title="Rapid Learning Tools" />
@@ -411,6 +482,7 @@ const RapidToolsSection = ({
               tool={tool}
               userCurrency={userCurrency}
               examCategoryId={examCategoryId}
+              onCartUpdate={onCartUpdate}
             />
           ))}
         </Sliders>
@@ -424,10 +496,12 @@ const RapidToolCard = ({
   tool,
   userCurrency,
   examCategoryId,
+  onCartUpdate,
 }: {
   tool: RapidTool;
   userCurrency: string;
   examCategoryId?: string;
+  onCartUpdate: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
@@ -464,6 +538,9 @@ const RapidToolCard = ({
         const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
 
         store.dispatch(setCartCount(countRes.data.count));
+        
+        // Refresh cart items to update UI
+        await onCartUpdate();
         
         if (res.data.alreadyInCart) {
           toast.info("This tool is already in your cart");

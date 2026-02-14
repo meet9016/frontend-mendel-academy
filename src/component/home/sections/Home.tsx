@@ -18,6 +18,7 @@ export interface Exam {
   features: string[];
   exam_name: string;
   exam_id: string;
+  slug: string;
   category_name: string;
 }
 
@@ -97,8 +98,9 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleExamClick = (examId: string) => {
-    router.push(`/medicalexam/${examId}`);
+  const handleExamClick = (exam: Exam) => {
+    const identifier = exam.slug || exam._id || exam.exam_id;
+    router.push(`/medicalexam/${identifier}`);
     setShowDropdown(false);
     setSearchTerm("");
     setSelectedIndex(-1);
@@ -122,7 +124,7 @@ export default function Home() {
       case "Enter":
         e.preventDefault();
         if (selectedIndex >= 0) {
-          handleExamClick(filteredExams[selectedIndex].exam_id);
+          handleExamClick(filteredExams[selectedIndex]);
         }
         break;
       case "Escape":
@@ -187,7 +189,7 @@ export default function Home() {
                   <div
                     id={`exam-item-${index}`}
                     key={exam._id}
-                    onClick={() => handleExamClick(exam.exam_id)}
+                    onClick={() => handleExamClick(exam)}
                     className={`px-5 py-3.5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 ${
                       selectedIndex === index
                         ? 'bg-yellow-50 border-l-4 border-l-[#FFCA00]'
