@@ -3,9 +3,12 @@ import CommonButton from "@/comman/Button";
 import React, { useEffect, useState } from "react";
 import {
   FaArrowRight,
+  FaAward,
   FaChevronDown,
+  FaClock,
   FaMoneyBillWave,
   FaRegStar,
+  FaUser,
   FaUsers,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +40,8 @@ type Program = {
   category: string;
   currency?: string;
 };
+
+type Stat = { icon: React.ElementType; value: string; label: string };
 
 export interface ProgramData {
   id: string;
@@ -169,7 +174,7 @@ const PathologyMasterySeries = () => {
       </main>
 
       {/* ----  EndometrialPathology  ---- */}
-      <EndometrialPathology />
+      {/* <EndometrialPathology /> */}
 
       {/* ----  RECORDED PROGRAM---- */}
       <Section
@@ -201,41 +206,63 @@ const FeaturedLive = ({
   data,
 }: {
   onMore: () => void;
-  data: ProgramData | undefined;
+  data: ProgramData | undefined | any;
 }) => {
+  const stats: Stat[] = [
+    { icon: FaUser, value: "64", label: "Students Enrolled" },
+    { icon: FaClock, value: data?.duration, label: "Program Duration" },
+    { icon: FaAward, value: "36", label: "Left This Week" },
+  ];
   return (
     <div className="w-full max-w-[1000px] mx-auto bg-gray-900 text-white rounded-2xl p-6 md:p-10 mt-10 shadow-lg hover:shadow-xl transition-shadow">
-      <div className="flex flex-wrap items-center justify-between text-sm mb-6">
+      {/* Live Status - Top Line */}
+      <div className="flex items-center justify-between text-sm mb-4">
         <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           <span>{data?.status}</span>
         </div>
-        <div className="flex items-center gap-3">
-          {data?.isSoldOut ? (
-            <span className="bg-white/10 ff-font-bold px-3 py-1 rounded-full">
-              Sold Out
-            </span>
-          ) : null}
-          <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
-            <CgLock className="w-4 h-4" />
-            64 Students
-            {/* {data?.duration} */}
+        
+        {data?.isSoldOut ? (
+          <span className="bg-white/10 ff-font-bold px-3 py-1 rounded-full">
+            Sold Out
           </span>
-          <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
-            <CgLock className="w-4 h-4" />
-            {data?.duration}
-          </span>
-          <span className="bg-white/10 px-3 py-1 ff-font-bold rounded-full flex items-center gap-1">
-            <CgLock className="w-4 h-4" />
-            36 left this week
-            {/* {data?.duration} */}
-          </span>
-        </div>
+        ) : null}
       </div>
 
-      <h3 className="text-2xl md:text-3xl ff-font-bold font-bold mb-4">
-        {data?.course_title}
-      </h3>
+      {/* Title and Stats - Same Line */}
+      <div className="flex items-start justify-between gap-4 mb-4">
+        <h3 className="text-2xl md:text-3xl ff-font-bold font-bold max-w-2xl">
+          {data?.course_title}
+        </h3>
+
+        {/* Stats Boxes - Right Side with 3-line layout */}
+        <div className="grid grid-cols-3 gap-2 flex-shrink-0">
+          {stats.map((stat, i) => (
+            <div
+              key={i}
+              className="bg-[#f3f3f3] rounded-lg py-1.5 px-2 text-center
+               border border-[#e5b43c]
+               shadow-sm hover:shadow-md
+               transition-all duration-300 min-w-[85px]"
+            >
+              {/* Line 1: Icon */}
+              <div className="flex justify-center mb-0.5">
+                <stat.icon className="w-4 h-4 text-[#e5b43c]" />
+              </div>
+              
+              {/* Line 2: Value */}
+              <div className="text-sm font-bold text-black leading-tight mb-0.5">
+                {stat.value}
+              </div>
+              
+              {/* Line 3: Label */}
+              <div className="text-[8px] text-gray-600 truncate leading-tight">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="flex items-center gap-3 mb-5">
         <div className="w-12 h-12 rounded-full bg-gray-700 ff-font-bold flex items-center justify-center">
