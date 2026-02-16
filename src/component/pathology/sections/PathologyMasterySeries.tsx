@@ -214,95 +214,103 @@ const FeaturedLive = ({
     { icon: FaAward, value: "36", label: "Left This Week" },
   ];
   return (
-    <div className="w-full max-w-[1000px] mx-auto bg-gray-900 text-white rounded-2xl p-6 md:p-10 mt-10 shadow-lg hover:shadow-xl transition-shadow">
-      {/* Live Status - Top Line */}
-      <div className="flex items-center justify-between text-sm mb-4">
-        <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
-          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span>{data?.status}</span>
-        </div>
-        
-        {data?.isSoldOut ? (
-          <span className="bg-white/10 ff-font-bold px-3 py-1 rounded-full">
-            Sold Out
-          </span>
-        ) : null}
-      </div>
+    <div className="w-full max-w-[1000px] mx-auto bg-gray-900 text-white rounded-2xl p-8 md:p-10 mt-10 shadow-lg">
 
-      {/* Title and Stats - Same Line */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <h3 className="text-2xl md:text-3xl ff-font-bold font-bold max-w-2xl">
-          {data?.course_title}
-        </h3>
+      <div className="flex flex-col md:flex-row gap-8">
 
-        {/* Stats Boxes - Right Side with 3-line layout */}
-        <div className="grid grid-cols-3 gap-2 flex-shrink-0">
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className="bg-[#f3f3f3] rounded-lg py-1.5 px-2 text-center
-               border border-[#e5b43c]
-               shadow-sm hover:shadow-md
-               transition-all duration-300 min-w-[85px]"
-            >
-              {/* Line 1: Icon */}
-              <div className="flex justify-center mb-0.5">
-                <stat.icon className="w-4 h-4 text-[#e5b43c]" />
-              </div>
-              
-              {/* Line 2: Value */}
-              <div className="text-sm font-bold text-black leading-tight mb-0.5">
-                {stat.value}
-              </div>
-              
-              {/* Line 3: Label */}
-              <div className="text-[8px] text-gray-600 truncate leading-tight">
-                {stat.label}
-              </div>
+        {/* LEFT SIDE */}
+        <div className="md:w-[70%]">
+
+          {/* Status Row */}
+          <div className="flex items-center justify-between text-sm mb-4">
+            <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span>{data?.status}</span>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-12 h-12 rounded-full bg-gray-700 ff-font-bold flex items-center justify-center">
-          <span className="text-white text-lg font-semibold">D</span>
-        </div>
-        <div>
-          <h4 className="font-semibold ff-font-bold text-white text-base md:text-lg">
-            {data?.instructor?.name}
-          </h4>
-          <p className="text-gray-400 ff-font text-sm">
-            {data?.instructor?.qualification}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mb-6">
-        {data?.tags?.map((f) => (
-          <div
-            key={f}
-            className="bg-gray-700 text-white ff-font px-4 py-1.5 rounded-full text-sm hover:bg-gray-600 transition"
-          >
-            {f}
+            {data?.isSoldOut && (
+              <span className="bg-white/10 ff-font-bold px-3 py-1 rounded-full">
+                Sold Out
+              </span>
+            )}
           </div>
-        ))}
-      </div>
 
-      <CommonButton
-        size="xxl"
-        pyClass="py-4"
-        pxClass="px-10"
-        fontWeight={700}
-        fontSize={14}
-        onClick={onMore}
-        className="group"
-      >
-        <div className="flex items-center gap-2">
-          <span>Learn More</span>
-          <FaArrowRight className="w-4 h-4 duration-300 transition-transform group-hover:translate-x-1" />
+          {/* Title */}
+          <h3 className="text-2xl md:text-3xl ff-font-bold font-bold mb-6">
+            {data?.course_title}
+          </h3>
+
+          {/* Instructor */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
+              <span className="text-white text-lg font-semibold">D</span>
+            </div>
+            <div>
+              <h4 className="font-semibold text-white text-base md:text-lg">
+                {data?.instructor?.name}
+              </h4>
+              <p className="text-gray-400 text-sm">
+                {data?.instructor?.qualification}
+              </p>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {data?.tags?.map((f: string) => (
+              <div
+                key={f}
+                className="bg-gray-700 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-600 transition"
+              >
+                {f}
+              </div>
+            ))}
+          </div>
+
+          {/* Button */}
+          <CommonButton
+            size="xxl"
+            pyClass="py-4"
+            pxClass="px-10"
+            fontWeight={700}
+            fontSize={14}
+            onClick={onMore}
+            className="group"
+          >
+            <div className="flex items-center gap-2">
+              <span>Learn More</span>
+              <FaArrowRight className="w-4 h-4 duration-300 transition-transform group-hover:translate-x-1" />
+            </div>
+          </CommonButton>
         </div>
-      </CommonButton>
+
+        {/* RIGHT SIDE - STATS */}
+        <div className="md:w-[30%]">
+          <div className="space-y-4">
+            {stats.map((stat, i) => (
+              <div
+                key={i}
+                className="bg-white/5 backdrop-blur-md border border-white/10 
+                       rounded-xl p-4 flex items-center gap-4
+                       hover:border-[#e5b43c] transition-all duration-300"
+              >
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#e5b43c]/10">
+                  <stat.icon className="w-5 h-5 text-[#e5b43c]" />
+                </div>
+
+                <div>
+                  <div className="text-xl font-bold text-white">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    {stat.label}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
