@@ -170,7 +170,7 @@ const StripeCheckoutForm = ({
           className={`w-full py-3 rounded-xl text-white font-semibold transition-all 
             ${loading || !stripe
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-primary hover:bg-[#e6b800] shadow-md"
+              : "bg-[#e6b800] hover:bg-[#e5b43c] shadow-md"
             }`}
         >
           {loading ? (
