@@ -269,7 +269,7 @@ const CourseCard = (course: QBank) => {
   const handleCardClick = () => {
     const identifier = slug || _id || exam_id;
     if (identifier) {
-      router.push(`/medicalexam/${identifier}`);
+      router.push(`/services/${identifier}`);
     }
   };
 

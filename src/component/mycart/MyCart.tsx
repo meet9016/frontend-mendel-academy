@@ -106,7 +106,7 @@ const getProductUrl = (item: any) => {
 
     const identifier = slug || examCategoryId;
     if (identifier) {
-      return `/medicalexam/${identifier}`;
+      return `/services/${identifier}`;
     }
     console.warn("No exam_category_id or slug available for exam_plan item:", item);
     return null;
@@ -127,7 +127,7 @@ const getProductUrl = (item: any) => {
     
     const identifier = slug || examCategoryId;
     if (identifier) {
-      return `/medicalexam/${identifier}`;
+      return `/services/${identifier}`;
     }
   }
 

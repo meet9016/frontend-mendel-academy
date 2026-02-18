@@ -100,7 +100,7 @@ export default function Home() {
 
   const handleExamClick = (exam: Exam) => {
     const identifier = exam.slug || exam._id || exam.exam_id;
-    router.push(`/medicalexam/${identifier}`);
+    router.push(`/services/${identifier}`);
     setShowDropdown(false);
     setSearchTerm("");
     setSelectedIndex(-1);
@@ -254,7 +254,7 @@ export default function Home() {
                       <li 
                         key={idx} 
                         className="relative pl-4 group cursor-pointer hover:text-[#FFCA00] transition-colors duration-200"
-                        onClick={() => router.push(`/medicalexam/${item?.exam_id}`)}
+                        onClick={() => router.push(`/services/${item?.exam_id}`)}
                       >
                         {item?.exam_name}
                       </li>
@@ -269,7 +269,7 @@ export default function Home() {
                       className="transition shadow-md w-fit !rounded-full hover:shadow-lg"
                       fontWeight={700}
                       fontSize={15}
-                      onClick={() => router.push(`/medicalexam`)}
+                      onClick={() => router.push(`/services`)}
                     >
                       Learn more
                     </CommonButton>
