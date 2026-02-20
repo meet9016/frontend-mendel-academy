@@ -62,15 +62,12 @@ export interface EndPointApi {
 
     //Terms & Conditions
     getAllTermsAndConditions?: string;
-
-    //Question bank (subjects/chapters/topics/questions)
-    getAllSubject?: string;
-    getAllChapters?: string;
-    getTopicByChapter?: string;
-    getQuestionBankByTopic?: string;
-    getQuestionStatsBySubject?: string;
-    getChapterStatsBySubject?: string;
     getQBankTree?: string;
+    getQuestionBankByTopic?: string;
+    createTestAttempt?: string;
+    listTestAttempts?: string;
+    getTestAttemptDetail?: string;
+    completeTestAttempt?: string;
 }
 
 // Define and export the API endpoint object
@@ -139,15 +136,12 @@ const endPointApi: EndPointApi = {
 
     //Terms & Conditions
     getAllTermsAndConditions: 'terms-conditions/get',
-
-    //Question bank (subjects/chapters/topics/questions)
-    getAllSubject: 'subject/getall',
-    getAllChapters: 'chapter/getall',
-    getTopicByChapter: 'topic/get-by-chapter',
-    getQuestionBankByTopic: 'questions/get-by-topic',
-    getQuestionStatsBySubject: 'questions/stats/subjects',
-    getChapterStatsBySubject: 'questions/stats/chapters-by-subject',
     getQBankTree: 'subject/getQBankTree',
+    getQuestionBankByTopic: 'subject/getQuestionBankByTopic',
+    createTestAttempt: 'test-attempt/create',
+    listTestAttempts: 'test-attempt/list',
+    getTestAttemptDetail: 'test-attempt/getDetail',
+    completeTestAttempt: 'test-attempt/complete',
 };
 
 export default endPointApi;

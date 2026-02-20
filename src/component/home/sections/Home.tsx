@@ -18,7 +18,6 @@ export interface Exam {
   features: string[];
   exam_name: string;
   exam_id: string;
-  slug: string;
   category_name: string;
 }
 
@@ -98,9 +97,8 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleExamClick = (exam: Exam) => {
-    const identifier = exam.slug || exam._id || exam.exam_id;
-    router.push(`/services/${identifier}`);
+  const handleExamClick = (examId: string) => {
+    router.push(`/medicalexam/${examId}`);
     setShowDropdown(false);
     setSearchTerm("");
     setSelectedIndex(-1);
@@ -124,7 +122,7 @@ export default function Home() {
       case "Enter":
         e.preventDefault();
         if (selectedIndex >= 0) {
-          handleExamClick(filteredExams[selectedIndex]);
+          handleExamClick(filteredExams[selectedIndex].exam_id);
         }
         break;
       case "Escape":
@@ -189,7 +187,7 @@ export default function Home() {
                   <div
                     id={`exam-item-${index}`}
                     key={exam._id}
-                    onClick={() => handleExamClick(exam)}
+                    onClick={() => handleExamClick(exam.exam_id)}
                     className={`px-5 py-3.5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 ${
                       selectedIndex === index
                         ? 'bg-yellow-50 border-l-4 border-l-[#FFCA00]'
@@ -254,7 +252,7 @@ export default function Home() {
                       <li 
                         key={idx} 
                         className="relative pl-4 group cursor-pointer hover:text-[#FFCA00] transition-colors duration-200"
-                        onClick={() => router.push(`/services/${item?.exam_id}`)}
+                        onClick={() => router.push(`/medicalexam/${item?.exam_id}`)}
                       >
                         {item?.exam_name}
                       </li>
@@ -269,7 +267,7 @@ export default function Home() {
                       className="transition shadow-md w-fit !rounded-full hover:shadow-lg"
                       fontWeight={700}
                       fontSize={15}
-                      onClick={() => router.push(`/services`)}
+                      onClick={() => router.push(`/medicalexam`)}
                     >
                       Learn more
                     </CommonButton>

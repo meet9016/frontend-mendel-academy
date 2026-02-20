@@ -8,8 +8,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FaApper, FaPaperclip, FaUser } from "react-icons/fa";
-import { FaNoteSticky, FaRightFromBracket } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa";
+import { FaRightFromBracket } from "react-icons/fa6";
 import MyCart from "../mycart/MyCart";
 import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
@@ -207,7 +207,7 @@ export default function Header() {
     },
   };
 
-  const isExamActive = pathname.startsWith("/services");
+  const isExamActive = pathname.startsWith("/medicalexam");
 
   const handleCartOpen = async () => {
     if (isCartLoading) return;
@@ -354,8 +354,7 @@ export default function Header() {
                             <button
                               className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
                               onClick={() => {
-                                const identifier = exam?.slug || exam?._id;
-                                router.push(`/services/${identifier}`);
+                                router.push(`/medicalexam/${exam?.exam_id}`);
                                 setIsExamDropdownOpen(false);
                               }}
                             >
@@ -371,7 +370,7 @@ export default function Header() {
                   <div className="border-t border-gray-200 mt-3 pt-3 text-center">
                     <button
                       onClick={() => {
-                        router.push('/services')
+                        router.push('/medicalexam')
                         setIsExamDropdownOpen(false);
                       }}
                       className="ff-font-bold text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200"
@@ -457,39 +456,37 @@ export default function Header() {
               </span>
             </button>
 
-            {isInitialized && (
-              authToken ? (
-                <button
-                  onClick={() => {
-                    setIsProfileOpen(!isProfileOpen);
+            {authToken ? (
+              <button
+                onClick={() => {
+                  setIsProfileOpen(!isProfileOpen);
+                }}
+                className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:border-gray-400 transition-all"
+              >
+                <img
+                  src={getProfilePhotoUrl()}
+                  className="w-full h-full object-cover"
+                  alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User Profile"}
+                  onError={(e) => {
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
                   }}
-                  className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-300 hover:border-gray-400 transition-all"
+                />
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => router.push("/auth/login")}
+                  className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 ff-font-bold hover:bg-gray-100 font-medium"
                 >
-                  <img
-                    src={getProfilePhotoUrl()}
-                    className="w-full h-full object-cover"
-                    alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User Profile"}
-                    onError={(e) => {
-                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
-                    }}
-                  />
+                  Login
                 </button>
-              ) : (
-                <>
-                  <button
-                    onClick={() => router.push("/auth/login")}
-                    className="px-4 py-2 cursor-pointer rounded-md border border-gray-300 ff-font-bold hover:bg-gray-100 font-medium"
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={() => router.push("/auth/register")}
-                    className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold hover:bg-yellow"
-                  >
-                    Sign Up
-                  </button>
-                </>
-              )
+                <button
+                  onClick={() => router.push("/auth/register")}
+                  className="px-4 py-2 cursor-pointer rounded-md bg-[#FFCA00] ff-font-bold hover:bg-yellow"
+                >
+                  Sign Up
+                </button>
+              </>
             )}
           </div>
 
@@ -544,15 +541,7 @@ export default function Header() {
                         <ul className="space-y-1">
                           {category?.exams?.map((exam: any) => (
                             <li key={exam?._id}>
-                              <button 
-                                onClick={() => {
-                                  const identifier = exam?.slug || exam?._id;
-                                  router.push(`/services/${identifier}`);
-                                  setIsMenuOpen(false);
-                                  setIsExamDropdownOpen(false);
-                                }}
-                                className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left"
-                              >
+                              <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
                                 {exam.exam_name}
                               </button>
                             </li>
@@ -568,43 +557,43 @@ export default function Header() {
 
               {/* Buttons (Mobile) */}
               <div className="flex flex-col gap-3 px-4">
-                {isInitialized && (
-                  !authToken ? (
-                    <>
-                      <button
-                        onClick={() => router.push("/auth/login")}
-                        className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
-                      >
-                        Login
-                      </button>
-                      <button
-                        onClick={() => router.push("/auth/register")}
-                        className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
-                      >
-                        Sign Up
-                      </button>
-                    </>
-                  ) : (
+                {!authToken && (
+                  <>
                     <button
-                      onClick={() => {
-                        router.push("/editProfile");
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                      onClick={() => router.push("/auth/login")}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
                     >
-                      <img
-                        src={getProfilePhotoUrl()}
-                        alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
-                        }}
-                      />
-                      <span className="font-medium ff-font">
-                        {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
-                      </span>
+                      Login
                     </button>
-                  )
+                    <button
+                      onClick={() => router.push("/auth/register")}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                )}
+
+                {authToken && (
+                  <button
+                    onClick={() => {
+                      router.push("/editProfile");
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
+                  >
+                    <img
+                      src={getProfilePhotoUrl()}
+                      alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                      }}
+                    />
+                    <span className="font-medium ff-font">
+                      {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
+                    </span>
+                  </button>
                 )}
 
                 <button
@@ -638,16 +627,6 @@ export default function Header() {
           >
             <FaUser className="text-gray-500 w-5 h-5" />
             <span className="text-sm font-medium ff-font">Edit Profile</span>
-          </button>
-          <button
-            onClick={() => {
-              router.push("/test-create");
-              setIsProfileOpen(false);
-            }}
-            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
-          >
-            <FaNoteSticky className="text-gray-500 w-5 h-5" />
-            <span className="text-sm font-medium ff-font">Test</span>
           </button>
           <hr className="my-2 border-gray-200" />
           <button

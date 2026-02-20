@@ -118,6 +118,10 @@ html.hydrated [role="button"] {
   border: 1px solid #FFCA00;
 }
 
+.bg-primary {
+  background-color: #FFCA00;
+}
+
 @layer utilities {
   .scrollbar-hide::-webkit-scrollbar {
     display: none;

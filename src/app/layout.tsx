@@ -8,6 +8,7 @@ import Footer from "@/component/auth/Footer";
 import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 const geistSans = Geist({
@@ -25,10 +26,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // ✅ Mark hydration complete
   useEffect(() => {
     document.documentElement.classList.add("hydrated");
   }, []);
+
+  const pathname = usePathname();
+  const isFullScreen = pathname.startsWith("/test-run");
 
   return (
     <html lang="en">
@@ -36,10 +39,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Provider store={store}>
-          <Header />
+          {!isFullScreen && <Header />}
           {children}
           <Toastify />
-          <Footer />
+          {!isFullScreen && <Footer />}
         </Provider>
       </body>
     </html>

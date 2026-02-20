@@ -35,7 +35,7 @@ function PgMedicalEntranceExams() {
   useEffect(() => {
     if (!id) return;
     fetcgExamData();
-  }, [id]);
+  }, []);
 
   return (
     <div>
