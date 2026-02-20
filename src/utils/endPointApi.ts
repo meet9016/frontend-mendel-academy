@@ -62,6 +62,12 @@ export interface EndPointApi {
 
     //Terms & Conditions
     getAllTermsAndConditions?: string;
+
+    //Question bank (subjects/chapters/topics/questions)
+    getAllSubject?: string;
+    getChapterBySubject?: string;
+    getTopicByChapter?: string;
+    getQuestionBankByTopic?: string;
 }
 
 // Define and export the API endpoint object
@@ -130,6 +136,12 @@ const endPointApi: EndPointApi = {
 
     //Terms & Conditions
     getAllTermsAndConditions: 'terms-conditions/get',
+
+    //Question bank (subjects/chapters/topics/questions)
+    getAllSubject: 'subject/getall',
+    getChapterBySubject: 'chapter/get-by-subject',
+    getTopicByChapter: 'topic/get-by-chapter',
+    getQuestionBankByTopic: 'questions/get-by-topic',
 };
 
 export default endPointApi;

@@ -8,8 +8,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
 import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FaUser } from "react-icons/fa";
-import { FaRightFromBracket } from "react-icons/fa6";
+import { FaApper, FaPaperclip, FaUser } from "react-icons/fa";
+import { FaNoteSticky, FaRightFromBracket } from "react-icons/fa6";
 import MyCart from "../mycart/MyCart";
 import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
@@ -638,6 +638,16 @@ export default function Header() {
           >
             <FaUser className="text-gray-500 w-5 h-5" />
             <span className="text-sm font-medium ff-font">Edit Profile</span>
+          </button>
+          <button
+            onClick={() => {
+              router.push("/test-create");
+              setIsProfileOpen(false);
+            }}
+            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 w-full text-left cursor-pointer transition-colors duration-200"
+          >
+            <FaNoteSticky className="text-gray-500 w-5 h-5" />
+            <span className="text-sm font-medium ff-font">Test</span>
           </button>
           <hr className="my-2 border-gray-200" />
           <button
