@@ -70,6 +70,7 @@ export interface EndPointApi {
     getQuestionBankByTopic?: string;
     getQuestionStatsBySubject?: string;
     getChapterStatsBySubject?: string;
+    getQBankTree?: string;
 }
 
 // Define and export the API endpoint object
@@ -146,6 +147,7 @@ const endPointApi: EndPointApi = {
     getQuestionBankByTopic: 'questions/get-by-topic',
     getQuestionStatsBySubject: 'questions/stats/subjects',
     getChapterStatsBySubject: 'questions/stats/chapters-by-subject',
+    getQBankTree: 'subject/getQBankTree',
 };
 
 export default endPointApi;
