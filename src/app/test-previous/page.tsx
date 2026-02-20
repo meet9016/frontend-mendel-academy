@@ -89,7 +89,7 @@ export default function PreviousTestsPage() {
   };
 
   const handleResume = (row: TestAttemptRow) => {
-    router.push(`/test-analysis/${row.id}?tab=review`);
+    router.push(`/test-run/${row.id}?tab=review`);
   };
 
   const handleResult = (row: TestAttemptRow) => {
@@ -261,8 +261,8 @@ export default function PreviousTestsPage() {
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                                 row.mode === 'tutor' 
-                                  ? 'bg-blue-100 text-blue-700' 
-                                  : 'bg-purple-100 text-purple-700'
+                                  ? 'bg-primary text-dark' 
+                                  : 'bg-primary text-dark'
                               }`}>
                                 {row.mode === 'tutor' ? (
                                   <BiPlayCircle className="w-3 h-3 mr-1" />
