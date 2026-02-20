@@ -14,11 +14,13 @@ type Subject = {
 type Chapter = {
   id: string;
   name: string;
+  subjectId: string;
 };
 
 type Topic = {
   id: string;
   name: string;
+  chapterId: string;
 };
 
 type Question = {
@@ -39,7 +41,6 @@ export default function TestCreatePage() {
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
 
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
@@ -52,8 +53,14 @@ export default function TestCreatePage() {
   const [questionCount, setQuestionCount] = useState(10);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [loadingChapters, setLoadingChapters] = useState(false);
-  const [loadingTopics, setLoadingTopics] = useState(false);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [topicsByChapter, setTopicsByChapter] = useState<Record<string, Topic[]>>({});
+  const [expandedChapters, setExpandedChapters] = useState<string[]>([]);
+  const [topicQuestionCounts, setTopicQuestionCounts] = useState<Record<string, number>>({});
+  const [chapterQuestionCounts, setChapterQuestionCounts] = useState<Record<string, number>>({});
+  const [subjectQuestionCounts, setSubjectQuestionCounts] = useState<Record<string, number>>({});
+  const [totalQuestionCount, setTotalQuestionCount] = useState(0);
+  const [loadedStatsSubjects, setLoadedStatsSubjects] = useState<string[]>([]);
 
   useEffect(() => {
     const loadSubjects = async () => {
@@ -73,25 +80,19 @@ export default function TestCreatePage() {
 
   useEffect(() => {
     const loadChapters = async () => {
-      if (!selectedSubjectIds.length) {
-        setChapters([]);
-        return;
-      }
       try {
         setLoadingChapters(true);
-        const all: Chapter[] = [];
-        for (const subjectId of selectedSubjectIds) {
-          const data = await api.get(
-            `${endPointApi.getChapterBySubject}/${subjectId}`
-          );
-          const list = data.data || data || [];
-          for (const ch of list) {
-            all.push({
-              id: ch.id || ch._id,
-              name: ch.name,
-            });
-          }
-        }
+        const data = await api.get(endPointApi.getAllChapters as string);
+        const list = data.data || data || [];
+        const all: Chapter[] = list.map((ch: any) => ({
+          id: ch.id || ch._id,
+          name: ch.name,
+          subjectId:
+            ch.subject?.id ||
+            ch.subject?._id ||
+            ch.subject?.toString() ||
+            "",
+        }));
         setChapters(all);
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Failed to load chapters");
@@ -100,38 +101,110 @@ export default function TestCreatePage() {
       }
     };
     loadChapters();
-  }, [selectedSubjectIds]);
+  }, []);
 
   useEffect(() => {
-    const loadTopics = async () => {
-      if (!selectedChapterIds.length) {
-        setTopics([]);
+    const loadSubjectStats = async () => {
+      if (!subjects.length) {
         return;
       }
       try {
-        setLoadingTopics(true);
-        const all: Topic[] = [];
-        for (const chapterId of selectedChapterIds) {
-          const data = await api.get(
-            `${endPointApi.getTopicByChapter}/${chapterId}`
-          );
-          const list = data.data || data || [];
-          for (const t of list) {
-            all.push({
-              id: t.id || t._id,
-              name: t.name,
-            });
+        const res = await api.get(
+          endPointApi.getQuestionStatsBySubject as string
+        );
+        const data = res.data || res || {};
+        const subjectCounts: Record<string, number> = {};
+        let total = 0;
+        if (Array.isArray(data.subjects)) {
+          for (const item of data.subjects) {
+            const id = item.subjectId || item._id;
+            const count = item.count || 0;
+            if (!id) continue;
+            subjectCounts[id] = count;
+            total += count;
           }
         }
-        setTopics(all);
+        setSubjectQuestionCounts(subjectCounts);
+        if (typeof data.totalQuestions === "number") {
+          setTotalQuestionCount(data.totalQuestions);
+        } else {
+          setTotalQuestionCount(total);
+        }
       } catch (error: any) {
-        toast.error(error.response?.data?.message || "Failed to load topics");
-      } finally {
-        setLoadingTopics(false);
+        toast.error(
+          error.response?.data?.message || "Failed to load subjects stats"
+        );
       }
     };
-    loadTopics();
-  }, [selectedChapterIds]);
+    loadSubjectStats();
+  }, [subjects]);
+
+  useEffect(() => {
+    const loadChapterStats = async () => {
+      const toLoad = selectedSubjectIds.filter(
+        (id) => !loadedStatsSubjects.includes(id)
+      );
+      if (!toLoad.length) {
+        return;
+      }
+      try {
+        for (const subjectId of toLoad) {
+          const res = await api.get(
+            `${endPointApi.getChapterStatsBySubject}/${subjectId}`
+          );
+          const data = res.data || res || {};
+          const chaptersStats = Array.isArray(data.chapters)
+            ? data.chapters
+            : [];
+
+          setChapterQuestionCounts((prev) => {
+            const next = { ...prev };
+            for (const ch of chaptersStats) {
+              const chId = ch.chapterId || ch._id;
+              if (!chId) continue;
+              next[chId] = ch.count || 0;
+            }
+            return next;
+          });
+
+          setTopicsByChapter((prev) => {
+            const next = { ...prev };
+            for (const ch of chaptersStats) {
+              const chId = ch.chapterId || ch._id;
+              if (!chId || !Array.isArray(ch.topics)) continue;
+              next[chId] = ch.topics.map((t: any) => ({
+                id: t.topicId || t._id,
+                name: t.name,
+                chapterId: chId,
+              }));
+            }
+            return next;
+          });
+
+          setTopicQuestionCounts((prev) => {
+            const next = { ...prev };
+            for (const ch of chaptersStats) {
+              const chId = ch.chapterId || ch._id;
+              if (!chId || !Array.isArray(ch.topics)) continue;
+              for (const t of ch.topics) {
+                const tId = t.topicId || t._id;
+                if (!tId) continue;
+                if (next[tId] !== undefined) continue;
+                next[tId] = t.count || 0;
+              }
+            }
+            return next;
+          });
+        }
+        setLoadedStatsSubjects((prev) => [...prev, ...toLoad]);
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message || "Failed to load chapter stats"
+        );
+      }
+    };
+    loadChapterStats();
+  }, [selectedSubjectIds, loadedStatsSubjects]);
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -217,15 +290,19 @@ export default function TestCreatePage() {
   const allSubjectsSelected =
     subjects.length > 0 && selectedSubjectIds.length === subjects.length;
 
-  const allChaptersSelected =
-    chapters.length > 0 && selectedChapterIds.length === chapters.length;
+  const selectableChapterIds = chapters
+    .filter((ch) => selectedSubjectIds.includes(ch.subjectId))
+    .map((ch) => ch.id);
 
-  const allTopicsSelected =
-    topics.length > 0 && selectedTopicIds.length === topics.length;
+  const allChaptersSelected =
+    selectableChapterIds.length > 0 &&
+    selectableChapterIds.every((id) => selectedChapterIds.includes(id));
 
   const handleToggleAllSubjects = () => {
     if (allSubjectsSelected) {
       setSelectedSubjectIds([]);
+      setSelectedChapterIds([]);
+      setSelectedTopicIds([]);
     } else {
       setSelectedSubjectIds(subjects.map((s) => s.id));
     }
@@ -233,18 +310,61 @@ export default function TestCreatePage() {
 
   const handleToggleAllChapters = () => {
     if (allChaptersSelected) {
-      setSelectedChapterIds([]);
+      setSelectedChapterIds((prev) =>
+        prev.filter((id) => !selectableChapterIds.includes(id))
+      );
     } else {
-      setSelectedChapterIds(chapters.map((c) => c.id));
+      setSelectedChapterIds((prev) => [
+        ...prev,
+        ...selectableChapterIds.filter((id) => !prev.includes(id)),
+      ]);
     }
   };
 
-  const handleToggleAllTopics = () => {
-    if (allTopicsSelected) {
-      setSelectedTopicIds([]);
-    } else {
-      setSelectedTopicIds(topics.map((t) => t.id));
-    }
+  const handleToggleSubject = (subjectId: string) => {
+    setSelectedSubjectIds((prev) => {
+      if (prev.includes(subjectId)) {
+        const nextSubjects = prev.filter((id) => id !== subjectId);
+        setSelectedChapterIds((prevChapters) =>
+          prevChapters.filter((chapterId) => {
+            const chapter = chapters.find((ch) => ch.id === chapterId);
+            if (!chapter) return false;
+            return nextSubjects.includes(chapter.subjectId);
+          })
+        );
+        setSelectedTopicIds((prevTopics) =>
+          prevTopics.filter((topicId) => {
+            let foundChapterId: string | null = null;
+            for (const [chapterId, topicList] of Object.entries(
+              topicsByChapter
+            )) {
+              if (topicList.some((t) => t.id === topicId)) {
+                foundChapterId = chapterId;
+                break;
+              }
+            }
+            if (!foundChapterId) {
+              return false;
+            }
+            const chapter = chapters.find((ch) => ch.id === foundChapterId);
+            if (!chapter) {
+              return false;
+            }
+            return nextSubjects.includes(chapter.subjectId);
+          })
+        );
+        return nextSubjects;
+      }
+      return [...prev, subjectId];
+    });
+  };
+
+  const handleToggleChapterExpand = (chapterId: string) => {
+    setExpandedChapters((prev) =>
+      prev.includes(chapterId)
+        ? prev.filter((id) => id !== chapterId)
+        : [...prev, chapterId]
+    );
   };
 
   const handleCreateTest = () => {
@@ -296,6 +416,8 @@ export default function TestCreatePage() {
 
     router.push("/test-run");
   };
+
+  const displayTotalCount = totalQuestionCount;
 
   return (
     <main className="min-h-[calc(100vh-120px)] bg-gray-100 w-full">
@@ -367,18 +489,24 @@ export default function TestCreatePage() {
             </section>
 
             <section className="rounded-md bg-[#ffffff]">
-              <div className="px-4 py-3 flex items-center gap-4">
-                <div className="text-sm font-semibold text-gray-700">
-                  Question Mode
-                </div>
+              <div className="px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-sm font-semibold text-gray-700">
+                    Question Mode
+                  </div>
 
-                <div className="flex text-[11px] border rounded-full overflow-hidden">
-                  <button className="px-3 py-1 bg-white text-blue-700 border-r border-gray-300">
-                    Standard
-                  </button>
-                  <button className="px-3 py-1 text-gray-400 bg-gray-100">
-                    Custom
-                  </button>
+                  <div className="flex text-[11px] border rounded-full overflow-hidden">
+                    <button className="px-3 py-1 bg-white text-blue-700 border-r border-gray-300">
+                      Standard
+                    </button>
+                    <button className="px-3 py-1 text-gray-400 bg-gray-100">
+                      Custom
+                    </button>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-600">
+                  Total:{" "}
+                  <span className="font-semibold">{displayTotalCount}</span>
                 </div>
               </div>
 
@@ -436,24 +564,29 @@ export default function TestCreatePage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {subjects.map((subject) => (
-                      <label
-                        key={subject.id}
-                        className="flex items-center gap-2 text-xs md:text-sm cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedSubjectIds.includes(subject.id)}
-                          onChange={() =>
-                            setSelectedSubjectIds((prev) =>
-                              toggleSelection(prev, subject.id)
-                            )
-                          }
-                          className="scale-90"
-                        />
-                        <span>{subject.name}</span>
-                      </label>
-                    ))}
+                    {subjects.map((subject) => {
+                      const subjectCount =
+                        subjectQuestionCounts[subject.id] ?? undefined;
+                      return (
+                        <label
+                          key={subject.id}
+                          className="flex items-center gap-2 text-xs md:text-sm cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedSubjectIds.includes(subject.id)}
+                            onChange={() => handleToggleSubject(subject.id)}
+                            className="scale-90"
+                          />
+                          <span>{subject.name}</span>
+                          {subjectCount !== undefined && (
+                            <span className="text-[11px] text-gray-500">
+                              ({subjectCount})
+                            </span>
+                          )}
+                        </label>
+                      );
+                    })}
                     {!subjects.length && (
                       <p className="text-xs text-gray-500">
                         No subjects found.
@@ -490,82 +623,114 @@ export default function TestCreatePage() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {chapters.map((chapter) => (
-                      <label
-                        key={chapter.id}
-                        className="flex items-center gap-2 text-xs md:text-sm cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedChapterIds.includes(chapter.id)}
-                          onChange={() =>
-                            setSelectedChapterIds((prev) =>
-                              toggleSelection(prev, chapter.id)
-                            )
-                          }
-                          className="scale-90"
-                        />
-                        <span>{chapter.name}</span>
-                      </label>
-                    ))}
+                    {chapters.map((chapter) => {
+                      const disabled = !selectedSubjectIds.includes(
+                        chapter.subjectId
+                      );
+                      const chapterCount =
+                        chapterQuestionCounts[chapter.id] ?? undefined;
+                      const isExpanded = expandedChapters.includes(chapter.id);
+                      return (
+                        <div
+                          key={chapter.id}
+                          className="border rounded px-2 py-1 text-xs md:text-sm bg-white"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <label
+                              className={`flex items-center gap-2 ${
+                                disabled
+                                  ? "cursor-not-allowed text-gray-400"
+                                  : "cursor-pointer"
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedChapterIds.includes(
+                                  chapter.id
+                                )}
+                                onChange={() =>
+                                  !disabled &&
+                                  setSelectedChapterIds((prev) =>
+                                    toggleSelection(prev, chapter.id)
+                                  )
+                                }
+                                disabled={disabled}
+                                className="scale-90"
+                              />
+                              <span>{chapter.name}</span>
+                              {chapterCount !== undefined && (
+                                <span className="text-[11px] text-gray-500">
+                                  ({chapterCount})
+                                </span>
+                              )}
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleChapterExpand(chapter.id)}
+                              className="text-gray-500 hover:text-gray-700 text-xs"
+                            >
+                              {isExpanded ? "−" : "+"}
+                            </button>
+                          </div>
+                          {isExpanded && (
+                            <div className="mt-2 pl-6 space-y-1">
+                              {loadingTopicsByChapter[chapter.id] ? (
+                                <p className="text-[11px] text-gray-500">
+                                  Loading topics...
+                                </p>
+                              ) : (
+                                <>
+                                  {(topicsByChapter[chapter.id] || []).map(
+                                    (topic) => {
+                                      const topicCount =
+                                        topicQuestionCounts[topic.id] ??
+                                        undefined;
+                                      return (
+                                        <label
+                                          key={topic.id}
+                                          className="flex items-center justify-between gap-2 text-[11px] md:text-xs cursor-pointer"
+                                        >
+                                          <span className="flex items-center gap-2">
+                                            <input
+                                              type="checkbox"
+                                              className="scale-90"
+                                              checked={selectedTopicIds.includes(
+                                                topic.id
+                                              )}
+                                              onChange={() =>
+                                                setSelectedTopicIds((prev) =>
+                                                  toggleSelection(prev, topic.id)
+                                                )
+                                              }
+                                            />
+                                            <span>{topic.name}</span>
+                                          </span>
+                                          {topicCount !== undefined && (
+                                            <span className="text-[11px] text-gray-500">
+                                              ({topicCount})
+                                            </span>
+                                          )}
+                                        </label>
+                                      );
+                                    }
+                                  )}
+                                  {!(
+                                    topicsByChapter[chapter.id] &&
+                                    topicsByChapter[chapter.id].length
+                                  ) && (
+                                    <p className="text-[11px] text-gray-400">
+                                      No topics found.
+                                    </p>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                     {!chapters.length && (
-                      <p className="text-xs text-gray-500">
-                        Select subjects to load chapters.
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </section>
-
-            <section className="bg-[#ffffff] rounded-md">
-              <div className="px-4 py-3 flex items-center justify-between text-sm font-semibold text-gray-700">
-                <span>Topics</span>
-                <label className="flex items-center gap-1 text-[11px] font-normal text-gray-600">
-                  <input
-                    type="checkbox"
-                    className="scale-90"
-                    checked={allTopicsSelected}
-                    onChange={handleToggleAllTopics}
-                    disabled={loadingTopics || !topics.length}
-                  />
-                  <span>Select all</span>
-                </label>
-              </div>
-              <div className="px-4 py-3">
-                {loadingTopics ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 animate-pulse">
-                    {Array.from({ length: 6 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="h-6 bg-gray-200 rounded"
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {topics.map((topic) => (
-                      <label
-                        key={topic.id}
-                        className="flex items-center gap-2 text-xs md:text-sm cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedTopicIds.includes(topic.id)}
-                          onChange={() =>
-                            setSelectedTopicIds((prev) =>
-                              toggleSelection(prev, topic.id)
-                            )
-                          }
-                          className="scale-90"
-                        />
-                        <span>{topic.name}</span>
-                      </label>
-                    ))}
-                    {!topics.length && (
-                      <p className="text-xs text-gray-500">
-                        Select chapters to load topics.
-                      </p>
+                      <p className="text-xs text-gray-500">No chapters found.</p>
                     )}
                   </div>
                 )}

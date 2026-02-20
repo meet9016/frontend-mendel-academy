@@ -65,9 +65,11 @@ export interface EndPointApi {
 
     //Question bank (subjects/chapters/topics/questions)
     getAllSubject?: string;
-    getChapterBySubject?: string;
+    getAllChapters?: string;
     getTopicByChapter?: string;
     getQuestionBankByTopic?: string;
+    getQuestionStatsBySubject?: string;
+    getChapterStatsBySubject?: string;
 }
 
 // Define and export the API endpoint object
@@ -139,9 +141,11 @@ const endPointApi: EndPointApi = {
 
     //Question bank (subjects/chapters/topics/questions)
     getAllSubject: 'subject/getall',
-    getChapterBySubject: 'chapter/get-by-subject',
+    getAllChapters: 'chapter/getall',
     getTopicByChapter: 'topic/get-by-chapter',
     getQuestionBankByTopic: 'questions/get-by-topic',
+    getQuestionStatsBySubject: 'questions/stats/subjects',
+    getChapterStatsBySubject: 'questions/stats/chapters-by-subject',
 };
 
 export default endPointApi;
