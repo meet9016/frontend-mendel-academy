@@ -13,6 +13,7 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { BlogDetailSkeleton } from "../Skeletons";
+import { formatDate } from "@/utils/helper";
 
 /* ----------  TYPES  ---------- */
 type Social = { Icon: React.ElementType; href: string };

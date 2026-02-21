@@ -7,6 +7,7 @@ import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { formatDateWithDayjs } from "@/utils/helper";
 import { BlogCardSkeleton } from "../Skeletons";
+import Skeleton from "react-loading-skeleton";
 
 /* ----------  TYPES  ---------- */
 type Blog = {
