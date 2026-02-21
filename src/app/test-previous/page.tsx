@@ -89,7 +89,32 @@ export default function PreviousTestsPage() {
   };
 
   const handleResume = (row: TestAttemptRow) => {
-    router.push(`/test-run/${row.id}?tab=review`);
+    if (typeof window === "undefined") {
+      router.push(`/test-analysis/${row.id}?tab=review`);
+      return;
+    }
+
+    const raw = window.sessionStorage.getItem("activeTest");
+    if (!raw) {
+      router.push(`/test-analysis/${row.id}?tab=review`);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        id?: string;
+        attemptId?: string;
+      };
+      const activeAttemptId = parsed.attemptId || parsed.id;
+
+      if (activeAttemptId && activeAttemptId === row.id && row.status === "in_progress") {
+        router.push("/test-run");
+      } else {
+        router.push(`/test-analysis/${row.id}?tab=review`);
+      }
+    } catch {
+      router.push(`/test-analysis/${row.id}?tab=review`);
+    }
   };
 
   const handleResult = (row: TestAttemptRow) => {

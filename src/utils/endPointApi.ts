@@ -68,6 +68,10 @@ export interface EndPointApi {
     listTestAttempts?: string;
     getTestAttemptDetail?: string;
     completeTestAttempt?: string;
+    listDemoQuestions?: string;
+    createDemoQuestion?: string;
+    updateDemoQuestion?: string;
+    deleteDemoQuestion?: string;
 }
 
 // Define and export the API endpoint object
@@ -142,6 +146,10 @@ const endPointApi: EndPointApi = {
     listTestAttempts: 'test-attempt/list',
     getTestAttemptDetail: 'test-attempt/getDetail',
     completeTestAttempt: 'test-attempt/complete',
+    listDemoQuestions: 'demo-question/list',
+    createDemoQuestion: 'demo-question/create',
+    updateDemoQuestion: 'demo-question',
+    deleteDemoQuestion: 'demo-question',
 };
 
 export default endPointApi;
