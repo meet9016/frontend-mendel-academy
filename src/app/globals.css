@@ -115,7 +115,12 @@ html.hydrated [role="button"] {
 }
 
 .border-primary {
-  border: 1px solid #FFCA00;
+  border-color: #FFCA00;
+}
+
+.ring-primary {
+  --tw-ring-color: #FFCA00;
+  box-shadow: 0 0 0 1px var(--tw-ring-color);
 }
 
 .bg-primary {

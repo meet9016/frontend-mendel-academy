@@ -479,6 +479,15 @@ const EditProfile = () => {
                 </div>
                 <p className="ff-font text-sm mb-4 text-gray-600">Student Profile</p>
 
+                {/* Show active QBank pro plan if exists */}
+                {profileData?.cart?.payBill?.some((p: any) => p.cart_type === "qbank_plan") && (
+                  <div className="mb-4 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold ff-font flex items-center gap-2">
+                    <FaCheckCircle className="w-3 h-3" />
+                    Currently active in {" "}
+                    {profileData.cart.payBill.filter((p: any) => p.cart_type === "qbank_plan")[0]?.qbank_plan_details?.name || "QBank Pro"} Plan
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
                     <div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center">

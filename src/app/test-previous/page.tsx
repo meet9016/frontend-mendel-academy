@@ -89,30 +89,9 @@ export default function PreviousTestsPage() {
   };
 
   const handleResume = (row: TestAttemptRow) => {
-    if (typeof window === "undefined") {
-      router.push(`/test-analysis/${row.id}?tab=review`);
-      return;
-    }
-
-    const raw = window.sessionStorage.getItem("activeTest");
-    if (!raw) {
-      router.push(`/test-analysis/${row.id}?tab=review`);
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(raw) as {
-        id?: string;
-        attemptId?: string;
-      };
-      const activeAttemptId = parsed.attemptId || parsed.id;
-
-      if (activeAttemptId && activeAttemptId === row.id && row.status === "in_progress") {
-        router.push("/test-run");
-      } else {
-        router.push(`/test-analysis/${row.id}?tab=review`);
-      }
-    } catch {
+    if (row.status === "in_progress") {
+      router.push(`/test-run?id=${row.id}`);
+    } else {
       router.push(`/test-analysis/${row.id}?tab=review`);
     }
   };
@@ -148,7 +127,7 @@ export default function PreviousTestsPage() {
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Previous Tests</h1>
               </div>
-              
+
               {/* Filter Tabs */}
               <div className="flex bg-gray-100 rounded-xl p-1 shadow-inner">
                 {[
@@ -159,11 +138,10 @@ export default function PreviousTestsPage() {
                   <button
                     key={tab.value}
                     onClick={() => setFilter(tab.value as any)}
-                    className={`px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                      filter === tab.value
+                    className={`px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${filter === tab.value
                         ? "bg-white text-gray-900 shadow-md"
                         : "text-gray-600 hover:text-gray-900"
-                    }`}
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -191,8 +169,8 @@ export default function PreviousTestsPage() {
                     <HiDocumentText className="h-16 w-16 text-gray-300" />
                     <h3 className="mt-4 text-lg font-medium text-gray-900">No tests found</h3>
                     <p className="mt-2 text-sm text-gray-500">
-                      {filter === "all" 
-                        ? "Get started by creating your first test." 
+                      {filter === "all"
+                        ? "Get started by creating your first test."
                         : `No ${filter} tests found.`
                       }
                     </p>
@@ -240,13 +218,12 @@ export default function PreviousTestsPage() {
                       {filteredRows.map((row, index) => {
                         const total = row.correctCount + row.incorrectCount + row.omittedCount;
                         const correctPercent = total > 0 ? Math.round((row.correctCount / total) * 100) : 0;
-                        
+
                         return (
-                          <tr 
-                            key={row.id} 
-                            className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-200 ${
-                              index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
-                            }`}
+                          <tr
+                            key={row.id}
+                            className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'
+                              }`}
                           >
                             {/* Score Cell */}
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -258,11 +235,10 @@ export default function PreviousTestsPage() {
                             {/* Name Cell */}
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center space-x-2">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                  row.status === 'completed' 
-                                    ? 'bg-green-100' 
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${row.status === 'completed'
+                                    ? 'bg-green-100'
                                     : 'bg-yellow-100'
-                                }`}>
+                                  }`}>
                                   {row.status === 'completed' ? (
                                     <BiCheckCircle className="w-4 h-4 text-green-600" />
                                   ) : (
@@ -284,11 +260,10 @@ export default function PreviousTestsPage() {
 
                             {/* Mode Cell */}
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                                row.mode === 'tutor' 
-                                  ? 'bg-primary text-dark' 
+                              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${row.mode === 'tutor'
+                                  ? 'bg-primary text-dark'
                                   : 'bg-primary text-dark'
-                              }`}>
+                                }`}>
                                 {row.mode === 'tutor' ? (
                                   <BiPlayCircle className="w-3 h-3 mr-1" />
                                 ) : (
@@ -377,7 +352,7 @@ export default function PreviousTestsPage() {
                                 >
                                   <FaChartBar className="w-3.5 h-3.5" />
                                 </button>
-                               
+
                               </div>
                             </td>
                           </tr>

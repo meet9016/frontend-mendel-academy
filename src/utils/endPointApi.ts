@@ -31,6 +31,7 @@ export interface EndPointApi {
     postAddHyperSpecialistToCart?: string;
     postAddLiveCoursesToCart?: string;
     postAddRapidToolToCart?: string; // ✅ NEW
+    postAddQbankPlanToCart?: string; // ✅ NEW
     cartCount?: string;
     removeCart?: string;
     removeCartOption?: string;
@@ -72,6 +73,12 @@ export interface EndPointApi {
     createDemoQuestion?: string;
     updateDemoQuestion?: string;
     deleteDemoQuestion?: string;
+
+    getActivePlans?: string;
+    saveQuestionAnswer?: string;
+    bulkSaveAnswers?: string;
+    saveQuestionNote?: string;
+    toggleQuestionMark?: string;
 }
 
 // Define and export the API endpoint object
@@ -110,6 +117,7 @@ const endPointApi: EndPointApi = {
     postAddHyperSpecialistToCart: 'cart/add-hyperspecialist',
     postAddLiveCoursesToCart: 'cart/add-livecourse',
     postAddRapidToolToCart: 'cart/add-rapid-tool', // ✅ NEW
+    postAddQbankPlanToCart: 'cart/add-qbank-plan', // ✅ NEW
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
     removeCartOption: '/cart/remove-option',
@@ -150,6 +158,11 @@ const endPointApi: EndPointApi = {
     createDemoQuestion: 'demo-question/create',
     updateDemoQuestion: 'demo-question',
     deleteDemoQuestion: 'demo-question',
+    getActivePlans: 'plans/get-active-plans',
+    saveQuestionAnswer: 'test-attempt/questions/answer',
+    bulkSaveAnswers: 'test-attempt/questions/bulk',
+    saveQuestionNote: 'test-attempt/questions/note',
+    toggleQuestionMark: 'test-attempt/questions/mark',
 };
 
 export default endPointApi;

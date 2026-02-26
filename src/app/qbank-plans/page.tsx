@@ -1,69 +1,149 @@
 "use client";
 
+import { Plan } from "@/component/PGMedical IntreceExam/sections/WhoEnroll";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
 import { useRouter } from "next/navigation";
-import { BiCheck, BiCrown, BiShield } from "react-icons/bi";
+import { useCallback, useEffect, useState } from "react";
+import { BiCheck } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
-import { FiZap } from "react-icons/fi";
-
-const plans = [
-  {
-    id: "elite",
-    name: "Elite",
-    price: "₹2,499",
-    duration: "Videos, Question Bank, Test Series",
-    features: [
-      "6 Months Access",
-      "Everything in Pro",
-      "Revision and custom test tools",
-      "Early access to new features",
-    ],
-    icon: <BiCrown className="w-6 h-6" />,
-    badge: {
-      text: "Best Value",
-    },
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "₹1,299",
-    duration: "Question Bank, Test Series",
-    features: [
-      "3 Months Access",
-      "Everything in Basic",
-      "Advanced performance reports",
-      "Subject and system-wise insights",
-      "Priority support",
-    ],
-    icon: <BiShield className="w-6 h-6" />,
-    badge: {
-      text: "Most Popular",
-    },
-  },
-  {
-    id: "basic",
-    name: "Basic",
-    price: "₹499",
-    duration: "Test Series",
-    features: [
-      "1 Month Access",
-      "Access to full QBank",
-      "Create unlimited tests",
-      "Performance analytics",
-    ],
-    icon: <FiZap className="w-6 h-6" />,
-    badge: null,
-  },
-];
+import { toast } from "react-toastify";
+import { getTempId } from "@/utils/helper";
+import { getAuthId } from "@/utils/tokenManager";
+import { store } from "@/redux/store";
+import { setCartCount } from "@/redux/cartSlice";
 
 export default function QBankPlansPage() {
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [purchasedPlanId, setPurchasedPlanId] = useState<string | null>(null);
+  const [pendingCartPlanId, setPendingCartPlanId] = useState<string | null>(null);
+  const [addingToCartId, setAddingToCartId] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSelectPlan = (planId: string) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("mendel_qbank_pro", planId);
+  const handleSelectPlan = async (planId: string) => {
+    try {
+      setAddingToCartId(planId);
+      const userId = getAuthId();
+      const tempId = userId ? null : getTempId();
+
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        qbank_plan_id: planId,
+        bucket_type: true
+      };
+
+      const res = await api.post(`${endPointApi.postAddQbankPlanToCart}`, body);
+
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+
+        store.dispatch(setCartCount(countRes.data.count));
+
+        if (res.data.alreadyInCart) {
+          toast.info("Plan is already in cart");
+        } else {
+          toast.success("Plan added to cart successfully!");
+        }
+
+        if (typeof window !== "undefined") {
+          localStorage.setItem("mendel_qbank_pro", planId);
+        }
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to add to cart");
+    } finally {
+      setAddingToCartId(null);
     }
-    router.push("/test-create");
   };
+
+  const fetchPlans = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data }: any = await api.get<{
+        success: boolean;
+        data: Plan[];
+        total: number;
+      }>(`${endPointApi.getActivePlans}`);
+      if (data.success) {
+        setPlans(data.data)
+      }
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchUserProfileStatus = useCallback(async () => {
+    try {
+      const userId = getAuthId();
+      if (!userId) return;
+      const response = await api.get(`${endPointApi.getProfile}/${userId}`);
+      if (response?.data) {
+        // Check if a plan is already purchased (bucket_type: false)
+        const activePlan = response.data.cart?.payBill?.find((p: any) => p.cart_type === "qbank_plan");
+        if (activePlan) {
+          setPurchasedPlanId(activePlan.qbank_plan_id?._id || activePlan.qbank_plan_id);
+        }
+
+        // Check if an item is already inside the cart (bucket_type: true)
+        const pendingPlanInCart = response.data.cart?.addToCartItem?.find((p: any) => p.cart_type === "qbank_plan");
+        if (pendingPlanInCart) {
+          setPendingCartPlanId(pendingPlanInCart.qbank_plan_id?._id || pendingPlanInCart.qbank_plan_id);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching profile status:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPlans();
+    fetchUserProfileStatus();
+  }, [fetchPlans, fetchUserProfileStatus]);
+
+  // Skeleton Card Component
+  const SkeletonCard = () => (
+    <div className="relative bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden" style={{ height: "650px" }}>
+      <div className="p-8 flex flex-col h-full">
+        {/* Plan Header Skeleton */}
+        <div className="mb-6 flex items-center justify-center min-h-[96px] text-center">
+          <div className="w-full">
+            <div className="h-8 w-32 bg-gray-200 rounded-lg animate-pulse mx-auto"></div>
+            <div className="h-4 w-24 bg-gray-200 rounded-lg animate-pulse mt-3 mx-auto"></div>
+          </div>
+        </div>
+
+        {/* Price Skeleton */}
+        <div className="mb-8">
+          <div className="h-10 w-28 bg-gray-200 rounded-lg animate-pulse"></div>
+        </div>
+
+        {/* Features Skeleton */}
+        <div className="flex-1 mb-8">
+          <ul className="space-y-4">
+            {/* Duration feature */}
+            <li className="flex items-start gap-3">
+              <div className="h-6 w-6 rounded-full bg-gray-200 animate-pulse flex-shrink-0"></div>
+              <div className="h-5 w-40 bg-gray-200 rounded-lg animate-pulse"></div>
+            </li>
+            {/* 5 feature placeholders */}
+            {[1, 2, 3, 4, 5].map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <div className="h-6 w-6 rounded-full bg-gray-200 animate-pulse flex-shrink-0"></div>
+                <div className="h-5 w-48 bg-gray-200 rounded-lg animate-pulse"></div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Button Skeleton */}
+        <div className="w-full h-14 bg-gray-200 rounded-xl animate-pulse"></div>
+      </div>
+    </div>
+  );
 
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 relative overflow-hidden">
@@ -87,83 +167,103 @@ export default function QBankPlansPage() {
           </p>
         </div>
 
-        {/* Pricing Cards */}
+        {/* Pricing Cards with Skeleton Loader */}
         <div className="grid gap-8 md:grid-cols-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden hover:-translate-y-2 ${plan.badge ? "ring-offset-2" : ""
-                }`}
-              style={{ height: "650px" }} // Increased height to accommodate more features
-            >
-              {plan.badge && (
-                <div className="absolute top-0 right-0 z-10">
-                  <div className="relative">
-                    {/* Main badge - adjusted padding */}
-                    <div className="bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 rounded-bl-3xl shadow-lg">
-                      {plan.badge.text}
+          {loading ? (
+            // Show 3 skeleton cards while loading
+            <>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </>
+          ) : (
+            // Show actual plans when loaded
+            plans.map((plan: any) => (
+              <div
+                key={plan.id}
+                className={`relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden hover:-translate-y-2 ${plan.badge ? "ring-offset-2" : ""
+                  }`}
+                style={{ height: "650px" }}
+              >
+                {(plan.is_popular || plan.is_best_value) && (
+                  <div className="absolute top-0 right-0 z-10">
+                    <div className="relative">
+                      <div className="bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 rounded-bl-3xl shadow-lg">
+                        {plan.is_popular ? "Most Popular" : "Best Value"}
+                      </div>
+                      <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-4 border-primary rounded-full border-t-transparent border-r-transparent"></div>
                     </div>
-                    {/* Half circle decoration - positioned exactly at corner */}
-                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-4 border-primary rounded-full border-t-transparent border-r-transparent"></div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Top Accent Bar */}
-              <div className="h-2 bg-primary"></div>
+                <div className="p-8 flex flex-col h-full">
 
-              <div className="p-8 flex flex-col h-full">
-
-                {/* Plan Header - Flexible height based on content */}
-                <div className="mb-6 flex items-start gap-3 min-h-[96px]">
-                  <div className="h-14 w-14 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-md flex-shrink-0">
-                    {plan.icon}
+                  {/* Plan Header */}
+                  <div className="mb-6 flex items-center justify-center min-h-[96px] text-center">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">
+                        {plan.name}
+                      </h2>
+                      <p className="text-base text-gray-500 mt-1">
+                        {plan.duration}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      {plan.name}
-                    </h2>
-                    <p className="text-base text-gray-500 mt-1">
-                      {plan.duration}
-                    </p>
+
+                  {/* Price */}
+                  <div className="mb-8">
+                    <span className="text-4xl font-bold text-gray-900">
+                      {`₹ ${plan.price_inr}` || `$ ${plan.price_usd}`}
+                    </span>
                   </div>
-                </div>
 
-                {/* Price - Flexible height */}
-                <div className="mb-8">
-                  <span className="text-4xl font-bold text-gray-900">
-                    {plan.price}
-                  </span>
-                </div>
-
-                {/* Features - Automatically expands without scroll */}
-                <div className="flex-1 mb-8">
-                  <ul className="space-y-4">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
+                  {/* Features */}
+                  <div className="flex-1 mb-8">
+                    <ul className="space-y-4">
+                      <li className="flex items-start gap-3">
                         <div className="mt-0.5 h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
                           <BiCheck className="h-4 w-4 text-primary-foreground" />
                         </div>
                         <span className="text-base text-gray-700">
-                          {feature}
+                          {plan.duration_months} Months Access
                         </span>
                       </li>
-                    ))}
-                  </ul>
-                </div>
+                      {plan.features.map((feature: any) => (
+                        <li key={feature} className="flex items-start gap-3">
+                          <div className="mt-0.5 h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                            <BiCheck className="h-4 w-4 text-primary-foreground" />
+                          </div>
+                          <span className="text-base text-gray-700">
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* Button - Fixed at bottom */}
-                <button
-                  type="button"
-                  onClick={() => handleSelectPlan(plan.id)}
-                  className="w-full px-6 py-4 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group text-lg"
-                >
-                  Choose Plan
-                  <BsArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (purchasedPlanId) {
+                        toast.warning("You already have an active plan!");
+                        return;
+                      }
+                      if (pendingCartPlanId && pendingCartPlanId !== plan.id) {
+                        toast.warning("You already have another plan in your cart!");
+                        return;
+                      }
+                      handleSelectPlan(plan.id)
+                    }}
+                    disabled={purchasedPlanId ? true :addingToCartId === plan.id || purchasedPlanId === plan.id || pendingCartPlanId === plan.id}
+                    className="w-full px-6 py-4 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 group text-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {purchasedPlanId === plan.id ? "Active" : pendingCartPlanId === plan.id ? "Already In Cart" : addingToCartId === plan.id ? "Adding..." : "Add to Cart"}
+                    {addingToCartId !== plan.id && purchasedPlanId !== plan.id && pendingCartPlanId !== plan.id && <BsArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Demo Option */}

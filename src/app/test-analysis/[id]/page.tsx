@@ -5,13 +5,13 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import QBankSidebar from "@/component/qbank/QBankSidebar";
-import { 
-  FiPrinter, 
-  FiFileText, 
-  FiList, 
-  FiEye, 
-  FiCheckCircle, 
-  FiXCircle, 
+import {
+  FiPrinter,
+  FiFileText,
+  FiList,
+  FiEye,
+  FiCheckCircle,
+  FiXCircle,
   FiMinusCircle,
   FiTrendingUp,
   FiClock,
@@ -34,13 +34,15 @@ type TestAttemptDetail = {
   startedAt: string;
   completedAt?: string;
   questionPool?: string;
+  perQuestion?: any[];
+  questions?: any[];
 };
 
 export default function TestAnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [tab, setTab] = useState<"result" | "analysis" | "review">("analysis");
+  const [tab, setTab] = useState<"result" | "analysis" | "notes">("analysis");
   const [detail, setDetail] = useState<TestAttemptDetail | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +50,7 @@ export default function TestAnalysisPage() {
     const initialTab = (searchParams.get("tab") as
       | "result"
       | "analysis"
-      | "review"
+      | "notes"
       | null) || "analysis";
     setTab(initialTab);
   }, [searchParams]);
@@ -74,6 +76,8 @@ export default function TestAnalysisPage() {
           startedAt: d.startedAt,
           completedAt: d.completedAt,
           questionPool: d.questionPool || "Full Syllabus",
+          perQuestion: d.perQuestion || [],
+          questions: d.questions || [],
         });
       } finally {
         setLoading(false);
@@ -99,7 +103,7 @@ export default function TestAnalysisPage() {
     const percentCorrect =
       total > 0 ? Math.round((detail.correctCount / total) * 100) : 0;
     const accuracy = total > 0 ? Math.round((detail.correctCount / total) * 100) : 0;
-    
+
     return {
       total,
       correct: detail.correctCount,
@@ -111,7 +115,7 @@ export default function TestAnalysisPage() {
     };
   }, [detail]);
 
-  const handleTabChange = (next: "result" | "analysis" | "review") => {
+  const handleTabChange = (next: "result" | "analysis" | "notes") => {
     setTab(next);
     const params = new URLSearchParams(searchParams);
     params.set("tab", next);
@@ -181,7 +185,7 @@ export default function TestAnalysisPage() {
             <div className="px-6 py-4">
               {/* Breadcrumb */}
               <div className="flex items-center text-sm text-gray-500 mb-2">
-                <button 
+                <button
                   onClick={() => router.push("/test-previous")}
                   className="hover:text-gray-700 transition-colors"
                 >
@@ -190,7 +194,7 @@ export default function TestAnalysisPage() {
                 <span className="mx-2">/</span>
                 <span className="text-gray-900">Test Analysis</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">Test Analysis</h1>
@@ -203,25 +207,19 @@ export default function TestAnalysisPage() {
                     <span>{detail.questionPool}</span>
                   </div>
                 </div>
-                
+
                 {/* Action Buttons */}
                 <div className="flex items-center gap-2">
                   <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Print">
                     <FiPrinter className="w-4 h-4" />
                   </button>
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Notes">
+                  <button onClick={() => handleTabChange("notes")} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Notes">
                     <FiFileText className="w-4 h-4" />
                   </button>
                   <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Question List">
                     <FiList className="w-4 h-4" />
                   </button>
-                  <button 
-                    onClick={() => handleTabChange("review")}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-                  >
-                    <FiEye className="w-4 h-4" />
-                    Review Test
-                  </button>
+
                 </div>
               </div>
             </div>
@@ -234,16 +232,15 @@ export default function TestAnalysisPage() {
                 {[
                   { id: "result", label: "Test Results", icon: FiBarChart2 },
                   { id: "analysis", label: "Test Analysis", icon: FiTrendingUp },
-                  { id: "review", label: "Review", icon: FiEye }
+                  { id: "notes", label: "My Notes", icon: FiFileText },
                 ].map(({ id, label, icon: Icon }) => (
                   <button
                     key={id}
                     onClick={() => handleTabChange(id as any)}
-                    className={`flex items-center gap-2 py-4 border-b-2 transition-colors ${
-                      tab === id
-                        ? "border-blue-600 text-blue-600"
-                        : "border-transparent text-gray-500 hover:text-gray-700"
-                    }`}
+                    className={`flex items-center gap-2 py-4 border-b-2 transition-colors ${tab === id
+                      ? "border-blue-600 text-blue-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                      }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span className="font-medium">{label}</span>
@@ -266,7 +263,7 @@ export default function TestAnalysisPage() {
                     <div className="text-2xl font-bold text-gray-900">{scores.percentCorrect}%</div>
                     <div className="text-xs text-gray-500 mt-1">Overall Performance</div>
                   </div>
-                  
+
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-600">Correct</span>
@@ -275,7 +272,7 @@ export default function TestAnalysisPage() {
                     <div className="text-2xl font-bold text-green-600">{scores.correct}</div>
                     <div className="text-xs text-gray-500 mt-1">out of {scores.total}</div>
                   </div>
-                  
+
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-600">Incorrect</span>
@@ -284,7 +281,7 @@ export default function TestAnalysisPage() {
                     <div className="text-2xl font-bold text-red-600">{scores.incorrect}</div>
                     <div className="text-xs text-gray-500 mt-1">need improvement</div>
                   </div>
-                  
+
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-600">Omitted</span>
@@ -328,7 +325,7 @@ export default function TestAnalysisPage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Legend */}
                     <div className="mt-6 space-y-2">
                       <div className="flex items-center justify-between">
@@ -367,7 +364,7 @@ export default function TestAnalysisPage() {
                           </div>
                           <div className="font-medium capitalize">{detail.mode}</div>
                         </div>
-                        
+
                         <div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                             <FiBookOpen className="w-4 h-4" />
@@ -377,7 +374,7 @@ export default function TestAnalysisPage() {
                             {detail.subjects.length > 0 ? detail.subjects.join(", ") : "All Subjects"}
                           </div>
                         </div>
-                        
+
                         <div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                             <FiList className="w-4 h-4" />
@@ -386,7 +383,7 @@ export default function TestAnalysisPage() {
                           <div className="font-medium">{detail.totalQuestions}</div>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-4">
                         <div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
@@ -395,7 +392,7 @@ export default function TestAnalysisPage() {
                           </div>
                           <div className="font-medium">{scores.timeSpent}</div>
                         </div>
-                        
+
                         <div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                             <FiCalendar className="w-4 h-4" />
@@ -403,7 +400,7 @@ export default function TestAnalysisPage() {
                           </div>
                           <div className="font-medium">{formatDate(detail.startedAt)}</div>
                         </div>
-                        
+
                         <div>
                           <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                             <FiBarChart2 className="w-4 h-4" />
@@ -413,7 +410,7 @@ export default function TestAnalysisPage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Performance Indicators */}
                     <div className="mt-6 pt-6 border-t border-gray-100">
                       <h4 className="text-sm font-semibold text-gray-900 mb-3">Performance Indicators</h4>
@@ -424,13 +421,13 @@ export default function TestAnalysisPage() {
                             <span className="font-medium">{scores.accuracy}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-green-500 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${scores.accuracy}%` }}
                             ></div>
                           </div>
                         </div>
-                        
+
                         <div>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-gray-600">Completion Rate</span>
@@ -439,7 +436,7 @@ export default function TestAnalysisPage() {
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${Math.round(((scores.correct + scores.incorrect) / scores.total) * 100)}%` }}
                             ></div>
@@ -467,7 +464,7 @@ export default function TestAnalysisPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-red-500 rounded-lg">
@@ -479,7 +476,7 @@ export default function TestAnalysisPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-gray-500 rounded-lg">
@@ -492,7 +489,7 @@ export default function TestAnalysisPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="flex items-center gap-2 text-blue-900">
                     <FiTrendingUp className="w-5 h-5" />
@@ -506,20 +503,45 @@ export default function TestAnalysisPage() {
               </div>
             )}
 
-            {tab === "review" && (
+            {tab === "notes" && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="text-center py-12">
-                  <FiEye className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Review Mode</h3>
-                  <p className="text-sm text-gray-500 mb-6">
-                    Review each question with detailed explanations and solutions.
-                  </p>
-                  <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    Start Review
-                  </button>
+                <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                  <FiFileText className="w-5 h-5 text-blue-600" />
+                  My Notes
+                </h3>
+                <div className="space-y-6">
+                  {(detail as any).perQuestion?.filter((pq: any) => pq.note && pq.note.trim() !== "").length > 0 ? (
+                    (detail as any).perQuestion
+                      .filter((pq: any) => pq.note && pq.note.trim() !== "")
+                      .map((pq: any, index: number) => {
+                        const q = (detail as any).questions?.find((item: any) => item.id === pq.questionId || item._id === pq.questionId);
+                        return (
+                          <div key={pq.questionId} className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                            <div className="font-medium text-gray-900 mb-2">
+                              Question:
+                              {q?.question ? (
+                                <div className="text-sm mt-1 mb-3 bg-white p-3 rounded border border-gray-100 text-gray-700" dangerouslySetInnerHTML={{ __html: q.question }} />
+                              ) : (
+                                <span className="ml-2 text-sm text-gray-500">#{pq.questionId.slice(-6)}</span>
+                              )}
+                            </div>
+                            <div className="text-gray-800 bg-white p-4 rounded-lg shadow-sm whitespace-pre-wrap">
+                              {pq.note}
+                            </div>
+                          </div>
+                        );
+                      })
+                  ) : (
+                    <div className="py-12 text-center">
+                      <FiFileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500">You did not save any notes during this test.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
+
+
           </div>
         </section>
       </div>

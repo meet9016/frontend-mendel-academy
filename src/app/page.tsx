@@ -1,6 +1,5 @@
 
 import HomePage from "@/component/home/page";
-import Home from "@/component/home/sections/Home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
