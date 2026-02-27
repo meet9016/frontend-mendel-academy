@@ -213,17 +213,17 @@ export default function TestAnalysisPage() {
 
                 {/* Action Buttons */}
                 <div className="flex items-center gap-4">
-                  <button onClick={() => handleTabChange("notes")} className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium text-sm">
+                  <button onClick={() => handleTabChange("notes")} className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm">
                     <FiFileText className="w-4 h-4" />
                     <span>Notes</span>
                   </button>
-                  <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium text-sm">
+                  <button className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm">
                     <FiList className="w-4 h-4" />
                     <span>Question List</span>
                   </button>
                   <button
                     onClick={() => router.push(`/test-run?id=${detail.id}&mode=review`)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded font-semibold text-sm hover:bg-blue-600 transition-colors shadow-sm"
+                    className="px-4 py-2 bg-primary text-dark rounded font-semibold text-sm hover:bg-primary transition-colors shadow-sm"
                   >
                     Review Test
                   </button>
@@ -245,7 +245,7 @@ export default function TestAnalysisPage() {
                     key={id}
                     onClick={() => handleTabChange(id as any)}
                     className={`flex items-center gap-2 py-4 border-b-2 transition-colors ${tab === id
-                      ? "border-blue-600 text-blue-600"
+                      ? "border-primary text-primary"
                       : "border-transparent text-gray-500 hover:text-gray-700"
                       }`}
                   >
