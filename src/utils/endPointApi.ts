@@ -146,6 +146,10 @@ const endPointApi: EndPointApi = {
     //Hyper-Specialist
     getAllHyperSpecialist: 'hyperspecialist/getall',
 
+
+
+
+
     //Terms & Conditions
     getAllTermsAndConditions: 'terms-conditions/get',
     getQBankTree: 'subject/getQBankTree',
