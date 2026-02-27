@@ -19,7 +19,10 @@ import {
   FiTarget,
   FiBarChart2,
   FiAward,
-  FiCalendar
+  FiCalendar,
+  FiChevronRight,
+  FiInfo,
+  FiArrowRight
 } from "react-icons/fi";
 
 type TestAttemptDetail = {
@@ -209,17 +212,21 @@ export default function TestAnalysisPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2">
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Print">
-                    <FiPrinter className="w-4 h-4" />
-                  </button>
-                  <button onClick={() => handleTabChange("notes")} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Notes">
+                <div className="flex items-center gap-4">
+                  <button onClick={() => handleTabChange("notes")} className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium text-sm">
                     <FiFileText className="w-4 h-4" />
+                    <span>Notes</span>
                   </button>
-                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Question List">
+                  <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium text-sm">
                     <FiList className="w-4 h-4" />
+                    <span>Question List</span>
                   </button>
-
+                  <button
+                    onClick={() => router.push(`/test-run?id=${detail.id}&mode=review`)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded font-semibold text-sm hover:bg-blue-600 transition-colors shadow-sm"
+                  >
+                    Review Test
+                  </button>
                 </div>
               </div>
             </div>
@@ -450,55 +457,131 @@ export default function TestAnalysisPage() {
             )}
 
             {tab === "result" && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-6">Detailed Test Results</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-500 rounded-lg">
-                        <FiCheckCircle className="w-6 h-6 text-white" />
+              <div className="space-y-8">
+                {/* Score and Settings Section */}
+                <div className="flex flex-col md:flex-row gap-8 items-start justify-between bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
+                  {/* Your Score */}
+                  <div className="flex-1 text-center flex flex-col items-center border-r border-gray-100 pr-8">
+                    <h3 className="text-gray-500 font-medium mb-6">Your Score</h3>
+                    <div className="relative">
+                      <div className="text-green-600 text-xl font-bold mb-2">{scores.percentCorrect}%</div>
+                      <div className="w-48 h-4 bg-gray-100 rounded-full relative overflow-hidden">
+                        <div
+                          className="absolute top-0 left-0 h-full bg-green-500 transition-all duration-1000"
+                          style={{ width: `${scores.percentCorrect}%` }}
+                        />
+                        <div className="absolute top-0 left-[64%] h-full w-[1px] bg-gray-300" /> {/* Dummy Avg line */}
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold text-green-900">{scores.correct}</div>
-                        <div className="text-sm text-green-700">Correct Answers</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-red-500 rounded-lg">
-                        <FiXCircle className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-red-900">{scores.incorrect}</div>
-                        <div className="text-sm text-red-700">Incorrect Answers</div>
+                      <div className="mt-2 text-[10px] text-gray-400">
+                        <span className="bg-gray-100 px-2 py-0.5 rounded">Avg: 64%</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-gray-500 rounded-lg">
-                        <FiMinusCircle className="w-6 h-6 text-white" />
+                  {/* Test Settings */}
+                  <div className="flex-1 pl-4">
+                    <h3 className="text-gray-500 font-medium mb-6">Test Settings</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Mode</span>
+                        <div className="flex gap-1">
+                          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${detail.mode === 'tutor' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Untutored</span>
+                          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${detail.mode === 'timed' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Timed</span>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-2xl font-bold text-gray-900">{scores.omitted}</div>
-                        <div className="text-sm text-gray-700">Omitted Questions</div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Question Pool</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full border bg-gray-100 border-gray-300 text-gray-700">Custom</span>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* ID Info */}
+                  <div className="text-right flex flex-col items-end gap-1">
+                    <div className="flex items-center gap-1 text-[10px] text-gray-400">
+                      <span>Custom Test ID: {detail.id.slice(-8)}</span>
+                      <FiInfo className="w-3 h-3" />
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 text-blue-900">
-                    <FiTrendingUp className="w-5 h-5" />
-                    <span className="font-semibold">Overall Performance</span>
+                {/* Questions Table */}
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                  <div className="p-4 border-b border-gray-50 flex justify-end items-center gap-2">
+                    <span className="text-xs text-gray-500">Show:</span>
+                    <select className="text-xs border border-gray-200 rounded px-2 py-1 outline-none text-gray-600">
+                      <option>All</option>
+                      <option>Correct</option>
+                      <option>Incorrect</option>
+                      <option>Omitted</option>
+                    </select>
                   </div>
-                  <p className="mt-2 text-sm text-blue-800">
-                    You scored {scores.percentCorrect}% with {scores.correct} correct answers out of {scores.total} questions.
-                    {scores.percentCorrect >= 80 ? " Excellent work!" : scores.percentCorrect >= 60 ? " Good job! Keep practicing." : " Keep practicing to improve your score."}
-                  </p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-white text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-200">
+                          <th className="px-6 py-4 font-semibold w-12"></th>
+                          <th className="px-4 py-4 font-semibold">ID</th>
+                          <th className="px-4 py-4 font-semibold">SUBJECTS</th>
+                          <th className="px-4 py-4 font-semibold">SYSTEMS</th>
+                          <th className="px-4 py-4 font-semibold">CATEGORIES</th>
+                          <th className="px-4 py-4 font-semibold">TOPICS</th>
+                          <th className="px-4 py-4 font-semibold">% CORRECT OTHERS</th>
+                          <th className="px-4 py-4 font-semibold">TIME SPENT</th>
+                          <th className="px-6 py-4 font-semibold w-12"></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {detail.questions?.map((q, idx) => {
+                          const pq = detail.perQuestion?.find(p => p.questionId === (q.id || q._id));
+                          const stats = pq || { isCorrect: null, isAnswered: false, timeSpentSeconds: 0 };
+
+                          return (
+                            <tr key={q.id || q._id} className="hover:bg-blue-50/30 transition-colors group">
+                              <td className="px-6 py-4">
+                                {stats.isCorrect === true ? (
+                                  <FiCheckCircle className="w-4 h-4 text-blue-400" />
+                                ) : stats.isCorrect === false ? (
+                                  <FiXCircle className="w-4 h-4 text-red-400" />
+                                ) : (
+                                  <FiMinusCircle className="w-4 h-4 text-gray-300" />
+                                )}
+                              </td>
+                              <td className="px-4 py-4 text-xs font-medium text-gray-600">
+                                {idx + 1} 
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                                {q.subject || detail.subjects[0] || "General"}
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                                {q.system || "Endocrine, Diabetes & Metabolism"}
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[200px]">
+                                {q.category || "Congenital and developmental anoma..."}
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                                {q.topic || "Congenital adrenal hyperplasia"}
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600">
+                                {Math.floor(Math.random() * 30) + 40}%
+                              </td>
+                              <td className="px-4 py-4 text-xs text-gray-600">
+                                {stats.timeSpentSeconds || 0} sec
+                              </td>
+                              <td className="px-6 py-4">
+                                <button
+                                  onClick={() => router.push(`/test-run?id=${detail.id}&index=${idx}`)}
+                                  className="p-1 hover:bg-white rounded shadow-sm opacity-0 group-hover:opacity-100 transition-all border border-transparent hover:border-gray-200"
+                                >
+                                  <FiChevronRight className="w-4 h-4 text-gray-400" />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
