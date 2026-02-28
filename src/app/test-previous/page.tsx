@@ -89,8 +89,9 @@ export default function PreviousTestsPage() {
   };
 
   const handleResume = (row: TestAttemptRow) => {
-    if (row.status === "in_progress") router.push(`/test-run?id=${row.id}`);
-    else router.push(`/test-analysis/${row.id}?tab=review`);
+    router.push(`/test-run?id=${row.id}`);
+    // if (row.status === "in_progress") router.push(`/test-run?id=${row.id}`);
+    // else router.push(`/test-analysis/${row.id}?tab=review`);
   };
 
   const handleResult = (row: TestAttemptRow) => router.push(`/test-analysis/${row.id}?tab=result`);
