@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function Calculator() {
+export default function Calculator({ settings }: { settings: any }) {
   const [display, setDisplay] = useState("0");
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operator, setOperator] = useState<string | null>(null);
@@ -100,22 +100,22 @@ export default function Calculator() {
   const memoryRecall = () => setDisplay(String(memory));
   const memoryClear = () => setMemory(0);
 
-  const btn = "bg-gray-100 border border-gray-500 p-1";
-  const opBtn = "bg-blue-300 border border-gray-500 p-1";
-  const memBtn = "bg-purple-300 border border-gray-500 p-1";
-  const equalBtn = "bg-yellow-300 border border-gray-500 p-1";
+  // Theme-based classes
+  const isDark = settings?.theme === "dark";
+
+  const btn = `${isDark ? "bg-gray-700 text-white border-gray-500" : "bg-gray-100 border-gray-500"} p-1`;
+  const opBtn = `${isDark ? "bg-blue-700 text-white border-gray-500" : "bg-blue-300 border-gray-500"} p-1`;
+  const memBtn = `${isDark ? "bg-purple-700 text-white border-gray-500" : "bg-purple-300 border-gray-500"} p-1`;
+  const equalBtn = `${isDark ? "bg-yellow-700 text-black border-gray-500" : "bg-yellow-300 border-gray-500"} p-1`;
+  const containerBg = isDark ? "bg-gray-800 border-gray-600" : "bg-[#d6d6d6] border-blue-700";
+  const displayBg = isDark ? "bg-gray-900 text-white" : "bg-white text-black";
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-[260px] bg-[#d6d6d6] border border-blue-700 shadow-xl">
-
-        {/* Title */}
-        <div className="flex justify-between bg-[#3f5fbf] text-white px-2 py-1 text-sm font-semibold">
-          <span>Calculator</span>
-        </div>
+    <div className="flex items-center justify-center">
+      <div className={`w-[260px] ${containerBg} shadow-xl rounded-md`}>
 
         <div className="p-2">
-          <div className="bg-white border border-gray-500 p-2 mb-2 text-right text-lg font-mono">
+          <div className={`border border-gray-500 p-2 mb-2 text-right text-lg font-mono ${displayBg}`}>
             {display}
           </div>
 
