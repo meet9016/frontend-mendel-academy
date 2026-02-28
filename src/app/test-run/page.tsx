@@ -1284,7 +1284,7 @@ export default function TestRunPage() {
               </aside>
             )}
           </div>
-          <footer className={`footer h-12 ${headerBgClass} flex items-center justify-between px-4 text-xs`}>
+          <footer className={`footer h-12 ${headerBgClass} ${settings.theme === 'dark' ? 'border-t border-gray-600' : ''} flex items-center justify-between px-4 text-xs`}>
             {settings.showTimer && (
               <div>
                 Block Time Elapsed: {formatTime(elapsedSeconds)}
