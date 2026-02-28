@@ -1065,7 +1065,7 @@ export default function TestRunPage() {
                             </div>
                           )}
 
-                          <div className="flex items-start gap-3 w-full">
+                          <div className="flex items-center gap-3 w-full">
                             {/* Radio Button Container - ensures alignment */}
                             <div className="flex items-center justify-center mt-0.5 flex-shrink-0">
                               <input
