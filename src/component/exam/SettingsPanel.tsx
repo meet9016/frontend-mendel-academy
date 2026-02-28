@@ -86,14 +86,14 @@ export const SettingsPanel = ({
         <button
           onClick={toggleTheme}
           className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300 ${settings.theme === "dark"
-              ? "bg-gray-800"
-              : "bg-yellow-400"
+            ? "bg-gray-800"
+            : "bg-yellow-400"
             }`}
         >
           <span
             className={`flex items-center justify-center h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-300 ${settings.theme === "dark"
-                ? "translate-x-6"
-                : "translate-x-1"
+              ? "translate-x-6"
+              : "translate-x-1"
               }`}
           >
             {settings.theme === "dark" ? (
@@ -150,6 +150,8 @@ export const SettingsPanel = ({
             Add To Annotation
           </span>
           <Toggle
+            enabled={false}
+            onClick={() => { }}
           />
         </div>
 
@@ -158,6 +160,8 @@ export const SettingsPanel = ({
             Add To Notebook
           </span>
           <Toggle
+            enabled={false}
+            onClick={() => { }}
           />
         </div>
 
@@ -166,6 +170,8 @@ export const SettingsPanel = ({
             Add To Flashcard
           </span>
           <Toggle
+            enabled={false}
+            onClick={() => { }}
           />
         </div>
 

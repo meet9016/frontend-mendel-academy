@@ -444,7 +444,7 @@ export default function TestAnalysisPage() {
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                              className="bg-primary h-2 rounded-full transition-all duration-300"
                               style={{ width: `${Math.round(((scores.correct + scores.incorrect) / scores.total) * 100)}%` }}
                             ></div>
                           </div>
@@ -485,20 +485,20 @@ export default function TestAnalysisPage() {
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Mode</span>
                         <div className="flex gap-1">
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${detail.mode === 'tutor' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Untutored</span>
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full border ${detail.mode === 'timed' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Timed</span>
+                          <span className={`text-[12px] px-2 py-0.5 rounded-full border ${detail.mode === 'tutor' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Untutored</span>
+                          <span className={`text-[12px] px-2 py-0.5 rounded-full border ${detail.mode === 'timed' ? 'bg-gray-100 border-gray-300 text-gray-700' : 'text-gray-400 border-gray-200'}`}>Timed</span>
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Question Pool</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full border bg-gray-100 border-gray-300 text-gray-700">Custom</span>
+                        <span className="text-[12px] px-2 py-0.5 rounded-full border bg-gray-100 border-gray-300 text-gray-700">Custom</span>
                       </div>
                     </div>
                   </div>
 
                   {/* ID Info */}
                   <div className="text-right flex flex-col items-end gap-1">
-                    <div className="flex items-center gap-1 text-[10px] text-gray-400">
+                    <div className="flex items-center gap-1 text-[12px] text-gray-400">
                       <span>Custom Test ID: {detail.id.slice(-8)}</span>
                       <FiInfo className="w-3 h-3" />
                     </div>
@@ -519,7 +519,7 @@ export default function TestAnalysisPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="bg-white text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-200">
+                        <tr className="bg-white text-[13px] text-gray-600 uppercase tracking-wider border-b border-gray-200">
                           <th className="px-6 py-4 font-semibold w-12"></th>
                           <th className="px-4 py-4 font-semibold">ID</th>
                           <th className="px-4 py-4 font-semibold">SUBJECTS</th>
@@ -547,25 +547,25 @@ export default function TestAnalysisPage() {
                                   <FiMinusCircle className="w-4 h-4 text-gray-300" />
                                 )}
                               </td>
-                              <td className="px-4 py-4 text-xs font-medium text-gray-600">
-                                {idx + 1} 
+                              <td className="px-4 py-4 text-md font-medium text-gray-600">
+                                {idx + 1}
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                              <td className="px-4 py-4 text-md text-gray-600 truncate max-w-[150px]">
                                 {q.subject || detail.subjects[0] || "General"}
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                              <td className="px-4 py-4 text-md text-gray-600 truncate max-w-[150px]">
                                 {q.system || "Endocrine, Diabetes & Metabolism"}
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[200px]">
+                              <td className="px-4 py-4 text-md text-gray-600 truncate max-w-[200px]">
                                 {q.category || "Congenital and developmental anoma..."}
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600 truncate max-w-[150px]">
+                              <td className="px-4 py-4 text-md text-gray-600 truncate max-w-[150px]">
                                 {q.topic || "Congenital adrenal hyperplasia"}
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600">
+                              <td className="px-4 py-4 text-md text-gray-600">
                                 {Math.floor(Math.random() * 30) + 40}%
                               </td>
-                              <td className="px-4 py-4 text-xs text-gray-600">
+                              <td className="px-4 py-4 text-md text-gray-600">
                                 {stats.timeSpentSeconds || 0} sec
                               </td>
                               <td className="px-6 py-4">
