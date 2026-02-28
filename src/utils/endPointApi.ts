@@ -79,6 +79,7 @@ export interface EndPointApi {
     bulkSaveAnswers?: string;
     saveQuestionNote?: string;
     toggleQuestionMark?: string;
+    deleteQuestionNote?: string;
 }
 
 // Define and export the API endpoint object
@@ -167,6 +168,7 @@ const endPointApi: EndPointApi = {
     bulkSaveAnswers: 'test-attempt/questions/bulk',
     saveQuestionNote: 'test-attempt/questions/note',
     toggleQuestionMark: 'test-attempt/questions/mark',
+    deleteQuestionNote: 'test-attempt/questions/note',
 };
 
 export default endPointApi;

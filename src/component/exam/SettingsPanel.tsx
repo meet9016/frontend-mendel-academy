@@ -140,6 +140,86 @@ export const SettingsPanel = ({
             />
           </button>
         </div>
+        <div className="flex items-center justify-between ">
+          <label htmlFor="confirmOmission" className="text-sm text-gray-600">
+            Default Highlighter
+          </label>
+          <button
+            id="defaultHighlighter"
+
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${settings.defaultHighlighter ? 'bg-primary' : 'bg-gray-300'
+              }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.defaultHighlighter ? 'translate-x-5' : 'translate-x-1'
+                }`}
+            />
+          </button>
+        </div>
+        <div className="flex items-center justify-between ">
+          <label htmlFor="confirmOmission" className="text-sm text-gray-600">
+            Multicolor Highlighting
+          </label>
+          <button
+            id="defaultHighlighter"
+
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${settings.defaultHighlighter ? 'bg-primary' : 'bg-gray-300'
+              }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.defaultHighlighter ? 'translate-x-5' : 'translate-x-1'
+                }`}
+            />
+          </button>
+        </div>
+        <div className="flex items-center justify-between ">
+          <label htmlFor="confirmOmission" className="text-sm text-gray-600">
+            Add To Flashcard
+          </label>
+          <button
+            id="defaultHighlighter"
+
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${settings.defaultHighlighter ? 'bg-primary' : 'bg-gray-300'
+              }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.defaultHighlighter ? 'translate-x-5' : 'translate-x-1'
+                }`}
+            />
+          </button>
+        </div>
+        <div className="flex items-center justify-between ">
+          <label htmlFor="confirmOmission" className="text-sm text-gray-600">
+            Add To Notebook
+          </label>
+          <button
+            id="defaultHighlighter"
+
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${settings.defaultHighlighter ? 'bg-primary' : 'bg-gray-300'
+              }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.defaultHighlighter ? 'translate-x-5' : 'translate-x-1'
+                }`}
+            />
+          </button>
+        </div>
+        <div className="flex items-center justify-between ">
+          <label htmlFor="confirmOmission" className="text-sm text-gray-600">
+            Add To Annotation
+          </label>
+          <button
+            id="defaultHighlighter"
+
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${settings.defaultHighlighter ? 'bg-primary' : 'bg-gray-300'
+              }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.defaultHighlighter ? 'translate-x-5' : 'translate-x-1'
+                }`}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
