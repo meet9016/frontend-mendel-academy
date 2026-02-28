@@ -8,9 +8,10 @@ type NoteModalProps = {
   questionId: string;
   initialNote?: string;
   onSave: (questionId: string, note: string) => void;
+  onDelete: (questionId: string) => void;
 };
 
-export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSave }: NoteModalProps) => {
+export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSave, onDelete }: NoteModalProps) => {
   const [note, setNote] = useState(initialNote);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -38,34 +39,45 @@ export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSav
   };
 
   return (
-    <Modal title={`Note - Question ${questionId.slice(-6)}`} isOpen={isOpen} onClose={onClose}>
+    <Modal title={`Edit Items Notes`} isOpen={isOpen} onClose={onClose}>
       <div className="p-4 min-w-[400px] max-w-2xl">
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full h-64 p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm"
+          className="w-full h-64 p-3 border rounded-lg focus:ring-primary focus:border-transparent resize-none text-sm"
           placeholder="Write your notes here... (Ctrl+Enter to save)"
           autoFocus
         />
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-between items-center mt-4">
+
           <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+            onClick={() => onDelete(questionId)}
+            className="px-4 py-2 text-sm border border-red-500 text-red-600 rounded hover:bg-red-50"
           >
-            Cancel
+            Delete Note
           </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="px-4 py-2 text-sm bg-primary text-dark rounded hover:bg-primary/80 disabled:opacity-50"
-          >
-            {isSaving ? 'Saving...' : 'Save Note (Ctrl+Enter)'}
-          </button>
+
+          {/* RIGHT SIDE: Close + Save */}
+          <div className="flex gap-2">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+            >
+              Close
+            </button>
+
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="px-4 py-2 text-sm bg-primary text-dark rounded hover:bg-primary/80 disabled:opacity-50"
+            >
+              {isSaving ? 'Saving...' : 'Save Note (Ctrl+Enter)'}
+            </button>
+          </div>
+
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Notes are saved per question and will persist during your test session.
-        </p>
+
       </div>
     </Modal>
   );
