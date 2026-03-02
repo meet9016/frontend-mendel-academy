@@ -58,6 +58,9 @@ type TestSettings = {
   confirmOmission: boolean;
   highlighterColor: string;
   highlighterEnabled: boolean;
+  primaryColor?: string; // Add primary color for dynamic theming
+  secondaryColor?: string; // Add secondary color for dynamic theming
+  accentColor?: string; // Add accent color for dynamic theming
 };
 
 export default function TestRunPage() {
@@ -100,6 +103,9 @@ export default function TestRunPage() {
       confirmOmission: false,
       highlighterColor: '#FFFF00', // Default yellow
       highlighterEnabled: false,
+      primaryColor: '#FFCA00', // Default primary color
+      secondaryColor: '#3B82F6', // Default secondary color
+      accentColor: '#10B981', // Default accent color
     };
   });
 
@@ -118,6 +124,22 @@ export default function TestRunPage() {
       document.body.classList.remove('dark');
     }
   }, [settings.theme]);
+
+  // Apply dynamic CSS variables for colors
+  useEffect(() => {
+    document.documentElement.style.setProperty('--primary-color', settings.primaryColor || '#FFCA00');
+    document.documentElement.style.setProperty('--secondary-color', settings.secondaryColor || '#3B82F6');
+    document.documentElement.style.setProperty('--accent-color', settings.accentColor || '#10B981');
+    
+    // Also set text colors based on theme
+    if (settings.theme === 'dark') {
+      document.documentElement.style.setProperty('--text-primary', '#ffffff');
+      document.documentElement.style.setProperty('--text-secondary', '#e5e7eb');
+    } else {
+      document.documentElement.style.setProperty('--text-primary', '#111827');
+      document.documentElement.style.setProperty('--text-secondary', '#4b5563');
+    }
+  }, [settings.primaryColor, settings.secondaryColor, settings.accentColor, settings.theme]);
 
   // Decode HTML entities function
   const decodeHtmlEntities = (html: string) => {
@@ -483,6 +505,8 @@ export default function TestRunPage() {
 
     const mark = document.createElement('mark');
     mark.className = 'highlight-mark primary-mark-highlight';
+    mark.style.backgroundColor = settings.highlighterColor;
+    mark.style.color = settings.theme === 'dark' ? '#ffffff' : '#000000';
 
     try {
       range.surroundContents(mark);
@@ -872,13 +896,19 @@ export default function TestRunPage() {
   const correctIndex = currentQuestion?.options.indexOf(
     currentQuestion?.correctAnswer
   );
+  console.log(settings,'settinsgsgsgsg')
 
   // Check if explanation should be shown (based on settings and submission)
   const showExplanation = settings.showExplanations && currentState?.showExplanation || false;
 
-  // Dynamic styles based on theme
+  // Dynamic styles based on theme and primary color
   const mainBgClass = settings.theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100';
-  const headerBgClass = settings.theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-primary text-dark';
+  const headerBgClass = settings.theme === 'dark' 
+    ? 'bg-gray-800 text-white' 
+    : 'text-dark';
+  const headerBgStyle = settings.theme === 'dark'
+    ? undefined
+    : { backgroundColor: settings.primaryColor || '#FFCA00' };
   const contentBgClass = settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white';
   const textColorClass = settings.theme === 'dark' ? 'text-gray-200' : 'text-gray-900';
   const mutedTextClass = settings.theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
@@ -886,6 +916,12 @@ export default function TestRunPage() {
   const sidebarBgClass = settings.theme === 'dark' ? 'bg-gray-850' : 'bg-gray-50';
   const optionBgClass = settings.theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-white';
   const optionHoverClass = settings.theme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-50';
+
+  // Add custom styles for primary color
+  const primaryColorStyle = {
+    backgroundColor: settings.theme === 'dark' ? settings.primaryColor : settings.primaryColor,
+    color: settings.theme === 'dark' ? '#ffffff' : '#000000',
+  };
 
   return (
     <main ref={containerRef} className={`w-full min-h-screen ${mainBgClass} ${settings.theme}`}>
@@ -899,7 +935,7 @@ export default function TestRunPage() {
           showSkipButton={true}
           styles={{
             options: {
-              primaryColor: '#FFCA00',
+              primaryColor: settings.primaryColor || '#FFCA00',
               textColor: '#1f2937',
               backgroundColor: '#ffffff',
               overlayColor: 'rgba(0, 0, 0, 0.5)',
@@ -945,13 +981,14 @@ export default function TestRunPage() {
                   key={q.id}
                   type="button"
                   onClick={() => setCurrentIndex(idx)}
+                  style={isActive ? { backgroundColor: settings.primaryColor || '#FFCA00' } : undefined}
                   className={`cursor-pointer
     flex items-center justify-between 
     h-7 w-7 md:w-full md:h-8 
     px-0 text-center relative
     transition-colors duration-200
     ${isActive
-                      ? "bg-primary text-white"
+                      ? `text-white`
                       : settings.theme === "dark"
                         ? idx % 2 === 0
                           ? "bg-gray-800 text-gray-200"
@@ -992,6 +1029,7 @@ export default function TestRunPage() {
 
           <TestHeader
             headerBgClass={headerBgClass}
+            headerBgStyle={headerBgStyle}
             borderColorClass={borderColorClass}
             textColorClass={textColorClass}
             isSidebarVisible={isSidebarVisible}
@@ -1016,6 +1054,7 @@ export default function TestRunPage() {
             currentState={currentState}
             settings={settings}
             onSettingsChange={setSettings}
+            setSettings={setSettings}
           />
 
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden ">
@@ -1053,7 +1092,7 @@ export default function TestRunPage() {
                           optionClass += ` ${borderColorClass} ${optionBgClass}`;
                         }
                       } else if (selected) {
-                        optionClass += " border-primary bg-primary/50 ring-0 ring-primary";
+                        optionClass += ` border-[${settings.primaryColor}] bg-[${settings.primaryColor}]/50 ring-0 ring-[${settings.primaryColor}]`;
                       } else {
                         optionClass += ` ${borderColorClass} ${optionBgClass} hover:border-gray-400 ${optionHoverClass}`;
                       }
@@ -1113,7 +1152,7 @@ export default function TestRunPage() {
                                 onChange={() => !isDisabled && handleSelectOption(option)}
                                 className="cursor-pointer"
                                 style={{
-                                  accentColor: "#FFCA00",
+                                  accentColor: settings.primaryColor || "#FFCA00",
                                   width: `${Math.max(16, settings.fontSize - 2)}px`,
                                   height: `${Math.max(16, settings.fontSize - 2)}px`
                                 }}
@@ -1146,8 +1185,9 @@ export default function TestRunPage() {
                   disabled={currentState?.showExplanation}
                   className={`submit-button cursor-pointer px-6 py-2 rounded shadow text-sm font-medium ${currentState?.showExplanation
                     ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                    : "bg-primary text-dark hover:bg-blue-800"
+                    : `bg-[${settings.primaryColor}] text-dark hover:bg-[${settings.primaryColor}]/80`
                     }`}
+                  style={!currentState?.showExplanation ? { backgroundColor: settings.primaryColor } : {}}
                 >
                   {currentState?.showExplanation ? "Already Submitted" : "Submit"}
                 </button>
@@ -1323,6 +1363,7 @@ export default function TestRunPage() {
           </div>
           <TestFooter
             headerBgClass={headerBgClass}
+            headerBgStyle={headerBgStyle}
             settings={settings}
             elapsedSeconds={elapsedSeconds}
             mutedTextClass={textColorClass}
@@ -1384,7 +1425,7 @@ export default function TestRunPage() {
                 onClick={() => setSelectedLabCategory(category)}
                 className={`flex-1 cursor-pointer py-2 px-4 text-sm font-medium capitalize transition-colors duration-200
           ${selectedLabCategory === category
-                    ? "border-b-2 border-primary text-primary"
+                    ? `border-b-2 border-[${settings.primaryColor}] text-[${settings.primaryColor}]`
                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600"
                   }`}
               >

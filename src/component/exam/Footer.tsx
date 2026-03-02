@@ -73,7 +73,8 @@ function TestFooter({
     ];
 
     return (
-        <footer className={`footer h-14 ${headerBgClass} ${settings.theme === 'dark' ? 'border-t border-gray-600' : ''} flex items-center justify-between px-4 text-xs`}>
+        // <footer className={`footer h-14 ${headerBgClass} ${settings.theme === 'dark' ? 'border-t border-gray-600' : ''} flex items-center justify-between px-4 text-xs`}>
+        <footer style={{ backgroundColor: settings?.themeColor === 'dark' ? '#111828' : settings?.primaryColor }} className={`footer h-14 ${settings.theme === 'dark' ? 'border-t border-gray-600' : ''} flex items-center justify-between px-4 text-xs`}>
             {settings.showTimer && (
                 <div className="block-time flex items-center gap-1 font-semibold text-base text-gray-800 dark:text-gray-200">
                     Block Time Elapsed: {formatTime(elapsedSeconds)}
