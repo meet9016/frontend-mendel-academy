@@ -213,17 +213,17 @@ export default function TestAnalysisPage() {
 
                 {/* Action Buttons */}
                 <div className="flex items-center gap-4">
-                  <button onClick={() => handleTabChange("notes")} className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm">
+                  <button onClick={() => handleTabChange("notes")} className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm cursor-pointer">
                     <FiFileText className="w-4 h-4" />
                     <span>Notes</span>
                   </button>
-                  <button className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm">
+                  <button className="flex items-center gap-1 text-gray-600 hover:text-gray-800 font-medium text-sm cursor-pointer">
                     <FiList className="w-4 h-4" />
                     <span>Question List</span>
                   </button>
                   <button
                     onClick={() => router.push(`/test-run?id=${detail.id}&mode=review`)}
-                    className="px-4 py-2 bg-primary text-dark rounded font-semibold text-sm hover:bg-primary transition-colors shadow-sm"
+                    className="px-4 py-2 bg-primary text-dark rounded font-semibold text-sm hover:bg-primary transition-colors shadow-sm cursor-pointer"
                   >
                     Review Test
                   </button>
@@ -249,8 +249,8 @@ export default function TestAnalysisPage() {
                       : "border-transparent text-gray-500 hover:text-gray-700"
                       }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="font-medium">{label}</span>
+                    <Icon className="w-4 h-4 cursor-pointer" />
+                    <span className="font-medium cursor-pointer">{label}</span>
                   </button>
                 ))}
               </nav>
@@ -439,7 +439,7 @@ export default function TestAnalysisPage() {
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-gray-600">Completion Rate</span>
                             <span className="font-medium">
-                              {Math.round(((scores.correct + scores.incorrect) / scores.total) * 100)}%
+                              {Math.round(((scores.correct + scores.incorrect) / scores.total) * 100) || 0}%
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">

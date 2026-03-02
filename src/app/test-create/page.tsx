@@ -1016,15 +1016,15 @@ type ActiveTest = {
 const QUESTION_PER_TEST_LIMIT = 40;
 
 // ─── Custom Checkbox Component ────────────────────────────────────────────────
-const CustomCheckbox = ({ 
-  checked, 
-  onChange, 
+const CustomCheckbox = ({
+  checked,
+  onChange,
   disabled = false,
   className = "",
   id
-}: { 
-  checked: boolean; 
-  onChange: () => void; 
+}: {
+  checked: boolean;
+  onChange: () => void;
   disabled?: boolean;
   className?: string;
   id?: string;
@@ -1040,27 +1040,27 @@ const CustomCheckbox = ({
       className={`
         w-5 h-5 rounded border flex items-center justify-center cursor-pointer  
         transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1
-        ${disabled 
-          ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-300' 
-          : checked 
-            ? 'bg-primary border-primary hover:bg-primary/90' 
+        ${disabled
+          ? 'opacity-40 cursor-not-allowed bg-gray-100 border-gray-300'
+          : checked
+            ? 'bg-primary border-primary hover:bg-primary/90'
             : 'bg-white border-gray-300 hover:border-primary hover:bg-primary/5'
         }
         ${className}
       `}
     >
       {checked && (
-        <svg 
-          className="w-3.5 h-3.5 text-white" 
-          fill="none" 
-          viewBox="0 0 24 24" 
+        <svg
+          className="w-3.5 h-3.5 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2.5} 
-            d="M5 13l4 4L19 7" 
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M5 13l4 4L19 7"
           />
         </svg>
       )}
@@ -1095,7 +1095,15 @@ const Accordion = ({
   return (
     <section className="rounded-md border-b border-gray-100 bg-white shadow mb-3">
       <div className="px-4 py-3 flex items-center justify-between">
-        <div className="text-base font-semibold text-gray-800 flex items-center gap-3">
+        <div
+          className={`text-base font-semibold text-gray-800 flex items-center gap-3 ${showSelectAll ? "cursor-pointer" : ""
+            }`}
+          onClick={() => {
+            if (showSelectAll && !selectAllDisabled && onSelectAll) {
+              onSelectAll();
+            }
+          }}
+        >
           {showSelectAll && (
             <CustomCheckbox
               checked={selectAllChecked || false}
@@ -1293,7 +1301,7 @@ export default function TestCreatePage() {
     const loadQuestions = async () => {
       // Only load questions for topics that actually have questions
       const topicsToLoad = selectedTopicsWithQuestions.map(t => t.id);
-      
+
       if (!topicsToLoad.length) {
         setQuestions([]);
         return;
@@ -1442,7 +1450,7 @@ export default function TestCreatePage() {
       toast.error("This topic has no questions available");
       return;
     }
-    
+
     // Only allow if chapter is selected
     if (!selectedChapterIds.includes(topic.chapterId)) {
       toast.error("Please select the chapter first");
@@ -1487,11 +1495,11 @@ export default function TestCreatePage() {
   // ─── Question count handler with fix for focus issue ──────────────────────
   const handleQuestionCountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
+
     // Allow empty string or valid numbers
     if (value === "" || /^\d+$/.test(value)) {
       setLocalQuestionCount(value);
-      
+
       const numValue = parseInt(value, 10);
       if (!isNaN(numValue) && numValue > 0) {
         const maxAllowed = Math.min(QUESTION_PER_TEST_LIMIT, availableQuestionCount);
@@ -1510,7 +1518,7 @@ export default function TestCreatePage() {
 
     const numValue = parseInt(localQuestionCount, 10);
     const maxAllowed = Math.min(QUESTION_PER_TEST_LIMIT, availableQuestionCount);
-    
+
     if (numValue > maxAllowed) {
       setLocalQuestionCount(maxAllowed.toString());
       setQuestionCount(maxAllowed);
@@ -1651,8 +1659,8 @@ export default function TestCreatePage() {
     }
 
     router.push(`/test-run?id=${attemptId}`);
-  }, [isPro, selectedSubjectIds, selectedChapterIds, selectedTopicsWithQuestions, 
-      availableQuestionCount, questionCount, questions, allSubjects, allChapters, mode, router]);
+  }, [isPro, selectedSubjectIds, selectedChapterIds, selectedTopicsWithQuestions,
+    availableQuestionCount, questionCount, questions, allSubjects, allChapters, mode, router]);
 
   const handleResumeTest = useCallback(() => {
     const activeRaw = window.sessionStorage.getItem("activeTest");
@@ -1716,8 +1724,8 @@ export default function TestCreatePage() {
             )}
 
             {/* ── Test Mode ── */}
-            <Accordion 
-              title="Test Mode" 
+            <Accordion
+              title="Test Mode"
               id="testMode"
               isOpen={accordionStates.testMode}
               onToggle={handleAccordionToggle}
@@ -1755,8 +1763,8 @@ export default function TestCreatePage() {
             </Accordion>
 
             {/* ── Question Mode ── */}
-            <Accordion 
-              title="Question Mode" 
+            <Accordion
+              title="Question Mode"
               id="questionMode"
               isOpen={accordionStates.questionMode}
               onToggle={handleAccordionToggle}
@@ -1764,7 +1772,7 @@ export default function TestCreatePage() {
             >
               <div className="px-4 py-3 flex items-center gap-4">
                 <div className="flex text-sm border border-gray-300 rounded-full overflow-hidden">
-                  <button className="px-4 py-1.5 bg-white text-gray-700 border-r border-gray-300">
+                  <button className="px-4 py-1.5 bg-white text-gray-700 border-r border-gray-300  cursor-pointer">
                     Standard
                   </button>
                   <button className="px-4 py-1.5 text-gray-400 bg-gray-100">Custom</button>
@@ -1772,14 +1780,14 @@ export default function TestCreatePage() {
               </div>
               <div className="px-4 py-3 flex flex-wrap gap-x-6 gap-y-2 text-base text-gray-700">
                 <label className="inline-flex items-center gap-2 cursor-pointer">
-                  <CustomCheckbox checked={true} onChange={() => {}} />
+                  <CustomCheckbox checked={true} onChange={() => { }} />
                   <span>Unused <span className="shrink-0 text-sm font-medium border ml-1 rounded-full px-2 py-0.5 text-gray-700 border-gray-200">
                     {tree?.totalQuestions ?? 0}
                   </span></span>
                 </label>
                 {["Incorrect", "Marked", "Omitted", "Correct"].map((label) => (
                   <label key={label} className="inline-flex items-center gap-2 cursor-not-allowed text-gray-400">
-                    <CustomCheckbox checked={false} onChange={() => {}} disabled />
+                    <CustomCheckbox checked={false} onChange={() => { }} disabled />
                     <span>{label}</span>
                   </label>
                 ))}
@@ -1930,8 +1938,8 @@ export default function TestCreatePage() {
             </Accordion>
 
             {/* ── No. of Questions ── */}
-            <Accordion 
-              title="No. of Questions" 
+            <Accordion
+              title="No. of Questions"
               id="questionCount"
               isOpen={accordionStates.questionCount}
               onToggle={handleAccordionToggle}

@@ -26,6 +26,43 @@ export const SidePanel = ({ isOpen, onClose, title, children }: {
     );
 };
 
+export const ThemeSidePanel = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed right-0 top-0 h-full w-150 bg-white dark:bg-gray-900 shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto border-l border-gray-200 dark:border-gray-700">
+      
+      {/* Header */}
+      <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          {title}
+        </h2>
+
+        <button
+          onClick={onClose}
+          className="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white p-1 px-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 text-gray-700 dark:text-gray-300">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 export const Modal = ({
   isOpen,

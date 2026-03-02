@@ -78,7 +78,7 @@ export const NoteModal = ({
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={() => onDelete(questionId)}
-            className={buttonDeleteClass}
+            className={`${buttonDeleteClass} cursor-pointer`}
           >
             Delete Note
           </button>
@@ -86,7 +86,7 @@ export const NoteModal = ({
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className={buttonCloseClass}
+              className={`${buttonCloseClass} cursor-pointer`}
             >
               Close
             </button>
@@ -94,7 +94,7 @@ export const NoteModal = ({
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className={`${buttonSaveClass} text-dark`}
+              className={`${buttonSaveClass} text-dark cursor-pointer`}
             >
               {isSaving ? 'Saving...' : 'Save Note (Ctrl+Enter)'}
             </button>
