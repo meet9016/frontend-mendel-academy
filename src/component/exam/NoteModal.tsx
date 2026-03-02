@@ -9,9 +9,18 @@ type NoteModalProps = {
   initialNote?: string;
   onSave: (questionId: string, note: string) => void;
   onDelete: (questionId: string) => void;
+  settings: any;
 };
 
-export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSave, onDelete }: NoteModalProps) => {
+export const NoteModal = ({
+  isOpen,
+  onClose,
+  questionId,
+  initialNote = '',
+  onSave,
+  onDelete,
+  settings
+}: NoteModalProps) => {
   const [note, setNote] = useState(initialNote);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -30,39 +39,54 @@ export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSav
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Ctrl+Enter to save
     if (e.ctrlKey && e.key === 'Enter') {
       e.preventDefault();
       handleSave();
     }
-    // Escape to close (handled by modal)
   };
 
+  const isDark = settings?.theme === 'dark';
+
+  // Theme classes
+  const modalBg = isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900';
+  const textareaBg = isDark ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300';
+  const buttonCloseClass = isDark
+    ? 'px-4 py-2 text-sm border rounded hover:bg-gray-700 text-white border-gray-600'
+    : 'px-4 py-2 text-sm border rounded hover:bg-gray-100 text-gray-900 border-gray-300';
+  const buttonDeleteClass = isDark
+    ? 'px-4 py-2 text-sm border rounded hover:bg-red-700/20 text-red-400 border-red-600'
+    : 'px-4 py-2 text-sm border rounded hover:bg-red-50 text-red-600 border-red-500';
+  const buttonSaveClass = isDark
+    ? 'px-4 py-2 text-sm rounded bg-primary hover:bg-primary/80 text-dark disabled:opacity-50'
+    : 'px-4 py-2 text-sm rounded bg-primary hover:bg-primary/80 text-dark disabled:opacity-50';
+
   return (
-    <Modal title={`Edit Items Notes`} isOpen={isOpen} onClose={onClose}>
-      <div className="p-4 min-w-[400px] max-w-2xl">
+    <Modal title={`Edit Items Notes`} isOpen={isOpen} onClose={onClose} settings={settings}>
+      <div className={`p-4 min-w-[400px] max-w-2xl ${modalBg}`}>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full h-64 p-3 border rounded-lg focus:ring-primary focus:border-transparent resize-none text-sm"
+          className={`w-full h-64 p-3 rounded-lg resize-none text-sm border outline-none 
+  ${isDark
+              ? 'bg-gray-700 text-white border-gray-600 focus:ring-2 focus:ring-primary/40 focus:border-primary'
+              : 'bg-white text-gray-900 border-gray-300 focus:ring-2 focus:ring-primary/40 focus:border-primary'
+            }`}
           placeholder="Write your notes here... (Ctrl+Enter to save)"
           autoFocus
         />
         <div className="flex justify-between items-center mt-4">
-
           <button
             onClick={() => onDelete(questionId)}
-            className="px-4 py-2 text-sm border border-red-500 text-red-600 rounded hover:bg-red-50"
+            className={buttonDeleteClass}
           >
             Delete Note
           </button>
 
-          {/* RIGHT SIDE: Close + Save */}
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+              className={buttonCloseClass}
             >
               Close
             </button>
@@ -70,14 +94,12 @@ export const NoteModal = ({ isOpen, onClose, questionId, initialNote = '', onSav
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="px-4 py-2 text-sm bg-primary text-dark rounded hover:bg-primary/80 disabled:opacity-50"
+              className={`${buttonSaveClass} text-dark`}
             >
               {isSaving ? 'Saving...' : 'Save Note (Ctrl+Enter)'}
             </button>
           </div>
-
         </div>
-
       </div>
     </Modal>
   );

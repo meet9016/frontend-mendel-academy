@@ -141,7 +141,13 @@ html.hydrated [role="button"] {
   }
 }
 
-/* ff-font: // font-Helvetica */
-/* ff-font-bold: // font-Arial */
-/* text-primary: // font-color */
-/* border-primary: // font-border */
+/* Highlight marks */
+.highlight-mark {
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.primary-mark-highlight {
+  background-color: #FFCA00 !important;
+  color: black;
+}
