@@ -80,6 +80,7 @@ export interface EndPointApi {
     saveQuestionNote?: string;
     toggleQuestionMark?: string;
     deleteQuestionNote?: string;
+    flashcards: string;
 }
 
 // Define and export the API endpoint object
@@ -169,6 +170,7 @@ const endPointApi: EndPointApi = {
     saveQuestionNote: 'test-attempt/questions/note',
     toggleQuestionMark: 'test-attempt/questions/mark',
     deleteQuestionNote: 'test-attempt/questions/note',
+    flashcards: 'flashcards',
 };
 
 export default endPointApi;

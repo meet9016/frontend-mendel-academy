@@ -11,8 +11,9 @@ import { NoteModal } from "@/component/exam/NoteModal"; // Add this import
 import { Modal, SidePanel, ThemeSidePanel, TransParentModal } from "@/component/exam/SidePanel";
 import { LAB_VALUES, TUTORIAL_STEPS } from "@/utils/constant";
 import { SettingsPanel } from "@/component/exam/SettingsPanel";
-import TestHeader from "@/component/exam/Header";
-import TestFooter from "@/component/exam/Footer";
+import TestHeader from "@/component/exam/TestHeader";
+import TestFooter from "@/component/exam/TestFooter";
+import { FlashcardModal } from "@/component/exam/Flashcard";
 // Dynamic import for Joyride to avoid SSR issues
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 
@@ -81,6 +82,7 @@ export default function TestRunPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
   const [runTutorial, setRunTutorial] = useState(false);
+  const [showFlashcardModal, setShowFlashcardModal] = useState(false);
   const [selectedLabCategory, setSelectedLabCategory] = useState<string>('hematology'); // Default to first category
   const [settings, setSettings] = useState<TestSettings>(() => {
     // Load settings from localStorage if available
@@ -130,7 +132,7 @@ export default function TestRunPage() {
     document.documentElement.style.setProperty('--primary-color', settings.primaryColor || '#FFCA00');
     document.documentElement.style.setProperty('--secondary-color', settings.secondaryColor || '#3B82F6');
     document.documentElement.style.setProperty('--accent-color', settings.accentColor || '#10B981');
-    
+
     // Also set text colors based on theme
     if (settings.theme === 'dark') {
       document.documentElement.style.setProperty('--text-primary', '#ffffff');
@@ -253,6 +255,12 @@ export default function TestRunPage() {
       }
     }
   }, []);
+
+
+  const handleCreateFlashcard = () => {
+    if (!currentQuestion) return;
+    setShowFlashcardModal(true);
+  };
 
   // Handle functions
   const handleSelectOption = (option: string) => {
@@ -896,15 +904,15 @@ export default function TestRunPage() {
   const correctIndex = currentQuestion?.options.indexOf(
     currentQuestion?.correctAnswer
   );
-  console.log(settings,'settinsgsgsgsg')
+  console.log(settings, 'settinsgsgsgsg')
 
   // Check if explanation should be shown (based on settings and submission)
   const showExplanation = settings.showExplanations && currentState?.showExplanation || false;
 
   // Dynamic styles based on theme and primary color
   const mainBgClass = settings.theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100';
-  const headerBgClass = settings.theme === 'dark' 
-    ? 'bg-gray-800 text-white' 
+  const headerBgClass = settings.theme === 'dark'
+    ? 'bg-gray-800 text-white'
     : 'text-dark';
   const headerBgStyle = settings.theme === 'dark'
     ? undefined
@@ -1369,6 +1377,7 @@ export default function TestRunPage() {
             mutedTextClass={textColorClass}
             handleEndTest={handleEndTest}
             formatTime={formatTime}
+            handleCreateFlashcard={handleCreateFlashcard}
           />
         </section>
       </div>
@@ -1414,19 +1423,28 @@ export default function TestRunPage() {
         isOpen={showLabValues}
         onClose={() => setShowLabValues(false)}
         title="Laboratory Values Reference"
+        settings={settings}
       >
         <div className="flex flex-col h-full">
 
           {/* Category Tabs */}
-          <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+          <div className="flex border-b border-gray-100 dark:border-gray-200 mb-4">
             {Object.keys(LAB_VALUES).map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedLabCategory(category)}
+                style={
+                  selectedLabCategory === category
+                    ? {
+                      borderBottom: `2px solid ${settings.primaryColor}`,
+                      color: settings.primaryColor,
+                    }
+                    : {}
+                }
                 className={`flex-1 cursor-pointer py-2 px-4 text-sm font-medium capitalize transition-colors duration-200
-          ${selectedLabCategory === category
-                    ? `border-b-2 border-[${settings.primaryColor}] text-[${settings.primaryColor}]`
-                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600"
+    ${selectedLabCategory === category
+                    ? ""
+                    : "text-gray-500 dark:text-gray-700 hover:text-gray-700 dark:hover:text-gray-800"
                   }`}
               >
                 {category}
@@ -1442,26 +1460,26 @@ export default function TestRunPage() {
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead className="">
                       <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                        <th className={`px-4 py-2 text-left text-xs font-medium text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-400' : ''} uppercase`}>
                           Test
                         </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                        <th className={`px-4 py-2 text-left text-xs font-medium text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-400' : ''} uppercase`}>
                           Normal Range
                         </th>
                       </tr>
                     </thead>
 
-                    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody className={`bg-white ${settings.theme === 'dark' ? 'dark:bg-gray-900' : ''} divide-y divide-gray-200 ${settings.theme === 'dark' ? 'dark:divide-gray-700' : ''}`}>
                       {LAB_VALUES[selectedLabCategory as keyof typeof LAB_VALUES].map(
                         (item, index) => (
                           <tr
                             key={index}
-                            className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            className={`hover:bg-gray-50 ${settings.theme === 'dark' ? 'dark:hover:bg-gray-800' : ''} transition-colors`}
                           >
-                            <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
+                            <td className={`px-4 py-2 text-sm text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-100' : 'text-gray-900'}`}>
                               {item.test}
                             </td>
-                            <td className="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">
+                            <td className={`px-4 py-2 text-sm text-gray-600 ${settings.theme === 'dark' ? 'dark:text-gray-300' : 'text-gray-600'}`}>
                               {item.value}
                             </td>
                           </tr>
@@ -1485,6 +1503,17 @@ export default function TestRunPage() {
       >
         <Calculator settings={settings} />
       </TransParentModal>
+
+      <FlashcardModal
+        isOpen={showFlashcardModal}
+        onClose={() => setShowFlashcardModal(false)}
+        testAttemptId={test?.attemptId}
+        questionId={currentQuestion?.id}
+        initialFront={""}
+        initialBack={ ""}
+        initialTags={[]}
+        settings={settings}
+      />
 
       {/* Settings Side Panel */}
       <SidePanel
