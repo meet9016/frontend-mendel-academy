@@ -173,7 +173,7 @@ export const Modal = ({
             onMouseDown={handleMouseDown}
           >
             <h3 className="text-lg font-medium">{title}</h3>
-            <button onClick={onClose} className={`${closeBtn} text-xl leading-none`}>✕</button>
+            <button onClick={onClose} className={`${closeBtn} cursor-pointer text-xl leading-none`}>✕</button>
           </div>
 
           <div className={bodyBg}>
@@ -486,50 +486,96 @@ export const FlashcardModal = ({
           </button>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setViewMode('single');
-                setActiveTab('front');
-              }}
-              className={`p-2 rounded ${viewMode === 'single'
-                ? isDark ? 'bg-gray-600' : 'bg-gray-200'
-                : isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                }`}
-              title="Single view"
-            >
-              <TbLayoutRows className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('double')}
-              className={`p-2 rounded ${viewMode === 'double'
-                ? isDark ? 'bg-gray-600' : 'bg-gray-200'
-                : isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                }`}
-              title="Double view"
-            >
-              <TbLayoutColumns className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+
+              {/* Single View */}
+              <div className="relative group">
+                <button
+                  onClick={() => {
+                    setViewMode('single');
+                    setActiveTab('front');
+                  }}
+                  className={`p-2 cursor-pointer rounded ${viewMode === 'single'
+                      ? isDark
+                        ? 'bg-gray-600'
+                        : 'bg-gray-200'
+                      : isDark
+                        ? 'hover:bg-gray-700'
+                        : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <TbLayoutRows className="w-5 h-5" />
+                </button>
+
+                {/* Tooltip */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                    whitespace-nowrap px-2 py-1 text-xs rounded
+                    bg-gray-800 text-white opacity-0 group-hover:opacity-100
+                    transition-opacity duration-200 pointer-events-none">
+                  Single View
+                </div>
+              </div>
+
+              {/* Double View */}
+              <div className="relative group">
+                <button
+                  onClick={() => setViewMode('double')}
+                  className={`p-2 cursor-pointer rounded ${viewMode === 'double'
+                      ? isDark
+                        ? 'bg-gray-600'
+                        : 'bg-gray-200'
+                      : isDark
+                        ? 'hover:bg-gray-700'
+                        : 'hover:bg-gray-100'
+                    }`}
+                >
+                  <TbLayoutColumns className="w-5 h-5" />
+                </button>
+
+                {/* Tooltip */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                    whitespace-nowrap px-2 py-1 text-xs rounded
+                    bg-gray-800 text-white opacity-0 group-hover:opacity-100
+                    transition-opacity duration-200 pointer-events-none">
+                  Double View
+                </div>
+              </div>
+
+            </div>
 
             <div className="relative" ref={optionsRef}>
-              <button
-                onClick={() => setShowOptions(!showOptions)}
-                className={`p-2 rounded ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-              >
-                <BsThreeDotsVertical className="w-5 h-5" />
-              </button>
+              <div className="relative group">
+                <button
+                  onClick={() => setShowOptions(!showOptions)}
+                  className={`p-2 cursor-pointer rounded ${isDark ? "hover:bg-gray-700" : "hover:bg-gray-100"
+                    }`}
+                >
+                  <BsThreeDotsVertical className="w-5 h-5" />
+                </button>
+
+                {/* Tooltip */}
+                <div
+                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+               whitespace-nowrap px-2 py-1 text-xs rounded
+               bg-gray-800 text-white opacity-0 group-hover:opacity-100
+               transition-opacity duration-200 pointer-events-none z-50"
+                >
+                  More Options
+                </div>
+              </div>
 
               {showOptions && (
                 <div className={`absolute right-0 mt-1 w-48 rounded-md shadow-lg py-1 z-10 ${isDark ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
                   <button
                     onClick={() => handleEditFlashcard(viewingFlashcard)}
-                    className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 ${isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
+                    className={`w-full cursor-pointer text-left px-4 py-2 text-sm flex items-center gap-2 ${isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-100'}`}
                   >
                     <FiEdit2 className="w-4 h-4" />
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteClick(viewingFlashcard.id)}
-                    className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 ${isDark ? 'hover:bg-gray-600 text-red-400' : 'hover:bg-gray-100 text-red-600'}`}
+                    className={`w-full cursor-pointer text-left px-4 py-2 text-sm flex items-center gap-2 ${isDark ? 'hover:bg-gray-600 text-red-400' : 'hover:bg-gray-100 text-red-600'}`}
                   >
                     <BsTrash2 className="w-4 h-4" />
                     Delete

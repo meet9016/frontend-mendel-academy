@@ -31,7 +31,7 @@ export default function PreviousTestsPage() {
   const [rows, setRows] = useState<TestAttemptRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<"all" | "completed" | "in_progress">("all");
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -199,7 +199,7 @@ export default function PreviousTestsPage() {
               {/* Table Header */}
               <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-800">Test History</h2>
-                
+
                 {/* Items per page selector */}
                 {!loading && filteredRows.length > 0 && (
                   <div className="flex items-center space-x-2">
@@ -336,28 +336,59 @@ export default function PreviousTestsPage() {
 
                               {/* Actions Cell */}
                               <td className="px-6 py-4 whitespace-nowrap text-center">
-                                <div className="flex items-center justify-center space-x-1">
-                                  <button
-                                    onClick={() => handleResume(row)}
-                                    className="p-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
-                                    title="Resume Test"
-                                  >
-                                    <BiPlay className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleResult(row)}
-                                    className="p-1.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
-                                    title="View Results"
-                                  >
-                                    <HiDocumentReport className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    onClick={() => handleAnalysis(row)}
-                                    className="p-1.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
-                                    title="View Analysis"
-                                  >
-                                    <FaChartBar className="w-3.5 h-3.5" />
-                                  </button>
+                                <div className="flex items-center justify-center space-x-2">
+
+                                  {/* Resume */}
+                                  <div className="relative group">
+                                    <button
+                                      onClick={() => handleResume(row)}
+                                      className="p-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
+                                    >
+                                      <BiPlay className="w-3.5 h-3.5" />
+                                    </button>
+
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                      px-2 py-1 text-xs rounded bg-gray-900 text-white
+                      opacity-0 group-hover:opacity-100
+                      transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                                      Resume Test
+                                    </div>
+                                  </div>
+
+                                  {/* Results */}
+                                  <div className="relative group">
+                                    <button
+                                      onClick={() => handleResult(row)}
+                                      className="p-1.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
+                                    >
+                                      <HiDocumentReport className="w-3.5 h-3.5" />
+                                    </button>
+
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                      px-2 py-1 text-xs rounded bg-gray-900 text-white
+                      opacity-0 group-hover:opacity-100
+                      transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                                      View Results
+                                    </div>
+                                  </div>
+
+                                  {/* Analysis */}
+                                  <div className="relative group">
+                                    <button
+                                      onClick={() => handleAnalysis(row)}
+                                      className="p-1.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm hover:shadow-md cursor-pointer"
+                                    >
+                                      <FaChartBar className="w-3.5 h-3.5" />
+                                    </button>
+
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                      px-2 py-1 text-xs rounded bg-gray-900 text-white
+                      opacity-0 group-hover:opacity-100
+                      transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                                      View Analysis
+                                    </div>
+                                  </div>
+
                                 </div>
                               </td>
                             </tr>
@@ -375,21 +406,20 @@ export default function PreviousTestsPage() {
                             <span className="font-medium">{endIndex}</span> of{' '}
                             <span className="font-medium">{totalItems}</span> results
                           </div>
-                          
+
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={goToPreviousPage}
                               disabled={currentPage === 1}
-                              className={`relative inline-flex items-center px-3 py-2 rounded-md border text-sm font-medium transition-colors duration-200 ${
-                                currentPage === 1
+                              className={`relative inline-flex items-center px-3 py-2 rounded-md border text-sm font-medium transition-colors duration-200 ${currentPage === 1
                                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
                                   : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-                              }`}
+                                }`}
                             >
                               <BiChevronLeft className="h-4 w-4 mr-1" />
                               Previous
                             </button>
-                            
+
                             <div className="flex items-center space-x-1">
                               {[...Array(Math.min(5, totalPages))].map((_, idx) => {
                                 let pageNum;
@@ -402,31 +432,29 @@ export default function PreviousTestsPage() {
                                 } else {
                                   pageNum = currentPage - 2 + idx;
                                 }
-                                
+
                                 return (
                                   <button
                                     key={idx}
                                     onClick={() => goToPage(pageNum)}
-                                    className={`w-10 h-10 rounded-md text-sm font-medium transition-colors duration-200 ${
-                                      currentPage === pageNum
+                                    className={`w-10 h-10 rounded-md text-sm font-medium transition-colors duration-200 ${currentPage === pageNum
                                         ? 'bg-primary text-white'
                                         : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-                                    }`}
+                                      }`}
                                   >
                                     {pageNum}
                                   </button>
                                 );
                               })}
                             </div>
-                            
+
                             <button
                               onClick={goToNextPage}
                               disabled={currentPage === totalPages}
-                              className={`relative inline-flex items-center px-3 py-2 rounded-md border text-sm font-medium transition-colors duration-200 ${
-                                currentPage === totalPages
+                              className={`relative inline-flex items-center px-3 py-2 rounded-md border text-sm font-medium transition-colors duration-200 ${currentPage === totalPages
                                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
                                   : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-                              }`}
+                                }`}
                             >
                               Next
                               <BiChevronRight className="h-4 w-4 ml-1" />
