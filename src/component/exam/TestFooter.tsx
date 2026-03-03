@@ -1,6 +1,4 @@
-import React from 'react'
-
-const FooterButton = ({ children, onClick, className = '', mutedTextClass, ...props }) => (
+const FooterButton = ({ children, onClick, className = '', mutedTextClass, ...props }:any) => (
     <button
         type="button"
         onClick={onClick}

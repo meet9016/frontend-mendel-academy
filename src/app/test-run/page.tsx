@@ -67,22 +67,22 @@ type TestSettings = {
 export default function TestRunPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [test, setTest] = useState<ActiveTest | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<AnswerState>({});
-  const [marked, setMarked] = useState<Record<string, boolean>>({});
-  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [showTutorialMenu, setShowTutorialMenu] = useState(false);
-  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  const [showLabValues, setShowLabValues] = useState(false);
-  const [showCalculator, setShowCalculator] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
   const [runTutorial, setRunTutorial] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [answers, setAnswers] = useState<AnswerState>({});
+  const [showLabValues, setShowLabValues] = useState(false);
+  const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
+  const [test, setTest] = useState<ActiveTest | null>(null);
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [showTutorialMenu, setShowTutorialMenu] = useState(false);
+  const [marked, setMarked] = useState<Record<string, boolean>>({});
   const [showFlashcardModal, setShowFlashcardModal] = useState(false);
+  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
+  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [selectedLabCategory, setSelectedLabCategory] = useState<string>('hematology'); // Default to first category
   const [settings, setSettings] = useState<TestSettings>(() => {
     // Load settings from localStorage if available
@@ -315,7 +315,7 @@ export default function TestRunPage() {
               ...(prev[currentQuestion.id] || {}),
               selectedOption: null,
               isCorrect: false,
-              showExplanation: true,
+              showExplanation: true,      
               timeSpentSeconds,
             },
           }));
