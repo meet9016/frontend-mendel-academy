@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { toast } from "react-toastify";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiTransfer } from "react-icons/bi";
 import { FiArrowLeft, FiEdit2 } from "react-icons/fi";
 import { BsTrash2, BsThreeDotsVertical, BsExclamationTriangle } from "react-icons/bs";
 import { TbLayoutColumns, TbLayoutRows } from "react-icons/tb";
@@ -394,70 +394,131 @@ export const FlashcardModal = ({
     ? "bg-gray-700 border-gray-600 hover:bg-gray-650"
     : "bg-gray-50 border-gray-200 hover:shadow-md";
 
-  const renderCreateForm = () => (
-    <div className="p-6 w-250">
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <div className="mb-2 font-medium">Front</div>
-          <Editor
-            value={front}  // This is now the raw HTML
-            onTextChange={handleFrontEditorChange}
-            style={{ height: "250px" }}
-            className={`
-              ${isDark
-                ? "bg-gray-700 text-white border-gray-600"
-                : "bg-white text-gray-900 border-gray-300"
-              }
-            `}
-          />
-          <div className="text-xs mt-1 opacity-60">
-            Rich text editor supported
-          </div>
-        </div>
+// import { BiTransfer, BiPlus } from "react-icons/bi"; // Add BiTransfer to your existing imports
 
-        <div>
-          <div className="mb-2 font-medium">Back</div>
-          <Editor
-            value={back}  // This is now the raw HTML
-            onTextChange={handleBackEditorChange}
-            style={{ height: "250px" }}
-            className={`
-              ${isDark
-                ? "bg-gray-700 text-white border-gray-600"
-                : "bg-white text-gray-900 border-gray-300"
-              }
-            `}
-          />
-          <div className="text-xs mt-1 opacity-60">
-            Rich text editor supported
-          </div>
-        </div>
-      </div>
+// Replace your existing renderCreateForm function with this:
 
-      <div className="mt-6">
-        <input
-          type="text"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          placeholder="Tag name, comma separated"
-          className={`w-full px-3 py-2 rounded border text-sm outline-none ${isDark
-            ? "bg-gray-700 border-gray-600 text-white"
-            : "bg-white border-gray-300 text-gray-900"
-            }`}
+const renderCreateForm = () => (
+  <div className="p-6 w-250">
+    <div className="grid grid-cols-2 gap-6 relative">
+      {/* Front Editor */}
+      <div>
+        <div className="mb-2 font-medium flex items-center justify-between">
+          <span>Front</span>
+          {front && (
+            <span className="text-xs opacity-60">
+              {front.replace(/<[^>]*>/g, '').length} chars
+            </span>
+          )}
+        </div>
+        <Editor
+          value={front}
+          onTextChange={handleFrontEditorChange}
+          style={{ height: "250px" }}
+          className={`
+            ${isDark
+              ? "bg-gray-700 text-white border-gray-600"
+              : "bg-white text-gray-900 border-gray-300"
+            }
+          `}
         />
+        <div className="text-xs mt-1 opacity-60">
+          Rich text editor supported
+        </div>
       </div>
 
-      <div className="flex justify-between items-center mt-6">
-        <button
-          onClick={handleCancel}
-          className={`px-4 py-2 text-sm border rounded ${isDark
-            ? "border-gray-600 hover:bg-gray-700"
-            : "border-gray-300 hover:bg-gray-100"
-            }`}
-        >
-          Cancel
-        </button>
+      {/* Switch Button - Positioned in the middle */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className="relative group">
+          <button
+            onClick={() => {
+              const tempFront = front;
+              const tempBack = back;
+              setFront(tempBack);
+              setBack(tempFront);
+            }}
+            disabled={!front && !back}
+            className={`
+              p-3 rounded-full shadow-lg transition-all duration-300
+              ${!front && !back
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:scale-110 hover:rotate-180 cursor-pointer'
+              }
+              ${isDark
+                ? 'bg-gray-600 hover:bg-gray-500 text-white'
+                : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }
+            `}
+            title="Swap Front and Back content"
+          >
+            <BiTransfer className="w-5 h-5" />
+          </button>
+          
+          {/* Tooltip */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+              whitespace-nowrap px-2 py-1 text-xs rounded
+              bg-gray-800 text-white opacity-0 group-hover:opacity-100
+              transition-opacity duration-200 pointer-events-none">
+            Swap Front & Back
+          </div>
+        </div>
+      </div>
 
+      {/* Back Editor */}
+      <div>
+        <div className="text-right">
+          <span className="border border-gray-300">Back</span>
+         
+        </div>
+        <Editor
+          value={back}
+          onTextChange={handleBackEditorChange}
+          style={{ height: "250px" }}
+          className={`
+            ${isDark
+              ? "bg-gray-700 text-white border-gray-600"
+              : "bg-white text-gray-900 border-gray-300"
+            }
+          `}
+        />
+        <div className="text-xs mt-1 opacity-60">
+          Rich text editor supported
+        </div>
+      </div>
+    </div>
+
+    {/* Tags Input */}
+    <div className="mt-6">
+      <input
+        type="text"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        placeholder="Tag name, comma separated"
+        className={`w-full px-3 py-2 rounded border text-sm outline-none ${isDark
+          ? "bg-gray-700 border-gray-600 text-white"
+          : "bg-white border-gray-300 text-gray-900"
+          }`}
+      />
+    </div>
+
+    {/* Action Buttons */}
+    <div className="flex justify-between items-center mt-6">
+      <button
+        onClick={handleCancel}
+        className={`px-4 py-2 text-sm border rounded ${isDark
+          ? "border-gray-600 hover:bg-gray-700"
+          : "border-gray-300 hover:bg-gray-100"
+          }`}
+      >
+        Cancel
+      </button>
+
+      <div className="flex items-center gap-3">
+        {/* Keyboard shortcut hint */}
+        <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+          Ctrl+Enter to save
+        </span>
+        
         <button
           onClick={handleSave}
           disabled={isSaving}
@@ -467,7 +528,8 @@ export const FlashcardModal = ({
         </button>
       </div>
     </div>
-  );
+  </div>
+);
 
   const renderViewCard = () => {
     if (!viewingFlashcard) return null;

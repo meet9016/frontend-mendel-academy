@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import dynamic from 'next/dynamic';
 import Calculator from "@/component/exam/Calculator";
 import { NoteModal } from "@/component/exam/NoteModal"; // Add this import
+import { FeedbackModal } from "@/component/exam/FeedbackModal";
 import { Modal, SidePanel, ThemeSidePanel, TransParentModal } from "@/component/exam/SidePanel";
 import { LAB_VALUES, TUTORIAL_STEPS } from "@/utils/constant";
 import { SettingsPanel } from "@/component/exam/SettingsPanel";
@@ -75,6 +76,8 @@ export default function TestRunPage() {
   const [answers, setAnswers] = useState<AnswerState>({});
   const [showLabValues, setShowLabValues] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [existingFeedback, setExistingFeedback] = useState<string>('');
   const [test, setTest] = useState<ActiveTest | null>(null);
   const [showCalculator, setShowCalculator] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -110,7 +113,29 @@ export default function TestRunPage() {
       accentColor: '#10B981', // Default accent color
     };
   });
+  const [fontColor, setFontColor] = useState("#ffffffff");
+  function getTextColor(bgColor: string) {
+    const color = bgColor.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
 
+    // brightness formula
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 150 ? '#000000' : '#FFFFFF';
+  }
+
+  function getTextColorClass(bgColor: string) {
+    const color = bgColor.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 150 ? 'text-gray-900' : 'text-white';
+  }
   // Save settings to localStorage whenever they change
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -315,7 +340,7 @@ export default function TestRunPage() {
               ...(prev[currentQuestion.id] || {}),
               selectedOption: null,
               isCorrect: false,
-              showExplanation: true,      
+              showExplanation: true,
               timeSpentSeconds,
             },
           }));
@@ -487,6 +512,40 @@ export default function TestRunPage() {
     }
   };
 
+  // Feedback handling functions
+  const handleFeedback = async () => {
+    if (!test?.attemptId) return;
+
+    // Try to fetch existing feedback
+    try {
+      const res = await api.get(`${endPointApi.getFeedback}/${test.attemptId}`);
+      if (res.data && res.data.feedback) {
+        setExistingFeedback(res.data.feedback);
+      } else {
+        setExistingFeedback('');
+      }
+    } catch (error) {
+      // If no feedback exists, that's fine - just set empty
+      setExistingFeedback('');
+    }
+
+    setShowFeedbackModal(true);
+  };
+
+  const handleSaveFeedback = async (attemptId: string, feedback: string) => {
+    try {
+      await api.post(
+        `${endPointApi.addFeedback}`,
+        { attemptId, feedback: feedback.trim() }
+      );
+      toast.success('Feedback submitted successfully');
+      setExistingFeedback(feedback.trim());
+    } catch (error) {
+      console.error('Failed to save feedback to server:', error);
+      toast.error('Failed to submit feedback. Please try again.');
+    }
+  };
+
   const handleApplyHighlight = (type: 'question' | 'options' | 'explanation', optionIndex?: number, event?: React.MouseEvent) => {
     if (!currentQuestion) return;
 
@@ -654,6 +713,7 @@ export default function TestRunPage() {
         if (showCalculator) setShowCalculator(false);
         if (showSettings) setShowSettings(false);
         if (showNoteModal) setShowNoteModal(false); // Add this
+        if (showFeedbackModal) setShowFeedbackModal(false);
         if (isFullScreen) {
           document.exitFullscreen();
           setIsFullScreen(false);
@@ -685,7 +745,7 @@ export default function TestRunPage() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentQuestion, isFullScreen, showTutorialMenu, showKeyboardShortcuts, showLabValues, showCalculator, showSettings, showNoteModal, settings.confirmOmission, handleNext, handlePrevious, handleSubmit, toggleMarkCurrent, toggleFullScreen]);
+  }, [currentQuestion, isFullScreen, showTutorialMenu, showKeyboardShortcuts, showLabValues, showCalculator, showSettings, showNoteModal, showFeedbackModal, settings.confirmOmission, handleNext, handlePrevious, handleSubmit, toggleMarkCurrent, toggleFullScreen]);
 
   // Handle full screen change
   useEffect(() => {
@@ -799,7 +859,7 @@ export default function TestRunPage() {
 
             {/* Main Content */}
             <section className="flex-1 flex flex-col">
-              <header className={`${isDark ? "bg-gray-900" : "bg-primary"} px-4 py-2 border-b`}>
+              <header style={{ backgroundColor: isDark ? "#1d2838" : settings.primaryColor }} className={` px-4 py-2 border-b`}>
                 <div className="flex items-center justify-between">
 
                   {/* Left Section */}
@@ -904,7 +964,6 @@ export default function TestRunPage() {
   const correctIndex = currentQuestion?.options.indexOf(
     currentQuestion?.correctAnswer
   );
-  console.log(settings, 'settinsgsgsgsg')
 
   // Check if explanation should be shown (based on settings and submission)
   const showExplanation = settings.showExplanations && currentState?.showExplanation || false;
@@ -918,7 +977,8 @@ export default function TestRunPage() {
     ? undefined
     : { backgroundColor: settings.primaryColor || '#FFCA00' };
   const contentBgClass = settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white';
-  const textColorClass = settings.theme === 'dark' ? 'text-gray-200' : 'text-gray-900';
+  const textColorClass = settings.theme === 'dark' ? 'text-gray-200' : getTextColorClass(settings.primaryColor || '#FFCA00');
+  const textColorClass2 = settings.theme === 'dark' ? 'text-gray-200' : 'text-gray-900';
   const mutedTextClass = settings.theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
   const borderColorClass = settings.theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
   const sidebarBgClass = settings.theme === 'dark' ? 'bg-gray-850' : 'bg-gray-50';
@@ -970,6 +1030,16 @@ export default function TestRunPage() {
         settings={settings}
       />
 
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        attemptId={test?.attemptId || ''}
+        initialFeedback={existingFeedback}
+        onSave={handleSaveFeedback}
+        settings={settings}
+      />
+
       {/* Main Content Area - Fixed height calculation */}
       <div className={`flex h-[calc(108vh-36px-40px)] ${settings.theme}`}>
         {/* Left Sidebar - Full height */}
@@ -1014,7 +1084,13 @@ export default function TestRunPage() {
                           height="15"
                           viewBox="0 0 22 30"
                         >
-                          <g stroke="#FCFCFC" strokeWidth="2.2" fill="#B70808">
+                          <g stroke={
+                            isActive
+                              ? getTextColor(settings.primaryColor)
+                              : settings.theme === "dark"
+                                ? getTextColor("#000000")
+                                : getTextColor("#FFFFFF")
+                          } strokeWidth="2.2" fill="#B70808">
                             <g>
                               <line x1="10" y1="35" x2="1.5" y2="4" />
                               <path
@@ -1063,14 +1139,32 @@ export default function TestRunPage() {
             settings={settings}
             onSettingsChange={setSettings}
             setSettings={setSettings}
+            getTextColor={getTextColor}
           />
 
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden ">
+            <div
+              style={{
+                zIndex: 10,
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) rotate(-30deg)",
+                fontSize: "130px",
+                fontWeight: "bold",   // bold font
+                opacity: 0.1,
+                color: settings.theme === "dark" ? "#ffffff" : "#ffd00c",
+                whiteSpace: "nowrap"
+              }}
+            >
+              <div>Mendel</div>
+              <div>Academy</div>
+            </div>
             {/* Question Area */}
             <div className={`flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 ${showLabValues || showCalculator || showSettings ? 'lg:w-1/2' : 'lg:w-full'}`}>
               <div className="prose prose-sm max-w-none mb-6">
                 <div
-                  className={`${textColorClass} text-sm md:text-base leading-relaxed question-area-content`}
+                  className={`${textColorClass2} text-sm md:text-base leading-relaxed question-area-content`}
                   style={{ fontSize: `${settings.fontSize}px` }}
                   dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(currentState?.highlights?.question || currentQuestion?.question) }}
                   onMouseUp={(e) => handleApplyHighlight('question', undefined, e)}
@@ -1078,7 +1172,7 @@ export default function TestRunPage() {
               </div>
 
               <div className="w-full flex justify-left">
-                <div className={`w-full max-w-2xl border ${textColorClass}  ${borderColorClass} p-2 ${settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className={`w-full max-w-2xl border ${textColorClass2}  ${borderColorClass} p-2 ${settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                   <div className="space-y-3 options-area-content">
                     {currentQuestion?.options?.map((option, idx) => {
                       const selected =
@@ -1191,7 +1285,7 @@ export default function TestRunPage() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={currentState?.showExplanation}
-                  className={`submit-button cursor-pointer px-6 py-2 rounded shadow text-sm font-medium ${currentState?.showExplanation
+                  className={`submit-button cursor-pointer px-6 py-2 rounded shadow text-sm font-medium ${textColorClass} ${currentState?.showExplanation
                     ? "bg-gray-400 text-gray-700 cursor-not-allowed"
                     : `bg-[${settings.primaryColor}] text-dark hover:bg-[${settings.primaryColor}]/80`
                     }`}
@@ -1370,7 +1464,7 @@ export default function TestRunPage() {
             )}
           </div>
           <TestFooter
-            headerBgClass={headerBgClass}
+            textColorClass={textColorClass}
             headerBgStyle={headerBgStyle}
             settings={settings}
             elapsedSeconds={elapsedSeconds}
@@ -1378,6 +1472,7 @@ export default function TestRunPage() {
             handleEndTest={handleEndTest}
             formatTime={formatTime}
             handleCreateFlashcard={handleCreateFlashcard}
+            handleFeedback={handleFeedback}
           />
         </section>
       </div>
@@ -1510,7 +1605,7 @@ export default function TestRunPage() {
         testAttemptId={test?.attemptId}
         questionId={currentQuestion?.id}
         initialFront={""}
-        initialBack={ ""}
+        initialBack={""}
         initialTags={[]}
         settings={settings}
       />

@@ -153,7 +153,7 @@
 import { BiMenu } from 'react-icons/bi';
 import { useState, useEffect } from 'react';
 
-const Button = ({ children, onClick, disabled, title, className = '', textColorClass, ...props }: any) => (
+const Button = ({ children, onClick, disabled, title, getTextColor, className = '', textColorClass, ...props }: any) => (
     <button
         type="button"
         onClick={onClick}
@@ -171,7 +171,7 @@ function TestHeader({
     test, currentIndex, handlePrevious, handleNext, isCurrentMarked, toggleMarkCurrent,
     handleOpenNote, toggleFullScreen, isFullScreen, setRunTutorial, setShowTutorialMenu,
     showTutorialMenu, setShowKeyboardShortcuts, setShowLabValues, setShowCalculator,
-    setShowSettings, optionBgClass, currentState, settings, setSettings
+    setShowSettings, optionBgClass, currentState, settings, setSettings, getTextColor
 }: any) {
 
     const [showColorPicker, setShowColorPicker] = useState(false);
@@ -194,7 +194,7 @@ function TestHeader({
 
     const navButtons = [
         { onClick: () => setIsSidebarVisible(!isSidebarVisible), title: isSidebarVisible ? "Hide Questions Index" : "Show Questions Index", icon: <BiMenu className="text-3xl" /> },
-        { onClick: toggleMarkCurrent, icon: <svg width="30" height="30" viewBox="0 0 22 30"><g stroke="#FCFCFC" strokeWidth="2.2" fill="#B70808"><g><line x1="10" y1="35" x2="1.5" y2="4" /><path d="M20,8c-2,3-4,7-7,8c-2,1-5,2-7,3C5,14,4,9,1,5C8,1,13,10,20,8z" /></g></g></svg>, text: isCurrentMarked ? "Marked" : "Mark" },
+        { onClick: toggleMarkCurrent, icon: <svg width="30" height="30" viewBox="0 0 22 30"><g stroke={`${getTextColor(settings.primaryColor)}`} strokeWidth="2.2" fill="#B70808"><g><line x1="10" y1="35" x2="1.5" y2="4" /><path d="M20,8c-2,3-4,7-7,8c-2,1-5,2-7,3C5,14,4,9,1,5C8,1,13,10,20,8z" /></g></g></svg>, text: isCurrentMarked ? "Marked" : "Mark" },
     ];
 
     const centerButtons = [
@@ -266,12 +266,12 @@ function TestHeader({
                         <BiMenu className="text-3xl" />
                     </Button>
 
-                    <div className="question-number text-sm font-medium">
+                    <div className={`question-number text-sm font-medium ${textColorClass}`}>
                         Question {currentIndex + 1} of {test?.questions?.length}
                     </div>
 
                     <Button className="mark-question" onClick={toggleMarkCurrent} textColorClass={textColorClass}>
-                        <svg width="30" height="30" viewBox="0 0 22 30"><g stroke="#FCFCFC" strokeWidth="2.2" fill="#B70808"><g><line x1="10" y1="35" x2="1.5" y2="4" /><path d="M20,8c-2,3-4,7-7,8c-2,1-5,2-7,3C5,14,4,9,1,5C8,1,13,10,20,8z" /></g></g></svg>
+                        <svg width="30" height="30" viewBox="0 0 22 30"><g stroke={`${getTextColor(settings.primaryColor)}`} strokeWidth="2.2" fill="#B70808"><g><line x1="10" y1="35" x2="1.5" y2="4" /><path d="M20,8c-2,3-4,7-7,8c-2,1-5,2-7,3C5,14,4,9,1,5C8,1,13,10,20,8z" /></g></g></svg>
                         {isCurrentMarked ? "Marked" : "Mark"}
                     </Button>
                 </div>
