@@ -8,12 +8,13 @@ import { toast } from "react-toastify";
 import dynamic from 'next/dynamic';
 import Calculator from "@/component/exam/Calculator";
 import { NoteModal } from "@/component/exam/NoteModal"; // Add this import
-import { Modal, SidePanel, TransParentModal } from "@/component/exam/SidePanel";
-import { KEYBOARD_SHORTCUTS, LAB_VALUES, TUTORIAL_STEPS } from "@/utils/constant";
+import { FeedbackModal } from "@/component/exam/FeedbackModal";
+import { Modal, SidePanel, ThemeSidePanel, TransParentModal } from "@/component/exam/SidePanel";
+import { LAB_VALUES, TUTORIAL_STEPS } from "@/utils/constant";
 import { SettingsPanel } from "@/component/exam/SettingsPanel";
-import { BiFontSize, BiMenu, BiNotepad } from "react-icons/bi";
-import Header from "@/component/auth/Header";
-import TestHeader from "@/component/exam/Header";
+import TestHeader from "@/component/exam/TestHeader";
+import TestFooter from "@/component/exam/TestFooter";
+import { FlashcardModal } from "@/component/exam/Flashcard";
 // Dynamic import for Joyride to avoid SSR issues
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 
@@ -59,26 +60,33 @@ type TestSettings = {
   confirmOmission: boolean;
   highlighterColor: string;
   highlighterEnabled: boolean;
+  primaryColor?: string; // Add primary color for dynamic theming
+  secondaryColor?: string; // Add secondary color for dynamic theming
+  accentColor?: string; // Add accent color for dynamic theming
 };
 
 export default function TestRunPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [test, setTest] = useState<ActiveTest | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<AnswerState>({});
-  const [marked, setMarked] = useState<Record<string, boolean>>({});
-  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [showTutorialMenu, setShowTutorialMenu] = useState(false);
-  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
-  const [showLabValues, setShowLabValues] = useState(false);
-  const [showCalculator, setShowCalculator] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
   const [runTutorial, setRunTutorial] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [answers, setAnswers] = useState<AnswerState>({});
+  const [showLabValues, setShowLabValues] = useState(false);
+  const [showNoteModal, setShowNoteModal] = useState(false); // Add this state
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [existingFeedback, setExistingFeedback] = useState<string>('');
+  const [test, setTest] = useState<ActiveTest | null>(null);
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [showTutorialMenu, setShowTutorialMenu] = useState(false);
+  const [marked, setMarked] = useState<Record<string, boolean>>({});
+  const [showFlashcardModal, setShowFlashcardModal] = useState(false);
+  const [questionStartTime, setQuestionStartTime] = useState<number | null>(null);
+  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
+  const [selectedLabCategory, setSelectedLabCategory] = useState<string>('hematology'); // Default to first category
   const [settings, setSettings] = useState<TestSettings>(() => {
     // Load settings from localStorage if available
     if (typeof window !== 'undefined') {
@@ -100,9 +108,34 @@ export default function TestRunPage() {
       confirmOmission: false,
       highlighterColor: '#FFFF00', // Default yellow
       highlighterEnabled: false,
+      primaryColor: '#FFCA00', // Default primary color
+      secondaryColor: '#3B82F6', // Default secondary color
+      accentColor: '#10B981', // Default accent color
     };
   });
+  const [fontColor, setFontColor] = useState("#ffffffff");
+  function getTextColor(bgColor: string) {
+    const color = bgColor.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
 
+    // brightness formula
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 150 ? '#000000' : '#FFFFFF';
+  }
+
+  function getTextColorClass(bgColor: string) {
+    const color = bgColor.replace('#', '');
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 150 ? 'text-gray-900' : 'text-white';
+  }
   // Save settings to localStorage whenever they change
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -118,6 +151,22 @@ export default function TestRunPage() {
       document.body.classList.remove('dark');
     }
   }, [settings.theme]);
+
+  // Apply dynamic CSS variables for colors
+  useEffect(() => {
+    document.documentElement.style.setProperty('--primary-color', settings.primaryColor || '#FFCA00');
+    document.documentElement.style.setProperty('--secondary-color', settings.secondaryColor || '#3B82F6');
+    document.documentElement.style.setProperty('--accent-color', settings.accentColor || '#10B981');
+
+    // Also set text colors based on theme
+    if (settings.theme === 'dark') {
+      document.documentElement.style.setProperty('--text-primary', '#ffffff');
+      document.documentElement.style.setProperty('--text-secondary', '#e5e7eb');
+    } else {
+      document.documentElement.style.setProperty('--text-primary', '#111827');
+      document.documentElement.style.setProperty('--text-secondary', '#4b5563');
+    }
+  }, [settings.primaryColor, settings.secondaryColor, settings.accentColor, settings.theme]);
 
   // Decode HTML entities function
   const decodeHtmlEntities = (html: string) => {
@@ -231,6 +280,12 @@ export default function TestRunPage() {
       }
     }
   }, []);
+
+
+  const handleCreateFlashcard = () => {
+    if (!currentQuestion) return;
+    setShowFlashcardModal(true);
+  };
 
   // Handle functions
   const handleSelectOption = (option: string) => {
@@ -457,6 +512,40 @@ export default function TestRunPage() {
     }
   };
 
+  // Feedback handling functions
+  const handleFeedback = async () => {
+    if (!test?.attemptId) return;
+
+    // Try to fetch existing feedback
+    try {
+      const res = await api.get(`${endPointApi.getFeedback}/${test.attemptId}`);
+      if (res.data && res.data.feedback) {
+        setExistingFeedback(res.data.feedback);
+      } else {
+        setExistingFeedback('');
+      }
+    } catch (error) {
+      // If no feedback exists, that's fine - just set empty
+      setExistingFeedback('');
+    }
+
+    setShowFeedbackModal(true);
+  };
+
+  const handleSaveFeedback = async (attemptId: string, feedback: string) => {
+    try {
+      await api.post(
+        `${endPointApi.addFeedback}`,
+        { attemptId, feedback: feedback.trim() }
+      );
+      toast.success('Feedback submitted successfully');
+      setExistingFeedback(feedback.trim());
+    } catch (error) {
+      console.error('Failed to save feedback to server:', error);
+      toast.error('Failed to submit feedback. Please try again.');
+    }
+  };
+
   const handleApplyHighlight = (type: 'question' | 'options' | 'explanation', optionIndex?: number, event?: React.MouseEvent) => {
     if (!currentQuestion) return;
 
@@ -483,6 +572,8 @@ export default function TestRunPage() {
 
     const mark = document.createElement('mark');
     mark.className = 'highlight-mark primary-mark-highlight';
+    mark.style.backgroundColor = settings.highlighterColor;
+    mark.style.color = settings.theme === 'dark' ? '#ffffff' : '#000000';
 
     try {
       range.surroundContents(mark);
@@ -622,6 +713,7 @@ export default function TestRunPage() {
         if (showCalculator) setShowCalculator(false);
         if (showSettings) setShowSettings(false);
         if (showNoteModal) setShowNoteModal(false); // Add this
+        if (showFeedbackModal) setShowFeedbackModal(false);
         if (isFullScreen) {
           document.exitFullscreen();
           setIsFullScreen(false);
@@ -653,7 +745,7 @@ export default function TestRunPage() {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentQuestion, isFullScreen, showTutorialMenu, showKeyboardShortcuts, showLabValues, showCalculator, showSettings, showNoteModal, settings.confirmOmission, handleNext, handlePrevious, handleSubmit, toggleMarkCurrent, toggleFullScreen]);
+  }, [currentQuestion, isFullScreen, showTutorialMenu, showKeyboardShortcuts, showLabValues, showCalculator, showSettings, showNoteModal, showFeedbackModal, settings.confirmOmission, handleNext, handlePrevious, handleSubmit, toggleMarkCurrent, toggleFullScreen]);
 
   // Handle full screen change
   useEffect(() => {
@@ -666,7 +758,7 @@ export default function TestRunPage() {
   }, []);
 
   const getQuestionStatus = (question: Question) => {
-    const state = answers[question.id];
+    const state = answers[question?.id];
     if (!state || !state.selectedOption) return "unanswered";
     if (!state.showExplanation) return "unanswered";
     if (state.isCorrect) return "correct";
@@ -740,8 +832,6 @@ export default function TestRunPage() {
     router.replace("/");
   };
 
-
-
   const ExamSkeletonLoader = ({ settings }: { settings: any }) => {
     const isDark = settings?.theme === "dark";
 
@@ -750,71 +840,111 @@ export default function TestRunPage() {
 
     return (
       <main className={`w-full min-h-screen ${isDark ? "bg-gray-800" : "bg-gray-100"}`}>
-        {/* Top Navbar */}
-        <header className={`${isDark ? "bg-gray-900" : "bg-primary"} px-4 py-3 border-b`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="h-6 w-32 rounded animate-pulse bg-gray-300" />
-              <div className="h-5 w-24 rounded animate-pulse bg-gray-300" />
-            </div>
-            <div className="flex items-center gap-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-8 w-20 rounded animate-pulse bg-gray-300" />
-              ))}
-            </div>
-          </div>
-        </header>
-
-        <div className="flex h-[calc(100vh-60px)]">
-          {/* Left Sidebar */}
-          <aside className="hidden md:block w-48 border-r flex-shrink-0">
-            <div className={`px-3 py-2 border-b text-xs font-semibold ${isDark ? "bg-gray-800 text-gray-300" : "bg-white text-gray-700"}`}>
-              Items
-            </div>
-            <div className="p-2 space-y-2 animate-pulse">
-              {Array.from({ length: 20 }).map((_, index) => (
-                <div
-                  key={index}
-                  className={`h-7 rounded ${bgSub}`}
-                />
-              ))}
-            </div>
-          </aside>
-
-          {/* Main Content */}
-          <section className="flex-1 flex flex-col">
-            <div className="flex-1 flex flex-col lg:flex-row">
-              {/* Question Section */}
-              <div className="flex-1 overflow-auto px-4 md:px-6 py-4 md:py-6">
-                <div className="space-y-2 mb-6 animate-pulse">
-                  <div className={`h-3 rounded w-full ${bgBase}`} />
-                  <div className={`h-3 rounded w-11/12 ${bgBase}`} />
-                  <div className={`h-3 rounded w-10/12 ${bgBase}`} />
-                </div>
-
-                <div className="space-y-3 mb-4 animate-pulse">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div key={index} className={`h-9 rounded ${bgSub}`} />
-                  ))}
-                </div>
-
-                <div className={`mt-4 h-16 rounded ${bgSub} animate-pulse`} />
+        <div className="flex h-[calc(112vh-116px)] flex-col">
+          <div className="flex flex-1">
+            {/* Left Sidebar */}
+            <aside className="hidden md:block w-48 border-r border-white/10 flex-shrink-0">
+              <div className={`px-3 py-2 border-b border-white/10 text-xs font-semibold ${isDark ? "bg-gray-800 text-gray-300" : "bg-white text-gray-700"}`}>
+                Items
               </div>
+              <div className="p-2 space-y-2 animate-pulse">
+                {Array.from({ length: 20 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className={`h-7 rounded ${bgSub}`}
+                  />
+                ))}
+              </div>
+            </aside>
 
-              {/* Right Panel: Explanation */}
-              <aside className={`w-full lg:w-[38%] border-t lg:border-t-0 lg:border-l flex flex-col ${isDark ? "border-gray-700" : "border-gray-200"}`}>
-                <div className={`px-4 py-3 border-b text-xs font-semibold ${isDark ? "text-gray-300 bg-gray-800" : "text-gray-700 bg-gray-50"}`}>
-                  Explanation
+            {/* Main Content */}
+            <section className="flex-1 flex flex-col">
+              <header style={{ backgroundColor: isDark ? "#1d2838" : settings.primaryColor }} className={` px-4 py-2 border-b`}>
+                <div className="flex items-center justify-between">
+
+                  {/* Left Section */}
+                  <div className="flex items-center gap-4">
+                    <div className="h-6 w-6 rounded animate-pulse bg-white/40" />
+                    <div className="h-6 w-32 rounded animate-pulse bg-white/40" />
+                    <div className="h-10 w-18 rounded animate-pulse bg-white/40" />
+                  </div>
+
+                  {/* Center Section */}
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-18 rounded-md animate-pulse bg-white/40" />
+                    <div className="h-10 w-18 rounded-md animate-pulse bg-white/40" />
+                  </div>
+
+                  {/* Right Section */}
+                  <div className="flex items-center gap-3">
+                    {Array.from({ length: 7 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-10 w-18 rounded-md animate-pulse bg-white/40"
+                      />
+                    ))}
+                  </div>
+
                 </div>
-                <div className="flex-1 px-4 py-3 space-y-2 animate-pulse">
-                  <div className={`h-3 rounded w-10/12 ${bgSub}`} />
-                  <div className={`h-3 rounded w-11/12 ${bgSub}`} />
-                  <div className={`h-3 rounded w-9/12 ${bgSub}`} />
-                  <div className={`h-3 rounded w-8/12 ${bgSub}`} />
+              </header>
+              <div className="flex-1 flex flex-col lg:flex-row">
+                {/* Question Section */}
+                <div className="flex-1 overflow-auto px-4 md:px-6 py-4 md:py-6">
+                  <div className="space-y-2 mb-6 animate-pulse">
+                    <div className={`h-3 rounded w-full ${bgBase}`} />
+                    <div className={`h-3 rounded w-11/12 ${bgBase}`} />
+                    <div className={`h-3 rounded w-10/12 ${bgBase}`} />
+                  </div>
+
+                  <div className="space-y-3 mb-4 animate-pulse">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <div key={index} className={`h-9 rounded ${bgSub}`} />
+                    ))}
+                  </div>
+
+                  <div className={`mt-4 h-16 rounded ${bgSub} animate-pulse`} />
                 </div>
-              </aside>
-            </div>
-          </section>
+
+                {/* Right Panel: Explanation */}
+                <aside className={`w-full lg:w-[38%] border-t lg:border-t-0 lg:border-l flex flex-col ${isDark ? "border-gray-700" : "border-gray-200"}`}>
+                  <div className={`px-4 py-3 border-b border-white/10 text-xs font-semibold ${isDark ? "text-gray-300 bg-gray-800" : "text-gray-700 bg-gray-50"}`}>
+                    Explanation
+                  </div>
+                  <div className="flex-1 px-4 py-3 space-y-2 animate-pulse">
+                    <div className={`h-3 rounded w-10/12 ${bgSub}`} />
+                    <div className={`h-3 rounded w-11/12 ${bgSub}`} />
+                    <div className={`h-3 rounded w-9/12 ${bgSub}`} />
+                    <div className={`h-3 rounded w-8/12 ${bgSub}`} />
+                  </div>
+                </aside>
+              </div>
+              <footer className={`h-14 ${isDark ? "bg-gray-900 border-t border-gray-700" : "bg-primary border-t border-gray-200"} flex items-center justify-between px-4 text-xs`}>
+                {/* Timer Skeleton */}
+                <div className="flex items-center gap-1">
+                  <div className="h-6 w-60 rounded animate-pulse bg-white/40" />
+                </div>
+
+                {/* Footer Links Skeleton */}
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: 7 }).map((_, index) => (
+                    <div key={index} className="flex flex-col items-center gap-1">
+                      <div className="h-5 w-5 rounded animate-pulse bg-white/40" />
+                      <div className="h-5 w-16 rounded animate-pulse bg-white/40" />
+                    </div>
+                  ))}
+
+                  {/* End Block Button Skeleton */}
+                  <div className="flex flex-col items-center gap-1 ml-2">
+                    <div className="h-5 w-5 rounded animate-pulse bg-white/40" />
+                    <div className="h-5 w-12 rounded animate-pulse bg-white/40" />
+                  </div>
+                </div>
+              </footer>
+            </section>
+          </div>
+
+          {/* Footer */}
+
         </div>
       </main>
     );
@@ -823,33 +953,43 @@ export default function TestRunPage() {
   // Loading state
   if (!test || !currentQuestion) {
     return (
-      <>
-        <ExamSkeletonLoader settings={settings} />
-      </>
+      <ExamSkeletonLoader settings={settings} />
     )
   }
 
-  const currentState = answers[currentQuestion.id];
+  const currentState = answers[currentQuestion?.id];
   const currentStatus = getQuestionStatus(currentQuestion);
-  const isCurrentMarked = marked[currentQuestion.id];
+  const isCurrentMarked = marked[currentQuestion?.id];
 
-  const correctIndex = currentQuestion.options.indexOf(
-    currentQuestion.correctAnswer
+  const correctIndex = currentQuestion?.options.indexOf(
+    currentQuestion?.correctAnswer
   );
 
   // Check if explanation should be shown (based on settings and submission)
   const showExplanation = settings.showExplanations && currentState?.showExplanation || false;
 
-  // Dynamic styles based on theme
+  // Dynamic styles based on theme and primary color
   const mainBgClass = settings.theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100';
-  const headerBgClass = settings.theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-primary text-dark';
+  const headerBgClass = settings.theme === 'dark'
+    ? 'bg-gray-800 text-white'
+    : 'text-dark';
+  const headerBgStyle = settings.theme === 'dark'
+    ? undefined
+    : { backgroundColor: settings.primaryColor || '#FFCA00' };
   const contentBgClass = settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white';
-  const textColorClass = settings.theme === 'dark' ? 'text-gray-200' : 'text-gray-900';
+  const textColorClass = settings.theme === 'dark' ? 'text-gray-200' : getTextColorClass(settings.primaryColor || '#FFCA00');
+  const textColorClass2 = settings.theme === 'dark' ? 'text-gray-200' : 'text-gray-900';
   const mutedTextClass = settings.theme === 'dark' ? 'text-gray-400' : 'text-gray-600';
   const borderColorClass = settings.theme === 'dark' ? 'border-gray-700' : 'border-gray-200';
   const sidebarBgClass = settings.theme === 'dark' ? 'bg-gray-850' : 'bg-gray-50';
-  const optionBgClass = settings.theme === 'dark' ? 'bg-gray-700' : 'bg-white';
+  const optionBgClass = settings.theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-white';
   const optionHoverClass = settings.theme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-50';
+
+  // Add custom styles for primary color
+  const primaryColorStyle = {
+    backgroundColor: settings.theme === 'dark' ? settings.primaryColor : settings.primaryColor,
+    color: settings.theme === 'dark' ? '#ffffff' : '#000000',
+  };
 
   return (
     <main ref={containerRef} className={`w-full min-h-screen ${mainBgClass} ${settings.theme}`}>
@@ -863,7 +1003,7 @@ export default function TestRunPage() {
           showSkipButton={true}
           styles={{
             options: {
-              primaryColor: '#FFCA00',
+              primaryColor: settings.primaryColor || '#FFCA00',
               textColor: '#1f2937',
               backgroundColor: '#ffffff',
               overlayColor: 'rgba(0, 0, 0, 0.5)',
@@ -883,15 +1023,25 @@ export default function TestRunPage() {
       <NoteModal
         isOpen={showNoteModal}
         onClose={() => setShowNoteModal(false)}
-        questionId={currentQuestion.id}
+        questionId={currentQuestion?.id}
         initialNote={currentState?.note}
         onSave={handleSaveNote}
         onDelete={handleDeleteNote}
         settings={settings}
       />
 
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        attemptId={test?.attemptId || ''}
+        initialFeedback={existingFeedback}
+        onSave={handleSaveFeedback}
+        settings={settings}
+      />
+
       {/* Main Content Area - Fixed height calculation */}
-      <div className={`flex h-[calc(108vh-32px-40px)] ${settings.theme}`}>
+      <div className={`flex h-[calc(108vh-36px-40px)] ${settings.theme}`}>
         {/* Left Sidebar - Full height */}
         <aside
           className={`question-sidebar w-full md:w-30 border-b ${borderColorClass} md:border-b-0 md:border-r ${sidebarBgClass} overflow-y-auto transition-all duration-300 ${isSidebarVisible ? '' : 'hidden md:hidden'
@@ -899,7 +1049,7 @@ export default function TestRunPage() {
         >
 
           <div className="p-0 grid grid-cols-10 md:grid-cols-1 gap-0 text-xs">
-            {test.questions.map((q, idx) => {
+            {test?.questions?.map((q, idx) => {
               const status = getQuestionStatus(q);
               const isActive = idx === currentIndex;
               const isMarked = marked[q.id];
@@ -909,13 +1059,14 @@ export default function TestRunPage() {
                   key={q.id}
                   type="button"
                   onClick={() => setCurrentIndex(idx)}
-                  className={`
+                  style={isActive ? { backgroundColor: settings.primaryColor || '#FFCA00' } : undefined}
+                  className={`cursor-pointer
     flex items-center justify-between 
     h-7 w-7 md:w-full md:h-8 
     px-0 text-center relative
     transition-colors duration-200
     ${isActive
-                      ? "bg-primary text-white"
+                      ? `text-white`
                       : settings.theme === "dark"
                         ? idx % 2 === 0
                           ? "bg-gray-800 text-gray-200"
@@ -933,7 +1084,13 @@ export default function TestRunPage() {
                           height="15"
                           viewBox="0 0 22 30"
                         >
-                          <g stroke="#FCFCFC" strokeWidth="2.2" fill="#B70808">
+                          <g stroke={
+                            isActive
+                              ? getTextColor(settings.primaryColor)
+                              : settings.theme === "dark"
+                                ? getTextColor("#000000")
+                                : getTextColor("#FFFFFF")
+                          } strokeWidth="2.2" fill="#B70808">
                             <g>
                               <line x1="10" y1="35" x2="1.5" y2="4" />
                               <path
@@ -956,6 +1113,7 @@ export default function TestRunPage() {
 
           <TestHeader
             headerBgClass={headerBgClass}
+            headerBgStyle={headerBgStyle}
             borderColorClass={borderColorClass}
             textColorClass={textColorClass}
             isSidebarVisible={isSidebarVisible}
@@ -980,24 +1138,43 @@ export default function TestRunPage() {
             currentState={currentState}
             settings={settings}
             onSettingsChange={setSettings}
+            setSettings={setSettings}
+            getTextColor={getTextColor}
           />
 
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden ">
+            <div
+              style={{
+                zIndex: 10,
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) rotate(-30deg)",
+                fontSize: "130px",
+                fontWeight: "bold",   // bold font
+                opacity: 0.1,
+                color: settings.theme === "dark" ? "#ffffff" : "#ffd00c",
+                whiteSpace: "nowrap"
+              }}
+            >
+              <div>Mendel</div>
+              <div>Academy</div>
+            </div>
             {/* Question Area */}
             <div className={`flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 ${showLabValues || showCalculator || showSettings ? 'lg:w-1/2' : 'lg:w-full'}`}>
               <div className="prose prose-sm max-w-none mb-6">
                 <div
-                  className={`${textColorClass} text-sm md:text-base leading-relaxed question-area-content`}
+                  className={`${textColorClass2} text-sm md:text-base leading-relaxed question-area-content`}
                   style={{ fontSize: `${settings.fontSize}px` }}
-                  dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(currentState?.highlights?.question || currentQuestion.question) }}
+                  dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(currentState?.highlights?.question || currentQuestion?.question) }}
                   onMouseUp={(e) => handleApplyHighlight('question', undefined, e)}
                 />
               </div>
 
               <div className="w-full flex justify-left">
-                <div className={`w-full max-w-2xl border ${textColorClass}  ${borderColorClass} p-2 ${settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className={`w-full max-w-2xl border ${textColorClass2}  ${borderColorClass} p-2 ${settings.theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
                   <div className="space-y-3 options-area-content">
-                    {currentQuestion.options.map((option, idx) => {
+                    {currentQuestion?.options?.map((option, idx) => {
                       const selected =
                         currentState && currentState.selectedOption === option;
                       const isCorrect = option === currentQuestion.correctAnswer;
@@ -1006,18 +1183,18 @@ export default function TestRunPage() {
                       // Disable option clicks if answer has been submitted
                       const isDisabled = showFeedback;
 
-                      let optionClass = `flex items-start gap-3 px-3 py-3 border rounded transition-all w-full text-left`;
+                      let optionClass = `flex items-start gap-3 px-3 py-3 rounded transition-all w-full text-left`;
 
                       if (showFeedback) {
                         if (isCorrect) {
-                          optionClass += " border-green-500 bg-green-50 text-green-800 ring-1 ring-green-500";
+                          optionClass += ` ${borderColorClass} ${optionBgClass}`;
                         } else if (selected && !isCorrect) {
-                          optionClass += " border-red-500 bg-red-50 text-red-800 ring-1 ring-red-500";
+                          optionClass += ` ${borderColorClass} ${optionBgClass}`;
                         } else {
                           optionClass += ` ${borderColorClass} ${optionBgClass}`;
                         }
                       } else if (selected) {
-                        optionClass += " border-primary bg-primary/50 ring-0 ring-primary";
+                        optionClass += ` border-[${settings.primaryColor}] bg-[${settings.primaryColor}]/50 ring-0 ring-[${settings.primaryColor}]`;
                       } else {
                         optionClass += ` ${borderColorClass} ${optionBgClass} hover:border-gray-400 ${optionHoverClass}`;
                       }
@@ -1075,8 +1252,9 @@ export default function TestRunPage() {
                                 checked={selected}
                                 disabled={isDisabled}
                                 onChange={() => !isDisabled && handleSelectOption(option)}
-                                className="w-4 h-4 accent-primary cursor-pointer"
+                                className="cursor-pointer"
                                 style={{
+                                  accentColor: settings.primaryColor || "#FFCA00",
                                   width: `${Math.max(16, settings.fontSize - 2)}px`,
                                   height: `${Math.max(16, settings.fontSize - 2)}px`
                                 }}
@@ -1107,10 +1285,11 @@ export default function TestRunPage() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={currentState?.showExplanation}
-                  className={`submit-button px-6 py-2 rounded shadow text-sm font-medium ${currentState?.showExplanation
+                  className={`submit-button cursor-pointer px-6 py-2 rounded shadow text-sm font-medium ${textColorClass} ${currentState?.showExplanation
                     ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                    : "bg-primary text-dark hover:bg-blue-800"
+                    : `bg-[${settings.primaryColor}] text-dark hover:bg-[${settings.primaryColor}]/80`
                     }`}
+                  style={!currentState?.showExplanation ? { backgroundColor: settings.primaryColor } : {}}
                 >
                   {currentState?.showExplanation ? "Already Submitted" : "Submit"}
                 </button>
@@ -1284,30 +1463,17 @@ export default function TestRunPage() {
               </aside>
             )}
           </div>
-          <footer className={`footer h-12 ${headerBgClass} ${settings.theme === 'dark' ? 'border-t border-gray-600' : ''} flex items-center justify-between px-4 text-xs`}>
-            {settings.showTimer && (
-              <div>
-                Block Time Elapsed: {formatTime(elapsedSeconds)}
-              </div>
-            )}
-            <div className={`flex items-center gap-4 ${settings.showTimer ? '' : 'ml-auto'}`}>
-              <span className={`hover:underline cursor-pointer ${mutedTextClass}`}>Medical Library</span>
-              <span className={`hover:underline cursor-pointer ${mutedTextClass}`}>My Notebook</span>
-              <span className={`hover:underline cursor-pointer ${mutedTextClass}`}>Flashcards</span>
-              <span className={`hover:underline cursor-pointer ${mutedTextClass}`}>Feedback</span>
-              <span className={`hover:underline cursor-pointer ${mutedTextClass}`}>Suspend</span>
-              <button
-                type="button"
-                onClick={handleEndTest}
-                className="end-test-button inline-flex items-center gap-2 px-4 py-2 bg-red-400 border border-red-500 rounded hover:bg-red-400 transition-colors text-sm font-medium cursor-pointer"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ff0000" fill="none" stroke="#ff0000" stroke-width="1.5">
-                  <path d="M7.84308 3.80211C9.8718 2.6007 10.8862 2 12 2C13.1138 2 14.1282 2.6007 16.1569 3.80211L16.8431 4.20846C18.8718 5.40987 19.8862 6.01057 20.4431 7C21 7.98943 21 9.19084 21 11.5937V12.4063C21 14.8092 21 16.0106 20.4431 17C19.8862 17.9894 18.8718 18.5901 16.8431 19.7915L16.1569 20.1979C14.1282 21.3993 13.1138 22 12 22C10.8862 22 9.8718 21.3993 7.84308 20.1979L7.15692 19.7915C5.1282 18.5901 4.11384 17.9894 3.55692 17C3 16.0106 3 14.8092 3 12.4063V11.5937C3 9.19084 3 7.98943 3.55692 7C4.11384 6.01057 5.1282 5.40987 7.15692 4.20846L7.84308 3.80211Z" />
-                </svg>
-                End Block
-              </button>
-            </div>
-          </footer>
+          <TestFooter
+            textColorClass={textColorClass}
+            headerBgStyle={headerBgStyle}
+            settings={settings}
+            elapsedSeconds={elapsedSeconds}
+            mutedTextClass={textColorClass}
+            handleEndTest={handleEndTest}
+            formatTime={formatTime}
+            handleCreateFlashcard={handleCreateFlashcard}
+            handleFeedback={handleFeedback}
+          />
         </section>
       </div>
 
@@ -1317,7 +1483,7 @@ export default function TestRunPage() {
         onClose={() => setShowKeyboardShortcuts(false)}
         settings={settings}
       >
-        <div className="p-4 space-y-3 text-sm">
+        <div className="p-2 space-y-3 text-sm">
           {[
             ["a,b,c,d", "Answer choice selector"],
             ["Alt + m", "Mark question"],
@@ -1332,14 +1498,14 @@ export default function TestRunPage() {
           ].map(([key, label], index) => (
             <div
               key={index}
-              className={`flex items-center gap-6 py-2 ${index !== 9 ? "border-b border-gray-200" : ""
+              className={`flex items-center gap-6 py-1 ${index !== 9 ? " border-gray-200" : ""
                 }`}
             >
-              <div className="bg-[#2f2f2f] text-white px-3 py-1 rounded shadow-inner font-mono text-xs min-w-[80px] text-center">
+              <div className={`px-3 py-2 rounded shadow-inner font-mono text-xs min-w-[80px] text-center ${settings.theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-100'}`}>
                 {key}
               </div>
 
-              <span className="text-gray-800 text-sm">
+              <span className={`text-gray-800 text-sm ${settings.theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                 {label}
               </span>
             </div>
@@ -1348,35 +1514,80 @@ export default function TestRunPage() {
       </Modal>
 
       {/* Lab Values Side Panel */}
-      <SidePanel
+      <ThemeSidePanel
         isOpen={showLabValues}
         onClose={() => setShowLabValues(false)}
         title="Laboratory Values Reference"
+        settings={settings}
       >
-        <div className="space-y-6">
-          {Object.entries(LAB_VALUES).map(([category, values]) => (
-            <div key={category}>
-              <h3 className="text-lg font-semibold capitalize mb-2">{category}</h3>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Test</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Normal Range</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {values.map((item, index) => (
-                    <tr key={index}>
-                      <td className="px-4 py-2 text-sm text-gray-900">{item.test}</td>
-                      <td className="px-4 py-2 text-sm text-gray-600">{item.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
+        <div className="flex flex-col h-full">
+
+          {/* Category Tabs */}
+          <div className="flex border-b border-gray-100 dark:border-gray-200 mb-4">
+            {Object.keys(LAB_VALUES).map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedLabCategory(category)}
+                style={
+                  selectedLabCategory === category
+                    ? {
+                      borderBottom: `2px solid ${settings.primaryColor}`,
+                      color: settings.primaryColor,
+                    }
+                    : {}
+                }
+                className={`flex-1 cursor-pointer py-2 px-4 text-sm font-medium capitalize transition-colors duration-200
+    ${selectedLabCategory === category
+                    ? ""
+                    : "text-gray-500 dark:text-gray-700 hover:text-gray-700 dark:hover:text-gray-800"
+                  }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          {/* Selected Category Content */}
+          <div className="flex-1 overflow-y-auto">
+            {selectedLabCategory && (
+              <div className="space-y-4">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="">
+                      <tr>
+                        <th className={`px-4 py-2 text-left text-xs font-medium text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-400' : ''} uppercase`}>
+                          Test
+                        </th>
+                        <th className={`px-4 py-2 text-left text-xs font-medium text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-400' : ''} uppercase`}>
+                          Normal Range
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody className={`bg-white ${settings.theme === 'dark' ? 'dark:bg-gray-900' : ''} divide-y divide-gray-200 ${settings.theme === 'dark' ? 'dark:divide-gray-700' : ''}`}>
+                      {LAB_VALUES[selectedLabCategory as keyof typeof LAB_VALUES].map(
+                        (item, index) => (
+                          <tr
+                            key={index}
+                            className={`hover:bg-gray-50 ${settings.theme === 'dark' ? 'dark:hover:bg-gray-800' : ''} transition-colors`}
+                          >
+                            <td className={`px-4 py-2 text-sm text-gray-900 ${settings.theme === 'dark' ? 'dark:text-gray-100' : 'text-gray-900'}`}>
+                              {item.test}
+                            </td>
+                            <td className={`px-4 py-2 text-sm text-gray-600 ${settings.theme === 'dark' ? 'dark:text-gray-300' : 'text-gray-600'}`}>
+                              {item.value}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </SidePanel>
+      </ThemeSidePanel>
 
       {/* Calculator Side Panel */}
       <TransParentModal
@@ -1387,6 +1598,17 @@ export default function TestRunPage() {
       >
         <Calculator settings={settings} />
       </TransParentModal>
+
+      <FlashcardModal
+        isOpen={showFlashcardModal}
+        onClose={() => setShowFlashcardModal(false)}
+        testAttemptId={test?.attemptId}
+        questionId={currentQuestion?.id}
+        initialFront={""}
+        initialBack={""}
+        initialTags={[]}
+        settings={settings}
+      />
 
       {/* Settings Side Panel */}
       <SidePanel
