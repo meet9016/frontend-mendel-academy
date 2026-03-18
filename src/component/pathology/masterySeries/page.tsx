@@ -14,10 +14,10 @@ function MasterySeries() {
     <div>
    
 
+      <AdvancedPathology />
       <PathologyMasterySeries showCounters={true}/>
 
   
-      <AdvancedPathology />
       
       {/* --- Stats Section --- */}
 

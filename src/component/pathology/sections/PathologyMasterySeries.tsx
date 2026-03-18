@@ -149,7 +149,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
 
   return (
     <>
-      <main className="max-w-[1380px] mx-auto flex flex-col items-center justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
+    {!showCounters ?  <main className="max-w-[1380px] mx-auto flex flex-col items-center justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
         <div className="text-center space-y-1">
           <h1 className="text-2xl md:text-4xl font-bold ff-font-bold">
             Advanced Pathology Programs
@@ -172,7 +172,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
             onMore={() => router.push("/subscription")}
           />
         )}
-      </main>
+      </main>:null}
       {showCounters ? <StatusSection /> : null}
       {/* ----  EndometrialPathology  ---- */}
       {/* <EndometrialPathology /> */}
