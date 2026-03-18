@@ -1,3 +1,4 @@
+'use client'
 // Faq.tsx
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';

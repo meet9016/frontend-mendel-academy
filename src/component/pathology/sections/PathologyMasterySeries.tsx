@@ -26,6 +26,7 @@ import UpcomingCourse from "./UpcomingCourse";
 import { getTempId } from "@/utils/helper";
 import { getAuthId } from "@/utils/tokenManager";
 import { setCartCount } from "@/redux/cartSlice";
+import StatusSection from "./StatusSection";
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -136,7 +137,7 @@ const addToCart = async (item: Program) => {
   }
 };
 
-const PathologyMasterySeries = () => {
+const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boolean }) => {
   const { loadings, list } = useSelector((state: RootState) => state.data);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -172,7 +173,7 @@ const PathologyMasterySeries = () => {
           />
         )}
       </main>
-
+      {showCounters ? <StatusSection /> : null}
       {/* ----  EndometrialPathology  ---- */}
       {/* <EndometrialPathology /> */}
 
@@ -190,7 +191,7 @@ const PathologyMasterySeries = () => {
 
       {/* ----  UPCOMING PROGRAM ----- */}
       <Section
-        title="Upcoming Programs"
+        title={showCounters ? "Ongoing Programs" : "Upcoming Programs"}
         subtitle="Join the waitlist and get early access"
       >
         {loading ? <UpcomeingProgramSkeleton /> : <UpcomingCourse />}

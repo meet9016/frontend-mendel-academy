@@ -57,6 +57,7 @@ export default function Header() {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isExamDropdownOpen, setIsExamDropdownOpen] = useState<boolean>(false);
+  const [isPathologyDropdownOpen, setIsPathologyDropdownOpen] = useState<boolean>(false);
   const [examCategories, setExamCategories] = useState<ExamCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
@@ -150,16 +151,23 @@ export default function Header() {
       ) {
         setIsExamDropdownOpen(false);
       }
+      if (
+        isPathologyDropdownOpen &&
+        !target.closest("#pathology-button") &&
+        !target.closest("#pathology-dropdown")
+      ) {
+        setIsPathologyDropdownOpen(false);
+      }
     };
 
-    if (isExamDropdownOpen) {
+    if (isExamDropdownOpen || isPathologyDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isExamDropdownOpen]);
+  }, [isExamDropdownOpen, isPathologyDropdownOpen]);
 
   const handleLogout = () => {
     clearToken();
@@ -208,6 +216,7 @@ export default function Header() {
   };
 
   const isExamActive = pathname.startsWith("/medicalexam");
+  const isPathologyActive = pathname.startsWith("/pathology");
 
   const handleCartOpen = async () => {
     if (isCartLoading) return;
@@ -320,7 +329,7 @@ export default function Header() {
               ></span>
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Exam Dropdown Menu */}
             <div className="relative">
               <button
                 id="exam-button"
@@ -366,7 +375,6 @@ export default function Header() {
                     ))}
                   </div>
 
-
                   <div className="border-t border-gray-200 mt-3 pt-3 text-center">
                     <button
                       onClick={() => {
@@ -382,19 +390,78 @@ export default function Header() {
               )}
             </div>
 
-            <button
-              onClick={() => router.push("/pathology")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/pathology" ? "" : "hover:text-[#FFCA00]"}
-              `}
-            >
-              Advanced Pathology Prep
-              <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-                  ${pathname === "/pathology" ? "w-full" : "w-0 group-hover:w-full"}
+            {/* Advanced Pathology Prep Dropdown */}
+            <div className="relative">
+              <button
+                id="pathology-button"
+                onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
+                className={`relative ff-font font-medium text-sm group cursor-pointer
+                  ${isPathologyActive ? "" : "hover:text-[#FFCA00]"}
                 `}
-              ></span>
-            </button>
+              >
+                Advanced Pathology Prep
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                    ${isPathologyActive ? "w-full" : "w-0 group-hover:w-full"}
+                  `}
+                ></span>
+              </button>
+
+              {isPathologyDropdownOpen && (
+                <div
+                  id="pathology-dropdown"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[400px] bg-white border border-gray-200 rounded-xl shadow-xl p-6 animate-fadeIn"
+                >
+                  <h3 className="text-sm font-bold text-[#FFCA00] mb-4 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
+                    Pathology Programs
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    {/* Hyper Specialist Option */}
+                    <div 
+                      onClick={() => {
+                        router.push('/pathology/hyper-specialist');
+                        setIsPathologyDropdownOpen(false);
+                      }}
+                      className="group cursor-pointer text-center"
+                    >
+                      
+                      <h4 className="font-bold text-gray-800 mb-1 ff-font group-hover:text-[#FFCA00] transition-colors">
+                        Hyper Specialist
+                      </h4>
+                     
+                    </div>
+
+                    {/* Mastery Series Option */}
+                    <div 
+                      onClick={() => {
+                        router.push('/pathology/mastery-series');
+                        setIsPathologyDropdownOpen(false);
+                      }}
+                      className="group cursor-pointer text-center"
+                    >
+                    
+                      <h4 className="font-bold text-gray-800 mb-1 ff-font group-hover:text-[#FFCA00] transition-colors">
+                        Mastery Series
+                      </h4>
+                     
+                    </div>
+                  </div>
+
+                  {/* <div className="border-t border-gray-200 mt-4 pt-4 text-center">
+                    <button
+                      onClick={() => {
+                        router.push('/pathology');
+                        setIsPathologyDropdownOpen(false);
+                      }}
+                      className="ff-font-bold text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200"
+                    >
+                      View All Pathology Programs →
+                    </button>
+                  </div> */}
+                </div>
+              )}
+            </div>
 
             <button
               onClick={() => router.push("/aboutUs")}
@@ -507,21 +574,15 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col gap-4">
-              {["Home", "Pathology", "Blog", "About Us"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    if (item === "Home") router.push("/");
-                    if (item === "Blog") router.push("/blog");
-                    if (item === "Pathology") router.push("/pathology");
-                    if (item === "About Us") router.push("/aboutUs");
-                  }}
-                  className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
-                >
-                  {item}
-                </button>
-              ))}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/");
+                }}
+                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+              >
+                Home
+              </button>
 
               {/* Mobile Exam Dropdown */}
               <div className="px-4">
@@ -541,7 +602,13 @@ export default function Header() {
                         <ul className="space-y-1">
                           {category?.exams?.map((exam: any) => (
                             <li key={exam?._id}>
-                              <button className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left">
+                              <button 
+                                onClick={() => {
+                                  router.push(`/medicalexam/${exam?.exam_id}`);
+                                  setIsMenuOpen(false);
+                                }}
+                                className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left"
+                              >
                                 {exam.exam_name}
                               </button>
                             </li>
@@ -552,6 +619,76 @@ export default function Header() {
                   </div>
                 )}
               </div>
+
+              {/* Mobile Pathology Dropdown */}
+              <div className="px-4">
+                <button
+                  onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
+                  className="ff-font font-medium py-2 w-full text-left hover:text-yellow-500"
+                >
+                  Advanced Pathology Prep
+                </button>
+                {isPathologyDropdownOpen && (
+                  <div className="mt-2 pl-4 space-y-3">
+                    <button
+                      onClick={() => {
+                        router.push('/pathology/hyper-specialist');
+                        setIsMenuOpen(false);
+                        setIsPathologyDropdownOpen(false);
+                      }}
+                      className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
+                    >
+                      <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                      </svg>
+                      Hyper Specialist
+                    </button>
+                    <button
+                      onClick={() => {
+                        router.push('/pathology/mastery-series');
+                        setIsMenuOpen(false);
+                        setIsPathologyDropdownOpen(false);
+                      }}
+                      className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
+                    >
+                      <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      Mastery Series
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/blog");
+                }}
+                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+              >
+                Blog
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/aboutUs");
+                }}
+                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+              >
+                About Us
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/studentTestimonials");
+                }}
+                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
+              >
+                Student Testimonials
+              </button>
 
               <hr className="border-gray-200 my-2" />
 
