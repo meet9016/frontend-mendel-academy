@@ -355,7 +355,7 @@ export default function Header() {
                               className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
                               onClick={() => {
                                 const identifier = exam?.slug || exam?._id;
-                                router.push(`/services/${identifier}`);
+                                router.push(`/services/${identifier}`);    
                                 setIsExamDropdownOpen(false);
                               }}
                             >
