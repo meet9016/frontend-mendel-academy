@@ -419,33 +419,40 @@ export default function Header() {
 
                   <div className="grid grid-cols-2 gap-6">
                     {/* Hyper Specialist Option */}
-                    <div 
-                      onClick={() => {
-                        router.push('/pathology/hyper-specialist');
-                        setIsPathologyDropdownOpen(false);
-                      }}
+                    <div
+
                       className="group cursor-pointer text-center"
                     >
-                      
-                      <h4 className="font-bold text-gray-800 mb-1 ff-font group-hover:text-[#FFCA00] transition-colors">
+                      <button
+                        className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                        onClick={() => {
+                          router.push('/pathology/hyper-specialist');
+                          setIsPathologyDropdownOpen(false);
+                        }}
+                      >
                         Hyper Specialist
-                      </h4>
-                     
+                      </button>
+
+
                     </div>
 
                     {/* Mastery Series Option */}
-                    <div 
+                    <div
                       onClick={() => {
                         router.push('/pathology/mastery-series');
                         setIsPathologyDropdownOpen(false);
                       }}
                       className="group cursor-pointer text-center"
                     >
-                    
-                      <h4 className="font-bold text-gray-800 mb-1 ff-font group-hover:text-[#FFCA00] transition-colors">
+                      <button
+                        className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                        onClick={() => {
+                          router.push('/pathology/mastery-series');
+                          setIsPathologyDropdownOpen(false);
+                        }}
+                      >
                         Mastery Series
-                      </h4>
-                     
+                      </button>
                     </div>
                   </div>
 
@@ -603,7 +610,7 @@ export default function Header() {
                         <ul className="space-y-1">
                           {category?.exams?.map((exam: any) => (
                             <li key={exam?._id}>
-                              <button 
+                              <button
                                 onClick={() => {
                                   router.push(`/medicalexam/${exam?.exam_id}`);
                                   setIsMenuOpen(false);
@@ -640,7 +647,7 @@ export default function Header() {
                       className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
                     >
                       <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                       </svg>
                       Hyper Specialist
                     </button>
@@ -653,7 +660,7 @@ export default function Header() {
                       className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
                     >
                       <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                       </svg>
                       Mastery Series
                     </button>

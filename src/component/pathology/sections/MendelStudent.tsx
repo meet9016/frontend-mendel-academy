@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaQuoteRight, FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaQuoteRight,
+  FaStar,
+} from "react-icons/fa";
 
 /* ----------  TYPES  ---------- */
 type Testimonial = {
@@ -51,19 +56,20 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-/* ----------  MAIN COMPONENT  ---------- */
-export default function MendelStudent() {
+export default function Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardsPerView = 3;
   const maxIndex = Math.max(0, testimonials.length - cardsPerView);
 
   const handlePrevious = () => setCurrentIndex((prev) => Math.max(0, prev - 1));
-  const handleNext = () => setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
+  const handleNext = () =>
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
 
   return (
-    <section className="relative py-10  bg-white overflow-hidden">
-      <div className="relative max-w-[1380px] mx-auto px-6">
+    <section className="relative py-12 bg-white">
+      <div className="relative max-w-[1380px] mx-auto px-6 overflow-visible">
         <Header />
+
         <Carousel
           testimonials={testimonials}
           currentIndex={currentIndex}
@@ -77,35 +83,22 @@ export default function MendelStudent() {
   );
 }
 
-/* ----------  SUB-COMPONENTS  ---------- */
+/* ---------- HEADER ---------- */
 const Header = () => (
-  <div className="text-center mb-16">
-    <div className="inline-flex items-center justify-center gap-2 mb-2">
-      <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#f0b100]" />
-      <span className="text-sm font-medium text-primary ff-font uppercase tracking-wider">Student Success Stories</span>
-      <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#f0b100]" />
-    </div>
+  <div className="text-center mb-10">
     <motion.h2
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="text-2xl md:text-4xl ff-font-bold font-bold mb-2"
+      className="text-2xl md:text-4xl font-bold"
     >
-      What Mendel Students<br />Say About Us
+      What Mendel Students <br /> Say About Us
     </motion.h2>
-    <motion.p
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, duration: 0.8 }}
-      viewport={{ once: true }}
-      className="ff-font text-lg max-w-3xl mx-auto"
-    >
-      Join thousands of pathology professionals who have transformed their diagnostic skills
-    </motion.p>
   </div>
 );
 
+/* ---------- CAROUSEL ---------- */
 const Carousel = ({
   testimonials,
   currentIndex,
@@ -113,33 +106,35 @@ const Carousel = ({
   onPrevious,
   onNext,
   onDot,
-}: {
-  testimonials: Testimonial[];
-  currentIndex: number;
-  maxIndex: number;
-  onPrevious: () => void;
-  onNext: () => void;
-  onDot: (i: number) => void;
-}) => (
+}: any) => (
   <div className="relative">
-    {/* Arrows */}
-    <Arrow onClick={onPrevious} disabled={currentIndex === 0} icon={FaChevronLeft} left />
-    <Arrow onClick={onNext} disabled={currentIndex >= maxIndex} icon={FaChevronRight} right />
+    <Arrow
+      onClick={onPrevious}
+      disabled={currentIndex === 0}
+      icon={FaChevronLeft}
+      left
+    />
+    <Arrow
+      onClick={onNext}
+      disabled={currentIndex >= maxIndex}
+      icon={FaChevronRight}
+    />
 
-    {/* Cards */}
-    <div className="overflow-hidden px-2 cursor-pointer ">
+    <div className="overflow-x-hidden overflow-y-visible px-6 pt-12">
       <motion.div
-        className="flex gap-6 transition-transform duration-500 ease-out"
-        style={{ transform: `translateX(-${currentIndex * (100 / 3 + 2)}%)` }}
+        className="flex gap-6"
+        animate={{
+          x: `-${currentIndex * 33.333}%`,
+        }}
+        transition={{ duration: 0.5 }}
       >
-        {testimonials.map((t) => (
+        {testimonials.map((t: Testimonial) => (
           <TestimonialCard key={t.id} {...t} />
         ))}
       </motion.div>
     </div>
 
-    {/* Dots */}
-    <div className="flex justify-center gap-2 mt-3">
+    <div className="flex justify-center gap-2 mt-6">
       {[...Array(maxIndex + 1)].map((_, i) => (
         <Dot key={i} active={i === currentIndex} onClick={() => onDot(i)} />
       ))}
@@ -147,55 +142,54 @@ const Carousel = ({
   </div>
 );
 
+/* ---------- ARROW ---------- */
 const Arrow = ({
   onClick,
   disabled,
   icon: Icon,
   left,
-}: {
-  onClick: () => void;
-  disabled: boolean;
-  icon: React.ElementType;
-  left?: boolean;
-}) => (
+}: any) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`absolute top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-white border-2 border-[#f0b100]/30 shadow-xl transition-all duration-300 hover:scale-110 cursor-pointer hover:bg-[#fff7db] hover:text-white group ${
-      disabled ? "opacity-50 cursor-not-allowed" : ""
-    } ${left ? "-translate-x-4 left-0" : "translate-x-4 right-0"}`}
+    className={`absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-md border transition ${
+      left ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"
+    } ${disabled && "opacity-40"}`}
   >
-    <Icon className="text-primary group-hover:text-white" />
+    <Icon />
   </button>
 );
 
+/* ---------- CARD ---------- */
 const TestimonialCard = ({ name, rating, timeAgo, text }: Testimonial) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.95 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5 }}
-    viewport={{ once: true }}
-    className="min-w-[calc(33.333%-1rem)] group relative bg-white rounded-2xl border-2 border-primary p-8 shadow-lg hover:shadow-2xl hover:border-[#f0b100]/40 transition-all duration-500 hover:-translate-y-2"
-  >
-    <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#FACC00] rounded-full flex items-center justify-center shadow-lg">
-      <FaQuoteRight className="text-white" />
+  <div className="min-w-[calc(33.333%-1rem)] relative bg-white border border-[#f0b100] rounded-2xl p-6 pt-12 shadow-md hover:shadow-xl transition duration-300">
+    
+    {/* Quote FIXED */}
+    <div className="absolute -top-5 left-6 w-10 h-10 bg-[#f0b100] rounded-full flex items-center justify-center shadow-md">
+      <FaQuoteRight className="text-white text-sm" />
     </div>
 
-    <h3 className="text-xl font-bold ff-font-bold mb-2">{name}</h3>
+    <h3 className="text-lg font-semibold mb-2">{name}</h3>
+
     <div className="flex items-center gap-2 mb-3">
       {[...Array(rating)].map((_, i) => (
-        <FaStar key={i} className="text-primary" />
+        <FaStar key={i} className="text-[#f0b100]" />
       ))}
-      <span className="text-sm ff-font">{timeAgo}</span>
+      <span className="text-sm text-gray-500">{timeAgo}</span>
     </div>
 
-    <p className="ff-font text-sm leading-relaxed line-clamp-5">{text}</p>
-  </motion.div>
+    <p className="text-sm text-gray-600 leading-relaxed line-clamp-5">
+      {text}
+    </p>
+  </div>
 );
 
-const Dot = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
+/* ---------- DOT ---------- */
+const Dot = ({ active, onClick }: any) => (
   <button
     onClick={onClick}
-    className={`h-2 rounded-full transition-all ${active ? "w-8 bg-[#f0b100]" : "w-2 bg-[#f0b100]/40 hover:bg-[#f0b100]/60"}`}
+    className={`h-2 rounded-full transition-all ${
+      active ? "w-6 bg-[#f0b100]" : "w-2 bg-gray-300"
+    }`}
   />
 );
