@@ -63,6 +63,17 @@ export default function Home() {
   const router = useRouter();
   const { examBank, loading } = useExam();
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Word cycle for hero section
+  const words = ["amplify", "intensify", "fortify"];
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % words.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredExams, setFilteredExams] = useState<Exam[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -156,21 +167,26 @@ export default function Home() {
   return (
     <>
       {/* ----------------  HERO  ---------------- */}
-      <main className="flex justify-center min-h-[45vh] bg-white px-2 md:px-4 lg:px-6 text-center py-10">
-        <div className="flex flex-col items-center space-y-7 max-w-[1380px] max-auto">
-          <h1 className="ff-font-bold -mt-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-snug">
+      <main className="flex justify-center min-h-[75vh] lg:min-h-[80vh] items-center bg-white px-2 md:px-4 lg:px-6 text-center pt-24 pb-20">
+        <div className="flex flex-col items-center w-full max-w-[1380px] mx-auto">
+          
+          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium mb-10">
+            Trusted by 10,000+ Medical Students
+          </div>
+
+          <h1 className="ff-font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.25] text-[#111827]">
             We simplify learning, <br />
-            <span className="bg-[#FFCA00] px-2 py-1 rounded-lg">
-              amplify
+            <span className="bg-[#FFCA00] px-3 py-1 rounded-xl inline-block transition-all duration-300 mt-2 text-[#131d2c]">
+              {words[wordIndex]}
             </span>{" "}
             success
           </h1>
 
-          <p className="ff-font text-sm sm:text-base md:text-lg max-w-2xl">
-            Personalized Medical Coaching
+          <p className="ff-font text-base sm:text-lg md:text-xl text-[#6b7280] mt-8 mb-16 max-w-2xl mx-auto">
+            Personalized Medical Coaching Driven by Data, Enhanced by AI
           </p>
 
-          <div ref={searchRef} className="w-full max-w-xl relative">
+          <div ref={searchRef} className="w-full max-w-xl relative mb-10">
             <FiSearch
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
               size={20}
@@ -217,7 +233,7 @@ export default function Home() {
             )}
           </div>
 
-          <div ref={dropdownRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full z-10 relative">
+          <div ref={dropdownRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full z-10 relative">
             {/* PG Entrance Exams Dropdown */}
             <div className="relative w-full sm:w-auto">
               <button

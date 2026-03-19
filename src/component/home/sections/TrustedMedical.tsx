@@ -36,7 +36,7 @@ const stats: Stat[] = [
 /* ----------  MAIN COMPONENT  ---------- */
 export default function TrustedMedical() {
   return (
-    <section className="bg-gray-900 text-white py-10 px-6">
+    <section className="bg-gray-900 text-white pt-16 pb-12 sm:pt-20 sm:pb-16 px-6">
       <div className="max-w-6xl mx-auto text-center">
         <Header />
         <StatsGrid stats={stats} />
@@ -47,22 +47,22 @@ export default function TrustedMedical() {
 
 /* ----------  SUB-COMPONENTS  ---------- */
 const Header = () => (
-  <>
-    <h2 className="text-3xl md:text-4xl ff-font-bold font-bold">
+  <div className="flex flex-col items-center mb-10 md:mb-14">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl ff-font-bold font-bold mb-2 md:mb-3">
       Trusted by Medical
     </h2>
-    <h2 className="text-3xl md:text-4xl ff-font-bold font-bold mb-3">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl ff-font-bold font-bold mb-4 md:mb-6">
       Professionals Worldwide
     </h2>
-    <p className="text-gray-300 ff-font text-base md:text-lg mb-7">
+    <p className="text-gray-300 ff-font text-base md:text-lg lg:text-xl max-w-2xl text-center leading-relaxed mt-1">
       Thousands of students and professionals advance their careers with our
       comprehensive pathology education.
     </p>
-  </>
+  </div>
 );
 
 const StatsGrid = ({ stats }: { stats: Stat[] }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 pt-2">
     {stats.map((s, i) => (
       <StatItem key={i} {...s} />
     ))}

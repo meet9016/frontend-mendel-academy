@@ -62,7 +62,7 @@ const features: Feature[] = [
 /* ----------  MAIN PAGE  ---------- */
 export default function MedicalChooseMendelAcademy() {
   return (
-    <main className="flex flex-col items-center max-w-[1380px] mx-auto justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
+    <main className="flex flex-col items-center w-full max-w-[1380px] mx-auto justify-center bg-white px-4 md:px-6 lg:px-8 pt-16 pb-12 sm:pt-20 sm:pb-16">
       <Header />
       <FeatureGrid features={features} />
       <BottomSection />
@@ -72,24 +72,22 @@ export default function MedicalChooseMendelAcademy() {
 
 /* ----------  SECTIONS  ---------- */
 const Header = () => (
-  <>
-    <div className="text-center space-y-0">
-      <h1 className="text-2xl md:text-3xl ff-font-bold font-bold">
-        Why Medical Professionals
-      </h1>
-      <h2 className="text-2xl md:text-3xl ff-font-bold font-bold">
-        Choose Mendel Academy
-      </h2>
-    </div>
-    <div className="text-center mt-3 ff-font md:text-lg max-w-4xl">
-      <p>Our comprehensive pathology platform accelerates your professional growth and clinical expertise.</p>
-    </div>
-  </>
+  <div className="flex flex-col items-center mb-10 md:mb-14 text-center">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl ff-font-bold font-bold mb-2 md:mb-3 text-[#111827]">
+      Why Medical Professionals
+    </h2>
+    <h2 className="text-2xl sm:text-3xl md:text-4xl ff-font-bold font-bold mb-4 md:mb-6 text-[#111827]">
+      Choose Mendel Academy
+    </h2>
+    <p className="text-gray-600 ff-font text-base md:text-lg lg:text-xl max-w-2xl text-center leading-relaxed mt-1">
+      Our comprehensive pathology platform accelerates your professional growth and clinical expertise.
+    </p>
+  </div>
 );
 
 const FeatureGrid = ({ features }: { features: Feature[] }) => (
-  <section className="w-full max-w-[1380px] mx-auto mt-3">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
+  <section className="w-full max-w-[1380px] mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 pt-2 cursor-pointer">
       {features.map((f) => (
         <FeatureCard key={f.title} {...f} />
       ))}
