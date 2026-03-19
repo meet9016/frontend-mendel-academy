@@ -67,6 +67,8 @@ export default function Home() {
   const [filteredExams, setFilteredExams] = useState<Exam[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle search
   useEffect(() => {
@@ -90,6 +92,9 @@ export default function Home() {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
+      }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
       }
     };
 
@@ -212,129 +217,70 @@ export default function Home() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-2 w-full max-w-3xl">
-            {/* PG Entrance Exam Prep Box */}
-            <div className="bg-white border-gray-300 border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
-              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">
-                PG Entrance Exam Prep
-              </h3>
+          <div ref={dropdownRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full z-10 relative">
+            {/* PG Entrance Exams Dropdown */}
+            <div className="relative w-full sm:w-auto">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'pg' ? null : 'pg')}
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#0f172a] text-white rounded-xl font-semibold flex items-center justify-between gap-3 shadow-md hover:bg-[#1e293b] transition-colors"
+              >
+                PG Entrance Exams
+                <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pg' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
               
-              {/* Content or Skeleton Loader */}
-              {loading ? (
-                <div className="space-y-2">
-                  {[...Array(4)].map((_, idx) => (
-                    <div key={idx} className="text-center">
-                      <Skeleton 
-                        height={24} 
-                        width="80%" 
-                        className="mx-auto rounded-md"
-                        baseColor="#f3f4f6"
-                        highlightColor="#e5e7eb"
-                      />
+              {activeDropdown === 'pg' && (
+                <div className="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-72 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
+                  {loading ? (
+                    <div className="p-8 text-center text-sm text-gray-500 animate-pulse">Loading exams...</div>
+                  ) : (
+                    <div className="py-2 max-h-72 overflow-y-auto scrollbar-hide">
+                      {examBank?.map((item, idx) => (
+                        <div 
+                          key={idx}
+                          onClick={() => {
+                            router.push(`/medicalexam/${item?.exam_id}`);
+                            setActiveDropdown(null);
+                          }}
+                          className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
+                        >
+                          <span className="truncate pr-4">{item?.exam_name}</span>
+                          <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  
-                  {/* Button skeleton */}
-                  <div className="mt-auto text-center pt-4">
-                    <Skeleton 
-                      height={48} 
-                      width={120} 
-                      className="mx-auto rounded-full"
-                      baseColor="#f3f4f6"
-                      highlightColor="#e5e7eb"
-                    />
-                  </div>
+                  )}
                 </div>
-              ) : (
-                <>
-                  <ul className="space-y-2 ff-font text-center text-black">
-                    {examBank?.map((item, idx) => (
-                      <li 
-                        key={idx} 
-                        className="relative pl-4 group cursor-pointer hover:text-[#FFCA00] transition-colors duration-200"
-                        onClick={() => router.push(`/medicalexam/${item?.exam_id}`)}
-                      >
-                        {item?.exam_name}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* fixed bottom button */}
-                  <div className="mt-auto text-center pt-4">
-                    <CommonButton
-                      pyClass="py-3"
-                      pxClass="px-8"
-                      className="transition shadow-md w-fit !rounded-full hover:shadow-lg"
-                      fontWeight={700}
-                      fontSize={15}
-                      onClick={() => router.push(`/medicalexam`)}
-                    >
-                      Learn more
-                    </CommonButton>
-                  </div>
-                </>
               )}
             </div>
 
-            {/* Advanced Pathology Box */}
-            <div className="bg-white border-[#d1d5dc] border rounded-2xl shadow-md p-6 text-left transition hover:shadow-lg relative flex flex-col w-85">
-              <h3 className="ff-font-bold text-2xl mb-3 font-bold text-center">
+            {/* Advanced Pathology Dropdown */}
+            <div className="relative w-full sm:w-auto">
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'pathology' ? null : 'pathology')}
+                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#0f172a] border border-gray-300 rounded-xl font-semibold flex items-center justify-between gap-3 shadow-sm hover:bg-gray-50 transition-colors"
+              >
                 Advanced Pathology
-              </h3>
-              
-              {/* Content or Skeleton Loader */}
-              {loading ? (
-                <div className="space-y-2">
-                  {[...Array(4)].map((_, idx) => (
-                    <div key={idx} className="text-center">
-                      <Skeleton 
-                        height={24} 
-                        width="80%" 
-                        className="mx-auto rounded-md"
-                        baseColor="#f3f4f6"
-                        highlightColor="#e5e7eb"
-                      />
-                    </div>
-                  ))}
-                  
-                  {/* Button skeleton */}
-                  <div className="mt-auto text-center pt-4">
-                    <Skeleton 
-                      height={48} 
-                      width={120} 
-                      className="mx-auto rounded-full"
-                      baseColor="#f3f4f6"
-                      highlightColor="#e5e7eb"
-                    />
+                <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pathology' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+
+              {activeDropdown === 'pathology' && (
+                <div className="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-72 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="py-2 max-h-72 overflow-y-auto scrollbar-hide">
+                    {pathologyItems.map((item, idx) => (
+                      <div 
+                        key={idx}
+                        onClick={() => {
+                          router.push("/pathology");
+                          setActiveDropdown(null);
+                        }}
+                        className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
+                      >
+                        <span className="truncate pr-4">{item}</span>
+                        <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ) : (
-                <>
-                  <ul className="space-y-2 ff-font text-center text-black">
-                    {pathologyItems.map((item, idx) => (
-                      <li 
-                        key={idx} 
-                        className="relative pl-4 group cursor-pointer hover:text-[#FFCA00] transition-colors duration-200"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* fixed bottom button */}
-                  <div className="mt-auto text-center pt-4">
-                    <CommonButton
-                      pyClass="py-3"
-                      pxClass="px-8"
-                      className="transition shadow-md w-fit !rounded-full hover:shadow-lg"
-                      fontWeight={700}
-                      fontSize={15}
-                      onClick={() => router.push("/pathology")}
-                    >
-                      Learn more
-                    </CommonButton>
-                  </div>
-                </>
               )}
             </div>
           </div>
