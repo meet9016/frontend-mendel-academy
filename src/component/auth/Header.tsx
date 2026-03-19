@@ -773,7 +773,7 @@ export default function Header() {
             <FaUser className="text-gray-500 w-5 h-5" />
             <span className="text-sm font-medium ff-font">Edit Profile</span>
           </button>
-          <button
+          {/* <button
             onClick={() => {
               router.push("/test-create");
               setIsProfileOpen(false);
@@ -782,7 +782,7 @@ export default function Header() {
           >
             <FaNoteSticky className="text-gray-500 w-5 h-5" />
             <span className="text-sm font-medium ff-font">QBank</span>
-          </button>
+          </button> */}
           <hr className="my-2 border-gray-200" />
           <button
             onClick={() => handleLogout()}
