@@ -182,9 +182,14 @@ export default function Home() {
             success
           </h1>
 
-          <p className="ff-font text-base sm:text-lg md:text-xl text-[#6b7280] mt-8 mb-16 max-w-2xl mx-auto">
-            Personalized Medical Coaching Driven by Data, Enhanced by AI
-          </p>
+          <div className="ff-font text-base sm:text-lg md:text-xl text-[#6b7280] mt-8 mb-16 max-w-2xl mx-auto flex flex-col items-center gap-1.5">
+            <span className="ff-font text-xl sm:text-2xl text-[#6b7280] leading-tight font-semibold">
+              Personalized Medical Coaching
+            </span>
+            <span className="ff-font text-base sm:text-lg text-[#6b7280]">
+              Driven by Data, Enhanced by AI
+            </span>
+          </div>
 
           <div ref={searchRef} className="w-full max-w-xl relative mb-10">
             <FiSearch
@@ -238,7 +243,7 @@ export default function Home() {
             <div className="relative w-full sm:w-auto">
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'pg' ? null : 'pg')}
-                className="w-full sm:w-auto px-8 py-3.5 bg-[#0f172a] text-white rounded-xl font-semibold flex items-center justify-between gap-3 shadow-md hover:bg-[#1e293b] transition-colors"
+                className="w-full sm:w-auto px-6 py-3.5 bg-[#0f172a] text-white rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-md hover:bg-[#1e293b] transition-colors text-sm"
               >
                 PG Entrance Exams
                 <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pg' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -273,7 +278,7 @@ export default function Home() {
             <div className="relative w-full sm:w-auto">
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'pathology' ? null : 'pathology')}
-                className="w-full sm:w-auto px-8 py-3.5 bg-white text-[#0f172a] border border-gray-300 rounded-xl font-semibold flex items-center justify-between gap-3 shadow-sm hover:bg-gray-50 transition-colors"
+                className="w-full sm:w-auto px-6 py-3.5 bg-white text-[#0f172a] border border-gray-300 rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-sm hover:bg-gray-50 transition-colors text-sm"
               >
                 Advanced Pathology
                 <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pathology' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
