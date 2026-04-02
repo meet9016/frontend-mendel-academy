@@ -12,6 +12,7 @@ import { getTempId } from "@/utils/helper";
 import { getAuthId } from "@/utils/tokenManager";
 import { store } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
+import { ErrorToast, InfoToast, SuccessToast, WarningToast } from "@/comman/Toastify";
 
 export default function QBankPlansPage() {
   const [plans, setPlans] = useState([]);
@@ -42,9 +43,9 @@ export default function QBankPlansPage() {
         store.dispatch(setCartCount(countRes.data.count));
 
         if (res.data.alreadyInCart) {
-          toast.info("Plan is already in cart");
+          InfoToast("Plan is already in cart");
         } else {
-          toast.success("Plan added to cart successfully!");
+          SuccessToast("Plan added to cart successfully!");
         }
 
         if (typeof window !== "undefined") {
@@ -52,7 +53,7 @@ export default function QBankPlansPage() {
         }
       }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to add to cart");
+      ErrorToast(error?.response?.data?.message || "Failed to add to cart");
     } finally {
       setAddingToCartId(null);
     }
@@ -245,11 +246,11 @@ export default function QBankPlansPage() {
                     type="button"
                     onClick={() => {
                       if (purchasedPlanId) {
-                        toast.warning("You already have an active plan!");
+                        WarningToast("You already have an active plan!");
                         return;
                       }
                       if (pendingCartPlanId && pendingCartPlanId !== plan.id) {
-                        toast.warning("You already have another plan in your cart!");
+                        WarningToast("You already have another plan in your cart!");
                         return;
                       }
                       handleSelectPlan(plan.id)

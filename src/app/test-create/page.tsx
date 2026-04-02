@@ -964,6 +964,7 @@ import endPointApi from "@/utils/endPointApi";
 import { toast } from "react-toastify";
 import QBankSidebar from "@/component/qbank/QBankSidebar";
 import { getAuthId } from "@/utils/tokenManager";
+import { ErrorToast } from "@/comman/Toastify";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Topic = {
@@ -1220,7 +1221,7 @@ export default function TestCreatePage() {
 
         setTree(normalized);
       } catch (error: any) {
-        toast.error(error.response?.data?.message || "Failed to load QBank data");
+        ErrorToast(error.response?.data?.message || "Failed to load QBank data");
       } finally {
         setLoadingTree(false);
       }
@@ -1327,7 +1328,7 @@ export default function TestCreatePage() {
         }
         setQuestions(all);
       } catch (error: any) {
-        toast.error(error.response?.data?.message || "Failed to load questions");
+        ErrorToast(error.response?.data?.message || "Failed to load questions");
       } finally {
         setLoadingQuestions(false);
       }
@@ -1447,13 +1448,13 @@ export default function TestCreatePage() {
   const handleToggleTopic = useCallback((topic: Topic) => {
     // Only allow if topic has questions
     if (topic.questionCount === 0) {
-      toast.error("This topic has no questions available");
+      ErrorToast("This topic has no questions available");
       return;
     }
 
     // Only allow if chapter is selected
     if (!selectedChapterIds.includes(topic.chapterId)) {
-      toast.error("Please select the chapter first");
+      ErrorToast("Please select the chapter first");
       return;
     }
     setSelectedTopicIds((prev) => toggleItem(prev, topic.id));
@@ -1535,7 +1536,7 @@ export default function TestCreatePage() {
         const res = await api.get(endPointApi.listDemoQuestions as string);
         const list = (res.data || []) as any[];
         if (!list.length) {
-          toast.error("No demo questions configured. Please contact admin.");
+          ErrorToast("No demo questions configured. Please contact admin.");
           return;
         }
         const allDemo: Question[] = list.map((q) => ({
@@ -1569,7 +1570,7 @@ export default function TestCreatePage() {
           });
           attemptId = resAttempt.data?.id || resAttempt.data?._id;
         } catch (error: any) {
-          toast.error(
+          ErrorToast(
             error.response?.data?.message || "Failed to create test record"
           );
           return;
@@ -1587,25 +1588,25 @@ export default function TestCreatePage() {
         try {
           window.sessionStorage.setItem("activeTest", JSON.stringify(payload));
         } catch {
-          toast.error("Failed to store test data");
+          ErrorToast("Failed to store test data");
           return;
         }
 
         router.push(`/test-run?id=${attemptId}`);
         return;
       } catch (error: any) {
-        toast.error(
+        ErrorToast(
           error.response?.data?.message || "Failed to load demo questions"
         );
         return;
       }
     }
 
-    if (!selectedSubjectIds.length) return toast.error("Please select at least one subject");
-    if (!selectedChapterIds.length) return toast.error("Please select at least one chapter");
-    if (!selectedTopicsWithQuestions.length) return toast.error("Please select at least one topic with questions");
-    if (!availableQuestionCount) return toast.error("No questions available for selected topics");
-    if (questionCount < 1) return toast.error("Please select at least one question");
+    if (!selectedSubjectIds.length) return ErrorToast("Please select at least one subject");
+    if (!selectedChapterIds.length) return ErrorToast("Please select at least one chapter");
+    if (!selectedTopicsWithQuestions.length) return ErrorToast("Please select at least one topic with questions");
+    if (!availableQuestionCount) return ErrorToast("No questions available for selected topics");
+    if (questionCount < 1) return ErrorToast("Please select at least one question");
 
     const limit = Math.min(
       QUESTION_PER_TEST_LIMIT,
@@ -1636,7 +1637,7 @@ export default function TestCreatePage() {
       });
       attemptId = res.data?.id || res.data?._id;
     } catch (error: any) {
-      toast.error(
+      ErrorToast(
         error.response?.data?.message || "Failed to create test record"
       );
       return;
@@ -1654,7 +1655,7 @@ export default function TestCreatePage() {
     try {
       window.sessionStorage.setItem("activeTest", JSON.stringify(payload));
     } catch {
-      toast.error("Failed to store test data");
+      ErrorToast("Failed to store test data");
       return;
     }
 

@@ -151,3 +151,36 @@ html.hydrated [role="button"] {
   background-color: #FFCA00 !important;
   color: black;
 }
+
+/* 🔥 Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* ❌ Remove top/bottom arrow buttons */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #FFCA00;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+/* Hover animation */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #e6b800;
+}
+
+/* Firefox support */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #FFCA00 transparent;
+}

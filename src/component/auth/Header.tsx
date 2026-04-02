@@ -318,7 +318,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/" ? "" : "hover:text-[#FFCA00]"}
+                ${pathname === "/" ? "" : ""}
               `}
             >
               Home
@@ -335,7 +335,7 @@ export default function Header() {
                 id="exam-button"
                 onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
-                  ${isExamActive ? "" : "hover:text-[#FFCA00]"}
+                  ${isExamActive ? "" : ""}
                 `}
               >
                 PG Medical Entrance Exams
@@ -397,7 +397,7 @@ export default function Header() {
                 id="pathology-button"
                 onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
-                  ${isPathologyActive ? "" : "hover:text-[#FFCA00]"}
+                  ${isPathologyActive ? "" : ""}
                 `}
               >
                 Advanced Pathology Prep
@@ -474,7 +474,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/aboutUs" ? "" : "hover:text-[#FFCA00]"}
+                ${pathname === "/aboutUs" ? "" : ""}
               `}
             >
               About Us
@@ -488,7 +488,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/blog" ? "" : "hover:text-[#FFCA00]"}
+                ${pathname === "/blog" ? "" : ""}
               `}
             >
               Blog
@@ -502,7 +502,7 @@ export default function Header() {
             <button
               onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/studentTestimonials" ? "" : "hover:text-[#FFCA00]"}
+                ${pathname === "/studentTestimonials" ? "" : ""}
               `}
             >
               Student Testimonials

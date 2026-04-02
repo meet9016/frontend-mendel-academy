@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Toastify from "@/comman/Toastify";
+// import { Toastify } from "@/comman/Toastify";
 import Header from "@/component/auth/Header";
 import Footer from "@/component/auth/Footer";
 import { store } from "@/redux/store";
@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {Toastify} from "@/comman/Toastify";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

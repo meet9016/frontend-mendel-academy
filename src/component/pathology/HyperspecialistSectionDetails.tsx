@@ -12,6 +12,7 @@ import { AppDispatch } from "@/redux/store";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId } from "@/utils/helper";
 import { HyperspecialistCardSkeleton } from "../Skeletons";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 
 export type HyperSpecialistItem = {
   _id: string;
@@ -100,7 +101,7 @@ export default function Hero() {
       }
     } catch (err) {
       console.error("Error fetching HyperSpecialist modules:", err);
-      toast.error("Failed to load modules");
+      ErrorToast("Failed to load modules");
     } finally {
       setLoading(false);
     }
@@ -129,7 +130,7 @@ export default function Hero() {
 
   const addToCart = async () => {
     if (selected.length === 0) {
-      toast.error("Please select at least one module");
+      ErrorToast("Please select at least one module");
       return;
     }
 
@@ -151,7 +152,7 @@ export default function Hero() {
       } else if (tempId && tempId !== "null") {
         cartPayload.temp_id = tempId;
       } else {
-        toast.error("Session expired. Please refresh the page.");
+        ErrorToast("Session expired. Please refresh the page.");
         setAddingToCart(false);
         return;
       }
@@ -183,15 +184,15 @@ export default function Hero() {
 
         // Show appropriate message
         if (newAdditions.length > 0 && alreadyInCart.length > 0) {
-          toast.success(
+          SuccessToast(
             `${newAdditions.length} module${newAdditions.length > 1 ? "s" : ""
             } added to cart. ${alreadyInCart.length} ${alreadyInCart.length > 1 ? "were" : "was"
             } already in cart.`
           );
         } else if (alreadyInCart.length === selected.length) {
-          toast.info(`All selected modules are already in your cart!`);
+          InfoToast(`All selected modules are already in your cart!`);
         } else {
-          toast.success(
+          SuccessToast(
             `${newAdditions.length} module${newAdditions.length > 1 ? "s" : ""
             } added to cart!`
           );
@@ -200,7 +201,7 @@ export default function Hero() {
         // ✅ Don't clear selection - keep items selected to show they're in cart
         // setSelected([]);
       } else {
-        toast.warning(
+        ErrorToast(
           `${successResults.length} of ${selected.length} modules processed`
         );
         // ✅ Still update cart count
@@ -208,7 +209,7 @@ export default function Hero() {
       }
     } catch (error: any) {
       console.error("Error adding to cart:", error);
-      toast.error(error.response?.data?.message || "Failed to add to cart");
+      ErrorToast(error.response?.data?.message || "Failed to add to cart");
     } finally {
       setAddingToCart(false);
     }

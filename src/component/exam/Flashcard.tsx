@@ -9,6 +9,7 @@ import { TbLayoutColumns, TbLayoutRows } from "react-icons/tb";
 import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("primereact/editor").then((m) => m.Editor), { ssr: false });
 import type { EditorTextChangeEvent } from "primereact/editor";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 type Flashcard = {
   id: string;
@@ -235,7 +236,7 @@ export const FlashcardModal = ({
       setFlashcards(response.data);
     } catch (error) {
       console.error("Failed to fetch flashcards:", error);
-      toast.error("Failed to load flashcards");
+      ErrorToast("Failed to load flashcards");
     } finally {
       setIsLoading(false);
     }
@@ -275,7 +276,7 @@ export const FlashcardModal = ({
 
   const handleSave = async () => {
     if (!front.trim() || !back.trim()) {
-      toast.error("Front and Back content are required");
+      ErrorToast("Front and Back content are required");
       return;
     }
 
@@ -297,11 +298,11 @@ export const FlashcardModal = ({
         setFlashcards((prev: Flashcard[]) =>
           prev.map((fc: Flashcard) => (fc.id === editingFlashcard.id ? response.data : fc))
         );
-        toast.success("Flashcard updated successfully");
+        SuccessToast("Flashcard updated successfully");
       } else {
         const response = await api.post(endPointApi.flashcards, flashcardData);
         setFlashcards((prev: Flashcard[]) => [response.data, ...prev]);
-        toast.success("Flashcard created successfully");
+        SuccessToast("Flashcard created successfully");
       }
 
       setShowCreateForm(false);
@@ -311,7 +312,7 @@ export const FlashcardModal = ({
       setTags("");
     } catch (error) {
       console.error("Failed to save flashcard:", error);
-      toast.error("Failed to save flashcard");
+      ErrorToast("Failed to save flashcard");
     } finally {
       setIsSaving(false);
     }
@@ -338,10 +339,10 @@ export const FlashcardModal = ({
       if (viewingFlashcard?.id === flashcardToDelete) {
         setViewingFlashcard(null);
       }
-      toast.success("Flashcard deleted successfully");
+      SuccessToast("Flashcard deleted successfully");
     } catch (error) {
       console.error("Failed to delete flashcard:", error);
-      toast.error("Failed to delete flashcard");
+      ErrorToast("Failed to delete flashcard");
     } finally {
       setFlashcardToDelete(null);
     }

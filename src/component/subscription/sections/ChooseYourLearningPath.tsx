@@ -1,4 +1,5 @@
 import CommonButton from '@/comman/Button';
+import { ErrorToast } from '@/comman/Toastify';
 import { setCartCount } from "@/redux/cartSlice";
 import { store } from "@/redux/store";
 import endPointApi from '@/utils/endPointApi';
@@ -93,7 +94,7 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
     const handleAddToCart = async (module: ModuleData, moduleIndex: number) => {
         
         if (!livecourseId) {
-            toast.error('Course information is missing');
+            ErrorToast('Course information is missing');
             return;
         }
 
@@ -104,7 +105,7 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
         }
 
         if (!moduleId && moduleId !== 0) {
-            toast.error('Module information is missing');
+            ErrorToast('Module information is missing');
             return;
         }
 
@@ -151,19 +152,19 @@ const ChooseYourLearningPath: React.FC<ChooseYourLearningPathProps> = ({
                 }
 
                 if (result.alreadyInCart) {
-                    toast.success('Module is already in your cart!');
+                    SuccessToast('Module is already in your cart!');
                 } else {
-                    toast.success('Module added to cart successfully!');
+                    SuccessToast('Module added to cart successfully!');
                 }
 
                 if (onAddToCart && typeof onAddToCart === 'function') {
                     onAddToCart(String(moduleId));
                 }
             } else {
-                toast.error(result.message || 'Failed to add module to cart');
+                ErrorToast(result.message || 'Failed to add module to cart');
             }
         } catch (error) {
-            toast.error('An error occurred. Please try again.');
+            ErrorToast('An error occurred. Please try again.');
         } finally {
             setLoadingModuleId(null);
         }

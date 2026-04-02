@@ -27,6 +27,7 @@ import { getTempId } from "@/utils/helper";
 import { getAuthId } from "@/utils/tokenManager";
 import { setCartCount } from "@/redux/cartSlice";
 import StatusSection from "./StatusSection";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 /* ----------  TYPES  ---------- */
 type Program = {
@@ -113,7 +114,7 @@ const addToCart = async (item: Program) => {
   const productId = item._id || item.id;
 
   if (!productId) {
-    toast.error("Product ID is missing");
+    ErrorToast("Product ID is missing");
     return;
   }
 
@@ -131,9 +132,9 @@ const addToCart = async (item: Program) => {
     const res = await api.post(`${endPointApi.postCreateAddToCart}`, body);
 
     if (res.data.success) store.dispatch(setCartCount(res.data.count));
-    toast.success(res.data.message);
+    SuccessToast(res.data.message);
   } catch (error: any) {
-    toast.error(error?.response?.data?.message || "Failed to add to cart");
+    ErrorToast(error?.response?.data?.message || "Failed to add to cart");
   }
 };
 

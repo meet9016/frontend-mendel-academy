@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { toast } from "react-toastify";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 type DemoQuestion = {
   id: string;
@@ -38,7 +39,7 @@ export default function DemoQuestionsAdminPage() {
       const list = res.data || [];
       setItems(list);
     } catch (error: any) {
-      toast.error(
+      ErrorToast(
         error?.response?.data?.message || "Failed to load demo questions"
       );
     } finally {
@@ -98,15 +99,15 @@ export default function DemoQuestionsAdminPage() {
     };
 
     if (!payload.question.trim()) {
-      toast.error("Question is required");
+      ErrorToast("Question is required");
       return;
     }
     if (!payload.options.filter((o) => o && o.trim()).length) {
-      toast.error("At least two options are required");
+      ErrorToast("At least two options are required");
       return;
     }
     if (!payload.correctAnswer.trim()) {
-      toast.error("Correct answer is required");
+      ErrorToast("Correct answer is required");
       return;
     }
 
@@ -117,15 +118,15 @@ export default function DemoQuestionsAdminPage() {
           `${endPointApi.updateDemoQuestion}/${editing.id}`,
           payload
         );
-        toast.success("Demo question updated");
+        SuccessToast("Demo question updated");
       } else {
         await api.post(endPointApi.createDemoQuestion as string, payload);
-        toast.success("Demo question created");
+        SuccessToast("Demo question created");
       }
       setEditing(null);
       await loadQuestions();
     } catch (error: any) {
-      toast.error(
+      ErrorToast(
         error?.response?.data?.message || "Failed to save demo question"
       );
     } finally {
@@ -137,10 +138,10 @@ export default function DemoQuestionsAdminPage() {
     if (!window.confirm("Delete this demo question?")) return;
     try {
       await api.delete(`${endPointApi.deleteDemoQuestion}/${id}`);
-      toast.success("Demo question deleted");
+      SuccessToast("Demo question deleted");
       await loadQuestions();
     } catch (error: any) {
-      toast.error(
+      ErrorToast(
         error?.response?.data?.message || "Failed to delete demo question"
       );
     }

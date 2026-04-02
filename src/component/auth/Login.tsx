@@ -14,6 +14,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { removeTempId } from "@/utils/helper";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 /* ----------  TYPES  ---------- */
 type FormData = { email: string; password: string };
@@ -47,11 +48,11 @@ export default function Login() {
       .then((res) => {  
         saveToken(res.data.token.access);
         saveUserId(res.data.user._id);
-        toast.success(res.data.message || "User login successfully!");
+        SuccessToast(res.data.message || "User login successfully!");
         router.push("/");
         removeTempId(); // Remove tmp id on login
       })
-      .catch((err) => toast.error(err.response?.data?.message));
+      .catch((err) => ErrorToast(err.response?.data?.message));
   };
 
   return (

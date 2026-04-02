@@ -21,6 +21,7 @@ import { store } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 
 /* ---------- TYPES ---------- */
 type OptionType = "record-book" | "video" | "writing-book";
@@ -120,12 +121,12 @@ const addToCart = async (
     const productId = (program as any).id || program._id;
 
     if (!productId) {
-      toast.error("Product ID is missing");
+      ErrorToast("Product ID is missing");
       return;
     }
 
     if (selectedOptions.length === 0) {
-      toast.warning("Please select at least one learning path option");
+      ErrorToast("Please select at least one learning path option");
       return;
     }
 
@@ -147,13 +148,13 @@ const addToCart = async (
       store.dispatch(setCartCount(countRes.data.count));
       
       if (isAlreadyInCart) {
-        toast.info("Product is already in cart");
+        InfoToast("Product is already in cart");
       } else {
-        toast.success("Product added to cart successfully!");
+        SuccessToast("Product added to cart successfully!");
       }
     }
   } catch (error: any) {
-    toast.error(error?.response?.data?.message || "Failed to add to cart");
+    ErrorToast(error?.response?.data?.message || "Failed to add to cart");
   }
 };
 
@@ -232,7 +233,7 @@ export default function RecordedProgramDetails() {
         const id = params?.id;
 
         if (!id) {
-          toast.error("Program ID not found");
+          ErrorToast("Program ID not found");
           router.push("/pathology");
           return;
         }
@@ -245,11 +246,11 @@ export default function RecordedProgramDetails() {
           const productId = res.data.data.id || res.data.data._id;
           await checkCartAndPreselect(productId);
         } else {
-          toast.error("Program not found");
+          ErrorToast("Program not found");
           router.push("/pathology");
         }
       } catch (error: any) {
-        toast.error(
+        ErrorToast(
           error?.response?.data?.message || "Failed to load program details"
         );
         router.push("/pathology");
@@ -286,7 +287,7 @@ export default function RecordedProgramDetails() {
       program.options.length > 0 &&
       selectedOptions.length === 0
     ) {
-      toast.warning("Please select at least one learning path option");
+      ErrorToast("Please select at least one learning path option");
       return;
     }
 

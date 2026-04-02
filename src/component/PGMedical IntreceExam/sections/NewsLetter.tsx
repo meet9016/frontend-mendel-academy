@@ -14,6 +14,7 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { newsLatterSchema } from "@/validationSchema/validationSchema";
 import CommonButton from "@/comman/Button";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 // NewsLetter.types.ts
 export interface FormData {
@@ -72,7 +73,7 @@ const NewsLetter: React.FC = () => {
       };
 
       const res = await api.post(`${endPointApi.userRagisterCreate}`, body);
-      toast.success(res.data.message);
+      SuccessToast(res.data.message);
       setFormData({
         firstName: "",
         lastName: "",
@@ -81,7 +82,7 @@ const NewsLetter: React.FC = () => {
         graduationYear: "",
       });
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      ErrorToast(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

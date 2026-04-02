@@ -15,6 +15,7 @@ import { GoPerson } from "react-icons/go";
 import { MdPhone } from "react-icons/md";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 /* ----------  TYPES  ---------- */
 type FormData = {
@@ -83,7 +84,7 @@ export default function Registers() {
           console.log("✅ User registered with ID:", response.data.user._id);
         }
 
-        toast.success(response.data.message || "Registration successful!");
+        SuccessToast(response.data.message || "Registration successful!");
 
         // Small delay to ensure localStorage is updated
         setTimeout(() => {
@@ -93,7 +94,7 @@ export default function Registers() {
     } catch (err: any) {
       console.error("Registration error:", err);
       const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
-      toast.error(errorMessage);
+      ErrorToast(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

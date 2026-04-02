@@ -7,6 +7,7 @@ import CommonButton from "@/comman/Button";
 import "react-loading-skeleton/dist/skeleton.css";
 import Skeleton from "react-loading-skeleton";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 /* ----------  TYPES  ---------- */
 export interface Exam {
@@ -114,7 +115,7 @@ export default function Home() {
   }, []);
 
   const handleExamClick = (examId: string) => {
-    router.push(`/medicalexam/${examId}`);
+    router.push(`/services/${examId}`);
     setShowDropdown(false);
     setSearchTerm("");
     setSelectedIndex(-1);
@@ -164,21 +165,83 @@ export default function Home() {
     "Fellows",
   ];
 
+
+  // import { motion, AnimatePresence } from "framer-motion";
+
+  const container = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.04,
+      },
+    },
+  };
+
+  const child = {
+    hidden: {
+      opacity: 0,
+      x: -20,            // 👈 left side se aayega
+      filter: "blur(8px)"
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      filter: "blur(0px)",
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
+
   return (
     <>
       {/* ----------------  HERO  ---------------- */}
       <main className="flex justify-center min-h-[75vh] lg:min-h-[80vh] items-center bg-white px-2 md:px-4 lg:px-6 text-center pt-24 pb-20">
         <div className="flex flex-col items-center w-full max-w-[1380px] mx-auto">
-          
+
           <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-gray-500 text-sm font-medium mb-10">
             Trusted by 10,000+ Medical Students
           </div>
 
+
+
+
           <h1 className="ff-font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.25] text-[#111827]">
             We simplify learning, <br />
-            <span className="bg-[#FFCA00] px-3 py-1 rounded-xl inline-block transition-all duration-300 mt-2 text-[#131d2c]">
-              {words[wordIndex]}
+
+            {/* 👇 div → span */}
+            <span className="relative inline-block mt-2 overflow-hidden rounded-xl align-middle">
+
+              {/* 🟡 Background */}
+              <motion.span
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="absolute inset-0 bg-[#FFCA00] origin-left"
+              />
+
+              {/* Text */}
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={words[wordIndex]}
+                  variants={container}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden"
+                  className="relative px-3 py-1 inline-block text-[#131d2c] font-semibold"
+                >
+                  {words[wordIndex].split("").map((char, i) => (
+                    <motion.span key={i} variants={child} className="inline-block">
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.span>
+              </AnimatePresence>
+
             </span>{" "}
+
             success
           </h1>
 
@@ -213,12 +276,11 @@ export default function Home() {
                   <div
                     id={`exam-item-${index}`}
                     key={exam._id}
-                    onClick={() => handleExamClick(exam.exam_id)}
-                    className={`px-5 py-3.5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 ${
-                      selectedIndex === index
-                        ? 'bg-yellow-50 border-l-4 border-l-[#FFCA00]'
-                        : 'hover:bg-gray-50'
-                    }`}
+                    onClick={() => handleExamClick(exam.slug)}
+                    className={`px-5 py-3.5 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 ${selectedIndex === index
+                      ? 'bg-yellow-50 border-l-4 border-l-[#FFCA00]'
+                      : 'hover:bg-gray-50'
+                      }`}
                   >
                     <p className="ff-font text-sm text-gray-800 text-left">
                       {exam.exam_name}
@@ -238,7 +300,7 @@ export default function Home() {
             )}
           </div>
 
-          <div ref={dropdownRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full z-10 relative">
+          <div ref={dropdownRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full z-10 relative mb-25">
             {/* PG Entrance Exams Dropdown */}
             <div className="relative w-full sm:w-auto">
               <button
@@ -248,18 +310,18 @@ export default function Home() {
                 PG Entrance Exams
                 <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pg' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
               </button>
-              
+
               {activeDropdown === 'pg' && (
                 <div className="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-72 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
                   {loading ? (
                     <div className="p-8 text-center text-sm text-gray-500 animate-pulse">Loading exams...</div>
                   ) : (
-                    <div className="py-2 max-h-72 overflow-y-auto scrollbar-hide">
+                    <div className="py-2 max-h-40 overflow-y-auto custom-scrollbar">
                       {examBank?.map((item, idx) => (
-                        <div 
+                        <div
                           key={idx}
                           onClick={() => {
-                            router.push(`/medicalexam/${item?.exam_id}`);
+                            router.push(`/services/${item?.slug}`);
                             setActiveDropdown(null);
                           }}
                           className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
@@ -286,9 +348,9 @@ export default function Home() {
 
               {activeDropdown === 'pathology' && (
                 <div className="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-72 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="py-2 max-h-72 overflow-y-auto scrollbar-hide">
+                  <div className="py-2 max-h-40 overflow-y-auto custom-scrollbar">
                     {pathologyItems.map((item, idx) => (
-                      <div 
+                      <div
                         key={idx}
                         onClick={() => {
                           router.push("/pathology");

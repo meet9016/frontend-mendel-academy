@@ -15,6 +15,7 @@ import { store } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
 import { toast } from "react-toastify";
 import Sliders from "@/comman/Sliders";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 
 interface WhoEnrollProps {
   data: WhoEnrollData | null;
@@ -76,12 +77,12 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
       const categoryId = examCategoryId || data?._id;
 
       if (!categoryId) {
-        toast.error("Category ID is missing");
+        ErrorToast("Category ID is missing");
         return;
       }
 
       if (!plan._id) {
-        toast.error("Plan ID is missing");
+        ErrorToast("Plan ID is missing");
         return;
       }
 
@@ -101,18 +102,18 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
         store.dispatch(setCartCount(countRes.data.count));
         
         if (res.data.alreadyInCart) {
-          toast.info("This plan is already in your cart");
+          InfoToast("This plan is already in your cart");
         } else {
-          toast.success("Plan added to cart successfully!");
+          SuccessToast("Plan added to cart successfully!");
         }
       }
     } catch (error: any) {
       console.error("Error adding to cart:", error);
 
       if (error.response?.status === 409) {
-        toast.info("This plan is already in your cart");
+        InfoToast("This plan is already in your cart");
       } else {
-        toast.error(error.response?.data?.message || "Failed to add plan to cart");
+        ErrorToast(error.response?.data?.message || "Failed to add plan to cart");
       }
     } finally {
       setLoadingPlanId(null);
@@ -441,12 +442,12 @@ const RapidToolCard = ({
       setIsLoading(true);
 
       if (!examCategoryId) {
-        toast.error("Category ID is missing");
+        ErrorToast("Category ID is missing");
         return;
       }
 
       if (!tool._id) {
-        toast.error("Tool ID is missing");
+        ErrorToast("Tool ID is missing");
         return;
       }
 
@@ -466,18 +467,18 @@ const RapidToolCard = ({
         store.dispatch(setCartCount(countRes.data.count));
         
         if (res.data.alreadyInCart) {
-          toast.info("This tool is already in your cart");
+          InfoToast("This tool is already in your cart");
         } else {
-          toast.success("Tool added to cart successfully!");
+          SuccessToast("Tool added to cart successfully!");
         }
       }
     } catch (error: any) {
       console.error("Error adding tool to cart:", error);
 
       if (error.response?.status === 409) {
-        toast.info("This tool is already in your cart");
+        InfoToast("This tool is already in your cart");
       } else {
-        toast.error(error.response?.data?.message || "Failed to add tool to cart");
+        ErrorToast(error.response?.data?.message || "Failed to add tool to cart");
       }
     } finally {
       setIsLoading(false);

@@ -196,8 +196,8 @@ const Pagination = ({ pageCount, onPageChange }: { pageCount: number; onPageChan
       containerClassName={"flex gap-2"}
       pageClassName={"border border-gray-300 cursor-pointer rounded-lg mb-10 w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-yellow-500 hover:text-white font-medium"}
       activeClassName={"bg-[#ffca00] text-black"}
-      previousClassName={"border border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-yellow-500 hover:text-white"}
-      nextClassName={"border border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-yellow-500 hover:text-white"}
+      previousClassName={"border cursor-pointer border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-yellow-500 hover:text-white"}
+      nextClassName={"border cursor-pointer border-gray-300 rounded-lg w-10 h-10 flex items-center justify-center hover:bg-yellow-500 hover:text-white"}
       disabledClassName={"opacity-50 cursor-not-allowed"}
     />
   </div>

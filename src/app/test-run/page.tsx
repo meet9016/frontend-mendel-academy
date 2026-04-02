@@ -15,6 +15,7 @@ import { SettingsPanel } from "@/component/exam/SettingsPanel";
 import TestHeader from "@/component/exam/TestHeader";
 import TestFooter from "@/component/exam/TestFooter";
 import { FlashcardModal } from "@/component/exam/Flashcard";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 // Dynamic import for Joyride to avoid SSR issues
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 
@@ -296,7 +297,7 @@ export default function TestRunPage() {
 
     // Prevent option selection if answer has already been submitted
     if (currentState?.showExplanation) {
-      toast.info("You cannot change your answer after submission");
+      InfoToast("You cannot change your answer after submission");
       return;
     }
 
@@ -319,7 +320,7 @@ export default function TestRunPage() {
 
     // Check if already submitted
     if (state?.showExplanation) {
-      toast.info("You have already submitted an answer for this question");
+      InfoToast("You have already submitted an answer for this question");
       return;
     }
 
@@ -358,16 +359,16 @@ export default function TestRunPage() {
                   isMarked: marked[currentQuestion.id] || false,
                 }
               );
-              toast.success("Question omitted successfully");
+              SuccessToast("Question omitted successfully");
             } catch (error) {
               console.error("Failed to save omission to server:", error);
-              toast.error("Failed to save answer. Will retry on next save.");
+              ErrorToast("Failed to save answer. Will retry on next save.");
               // You might want to add to a retry queue here
             }
           }
         }
       } else {
-        toast.error("Please select an answer");
+        ErrorToast("Please select an answer");
       }
       return;
     }
@@ -406,13 +407,13 @@ export default function TestRunPage() {
 
         // Show success message based on correctness
         if (isCorrect) {
-          toast.success("Correct answer! Well done!");
+          SuccessToast("Correct answer! Well done!");
         } else {
-          toast.info(`Answer submitted. The correct answer is ${String.fromCharCode(65 + currentQuestion.options.indexOf(currentQuestion.correctAnswer))}`);
+          InfoToast(`Answer submitted. The correct answer is ${String.fromCharCode(65 + currentQuestion.options.indexOf(currentQuestion.correctAnswer))}`);
         }
       } catch (error) {
         console.error("Failed to save answer to server:", error);
-        toast.error("Answer saved locally but failed to sync to server. Will retry.");
+        ErrorToast("Answer saved locally but failed to sync to server. Will retry.");
       }
     }
   };
@@ -474,14 +475,14 @@ export default function TestRunPage() {
           `${endPointApi.saveQuestionNote}/${test.attemptId}/${questionId}`,
           { note: note.trim() }
         );
-        toast.success('Note saved successfully');
+        SuccessToast('Note saved successfully');
       } catch (error) {
         console.error('Failed to save note to server:', error);
-        toast.error('Failed to save note. Will retry on next save.');
+        ErrorToast('Failed to save note. Will retry on next save.');
         // You might want to implement a retry queue here
       }
     } else {
-      toast.success('Note saved locally');
+      SuccessToast('Note saved locally');
     }
   };
 
@@ -501,14 +502,14 @@ export default function TestRunPage() {
         await api.delete(
           `${endPointApi.deleteQuestionNote}/${test.attemptId}/${questionId}`
         );
-        toast.success('Note deleted successfully');
+        SuccessToast('Note deleted successfully');
       } catch (error) {
         console.error('Failed to delete note from server:', error);
-        toast.error('Failed to delete note. Will retry on next save.');
+        ErrorToast('Failed to delete note. Will retry on next save.');
         // You might want to implement a retry queue here
       }
     } else {
-      toast.success('Note deleted locally');
+      SuccessToast('Note deleted locally');
     }
   };
 
@@ -538,11 +539,11 @@ export default function TestRunPage() {
         `${endPointApi.addFeedback}`,
         { attemptId, feedback: feedback.trim() }
       );
-      toast.success('Feedback submitted successfully');
+      SuccessToast('Feedback submitted successfully');
       setExistingFeedback(feedback.trim());
     } catch (error) {
       console.error('Failed to save feedback to server:', error);
-      toast.error('Failed to submit feedback. Please try again.');
+      ErrorToast('Failed to submit feedback. Please try again.');
     }
   };
 
@@ -823,7 +824,7 @@ export default function TestRunPage() {
           }
         );
       } catch (error: any) {
-        toast.error(
+        ErrorToast(
           error?.response?.data?.message || "Failed to save test result"
         );
       }

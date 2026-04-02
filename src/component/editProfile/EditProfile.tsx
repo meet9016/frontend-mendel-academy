@@ -20,6 +20,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { MdEmail, MdPhone, MdCalendarToday, MdPerson } from "react-icons/md";
 import { ProfileSkeleton } from "../Skeletons";
 import { toast } from "react-toastify";
+import { ErrorToast, SuccessToast } from "@/comman/Toastify";
 
 const EditProfile = () => {
   const userId = getAuthId();
@@ -110,7 +111,7 @@ const EditProfile = () => {
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
-        toast.error("Failed to load profile data");
+        ErrorToast("Failed to load profile data");
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -130,12 +131,12 @@ const EditProfile = () => {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Please upload an image file");
+      ErrorToast("Please upload an image file");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
+      ErrorToast("Image size should be less than 5MB");
       return;
     }
 
@@ -281,10 +282,10 @@ const EditProfile = () => {
 
           setShowCropModal(false);
           setSelectedImage(null);
-          toast.success("Profile photo updated successfully!");
+          SuccessToast("Profile photo updated successfully!");
         } catch (error: any) {
           console.error("Photo upload error:", error);
-          toast.error(error.response?.data?.message || "Failed to upload photo");
+          ErrorToast(error.response?.data?.message || "Failed to upload photo");
         } finally {
           setUploading(false);
         }
@@ -306,10 +307,10 @@ const EditProfile = () => {
       }));
 
       setIsEditMode(false);
-      toast.success("Profile updated successfully!");
+      SuccessToast("Profile updated successfully!");
     } catch (error: any) {
       console.error("Profile update error:", error);
-      toast.error(error.response?.data?.message || "Failed to update profile");
+      ErrorToast(error.response?.data?.message || "Failed to update profile");
     }
   };
 
@@ -330,10 +331,10 @@ const EditProfile = () => {
       link.href = window.URL.createObjectURL(blob);
       link.download = "user-payments.xlsx";
       link.click();
-      toast.success("Payment history downloaded!");
+      SuccessToast("Payment history downloaded!");
     } catch (error) {
       console.error("Excel download failed", error);
-      toast.error("Failed to download payment history");
+      ErrorToast("Failed to download payment history");
     }
   };
 
