@@ -211,38 +211,39 @@ export default function Home() {
           <h1 className="ff-font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.25] text-[#111827]">
             We simplify learning, <br />
 
-            {/* 👇 div → span */}
-            <span className="relative inline-block mt-2 overflow-hidden rounded-xl align-middle">
+            <span className="inline-flex items-center flex-wrap gap-2 mt-2">
 
-              {/* 🟡 Background */}
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="absolute inset-0 bg-[#FFCA00] origin-left"
-              />
-
-              {/* Text */}
-              <AnimatePresence mode="wait">
+              {/* Animated Word */}
+              <span className="relative inline-block overflow-hidden rounded-xl align-middle">
                 <motion.span
-                  key={words[wordIndex]}
-                  variants={container}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  className="relative px-3 py-1 inline-block text-[#131d2c] font-semibold"
-                >
-                  {words[wordIndex].split("").map((char, i) => (
-                    <motion.span key={i} variants={child} className="inline-block">
-                      {char}
-                    </motion.span>
-                  ))}
-                </motion.span>
-              </AnimatePresence>
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="absolute inset-0 bg-[#FFCA00] origin-left"
+                />
 
-            </span>{" "}
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={words[wordIndex]}
+                    variants={container}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    className="relative px-3 py-1 inline-block text-[#131d2c] font-semibold"
+                  >
+                    {words[wordIndex].split("").map((char, i) => (
+                      <motion.span key={i} variants={child} className="inline-block">
+                        {char}
+                      </motion.span>
+                    ))}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
 
-            success
+              {/* ✅ Success text properly aligned */}
+              <span className="text-[#111827]">success</span>
+
+            </span>
           </h1>
 
           <div className="ff-font text-base sm:text-lg md:text-xl text-[#6b7280] mt-8 mb-16 max-w-2xl mx-auto flex flex-col items-center gap-1.5">
