@@ -306,10 +306,12 @@ export default function Home() {
             <div className="relative w-full sm:w-auto">
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'pg' ? null : 'pg')}
-                className="w-full sm:w-auto px-6 py-3.5 bg-[#0f172a] text-white rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-md hover:bg-[#1e293b] transition-colors text-sm"
+                className="w-full sm:w-64 px-6 py-3.5 bg-[#0f172a] text-white rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-md hover:bg-[#1e293b] transition-colors text-sm whitespace-nowrap border border-transparent"
               >
                 PG Entrance Exams
-                <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pg' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg className={`w-4 h-4 transition-transform flex-shrink-0 ${activeDropdown === 'pg' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
               </button>
 
               {activeDropdown === 'pg' && (
@@ -328,7 +330,9 @@ export default function Home() {
                           className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
                         >
                           <span className="truncate pr-4">{item?.exam_name}</span>
-                          <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                          <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                          </svg>
                         </div>
                       ))}
                     </div>
@@ -341,10 +345,12 @@ export default function Home() {
             <div className="relative w-full sm:w-auto">
               <button
                 onClick={() => setActiveDropdown(activeDropdown === 'pathology' ? null : 'pathology')}
-                className="w-full sm:w-auto px-6 py-3.5 bg-white text-[#0f172a] border border-gray-300 rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-sm hover:bg-gray-50 transition-colors text-sm"
+                className="w-full sm:w-64 px-6 py-3.5 bg-white text-[#0f172a] border border-gray-300 rounded-xl font-semibold flex items-center justify-between gap-2.5 shadow-sm hover:bg-gray-50 transition-colors text-sm whitespace-nowrap"
               >
                 Advanced Pathology
-                <svg className={`w-4 h-4 transition-transform ${activeDropdown === 'pathology' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg className={`w-4 h-4 transition-transform flex-shrink-0 ${activeDropdown === 'pathology' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
               </button>
 
               {activeDropdown === 'pathology' && (
@@ -360,7 +366,9 @@ export default function Home() {
                         className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
                       >
                         <span className="truncate pr-4">{item}</span>
-                        <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                        <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
                       </div>
                     ))}
                   </div>

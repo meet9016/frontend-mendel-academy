@@ -32,6 +32,8 @@ export interface EndPointApi {
     postAddLiveCoursesToCart?: string;
     postAddRapidToolToCart?: string; // ✅ NEW
     postAddQbankPlanToCart?: string; // ✅ NEW
+    postAddEliteMentorshipToCart?: string; // ✅ NEW
+    postAddTsunamiToCart?: string; // ✅ NEW
     cartCount?: string;
     removeCart?: string;
     removeCartOption?: string;
@@ -122,6 +124,8 @@ const endPointApi: EndPointApi = {
     postAddLiveCoursesToCart: 'cart/add-livecourse',
     postAddRapidToolToCart: 'cart/add-rapid-tool', // ✅ NEW
     postAddQbankPlanToCart: 'cart/add-qbank-plan', // ✅ NEW
+    postAddEliteMentorshipToCart: 'cart/add-elite-mentorship', // ✅ NEW
+    postAddTsunamiToCart: 'cart/add-tsunami', // ✅ NEW
     cartCount: 'cart/count',
     removeCart: 'cart/remove',
     removeCartOption: '/cart/remove-option',

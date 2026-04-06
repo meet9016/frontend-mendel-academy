@@ -20,7 +20,7 @@ import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 interface WhoEnrollProps {
   data: WhoEnrollData | null;
   loading: boolean;
-  examCategoryId?: string; // ✅ NEW: Pass exam category ID from parent
+  examCategoryId?: string;
 }
 
 export interface Plan {
@@ -43,14 +43,34 @@ export interface RapidTool {
   price_inr?: number;
 }
 
+export interface EliteMentorship {
+  _id?: string;
+  name?: string;
+  price_usd?: number;
+  price_inr?: number;
+  included_services?: string;
+}
+
+export interface Tsunami {
+  name?: string;
+  included_service_price_usd?: number;
+  included_service_price_inr?: number;
+  description?: string;
+}
+
 export interface WhoEnrollData {
   _id?: string;
   who_can_enroll_title?: string;
   who_can_enroll_description?: string;
   who_can_enroll_image?: string;
+  plan_section_title?: string;
+  mentorship_tsunami_section_title?: string;
+  rapid_tools_section_title?: string;
   choose_plan_list?: Plan[];
   rapid_learning_tools?: RapidTool[];
-  user_currency?: string; // ✅ Backend provides this based on IP
+  elite_mentorship?: EliteMentorship[];
+  tsunami?: Tsunami;
+  user_currency?: string;
   user_country?: string;
 }
 
@@ -63,8 +83,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
     USE_PROFILES: { html: true },
   });
 
-  // ✅ Use backend-provided currency (based on IP detection)
-  // Fallback to isIndia() only if backend doesn't provide currency
   const backendCurrency = data?.user_currency;
   const fallbackCurrency = isIndia() ? "INR" : "USD";
   const userCurrency = backendCurrency || fallbackCurrency;
@@ -72,8 +90,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const addToCart = async (plan: Plan) => {
     try {
       setLoadingPlanId(plan._id);
-
-      // ✅ Use exam category ID from parent component
       const categoryId = examCategoryId || data?._id;
 
       if (!categoryId) {
@@ -97,10 +113,13 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
 
       if (res.data.success) {
         const identifier = userId || tempId;
+        if (!identifier) {
+          ErrorToast("Unable to identify user. Please log in or refresh the page.");
+          return;
+        }
         const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
-
         store.dispatch(setCartCount(countRes.data.count));
-        
+
         if (res.data.alreadyInCart) {
           InfoToast("This plan is already in your cart");
         } else {
@@ -109,7 +128,6 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
       }
     } catch (error: any) {
       console.error("Error adding to cart:", error);
-
       if (error.response?.status === 409) {
         InfoToast("This plan is already in your cart");
       } else {
@@ -139,6 +157,15 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           loadingPlanId={loadingPlanId}
           userCurrency={userCurrency}
           onEnroll={(plan) => addToCart(plan)}
+          title={data?.plan_section_title || "Choose Your Plan"}
+        />
+        <CombinedMentorshipAndTsunamiSection
+          mentorships={data?.elite_mentorship || []}
+          tsunami={data?.tsunami}
+          loading={loading}
+          userCurrency={userCurrency}
+          examCategoryId={examCategoryId}
+          title={data?.mentorship_tsunami_section_title || "Elite Mentorship & Tsunami Program"}
         />
 
         <RapidToolsSection
@@ -146,7 +173,10 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           loading={loading}
           userCurrency={userCurrency}
           examCategoryId={examCategoryId}
+          title={data?.rapid_tools_section_title || "Rapid Learning Tools"}
         />
+
+        {/* All Cards in One Line - Elite Mentorship + Tsunami */}
       </div>
     </section>
   );
@@ -212,23 +242,24 @@ const PricingSection = ({
   loadingPlanId,
   userCurrency,
   onEnroll,
+  title,
 }: {
   plans: Plan[];
   loading: boolean;
   loadingPlanId: string | null;
   userCurrency: string;
   onEnroll: (plan: Plan) => void;
+  title: string;
 }) => (
   <div className="max-w-[1380px] mx-auto">
-    <SectionHeading title="Choose Your Plan" />
+    <SectionHeading title={title} />
 
     {loading ? (
       <PlanSkeleton />
     ) : (
-      <div >
+      <div>
         <Sliders
           settings={{
-            // dots: true,
             accessibility: true,
             infinite: true,
             speed: 500,
@@ -251,7 +282,7 @@ const PricingSection = ({
         </Sliders>
       </div>
     )}
-  </div >
+  </div>
 );
 
 // Section Heading
@@ -275,28 +306,11 @@ const PlanCard = ({
   isLoading: boolean;
   onEnroll: () => void;
 }) => {
-  const price =
-    userCurrency === "INR"
-      ? plan.plan_pricing_inr
-      : plan.plan_pricing_dollar;
-
+  const price = userCurrency === "INR" ? plan.plan_pricing_inr : plan.plan_pricing_dollar;
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
 
   return (
-    <div
-      className={`
-    relative bg-white border-2 rounded-2xl 
-    m-3 my-8 p-6 
-    flex flex-col 
-    h-full               // ← important
-    min-h-[420px] 
-    transition-all duration-300
-    ${plan.most_popular
-      ? "border-primary shadow-xl"
-      : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"
-    }
-  `}
-    >
+    <div className={`relative bg-white border-2 rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[420px] transition-all duration-300 ${plan.most_popular ? "border-primary shadow-xl" : "border-[#e5e7eb] hover:shadow-xl hover:border-[#ffca00]"}`}>
       {plan.most_popular && (
         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
           <span className="bg-[#ffca00] text-white ff-font-bold px-6 py-2 rounded-full text-xs font-bold shadow-lg">
@@ -333,14 +347,7 @@ const PlanCard = ({
           </ul>
         </div>
 
-        <CommonButton
-          onClick={onEnroll}
-          pyClass="py-3"
-          pxClass="px-20"
-          fontWeight={700}
-          fontSize={14}
-          disabled={isLoading}
-        >
+        <CommonButton onClick={onEnroll} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
           {isLoading ? "Adding..." : "Enroll Now"}
         </CommonButton>
       </div>
@@ -375,20 +382,30 @@ const RapidToolSkeleton = () => (
   </div>
 );
 
+const CombinedSkeleton = () => (
+  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {[...Array(4)].map((_, i) => (
+      <Skeleton key={i} height={280} borderRadius={16} />
+    ))}
+  </div>
+);
+
 // Rapid Learning Tools Section
 const RapidToolsSection = ({
   tools,
   loading,
   userCurrency,
   examCategoryId,
+  title,
 }: {
   tools: RapidTool[];
   loading: boolean;
   userCurrency: string;
   examCategoryId?: string;
+  title: string;
 }) => (
   <div className="max-w-[1380px] mx-auto mt-16">
-    <SectionHeading title="Rapid Learning Tools" />
+    <SectionHeading title={title} />
 
     {loading ? (
       <RapidToolSkeleton />
@@ -433,39 +450,35 @@ const RapidToolCard = ({
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
-  
   const price = userCurrency === "INR" ? tool.price_inr : tool.price_usd;
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
 
   const addToolToCart = async () => {
     try {
       setIsLoading(true);
-
       if (!examCategoryId) {
         ErrorToast("Category ID is missing");
         return;
       }
-
       if (!tool._id) {
         ErrorToast("Tool ID is missing");
         return;
       }
-
       const body = {
         ...(userId ? { user_id: userId } : { temp_id: tempId }),
         exam_category_id: examCategoryId,
         tool_id: tool._id,
         bucket_type: true,
       };
-
       const res = await api.post(`${endPointApi.postAddRapidToolToCart}`, body);
-
       if (res.data.success) {
         const identifier = userId || tempId;
+        if (!identifier) {
+          ErrorToast("Unable to identify user. Please log in or refresh the page.");
+          return;
+        }
         const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
-
         store.dispatch(setCartCount(countRes.data.count));
-        
         if (res.data.alreadyInCart) {
           InfoToast("This tool is already in your cart");
         } else {
@@ -474,7 +487,6 @@ const RapidToolCard = ({
       }
     } catch (error: any) {
       console.error("Error adding tool to cart:", error);
-
       if (error.response?.status === 409) {
         InfoToast("This tool is already in your cart");
       } else {
@@ -490,26 +502,280 @@ const RapidToolCard = ({
       <div className="flex flex-col flex-grow justify-between">
         <div className="space-y-2">
           <div className="text-center">
-            <h3 className="text-xl font-bold ff-font-bold capitalize">
-              {tool.tool_type}
-            </h3>
+            <h3 className="text-xl font-bold ff-font-bold capitalize">{tool.tool_type}</h3>
           </div>
-
           <div className="text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
               {currencySymbol} {formatPrice(price ?? 0)}
             </p>
           </div>
         </div>
+        <CommonButton onClick={addToolToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
+          {isLoading ? "Adding..." : "Enroll Now"}
+        </CommonButton>
+      </div>
+    </div>
+  );
+};
 
-        <CommonButton
-          onClick={addToolToCart}
-          pyClass="py-3"
-          pxClass="px-20"
-          fontWeight={700}
-          fontSize={14}
-          disabled={isLoading}
-        >
+// COMBINED SECTION - All cards in one line (Elite Mentorship + Tsunami)
+const CombinedMentorshipAndTsunamiSection = ({
+  mentorships,
+  tsunami,
+  loading,
+  userCurrency,
+  examCategoryId,
+  title,
+}: {
+  mentorships: EliteMentorship[];
+  tsunami?: Tsunami;
+  loading: boolean;
+  userCurrency: string;
+  examCategoryId?: string;
+  title: string;
+}) => {
+  // Create a combined array of all items
+  const allItems: (EliteMentorship | Tsunami)[] = [...mentorships];
+
+  // Add tsunami to the combined array if it exists
+  if (tsunami && tsunami.name) {
+    allItems.push(tsunami);
+  }
+
+  if (allItems.length === 0) return null;
+
+  return (
+    <div className="max-w-[1380px] mx-auto mt-16">
+      <SectionHeading title={title} />
+
+      {loading ? (
+        <CombinedSkeleton />
+      ) : (
+        <div>
+          <Sliders
+            settings={{
+              accessibility: true,
+              infinite: true,
+              speed: 500,
+              slidesToShow: Math.min(4, allItems.length),
+              slidesToScroll: 1,
+              autoplay: true,
+              autoplaySpeed: 3000,
+              arrows: true,
+              responsive: [
+                {
+                  breakpoint: 1024,
+                  settings: {
+                    slidesToShow: Math.min(3, allItems.length),
+                  },
+                },
+                {
+                  breakpoint: 768,
+                  settings: {
+                    slidesToShow: Math.min(2, allItems.length),
+                  },
+                },
+                {
+                  breakpoint: 640,
+                  settings: {
+                    slidesToShow: 1,
+                  },
+                },
+              ],
+            }}
+          >
+            {allItems.map((item, index) => {
+              // Check if item is Tsunami (has name and description structure)
+              if ('included_service_price_usd' in item || 'description' in item) {
+                const tsunamiItem = item as Tsunami;
+                return (
+                  <TsunamiCardInLine
+                    key={`tsunami-${index}`}
+                    tsunami={tsunamiItem}
+                    userCurrency={userCurrency}
+                    examCategoryId={examCategoryId}
+                  />
+                );
+              } else {
+                // It's an Elite Mentorship item
+                const mentorshipItem = item as EliteMentorship;
+                return (
+                  <EliteMentorshipCardInLine
+                    key={mentorshipItem._id || `mentorship-${index}`}
+                    mentorship={mentorshipItem}
+                    userCurrency={userCurrency}
+                    examCategoryId={examCategoryId}
+                  />
+                );
+              }
+            })}
+          </Sliders>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Elite Mentorship Card for Inline Display
+const EliteMentorshipCardInLine = ({
+  mentorship,
+  userCurrency,
+  examCategoryId,
+}: {
+  mentorship: EliteMentorship;
+  userCurrency: string;
+  examCategoryId?: string;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+  const price = userCurrency === "INR" ? mentorship.price_inr : mentorship.price_usd;
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const addMentorshipToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) {
+        ErrorToast("Category ID is missing");
+        return;
+      }
+      if (!mentorship._id) {
+        ErrorToast("Mentorship ID is missing");
+        return;
+      }
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        mentorship_id: mentorship._id,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddEliteMentorshipToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) {
+          ErrorToast("Unable to identify user. Please log in or refresh the page.");
+          return;
+        }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        if (res.data.alreadyInCart) {
+          InfoToast("This mentorship is already in your cart");
+        } else {
+          SuccessToast("Mentorship added to cart successfully!");
+        }
+      }
+    } catch (error: any) {
+      console.error("Error adding mentorship to cart:", error);
+      if (error.response?.status === 409) {
+        InfoToast("This mentorship is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add mentorship to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[280px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+      <div className="flex flex-col flex-grow justify-between">
+        <div className="space-y-2">
+          <div className="text-center">
+            <h3 className="text-xl font-bold ff-font-bold capitalize">{mentorship.name}</h3>
+          </div>
+          <div className="text-center">
+            <p className="text-3xl ff-font-bold font-bold text-primary">
+              {currencySymbol} {formatPrice(price ?? 0)}
+            </p>
+          </div>
+          {mentorship.included_services && (
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600 ff-font">{mentorship.included_services}</p>
+            </div>
+          )}
+        </div>
+        <CommonButton onClick={addMentorshipToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
+          {isLoading ? "Adding..." : "Enroll Now"}
+        </CommonButton>
+      </div>
+    </div>
+  );
+};
+
+// Tsunami Card for Inline Display
+const TsunamiCardInLine = ({
+  tsunami,
+  userCurrency,
+  examCategoryId,
+}: {
+  tsunami: Tsunami;
+  userCurrency: string;
+  examCategoryId?: string;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+  const price = userCurrency === "INR" ? tsunami.included_service_price_inr : tsunami.included_service_price_usd;
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const addTsunamiToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) {
+        ErrorToast("Category ID is missing");
+        return;
+      }
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddTsunamiToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) {
+          ErrorToast("Unable to identify user. Please log in or refresh the page.");
+          return;
+        }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        if (res.data.alreadyInCart) {
+          InfoToast("This program is already in your cart");
+        } else {
+          SuccessToast("Program added to cart successfully!");
+        }
+      }
+    } catch (error: any) {
+      console.error("Error adding tsunami to cart:", error);
+      if (error.response?.status === 409) {
+        InfoToast("This program is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add program to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[280px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+      <div className="flex flex-col flex-grow justify-between">
+        <div className="space-y-4">
+          <div className="text-center">
+            <h3 className="text-xl font-bold ff-font-bold capitalize">{tsunami.name}</h3>
+          </div>
+          <div className="text-center">
+            <p className="text-3xl ff-font-bold font-bold text-primary">
+              {currencySymbol} {formatPrice(price ?? 0)}
+            </p>
+          </div>
+          {tsunami.description && (
+            <div className="text-center mt-4">
+              <p className="text-sm text-gray-600 ff-font">{tsunami.description}</p>
+            </div>
+          )}
+        </div>
+        <CommonButton onClick={addTsunamiToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
           {isLoading ? "Adding..." : "Enroll Now"}
         </CommonButton>
       </div>
