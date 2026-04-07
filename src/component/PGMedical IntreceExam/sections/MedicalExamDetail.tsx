@@ -7,7 +7,12 @@ import { IoMdCall } from "react-icons/io";
 import { BsArrowRight } from "react-icons/bs";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import React, { useState, useEffect } from "react";
 import CommonButton from "@/comman/Button";
+import endPointApi from "@/utils/endPointApi";
+import { getAuthId } from "@/utils/tokenManager";
+import { getTempId } from "@/utils/helper";
+import { api } from "@/utils/axiosInstance";
 
 // types.ts
 export type SubTitle = string;
@@ -25,9 +30,40 @@ export interface Exam {
 interface Props {
   data: Exam | null;
   loading?: boolean;
+  examCategoryId?: string;
 }
 
-const MedicalExamDetail = ({ data, loading = false }: Props) => {
+const MedicalExamDetail = ({ data, loading = false, examCategoryId }: Props) => {
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+
+  const fetchCartItems = async () => {
+    try {
+      const identifier = userId || tempId;
+      if (!identifier) return;
+
+      const res = await api.get(`${endPointApi.getCart}`, {
+        params: { temp_id: identifier },
+      });
+
+      if (res.data.success) {
+        setCartItems(res.data.cart || []);
+      }
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, [userId, tempId]);
+
+  // Check if anything from this category is already selected
+  const isSelected = cartItems.some(item => {
+    const itemCategoryId = item.exam_category_id?._id || item.exam_category_id;
+    return itemCategoryId === examCategoryId;
+  });
   return (
     <div className="bg-gray-50">
       <motion.section
@@ -36,7 +72,7 @@ const MedicalExamDetail = ({ data, loading = false }: Props) => {
         transition={{ duration: 1.2, ease: "easeOut" }}
         className="relative overflow-hidden bg-[#f9fafb]"
       >
-        {loading ? <HeroSkeleton /> : <HeroContent data={data} />}
+        {loading ? <HeroSkeleton /> : <HeroContent data={data} isSelected={isSelected} />}
       </motion.section>
     </div>
   );
@@ -45,13 +81,13 @@ const MedicalExamDetail = ({ data, loading = false }: Props) => {
 export default MedicalExamDetail;
 
 // Separate Hero Content Component
-const HeroContent = ({ data }: { data: Exam | null }) => {
+const HeroContent = ({ data, isSelected }: { data: Exam | null, isSelected: boolean }) => {
   if (!data) return null;
 
   return (
     <div className="relative mx-auto max-w-[1380px] px-4 md:px-6 lg:px-8 py-10 ">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-        <LeftContent data={data} />
+        <LeftContent data={data} isSelected={isSelected} />
         <RightImage data={data} />
       </div>
     </div>
@@ -59,7 +95,7 @@ const HeroContent = ({ data }: { data: Exam | null }) => {
 };
 
 // Left Content
-const LeftContent = ({ data }: { data: Exam }) => (
+const LeftContent = ({ data, isSelected }: { data: Exam, isSelected: boolean }) => (
   <div className="space-y-5">
     <h1 className="text-5xl md:text-6xl lg:text-5xl font-bold ff-font-bold leading-tight">
       {data.exam_name}
@@ -72,7 +108,7 @@ const LeftContent = ({ data }: { data: Exam }) => (
       ))}
     </div>
 
-    <CTASection />
+    <CTASection isSelected={isSelected} />
   </div>
 );
 
@@ -91,7 +127,7 @@ const FeatureCard = ({ text }: { text: string }) => (
 );
 
 // CTA Section
-const CTASection = () => (
+const CTASection = ({ isSelected }: { isSelected: boolean }) => (
   <div className="relative overflow-hidden rounded-3xl border-primary p-[3px]">
     <div className="bg-white rounded-[22px] p-5 md:p-6 space-y-4">
       <div className="flex flex-col md:flex-row md:items-center gap-2 text-gray-700">
@@ -115,8 +151,13 @@ const CTASection = () => (
         fontSize={16}
         pyClass="py-3"
         pxClass="px-10"
+        onClick={() => {
+          const pricingSection = document.getElementById('pricing-section');
+          if (pricingSection) pricingSection.scrollIntoView({ behavior: 'smooth' });
+        }}
+        disabled={isSelected}
       >
-        Enroll Now <BsArrowRight className="w-5 h-5" />
+        {isSelected ? "Selected" : "Enroll Now"} <BsArrowRight className="w-5 h-5" />
       </CommonButton>
     </div>
   </div>
@@ -134,7 +175,7 @@ const RightImage = ({ data }: { data: Exam }) => {
 
   return (
     <div className="relative order-first lg:order-last">
-      <div className="relative overflow-hidden rounded-3xl border-4 border-primary shadow-2xl p-2 w-[550px] h-[440px] mx-auto">
+      <div className="relative overflow-hidden rounded-3xl border-4 border-primary shadow-2xl p-2 w-[550px] h-[450px] mx-auto">
         <img
           src={imageUrl}
           alt={data.exams?.[0]?.exam_name || "Exam Image"}
@@ -142,7 +183,7 @@ const RightImage = ({ data }: { data: Exam }) => {
         />
       </div>
 
-      <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg border border-gray-200 p-3 md:p-4">
+      {/* <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg border border-gray-200 p-3 md:p-4">
         <div className="flex items-center gap-2">
           <FaStar className="text-primary text-base" />
           <div>
@@ -150,7 +191,7 @@ const RightImage = ({ data }: { data: Exam }) => {
             <p className="text-xs ff-font">Success Rate</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

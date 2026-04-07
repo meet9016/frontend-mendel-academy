@@ -39,7 +39,7 @@ function PgMedicalEntranceExams() {
 
   return (
     <div>
-      <MedicalExamDetail data={examData?.exams[0]} loading={loading} />
+      <MedicalExamDetail data={examData?.exams[0]} loading={loading} examCategoryId={id as string} />
       <CourseDes data={examData?.exams[0]?.description} loading={loading} />
 
       {/* FAQs */}

@@ -1,5 +1,5 @@
 // WhoEnroll.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DOMPurify from "dompurify";
 import Skeleton from "react-loading-skeleton";
@@ -79,6 +79,28 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+
+  const fetchCartItems = async () => {
+    try {
+      const identifier = userId || tempId;
+      if (!identifier) return;
+
+      const res = await api.get(`${endPointApi.getCart}`, {
+        params: { temp_id: identifier },
+      });
+
+      if (res.data.success) {
+        setCartItems(res.data.cart || []);
+      }
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, [userId, tempId]);
   const cleanHtml = DOMPurify.sanitize(data?.who_can_enroll_description || "", {
     USE_PROFILES: { html: true },
   });
@@ -119,6 +141,9 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
         }
         const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
         store.dispatch(setCartCount(countRes.data.count));
+        
+        // Refresh local cart items to update button state
+        await fetchCartItems();
 
         if (res.data.alreadyInCart) {
           InfoToast("This plan is already in your cart");
@@ -158,6 +183,7 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           userCurrency={userCurrency}
           onEnroll={(plan) => addToCart(plan)}
           title={data?.plan_section_title || "Choose Your Plan"}
+          cartItems={cartItems}
         />
         <CombinedMentorshipAndTsunamiSection
           mentorships={data?.elite_mentorship || []}
@@ -166,6 +192,8 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           userCurrency={userCurrency}
           examCategoryId={examCategoryId}
           title={data?.mentorship_tsunami_section_title || "Elite Mentorship & Tsunami Program"}
+          cartItems={cartItems}
+          onUpdateCart={fetchCartItems}
         />
 
         <RapidToolsSection
@@ -174,6 +202,8 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           userCurrency={userCurrency}
           examCategoryId={examCategoryId}
           title={data?.rapid_tools_section_title || "Rapid Learning Tools"}
+          cartItems={cartItems}
+          onUpdateCart={fetchCartItems}
         />
 
         {/* All Cards in One Line - Elite Mentorship + Tsunami */}
@@ -206,7 +236,7 @@ const ImageBlock = ({ src }: { src?: string }) => {
     "https://static.vecteezy.com/system/resources/previews/022/059/000/non_2x/no-image-available-icon-vector.jpg";
   return (
     <div className="order-2 flex justify-center md:order-1">
-      <div className="relative overflow-hidden rounded-2xl border-4 border-primary shadow-xl p-2 w-[450px] h-[450px]">
+      <div className="relative overflow-hidden rounded-3xl border-4 border-primary shadow-2xl p-2 w-[550px] h-[450px] mx-auto">
         <img
           src={src || fallback}
           alt="Medical professional"
@@ -243,6 +273,7 @@ const PricingSection = ({
   userCurrency,
   onEnroll,
   title,
+  cartItems,
 }: {
   plans: Plan[];
   loading: boolean;
@@ -250,8 +281,9 @@ const PricingSection = ({
   userCurrency: string;
   onEnroll: (plan: Plan) => void;
   title: string;
+  cartItems: any[];
 }) => (
-  <div className="max-w-[1380px] mx-auto">
+  <div id="pricing-section" className="max-w-[1380px] mx-auto">
     <SectionHeading title={title} />
 
     {loading ? (
@@ -277,6 +309,7 @@ const PricingSection = ({
               userCurrency={userCurrency}
               isLoading={loadingPlanId === plan._id}
               onEnroll={() => onEnroll(plan)}
+              isSelected={cartItems.some(item => item.cart_type === 'exam_plan' && (item.plan_id?._id === plan._id || item.plan_id === plan._id))}
             />
           ))}
         </Sliders>
@@ -300,11 +333,13 @@ const PlanCard = ({
   userCurrency,
   isLoading,
   onEnroll,
+  isSelected,
 }: {
   plan: Plan;
   userCurrency: string;
   isLoading: boolean;
   onEnroll: () => void;
+  isSelected?: boolean;
 }) => {
   const price = userCurrency === "INR" ? plan.plan_pricing_inr : plan.plan_pricing_dollar;
   const currencySymbol = userCurrency === "INR" ? "₹" : "$";
@@ -347,8 +382,8 @@ const PlanCard = ({
           </ul>
         </div>
 
-        <CommonButton onClick={onEnroll} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
-          {isLoading ? "Adding..." : "Enroll Now"}
+        <CommonButton onClick={onEnroll} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading || isSelected}>
+          {isLoading ? "Adding..." : (isSelected ? "Selected" : "Enroll Now")}
         </CommonButton>
       </div>
     </div>
@@ -397,12 +432,16 @@ const RapidToolsSection = ({
   userCurrency,
   examCategoryId,
   title,
+  cartItems,
+  onUpdateCart,
 }: {
   tools: RapidTool[];
   loading: boolean;
   userCurrency: string;
   examCategoryId?: string;
   title: string;
+  cartItems: any[];
+  onUpdateCart: () => void;
 }) => (
   <div className="max-w-[1380px] mx-auto mt-16">
     <SectionHeading title={title} />
@@ -429,6 +468,8 @@ const RapidToolsSection = ({
               tool={tool}
               userCurrency={userCurrency}
               examCategoryId={examCategoryId}
+              isSelected={cartItems.some(item => item.cart_type === 'rapid_tool' && (item.tool_id?._id === tool._id || item.tool_id === tool._id))}
+              onUpdateCart={onUpdateCart}
             />
           ))}
         </Sliders>
@@ -442,10 +483,14 @@ const RapidToolCard = ({
   tool,
   userCurrency,
   examCategoryId,
+  isSelected,
+  onUpdateCart,
 }: {
   tool: RapidTool;
   userCurrency: string;
   examCategoryId?: string;
+  isSelected?: boolean;
+  onUpdateCart: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
@@ -484,6 +529,7 @@ const RapidToolCard = ({
         } else {
           SuccessToast("Tool added to cart successfully!");
         }
+        await onUpdateCart();
       }
     } catch (error: any) {
       console.error("Error adding tool to cart:", error);
@@ -510,8 +556,8 @@ const RapidToolCard = ({
             </p>
           </div>
         </div>
-        <CommonButton onClick={addToolToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
-          {isLoading ? "Adding..." : "Enroll Now"}
+        <CommonButton onClick={addToolToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading || isSelected}>
+          {isLoading ? "Adding..." : (isSelected ? "Selected" : "Enroll Now")}
         </CommonButton>
       </div>
     </div>
@@ -526,6 +572,8 @@ const CombinedMentorshipAndTsunamiSection = ({
   userCurrency,
   examCategoryId,
   title,
+  cartItems,
+  onUpdateCart,
 }: {
   mentorships: EliteMentorship[];
   tsunami?: Tsunami;
@@ -533,6 +581,8 @@ const CombinedMentorshipAndTsunamiSection = ({
   userCurrency: string;
   examCategoryId?: string;
   title: string;
+  cartItems: any[];
+  onUpdateCart: () => void;
 }) => {
   // Create a combined array of all items
   const allItems: (EliteMentorship | Tsunami)[] = [...mentorships];
@@ -594,6 +644,8 @@ const CombinedMentorshipAndTsunamiSection = ({
                     tsunami={tsunamiItem}
                     userCurrency={userCurrency}
                     examCategoryId={examCategoryId}
+                    isSelected={cartItems.some(item => item.cart_type === 'tsunami' && (item.exam_category_id?._id === examCategoryId || item.exam_category_id === examCategoryId))}
+                    onUpdateCart={onUpdateCart}
                   />
                 );
               } else {
@@ -605,6 +657,8 @@ const CombinedMentorshipAndTsunamiSection = ({
                     mentorship={mentorshipItem}
                     userCurrency={userCurrency}
                     examCategoryId={examCategoryId}
+                    isSelected={cartItems.some(item => item.cart_type === 'elite_mentorship' && (item.mentorship_id?._id === mentorshipItem._id || item.mentorship_id === mentorshipItem._id))}
+                    onUpdateCart={onUpdateCart}
                   />
                 );
               }
@@ -621,10 +675,14 @@ const EliteMentorshipCardInLine = ({
   mentorship,
   userCurrency,
   examCategoryId,
+  isSelected,
+  onUpdateCart,
 }: {
   mentorship: EliteMentorship;
   userCurrency: string;
   examCategoryId?: string;
+  isSelected?: boolean;
+  onUpdateCart: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
@@ -663,6 +721,7 @@ const EliteMentorshipCardInLine = ({
         } else {
           SuccessToast("Mentorship added to cart successfully!");
         }
+        await onUpdateCart();
       }
     } catch (error: any) {
       console.error("Error adding mentorship to cart:", error);
@@ -694,8 +753,8 @@ const EliteMentorshipCardInLine = ({
             </div>
           )}
         </div>
-        <CommonButton onClick={addMentorshipToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
-          {isLoading ? "Adding..." : "Enroll Now"}
+        <CommonButton onClick={addMentorshipToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading || isSelected}>
+          {isLoading ? "Adding..." : (isSelected ? "Selected" : "Enroll Now")}
         </CommonButton>
       </div>
     </div>
@@ -707,10 +766,14 @@ const TsunamiCardInLine = ({
   tsunami,
   userCurrency,
   examCategoryId,
+  isSelected,
+  onUpdateCart,
 }: {
   tsunami: Tsunami;
   userCurrency: string;
   examCategoryId?: string;
+  isSelected?: boolean;
+  onUpdateCart: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
@@ -744,6 +807,7 @@ const TsunamiCardInLine = ({
         } else {
           SuccessToast("Program added to cart successfully!");
         }
+        await onUpdateCart();
       }
     } catch (error: any) {
       console.error("Error adding tsunami to cart:", error);
@@ -775,8 +839,8 @@ const TsunamiCardInLine = ({
             </div>
           )}
         </div>
-        <CommonButton onClick={addTsunamiToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading}>
-          {isLoading ? "Adding..." : "Enroll Now"}
+        <CommonButton onClick={addTsunamiToCart} pyClass="py-3" pxClass="px-20" fontWeight={700} fontSize={14} disabled={isLoading || isSelected}>
+          {isLoading ? "Adding..." : (isSelected ? "Selected" : "Enroll Now")}
         </CommonButton>
       </div>
     </div>
