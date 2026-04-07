@@ -55,6 +55,9 @@ const PrivacyPolicy = () => {
                             <li>Date and time of visit</li>
                             <li>Referring website</li>
                         </ul>
+
+                        <p className="mt-3 font-medium">Course Performance & Usage Data</p>
+                        <p>Mendel Academy collects data such as quiz scores, Grand Test results, time spent on specific modules, progress through the Mendel Library, and interaction with flashcards.</p>
                     </div>
 
                     {/* How We Collect Information */}
@@ -75,7 +78,10 @@ const PrivacyPolicy = () => {
                         <h2 className="font-semibold text-lg text-gray-900">
                             How We Use Your Information
                         </h2>
-                        <ul className="list-disc pl-6 space-y-1">
+                        <p className="mt-2">
+                            We process your data to fulfill our contract with you, based on your consent, and for our legitimate business interests.
+                        </p>
+                        <ul className="list-disc pl-6 space-y-1 mt-2">
                             <li>Provide and manage educational services</li>
                             <li>Respond to enquiries and requests</li>
                             <li>Process registrations and payments</li>
@@ -143,6 +149,39 @@ const PrivacyPolicy = () => {
                             <li>Request deletion</li>
                             <li>Withdraw marketing consent</li>
                         </ul>
+                        <p className="mt-2">
+                            We will respond within 30 days to a request to delete or access data.
+                        </p>
+                    </div>
+
+                    {/* Account Deletion Process */}
+                    <div>
+                        <h2 className="font-semibold text-lg text-gray-900">
+                            Account Deletion Process
+                        </h2>
+                        <p>
+                            You have the right to request the permanent deletion of your Mendel Academy account and associated personal data.
+                        </p>
+                        <p className="mt-2">
+                            To initiate this request, please send an email to{" "}
+                            <a href="mailto:admin@mendelacademy.com" className="text-blue-600 underline">
+                                admin@mendelacademy.com
+                            </a>{" "}
+                            using the email address associated with your Mendel Academy account. Please use the subject line: "Account Deletion Request."
+                        </p>
+                        <p className="mt-2">
+                            We will acknowledge your request within 48 hours and process the deletion within 30 days. Please note that deleting your account will permanently erase your course progress, Qbank history, and access to all purchased materials. We may retain basic transactional records (such as payment receipts) solely for legal and tax compliance purposes.
+                        </p>
+                    </div>
+
+                    {/* Communications and Opt-Out */}
+                    <div>
+                        <h2 className="font-semibold text-lg text-gray-900">
+                            Communications and Opt-Out
+                        </h2>
+                        <p>
+                            You can opt out of promotional emails by clicking the 'unsubscribe' link at the bottom of our emails, or reply 'STOP' to SMS/WhatsApp messages. You will still receive essential transactional emails (like purchase receipts, password resets, and course updates).
+                        </p>
                     </div>
 
                     {/* Third Party */}
@@ -185,6 +224,23 @@ const PrivacyPolicy = () => {
                         <p>
                             We may update this Privacy Policy at any time. Changes will be
                             effective immediately upon posting.
+                        </p>
+                    </div>
+
+                    {/* Grievance Officer */}
+                    <div>
+                        <h2 className="font-semibold text-lg text-gray-900">
+                            Grievance Officer (Mandatory for India)
+                        </h2>
+                        <p>
+                            In accordance with the Information Technology Act, 2000, and the DPDP Act, the name and contact details of the Grievance Officer are provided below:
+                        </p>
+                        <p className="mt-2">
+                            <strong>Gargi Managoli / CMO</strong><br />
+                            📧 Email: <a href="mailto:gargi.m@mendelacademy.com" className="text-blue-600 underline">gargi.m@mendelacademy.com</a>
+                        </p>
+                        <p className="mt-2">
+                            We will acknowledge your concern within 24 hours and aim to resolve it within 15 days.
                         </p>
                     </div>
 
