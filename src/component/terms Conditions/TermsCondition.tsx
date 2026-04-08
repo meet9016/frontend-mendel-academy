@@ -69,7 +69,16 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              2. Eligibility
+              2. Educational Use Only
+            </h2>
+            <p>
+              All content provided by Mendel Academy, including international exam preparation materials and Advanced Pathology courses, is strictly for educational, academic, and training purposes. Our courses are designed to supplement medical education and do not constitute clinical medical advice, diagnosis, or treatment protocols for actual patients. Completion of our courses does not grant the user a license to practice medicine or pathology in any jurisdiction.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-semibold text-lg text-gray-900">
+              3. Eligibility
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>You are capable of entering into a legally binding agreement under Indian law</li>
@@ -79,17 +88,34 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              3. Account and Registration
+              4. Intellectual Property & Digital Assets
             </h2>
-            <ul className="list-disc pl-6 space-y-1">
-              <li>Maintaining the confidentiality of your login information</li>
-              <li>All activities carried out under your account</li>
-            </ul>
+            <p>
+              All proprietary content, including but not limited to high-resolution pathology slides, digital imagery, video lectures, Qbank explanations, Study tools and manuals, are the exclusive intellectual property of Mendel Academy. Users are strictly prohibited from using automated software (e.g., scrapers, bots) to extract our digital assets. Unauthorized downloading, screen-recording, or distribution of our proprietary pathology imagery and case studies will result in immediate account termination and potential legal action.
+            </p>
           </div>
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              4. Payments
+              5. Course Certificates
+            </h2>
+            <p>
+              Any certificates of completion or achievement awarded by Mendel Academy signify the successful completion of an educational module. These certificates are for academic recognition only and do not confer any official board certification, academic degree, or regulatory credential recognized by medical licensing boards.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-semibold text-lg text-gray-900">
+              6. Account Security & Sharing
+            </h2>
+            <p>
+              Your Mendel Academy subscription is strictly for individual use. Account sharing, simultaneous logins from multiple locations, or reselling access is strictly prohibited. If we detect unauthorized account sharing, your subscription will be immediately terminated without prior notice and without eligibility for a refund.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-semibold text-lg text-gray-900">
+              7. Payments
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>All fees must be paid in full before accessing services</li>
@@ -100,18 +126,7 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              5. Use of Website and Content
-            </h2>
-            <p>
-              All content including videos, study material, notes, logos and
-              website content belongs to Mendel Academy and may not be copied,
-              shared, recorded, distributed or resold without written permission.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-lg text-gray-900">
-              6. Student Conduct
+              8. Student Conduct
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>Misuse the platform</li>
@@ -124,7 +139,7 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              7. Service Changes
+              9. Service Changes
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>Modify or discontinue any course</li>
@@ -135,7 +150,7 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              8. Limitation of Liability
+              10. Limitation of Liability
             </h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>Personal outcomes or results of students</li>
@@ -146,7 +161,7 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              9. Termination
+              11. Termination
             </h2>
             <p>
               Access may be suspended or terminated if these terms are violated
@@ -156,7 +171,7 @@ const TermsCondition = () => {
 
           <div>
             <h2 className="font-semibold text-lg text-gray-900">
-              10. Governing Law
+              12. Governing Law
             </h2>
             <p>
               These Terms shall be governed by and interpreted in accordance

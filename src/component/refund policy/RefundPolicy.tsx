@@ -28,6 +28,9 @@ export default function RefundPolicy() {
           programs, online and offline training sessions. No physical goods are
           sold.
         </p>
+        <p className="mt-2 text-sm text-gray-600">
+          <strong>Digital Content Access:</strong> By purchasing a digital course or Qbank subscription, you are requesting immediate access to our proprietary educational content. You acknowledge and agree that once access is granted or content is downloaded, you waive any statutory right of withdrawal or "cooling-off" period that may apply in your jurisdiction.
+        </p>
 
         {/* Refund Policy */}
         <h2 className="text-xl font-semibold mt-6 mb-2">Refund Policy</h2>
@@ -38,6 +41,9 @@ export default function RefundPolicy() {
           <li>Course access has been provided</li>
           <li>Classes have started</li>
           <li>Study material has been shared</li>
+          <li>
+            <strong>Offline/Live Training Sessions:</strong> For in-person, live, or offline training programs, no refunds will be issued if a cancellation request is made within 14 days of the scheduled event start date, as seating and resources are allocated in advance.
+          </li>
         </ul>
 
         {/* Exceptional Cases */}
@@ -64,6 +70,9 @@ export default function RefundPolicy() {
           <li>Lack of participation</li>
           <li>Dissatisfaction after accessing the course</li>
           <li>Failure to attend classes</li>
+          <li>
+            <strong>Subscription Renewals & Cancellations:</strong> For subscription-based plans that renew automatically, it is the student's responsibility to cancel their subscription before the next billing cycle begins. We do not provide refunds for recurring charges if you forget to cancel. If you cancel your subscription, you will retain access to the platform until the end of your currently paid billing period.
+          </li>
         </ul>
 
         {/* Refund Process */}
@@ -88,6 +97,14 @@ export default function RefundPolicy() {
         <p>
           Approved refunds will be processed using the original payment method.
           Processing time may take 7–10 working days.
+        </p>
+
+        {/* Chargebacks */}
+        <h2 className="text-xl font-semibold mt-6 mb-2">
+          Chargebacks and Payment Disputes
+        </h2>
+        <p>
+          We encourage all students to contact us directly to resolve any billing issues. If you initiate a chargeback or dispute with your bank or credit card provider without contacting us first, your Mendel Academy account and all course access will be immediately suspended pending the outcome of the dispute. Fraudulent chargebacks will be disputed with evidence of course access and login activity.
         </p>
 
         {/* Contact */}
