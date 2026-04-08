@@ -245,24 +245,52 @@ const PrivacyPolicy = () => {
                     </div>
 
                     {/* Contact */}
-                    <div>
-                        <h2 className="font-semibold text-lg text-gray-900">
+                    <div className=" mx-auto">
+                        <h2 className="font-semibold text-xl text-gray-900 border-b pb-2">
                             Contact Us
                         </h2>
-                        <p className="mt-2">
-                            <strong>Mendel Academy</strong><br />
-                            📞 Mobile: 99255 11511<br />
-                            📧 Email: drmanagoli@mendelacademy.com<br />
-                            🌐 Website: https://mendelacademy.com
-                        </p>
 
-                        <p className="mt-3">
-                            Address:<br />
-                            Apt 102, Sangit Sarita Complex,<br />
-                            New Rander Rd, near Amidhara Wadi,<br />
-                            Near United Hospital, Adajan,<br />
-                            Surat, Gujarat – 395009, India
-                        </p>
+                        <div className="mt-4 space-y-2 text-gray-700 text-sm">
+                            <p className="font-medium text-gray-900">Mendel Academy</p>
+
+                            <p>📞 Mobile: 99255 11511 / +1 310-708-3244</p>
+                            <p>📧 Email: drmanagoli@mendelacademy.com / info@mendelacademy.com</p>
+                            <p>
+                                🌐 Website:{" "}
+                                <a
+                                    href="https://mendelacademy.com"
+                                    target="_blank"
+                                    className="text-blue-600 hover:underline"
+                                >
+                                    mendelacademy.com
+                                </a>
+                            </p>
+                        </div>
+
+                        {/* Address Section */}
+                        <div className="mt-6 grid md:grid-cols-2 gap-6">
+
+                            {/* India Address */}
+                            <div className="bg-gray-50 p-4 rounded-xl border">
+                                <h3 className="font-semibold text-gray-900 mb-2">India Office</h3>
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                    Apt 102, Sangit Sarita Complex,<br />
+                                    New Rander Rd, near Amidhara Wadi,<br />
+                                    Near United Hospital, Adajan,<br />
+                                    Surat, Gujarat – 395009, India
+                                </p>
+                            </div>
+
+                            {/* USA Address */}
+                            <div className="bg-gray-50 p-4 rounded-xl border">
+                                <h3 className="font-semibold text-gray-900 mb-2">USA Office</h3>
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                    2108 N ST STE N SACRAMENTO,<br />
+                                    CA 95816, USA
+                                </p>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
