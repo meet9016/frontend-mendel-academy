@@ -114,7 +114,7 @@ const endPointApi: EndPointApi = {
     postPaymentVerify: 'payment/verify-payment',
 
     //medical exam
-    getAppMedicalExam: 'examlist/getapp',
+    getAppMedicalExam: 'examlist/exam-category-list',
     getMedicalById: 'examlist/getById',
     getAllMedical: 'examlist/getall',
     getByExamIdSubjectInfo: 'subject-info/getByExamId',
