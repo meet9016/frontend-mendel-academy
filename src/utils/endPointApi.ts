@@ -23,6 +23,8 @@ export interface EndPointApi {
     getAppMedicalExam?: string;
     getMedicalById?: string;
     getAllMedical?: string;
+    getByExamIdSubjectInfo?: string;
+    getByIdSubjectInfo?: string;
 
     //my cart
     getCart?: string;
@@ -112,9 +114,11 @@ const endPointApi: EndPointApi = {
     postPaymentVerify: 'payment/verify-payment',
 
     //medical exam
-    getAppMedicalExam: 'examlist/exam-category-list',
+    getAppMedicalExam: 'examlist/getapp',
     getMedicalById: 'examlist/getById',
     getAllMedical: 'examlist/getall',
+    getByExamIdSubjectInfo: 'subject-info/getByExamId',
+    getByIdSubjectInfo: 'subject-info/getById',
 
     //my cart
     getCart: 'cart/get',
