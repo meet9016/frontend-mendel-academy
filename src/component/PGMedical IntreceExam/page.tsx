@@ -66,7 +66,7 @@ function PgMedicalEntranceExams() {
       <CourseDes data={examData?.exams[0]?.description} loading={loading} />
 
       {/* Subjects Section */}
-     <section className="py-16 bg-gradient-to-b from-green-100 to-blue-50">
+     <section className="py-16">
   <div className="container mx-auto px-4">
 
     {/* HEADER */}
