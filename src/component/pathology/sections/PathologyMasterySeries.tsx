@@ -375,7 +375,7 @@ const RecordedGrid = ({
                   {/* Image Section */}
                   <div className="relative h-42 w-full overflow-hidden">
                     <img
-                      src="https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"
+                      src={p?.image || "https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"}
                       alt={p.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
