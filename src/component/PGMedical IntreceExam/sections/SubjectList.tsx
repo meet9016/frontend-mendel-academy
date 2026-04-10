@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface Lesson {
@@ -45,6 +46,8 @@ interface SubjectListProps {
 const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
   const [selectedSubject, setSelectedSubject] = useState<SubjectData | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+
+  const router = useRouter()
 
   const colors = [
     "bg-green-200 text-green-900",
@@ -190,7 +193,7 @@ const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
           {subjectData.map((subject, index) => (
             <button
               key={subject._id}
-              onClick={() => setSelectedSubject(subject)}
+              onClick={() => router.push(`/services/${subjectData?.sku}/${subjectId}/${chapter._id}`)}
               className={`flex items-center gap-3 px-6 py-3 rounded-full shadow-md transition-all duration-200 hover:scale-105 hover:shadow-xl ${colors[index % colors.length]}`}
             >
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow">
