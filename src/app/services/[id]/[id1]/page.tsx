@@ -98,7 +98,7 @@
 
 //   return (
 //     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-    
+
 
 //       {/* Subject Stats */}
 //       <section className="py-12 bg-white">
@@ -169,7 +169,7 @@
 //                 </a>
 //               ))}
 //             </div>
-            
+
 //             <div className="text-center">
 //               <button className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-colors">
 //                 Watch Full Lessons 7 Days Free
@@ -190,18 +190,18 @@
 //                   We break down complex topics into memorable visual stories that stick in your brain. 
 //                   Our method uses the science of visual memory to help you recall information when it matters most.
 //                 </p>
-                
+
 //                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Lessons you'll remember</h3>
 //                 <p className="text-lg text-gray-700 mb-6">
 //                   Our creative storytelling and visual memory techniques help you retain information 
 //                   longer and recall it more easily during exams.
 //                 </p>
-                
+
 //                 <button className="bg-purple-700 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-purple-800 transition-colors">
 //                   Get started, completely free for 7 days!
 //                 </button>
 //               </div>
-              
+
 //               <div className="relative">
 //                 <img 
 //                   src="https://z-cdn-media.chatglm.cn/files/fbfe76b2-56b3-4823-8d84-d8161b207197.png?auth_key=1875651382-7794da787ec0485fb22fbb49085eb05b-0-2afa500e1541603dcc2e16b5a382c42b" 
@@ -321,53 +321,43 @@ function SubjectDetail() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative text-dark">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+      <section className="w-full bg-primary py-12 md:py-20 relative text-black">
+        <div className="container mx-auto px-4 text-center md:text-left">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
             <div className="order-2 md:order-1">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              <div className="text-sm font-medium mb-4 opacity-80 flex items-center justify-center md:justify-start gap-2">
+                <a href={`/services/${examCategoryId}`} className="hover:underline">Home</a>
+                <span>/</span>
+                <span>{subjectData.name}</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-[#231f20] mb-6 leading-tight">
                 {subjectData.name}
               </h1>
-              <p className="text-xl mb-6">
-                {subjectData.description || "Master this subject with our comprehensive learning materials designed to help you succeed."}
-              </p>
-              <div className="flex flex-wrap gap-4 mb-6">
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-3xl font-bold">{subjectData.chapters.length}</div>
-                  <div className="text-sm">Chapters</div>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-3xl font-bold">
-                    {subjectData.chapters.reduce((total, chapter) => total + chapter.topics.length, 0)}
-                  </div>
-                  <div className="text-sm">Topics</div>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-3xl font-bold">
-                    {subjectData.chapters.reduce((total, chapter) =>
-                      total + chapter.topics.reduce((topicTotal, topic) => topicTotal + topic.lessons.length, 0), 0
-                    )}
-                  </div>
-                  <div className="text-sm">Lessons</div>
-                </div>
+              <div className="custom-bg-background rounded-lg mb-8 p-4 [&_*]:!bg-transparent">
+                <div
+                  className="text-lg md:text-xl text-[#231f20]/90"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      subjectData.description ||
+                      "Master this subject with our comprehensive learning materials designed to help you succeed.",
+                  }}
+                ></div>
               </div>
-              <button className="bg-white text-purple-700 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-100 transition-colors">
+              <button className="bg-[#231f20] text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-black transition-colors shadow-lg">
                 Start Learning
               </button>
             </div>
-            <div className="order-1 md:order-2 flex justify-center">
-              <div className="relative w-full max-w-md">
+            <div className="order-1 md:order-2 flex justify-center md:justify-end">
+              <div className="w-full max-w-[280px] md:max-w-md relative">
                 {subjectData.image ? (
                   <img
                     src={subjectData.image}
                     alt={subjectData.name}
-                    className="w-full h-auto rounded-lg shadow-2xl"
+                    className="w-full h-auto object-contain drop-shadow-2xl"
                   />
                 ) : (
-                  <div className="w-full h-64 bg-gradient-to-r from-blue-400 to-purple-400 rounded-lg flex items-center justify-center shadow-2xl">
-                    <span className="text-white text-6xl font-bold">
-                      {subjectData.name.charAt(0)}
-                    </span>
+                  <div className="w-full h-64 border-4 border-dashed border-black/10 rounded-xl flex items-center justify-center">
+                    <span className="text-black/50 font-medium">Subject Image</span>
                   </div>
                 )}
               </div>
@@ -384,7 +374,7 @@ function SubjectDetail() {
             <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
               Dive deep into each chapter with comprehensive lessons, practice materials, and interactive content.
             </p>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {subjectData.chapters.map((chapter) => (
                 <a
@@ -428,7 +418,7 @@ function SubjectDetail() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-16 bg-gradient-to-r from-purple-600 to-indigo-700 text-white">
+      {/* <section className="py-16 bg-gradient-to-r from-purple-600 to-indigo-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to start learning?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -438,7 +428,7 @@ function SubjectDetail() {
             Start Your Free Trial
           </button>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

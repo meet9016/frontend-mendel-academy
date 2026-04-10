@@ -101,113 +101,87 @@ function ChapterDetail() {
   }
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Back Button */}
-          <div className="mb-6">
-            <a
-              href={`/services/${examCategoryId}/${subjectId}`}
-              className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
-            >
-              ← Back to {subjectData.name}
-            </a>
-          </div>
-
-          {/* Chapter Header */}
-          <div className="bg-gray-50 rounded-lg p-8 mb-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{chapterData.title}</h1>
-              {chapterData.long_title && (
-                <p className="text-xl text-gray-600 mb-4">{chapterData.long_title}</p>
-              )}
-              <div className="grid md:grid-cols-2 gap-6 mt-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">{chapterData.topics.length}</div>
-                  <div className="text-gray-600">Topics</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">
-                    {chapterData.topics.reduce((total, topic) => total + topic.lessons.length, 0)}
+    <div className="bg-white min-h-screen">
+      {/* Chapter Hero Section */}
+      <section className="w-full bg-primary py-12 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            {/* Left Content */}
+            <div className="order-2 md:order-1 text-black">
+              <div className="text-sm font-medium mb-4 opacity-80 flex items-center gap-2">
+                <a href={`/services/${examCategoryId}`} className="hover:underline">Home</a>
+                <span>/</span>
+                <a href={`/services/${examCategoryId}/${subjectId}`} className="hover:underline">{subjectData.name}</a>
+                <span>/</span>
+                <span>{chapterData.title}</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-[#231f20] leading-tight mb-4">
+                {chapterData.long_title || chapterData.title}
+              </h1>
+            </div>
+            
+            {/* Right Image */}
+            <div className="order-1 md:order-2 flex justify-center md:justify-end">
+              <div className="w-full max-w-[280px] md:max-w-sm lg:max-w-md">
+                {chapterData.image ? (
+                  <img
+                    src={chapterData.image}
+                    alt={chapterData.title}
+                    className="w-full h-auto object-contain drop-shadow-2xl"
+                  />
+                ) : (
+                  <div className="w-full h-64 border-4 border-dashed border-black/10 rounded-xl flex items-center justify-center">
+                    <span className="text-black/50 font-medium">Chapter Image</span>
                   </div>
-                  <div className="text-gray-600">Lessons</div>
-                </div>
+                )}
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Topics and Lessons */}
-          <div>
-            {chapterData.topics.map((topic) => (
-              <div key={topic._id} className="mb-12">
-                <h3 className="text-2xl font-semibold mb-6 text-blue-600 border-b pb-2">{topic.title}</h3>
+      {/* Main Topics Content */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            {/* Topics and Lessons */}
+            <div>
+              {chapterData.topics.map((topic) => (
+                <div key={topic._id} className="mb-12">
+                  <h3 className="text-2xl font-semibold text-[#231f20] mb-6 pb-2">{topic.title}</h3>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {topic.lessons.map((lesson) => (
-                    <div key={lesson._id} className="bg-gray-50 rounded-lg p-4">
-                      <div className="relative h-24 mb-3 rounded-lg overflow-hidden">
-                        {lesson.image ? (
-                          <img
-                            src={lesson.image}
-                            alt={lesson.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-green-400 to-blue-400 flex items-center justify-center">
-                            <span className="text-white text-lg font-bold">
-                              {lesson.name.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <h4 className="font-medium mb-2">{lesson.name}</h4>
-
-                      {lesson.full_title && (
-                        <p className="text-sm text-gray-600 mb-2">{lesson.full_title}</p>
-                      )}
-
-                      {lesson.video_link && (
-                        <a
-                          href={lesson.video_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                          </svg>
-                          Watch Video
-                        </a>
-                      )}
-
-                      {lesson.tags && lesson.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {lesson.tags.map((tag, index) => (
-                            <span
-                              key={index}
-                              className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                  <div className="mb-4">
+                    <div className="flex flex-col gap-3 ml-8">
+                      {topic.lessons.map((lesson) => (
+                        <div key={lesson._id} className="flex items-center gap-3">
+                          <span className="text-green-500 font-light">→</span>
+                          {lesson.video_link ? (
+                            <a href={lesson.video_link} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 transition-colors">
+                              {lesson.name}
+                            </a>
+                          ) : (
+                            <span className="text-gray-700">{lesson.name}</span>
+                          )}
+                          {lesson.tags && lesson.tags.length > 0 && (
+                            <div className="flex gap-2 ml-2">
+                              {lesson.tags.map((tag, idx) => (
+                                <span key={idx} className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-
-                      {lesson.description && (
-                        <div className="mt-3 text-sm text-gray-600">
-                          <div dangerouslySetInnerHTML={{ __html: lesson.description }} />
-                        </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 

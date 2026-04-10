@@ -184,3 +184,7 @@ html.hydrated [role="button"] {
   scrollbar-width: thin;
   scrollbar-color: #FFCA00 transparent;
 }
+
+.custom-bg-background {
+  background-color: #FFCA00 !important;
+}
