@@ -257,14 +257,14 @@ const ContactCard = () => (
       <ContactRow
         icon={<FaPhone />}
         label="Call us at"
-        value="+91-99255-11631"
-        href="tel:+919925511631"
+        value="+91-99255-11511"
+        href="tel:+919925511511"
       />
       <ContactRow
         icon={<FaEnvelope />}
         label="Email us at"
-        value="ask@mendalacademy.com"
-        href="mailto:ask@mendalacademy.com"
+        value="info@mendelacademy.com"
+        href="mailto:info@mendelacademy.com"
       />
     </div>
   </div>
@@ -303,7 +303,7 @@ const BenefitsCard = () => {
   const benefits = [
     "Early bird pricing available",
     "Limited seats per batch",
-    "Personal guidance from Dr. Managed",
+    "Personal guidance from Dr. Managoli",
     "Access to exclusive study materials",
     "Join our community of successful students",
   ];
@@ -311,7 +311,7 @@ const BenefitsCard = () => {
   return (
     <div className="rounded-3xl border border-primary bg-white p-8 shadow-lg">
       <h3 className="mb-6 text-2xl font-bold ff-font-bold">
-        Why Register Now?
+       Personal mentorship from Dr. Kishor Managoli
       </h3>
       <ul className="space-y-4">
         {benefits.map((b, i) => (
