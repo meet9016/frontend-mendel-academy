@@ -188,3 +188,56 @@ html.hydrated [role="button"] {
 .custom-bg-background {
   background-color: #FFCA00 !important;
 }
+
+/* USMLE Global Styles */
+:root {
+  --usmle-yellow: #F5C800;
+  --usmle-yellow-dark: #d4a900;
+  --usmle-black: #1A1A1A;
+  --usmle-black-mid: #2C2C2C;
+  --usmle-white: #FFFFFF;
+  --usmle-gray-light: #F7F6F1;
+  --usmle-gray-border: #E5E3DA;
+  --usmle-gray-text: #5F5E58;
+  --usmle-gray-muted: #9A9890;
+}
+
+.usmle-bg-light {
+  background-color: var(--usmle-gray-light);
+}
+
+.usmle-bg-black {
+  background-color: var(--usmle-black);
+}
+
+.usmle-bg-white {
+  background-color: var(--usmle-white);
+}
+
+.usmle-text-yellow {
+  color: var(--usmle-yellow);
+}
+
+.usmle-text-black {
+  color: var(--usmle-black);
+}
+
+.usmle-text-gray {
+  color: var(--usmle-gray-text);
+}
+
+.usmle-text-muted {
+  color: var(--usmle-gray-muted);
+}
+
+.usmle-border-yellow {
+  border-color: var(--usmle-yellow);
+}
+
+.usmle-border-black {
+  border-color: var(--usmle-black);
+}
+
+.usmle-border-gray {
+  border-color: var(--usmle-gray-border);
+}
