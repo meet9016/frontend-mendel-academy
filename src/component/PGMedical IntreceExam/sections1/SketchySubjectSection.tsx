@@ -77,7 +77,7 @@ const SketchySubjectSection: React.FC<Props> = ({
               <button
                 key={subjectId}
                 onClick={() => setSelectedSubject(subject)}
-                className={`px-5 py-2 rounded-full border text-sm ff-font font-medium transition-all duration-200
+                className={`px-5 py-2 rounded-full border text-sm ff-font font-medium transition-all duration-200 cursor-pointer
                   ${
                     isSelected
                       ? "bg-primary text-black border-primary shadow-md"
@@ -122,7 +122,7 @@ const SketchySubjectSection: React.FC<Props> = ({
                     `/services/${examId}/${selectedSubject.id || selectedSubject._id}`
                   )
                 }
-                className="bg-gray-900 text-primary px-5 py-3 rounded-xl ff-font font-bold text-sm hover:opacity-90 transition"
+                className="bg-gray-900 text-primary px-5 py-3 rounded-xl ff-font font-bold text-sm hover:opacity-90 transition cursor-pointer"
               >
                 Preview free lessons →
               </button>

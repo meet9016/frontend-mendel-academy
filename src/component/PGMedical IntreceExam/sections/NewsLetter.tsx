@@ -290,7 +290,7 @@ const ContactRow = ({
       <p className="text-sm ff-font">{label}</p>
       <a
         href={href}
-        className="text-lg font-bold text-primary ff-font-bold hover:underline"
+        className="text-lg font-bold text-primary ff-font-bold hover:underline cursor-pointer"
       >
         {value}
       </a>

@@ -135,7 +135,7 @@ const CTASection = ({ isSelected }: { isSelected: boolean }) => (
         </div>
         <a
           href="tel:+919925511631"
-          className="text-base md:text-lg font-bold text-primary ff-font hover:text-yellow-500"
+          className="text-base md:text-lg font-bold text-primary ff-font hover:text-yellow-500 cursor-pointer"
         >
           +91-99255-11631
         </a>

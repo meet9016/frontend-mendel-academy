@@ -33,7 +33,7 @@ const Hero: React.FC<HeroProps> = ({ examName }) => {
       <div className="flex justify-center gap-3.5 flex-wrap">
         <button
           onClick={handleScrollToPricing}
-          className="px-9 py-3.5 rounded-lg bg-primary text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold"
+          className="px-9 py-3.5 rounded-lg bg-primary text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold cursor-pointer"
         >
           VIEW ALL PLANS
         </button>

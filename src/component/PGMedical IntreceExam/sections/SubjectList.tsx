@@ -83,7 +83,7 @@ const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
               setSelectedSubject(null);
               setSelectedChapter(null);
             }}
-            className="mb-6 text-blue-600 hover:text-blue-800"
+            className="mb-6 text-blue-600 hover:text-blue-800 cursor-pointer"
           >
             ← Back to Subjects
           </button>
@@ -134,7 +134,7 @@ const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
             <div className="mt-10">
               <button
                 onClick={() => setSelectedChapter(null)}
-                className="mb-4 text-blue-600"
+                className="mb-4 text-blue-600 cursor-pointer"
               >
                 ← Back to Chapters
               </button>
@@ -194,7 +194,7 @@ const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
             <button
               key={subject._id}
               onClick={() => router.push(`/services/${subjectData?.sku}/${subjectId}/${chapter._id}`)}
-              className={`flex items-center gap-3 px-6 py-3 rounded-full shadow-md transition-all duration-200 hover:scale-105 hover:shadow-xl ${colors[index % colors.length]}`}
+              className={`flex items-center gap-3 px-6 py-3 rounded-full shadow-md cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-xl ${colors[index % colors.length]}`}
             >
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow">
                 {subject.name.charAt(0)}
