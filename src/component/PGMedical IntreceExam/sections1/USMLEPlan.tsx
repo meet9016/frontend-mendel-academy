@@ -62,8 +62,8 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
     <>
       {/* Choose Your Plan */}
       {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
-        <section className="py-[72px] px-6 usmle-bg-light">
-          <div className="max-w-[960px] mx-auto">
+        <section id="pricing" className="py-[72px] px-6 usmle-bg-light">
+          <div className="max-w-[1280px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
                 {data?.plan_section_title || "Choose Your Plan"}
@@ -112,7 +112,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
+                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] ${
                       plan.most_popular
                         ? "border-2 border-[#F5C800] shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative"
                         : "border border-[#E5E3DA] hover:border-[#d4a900]"
@@ -132,13 +132,14 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
                       {currencySymbol}{formatPrice(price ?? 0)}
                     </p>
+                    <p className="text-[11px] text-[#64748b] mb-4 mt-4 ff-font">Intensive polish for the last 30 days of prep.</p>
                     <div className="flex-grow"></div>
                     <button
                       onClick={() => addToCart(plan)}
                       disabled={isLoading || isSelected}
                       className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${
                         plan.most_popular
-                          ? "bg-gray-900 usmle-text-yellow hover:opacity-85"
+                          ? "usmle-bg-black usmle-text-yellow hover:opacity-85"
                           : "bg-[#F5C800] text-black hover:bg-[#d4a900]"
                       }`}
                     >
@@ -159,32 +160,34 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     {data?.rapid_tools_section_title || "Rapid Learning Tools"}
                   </h2>
                 </div>
-                <Sliders
-                  settings={{
-                    accessibility: true,
-                    infinite: true,
-                    speed: 500,
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: true,
-                  }}
-                >
-                  {data.rapid_learning_tools.map((tool) => (
-                    <RapidToolCard
-                      key={tool._id}
-                      tool={tool}
-                      userCurrency={userCurrency}
-                      examCategoryId={examCategoryId}
-                      isSelected={cartItems.some(item =>
-                        item.cart_type === "rapid_tool" &&
-                        (item.tool_id?._id === tool._id || item.tool_id === tool._id)
-                      )}
-                      onUpdateCart={onUpdateCart}
-                    />
-                  ))}
-                </Sliders>
+                <div className="relative px-10">
+                  <Sliders
+                    settings={{
+                      accessibility: true,
+                      infinite: true,
+                      speed: 500,
+                      slidesToShow: 4,
+                      slidesToScroll: 1,
+                      autoplay: true,
+                      autoplaySpeed: 3000,
+                      arrows: true,
+                    }}
+                  >
+                    {data.rapid_learning_tools.map((tool) => (
+                      <RapidToolCard
+                        key={tool._id}
+                        tool={tool}
+                        userCurrency={userCurrency}
+                        examCategoryId={examCategoryId}
+                        isSelected={cartItems.some(item =>
+                          item.cart_type === "rapid_tool" &&
+                          (item.tool_id?._id === tool._id || item.tool_id === tool._id)
+                        )}
+                        onUpdateCart={onUpdateCart}
+                      />
+                    ))}
+                  </Sliders>
+                </div>
               </div>
             </div>
           )}
@@ -218,6 +221,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     >
                       <div className="flex-grow">
                         <p className="text-sm font-extrabold text-[#1A1A1A] mb-1 ff-font-bold">{mentorship.name}</p>
+                        <p className="text-xs text-[#64748b] ff-font">Weekly live sessions · Group mentorship</p>
                       </div>
                       <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
                         {currencySymbol}{formatPrice(price ?? 0)}
@@ -255,6 +259,32 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           </div>
         </section>
       ) : null}
+
+      {/* Designer Customized 1:1 Mentoring CTA */}
+      <section className="py-[72px] px-6 usmle-bg-light">
+        <div className="max-w-[960px] mx-auto">
+          <div className="usmle-bg-black rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
+            <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <h3 className="text-[22px] font-black text-white mb-[10px] ff-font-bold">
+              Designer Customized 1:1 Mentoring
+            </h3>
+            <p className="text-sm text-[#64748b] leading-[1.75] mb-[28px] max-w-[400px] ff-font">
+              For the student who requires a high-performance roadmap tailored to personal clinical strengths and weaknesses.
+            </p>
+            <button
+              className="bg-[#F5C800] text-black px-9 py-3.5 rounded-lg font-black text-sm border-none cursor-pointer tracking-[0.05em] transition-colors duration-150 hover:bg-[#d4a900]"
+              onClick={() => window.location.href = '/contact'}
+            >
+              CONTACT US FOR DETAILS
+            </button>
+          </div>
+        </div>
+      </section>
     </>
   );
 };
@@ -427,7 +457,7 @@ const TsunamiBundleCard = ({
   };
 
   return (
-    <div className="bg-gray-900 border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
+    <div className="usmle-bg-black border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">Step 1 + Step 2 Bundle</p>
       <h3 className="text-xl font-black usmle-text-yellow mb-5 ff-font-bold">{tsunami.name || "Mendel Tsunami"}</h3>
       <div className="flex items-baseline gap-3 mb-1">
@@ -504,7 +534,7 @@ const FullMatchBundleCard = ({
       <button
         onClick={addFullMatchToCart}
         disabled={isLoading || isSelected}
-        className="w-full py-3.5 rounded-lg bg-transparent usmle-text-black text-xs font-black border-2 usmle-border-black cursor-pointer tracking-[0.05em] mt-auto transition-all duration-150 hover:bg-gray-900 hover:text-white disabled:opacity-50"
+        className="w-full py-3.5 rounded-lg bg-transparent usmle-text-black text-xs font-black border-2 usmle-border-black cursor-pointer tracking-[0.05em] mt-auto transition-all duration-150 hover:usmle-bg-black hover:text-white disabled:opacity-50"
       >
         {isLoading ? "Adding..." : isSelected ? "Selected" : "ENROLL IN THE MATCH"}
       </button>
