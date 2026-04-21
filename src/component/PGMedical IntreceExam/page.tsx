@@ -1,9 +1,13 @@
 "use client";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import MedicalExamDetail from "./sections/MedicalExamDetail";
+import USMLEStep1Detail from "./sections1/USMLEStep1Detail";
+import USMLEStep2CKDetail from "./sections1/USMLEStep2CKDetail";
+import USMLEPricing from "./sections1/USMLEPricing";
+import USMLEEnroll from "./sections1/USMLEEnroll";
 import CourseDes from "./sections/CourseDes";
 import Faq from "./sections/Faq";
 import WhoEnroll from "./sections/WhoEnroll";
@@ -12,10 +16,15 @@ import NewsLetter from "./sections/NewsLetter";
 function PgMedicalEntranceExams() {
   const { id } = useParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [examData, setExamData] = useState<any>(null);
   const [subjectData, setSubjectData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // Determine which exam based on pathname
+  const isUSMLEStep1 = pathname?.includes("usmle-step-1");
+  const isUSMLEStep2 = pathname?.includes("usmle-step-2-ck");
 
   const fetcgExamData = async () => {
     try {
@@ -64,19 +73,75 @@ function PgMedicalEntranceExams() {
     }
   }, [examData]);
 
+  // Hero section content based on exam type
+  const getHeroContent = () => {
+    if (isUSMLEStep1) {
+      return {
+        label: "USMLE Step 1 Preparation",
+        title: "Master the USMLE.",
+        titleHighlight: "Choose your path.",
+        description: "From self-paced visual app tools to elite 1:1 physician mentorship. All pricing, no secrets.",
+        buttonText: "VIEW ALL PLANS",
+        buttonLink: "#pricing",
+      };
+    } else if (isUSMLEStep2) {
+      return {
+        label: "USMLE Step 2 CK Preparation",
+        title: "Excel in Step 2 CK.",
+        titleHighlight: "Your success starts here.",
+        description: "Comprehensive clinical knowledge preparation with expert guidance and proven strategies.",
+        buttonText: "VIEW ALL PLANS",
+        buttonLink: "#pricing",
+      };
+    }
+    return null;
+  };
+
+  const heroContent = getHeroContent();
+
   return (
     <div>
+      {/* DYNAMIC HERO SECTION */}
+      {heroContent ? (
+        <section className="bg-[#1A1A1A] py-20 px-6 text-center border-b-4 border-[#F5C800]">
+          <p className="text-[#F5C800] text-xs font-bold tracking-[0.1em] uppercase mb-2">
+            {heroContent.label}
+          </p>
+          <h1 className="text-5xl font-black text-white leading-tight mb-5">
+            {heroContent.title}<br />
+            <span className="text-[#F5C800]">{heroContent.titleHighlight}</span>
+          </h1>
+          <p className="text-base text-[#64748b] max-w-lg mx-auto mb-10 leading-relaxed">
+            {heroContent.description}
+          </p>
+          <div className="flex justify-center gap-3.5 flex-wrap">
+            <a
+              href={heroContent.buttonLink}
+              className="px-9 py-3.5 rounded-lg bg-[#F5C800] text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity"
+            >
+              {heroContent.buttonText}
+            </a>
+          </div>
+        </section>
+      ) : (
+        /* DEFAULT HEADER FOR OTHER EXAMS */
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Explore the curriculum
+              </h2>
+              <p className="text-gray-600 max-w-xl mx-auto">
+                One subscription, everything you need for the exam.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SUBJECTS SECTION */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          {/* HEADER */}
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Explore the curriculum
-            </h2>
-            <p className="text-gray-600 max-w-xl mx-auto">
-              One subscription, everything you need for the exam.
-            </p>
-          </div>
 
           {/* LOADING */}
           {loading ? (
@@ -120,27 +185,70 @@ function PgMedicalEntranceExams() {
           )}
         </div>
       </section>
-
-      <MedicalExamDetail
-        data={examData?.exams[0]}
-        loading={loading}
-        examCategoryId={id as string}
-      />
-
+      
       <CourseDes
         data={examData?.exams[0]?.description}
         loading={loading}
-      />
+      />  
+      
+      {/* CONDITIONAL RENDERING BASED ON ROUTE */}
+      {isUSMLEStep1 ? (
+        <>
+          <USMLEStep1Detail
+            data={examData?.exams[0]}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+          {/* <USMLEPricing
+            data={examData}
+            loading={loading}
+            examCategoryId={id as string}
+          /> */}
+          <USMLEEnroll
+            data={examData}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+        </>
+      ) : isUSMLEStep2 ? (
+        <>
+          <USMLEStep1Detail
+            data={examData?.exams[0]}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+          <USMLEPricing
+            data={examData}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+          <USMLEEnroll
+            data={examData}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+        </>
+      ) : (
+        <MedicalExamDetail
+          data={examData?.exams[0]}
+          loading={loading}
+          examCategoryId={id as string}
+        />
+      )}
+
+      
+      {/* Who Can Enroll - Only for non-USMLE routes */}
+      {!isUSMLEStep1 && !isUSMLEStep2 && (
+        <WhoEnroll
+          data={examData}
+          loading={loading}
+          examCategoryId={id as string}
+        />
+      )}
 
       {/* FAQs */}
       <Faq />
 
-      {/* Who Can Enroll */}
-      <WhoEnroll
-        data={examData}
-        loading={loading}
-        examCategoryId={id as string}
-      />
 
       {/* REGISTER SECTION */}
       <NewsLetter />

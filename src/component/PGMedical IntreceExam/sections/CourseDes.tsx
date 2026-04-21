@@ -12,22 +12,18 @@ export interface CourseDesProps {
 }
 
 const CourseDes = ({ data = '', loading = false }: CourseDesProps) => {
-  const cleanHtml = DOMPurify.sanitize(data, {
-    USE_PROFILES: { html: true },
-  });
+  const cleanHtml = DOMPurify.sanitize(data, { USE_PROFILES: { html: true } });
 
   return (
-    <section className="py-10 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <SectionHeading title="Course Description" />
+    <section className="bg-white py-[72px] px-6">
+      <div className="max-w-[960px] mx-auto text-center">
+        <h2 className="text-[34px] font-black mb-7 text-[#1A1A1A]">Course Description</h2>
 
           {loading ? (
             <ContentSkeleton />
           ) : (
             <ContentBox html={cleanHtml} />
           )}
-        </div>
       </div>
     </section>
   );
@@ -35,29 +31,18 @@ const CourseDes = ({ data = '', loading = false }: CourseDesProps) => {
 
 export default CourseDes;
 
-// Reusable Section Heading
-const SectionHeading = ({ title }: { title: string }) => (
-  <div className="text-center mb-5">
-    <h2 className="text-4xl md:text-5xl font-bold ff -font-bold ">
-      {title}
-    </h2>
-  </div>
-);
-
-// Content Box
 const ContentBox = ({ html }: { html: string }) => (
   <div
     dangerouslySetInnerHTML={{ __html: html }}
-    className="bg-white p-8 md:p-10 ff-font rounded-3xl shadow-lg border border-gray-200 space-y-6"
+    className="bg-[#F7F6F1] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left leading-[1.85] text-[15px] text-[#1A1A1A] ff-font"
   />
 );
 
-// Skeleton Loader
 const ContentSkeleton = () => (
-  <div className="bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-gray-200 space-y-6">
-    {[...Array(5)].map((_, i) => (
-      <Skeleton key={i} height={30} width="100%" className="mb-4" />
+  <div className="bg-[#F7F6F1] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left space-y-4">
+    {[...Array(4)].map((_, i) => (
+      <Skeleton key={i} height={22} width="100%" />
     ))}
-    <Skeleton height={20} width="80%" />
+    <Skeleton height={22} width="70%" />
   </div>
 );
