@@ -87,7 +87,7 @@ const USMLEEnroll = ({ data, loading, examCategoryId }: USMLEEnrollProps) => {
       ) : null}
 
       {/* Designer Customized 1:1 Mentoring CTA */}
-      <section className="py-[72px] px-6 usmle-bg-light">
+      {/* <section className="py-[72px] px-6 usmle-bg-light">
         <div className="max-w-[960px] mx-auto">
           <div className="usmle-bg-black rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
             <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">
@@ -110,7 +110,7 @@ const USMLEEnroll = ({ data, loading, examCategoryId }: USMLEEnrollProps) => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };

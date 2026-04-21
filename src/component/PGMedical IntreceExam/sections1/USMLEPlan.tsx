@@ -62,7 +62,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
     <>
       {/* Choose Your Plan */}
       {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
-        <section className="py-[72px] px-6 usmle-bg-light">
+        <section id="pricing" className="py-[72px] px-6 usmle-bg-light">
           <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
@@ -132,6 +132,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
                       {currencySymbol}{formatPrice(price ?? 0)}
                     </p>
+                    <p className="text-[11px] text-[#64748b] mb-4 ff-font">Intensive polish for the last 30 days of prep.</p>
                     <div className="flex-grow"></div>
                     <button
                       onClick={() => addToCart(plan)}
@@ -159,32 +160,34 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     {data?.rapid_tools_section_title || "Rapid Learning Tools"}
                   </h2>
                 </div>
-                <Sliders
-                  settings={{
-                    accessibility: true,
-                    infinite: true,
-                    speed: 500,
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: true,
-                  }}
-                >
-                  {data.rapid_learning_tools.map((tool) => (
-                    <RapidToolCard
-                      key={tool._id}
-                      tool={tool}
-                      userCurrency={userCurrency}
-                      examCategoryId={examCategoryId}
-                      isSelected={cartItems.some(item =>
-                        item.cart_type === "rapid_tool" &&
-                        (item.tool_id?._id === tool._id || item.tool_id === tool._id)
-                      )}
-                      onUpdateCart={onUpdateCart}
-                    />
-                  ))}
-                </Sliders>
+                <div className="relative px-10">
+                  <Sliders
+                    settings={{
+                      accessibility: true,
+                      infinite: true,
+                      speed: 500,
+                      slidesToShow: 4,
+                      slidesToScroll: 1,
+                      autoplay: true,
+                      autoplaySpeed: 3000,
+                      arrows: true,
+                    }}
+                  >
+                    {data.rapid_learning_tools.map((tool) => (
+                      <RapidToolCard
+                        key={tool._id}
+                        tool={tool}
+                        userCurrency={userCurrency}
+                        examCategoryId={examCategoryId}
+                        isSelected={cartItems.some(item =>
+                          item.cart_type === "rapid_tool" &&
+                          (item.tool_id?._id === tool._id || item.tool_id === tool._id)
+                        )}
+                        onUpdateCart={onUpdateCart}
+                      />
+                    ))}
+                  </Sliders>
+                </div>
               </div>
             </div>
           )}
@@ -218,6 +221,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     >
                       <div className="flex-grow">
                         <p className="text-sm font-extrabold text-[#1A1A1A] mb-1 ff-font-bold">{mentorship.name}</p>
+                        <p className="text-xs text-[#64748b] ff-font">Weekly live sessions · Group mentorship</p>
                       </div>
                       <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
                         {currencySymbol}{formatPrice(price ?? 0)}
@@ -255,6 +259,32 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           </div>
         </section>
       ) : null}
+
+      {/* Designer Customized 1:1 Mentoring CTA */}
+      <section className="py-[72px] px-6 usmle-bg-light">
+        <div className="max-w-[960px] mx-auto">
+          <div className="usmle-bg-black rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
+            <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <h3 className="text-[22px] font-black text-white mb-[10px] ff-font-bold">
+              Designer Customized 1:1 Mentoring
+            </h3>
+            <p className="text-sm text-[#64748b] leading-[1.75] mb-[28px] max-w-[400px] ff-font">
+              For the student who requires a high-performance roadmap tailored to personal clinical strengths and weaknesses.
+            </p>
+            <button
+              className="bg-[#F5C800] text-black px-9 py-3.5 rounded-lg font-black text-sm border-none cursor-pointer tracking-[0.05em] transition-colors duration-150 hover:bg-[#d4a900]"
+              onClick={() => window.location.href = '/contact'}
+            >
+              CONTACT US FOR DETAILS
+            </button>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

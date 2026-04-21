@@ -283,7 +283,7 @@ const PricingSection = ({
   title: string;
   cartItems: any[];
 }) => (
-  <div id="pricing-section" className="max-w-[1380px] mx-auto">
+  <div id="pricing" className="max-w-[1380px] mx-auto">
     <SectionHeading title={title} />
 
     {loading ? (

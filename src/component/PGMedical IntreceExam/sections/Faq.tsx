@@ -80,7 +80,7 @@ const FaqCard = ({ faq, isOpen, onToggle }: { faq: FaqItem; isOpen: boolean; onT
   <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
     <button
       onClick={onToggle}
-      className="w-full p-6 flex items-center justify-between text-left"
+      className="w-full px-5 py-3.5 flex items-center justify-between text-left"
     >
       <span className="text-lg font-medium ff-font-bold pr-4">{faq.title}</span>
       <div className="flex-shrink-0 w-8 h-8 bg-white border-primary rounded-lg flex items-center justify-center">

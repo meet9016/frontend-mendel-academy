@@ -114,12 +114,8 @@ const LeftContent = ({ data, isSelected }: { data: Exam, isSelected: boolean }) 
 
 // Feature Card
 const FeatureCard = ({ text }: { text: string }) => (
-  <div className="group flex items-start gap-4 p-4 rounded-2xl bg-white border border-gray-200 hover:border-yellow-400 transition-all duration-300">
-    <div className="flex-shrink-0 mt-1">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border-primary">
-        <FaCheckCircle className="text-primary text-sm" />
-      </div>
-    </div>
+  <div className="group flex items-center gap-3 p-3 rounded-2xl bg-white border border-gray-200 hover:border-yellow-400 transition-all duration-300">
+    <FaCheckCircle className="text-primary text-base flex-shrink-0" />
     <span className="text-base md:text-lg ff-font font-medium leading-relaxed">
       {text}
     </span>
