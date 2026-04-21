@@ -144,7 +144,7 @@ const USMLEEnroll = ({ data, loading, examCategoryId }: USMLEEnrollProps) => {
 
       {/* Choose Your Plan - Pricing Section (USMLEPricing UI) */}
       {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
-        <section className="py-[72px] px-6 usmle-bg-light">
+        <section className="py-[72px] px-6 usmle-bg-light"> 
           <div className="max-w-[960px] mx-auto">
             {/* Section Header */}
             <div className="text-center mb-10">
