@@ -3,8 +3,11 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { getAuthId } from "@/utils/tokenManager";
+import { getTempId, isIndia } from "@/utils/helper";
 import MedicalExamDetail from "./sections/MedicalExamDetail";
 import USMLEEnroll from "./sections1/USMLEEnroll";
+import USMLEPlan from "./sections1/USMLEPlan";
 import CourseDes from "./sections/CourseDes";
 import Faq from "./sections/Faq";
 import WhoEnroll from "./sections/WhoEnroll";
@@ -18,10 +21,33 @@ function PgMedicalEntranceExams() {
   const [examData, setExamData] = useState<any>(null);
   const [subjectData, setSubjectData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
 
   // Determine which exam based on pathname
   const isUSMLEStep1 = pathname?.includes("usmle-step-1");
   const isUSMLEStep2 = pathname?.includes("usmle-step-2-ck");
+
+  const userCurrency = examData?.user_currency || (isIndia() ? "INR" : "USD");
+
+  const fetchCartItems = async () => {
+    try {
+      const identifier = userId || tempId;
+      if (!identifier) return;
+      const res = await api.get(`${endPointApi.getCart}`, {
+        params: { temp_id: identifier },
+      });
+      if (res.data.success) setCartItems(res.data.cart || []);
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isUSMLEStep1 || isUSMLEStep2) fetchCartItems();
+  }, [userId, tempId]);
 
   const fetcgExamData = async () => {
     try {
@@ -101,20 +127,20 @@ function PgMedicalEntranceExams() {
       {/* DYNAMIC HERO SECTION */}
       {heroContent ? (
         <section className="bg-[#1A1A1A] py-20 px-6 text-center border-b-4 border-[#F5C800]">
-          <p className="text-[#F5C800] text-xs font-bold tracking-[0.1em] uppercase mb-2">
+          <p className="text-[#F5C800] text-xs font-bold tracking-[0.1em] uppercase mb-2 ff-font-bold">
             {heroContent.label}
           </p>
-          <h1 className="text-5xl font-black text-white leading-tight mb-5">
+          <h1 className="text-5xl font-black text-white leading-tight mb-5 ff-font-bold">
             {heroContent.title}<br />
             <span className="text-[#F5C800]">{heroContent.titleHighlight}</span>
           </h1>
-          <p className="text-base text-[#64748b] max-w-lg mx-auto mb-10 leading-relaxed">
+          <p className="text-base text-[#64748b] max-w-lg mx-auto mb-10 leading-relaxed ff-font">
             {heroContent.description}
           </p>
           <div className="flex justify-center gap-3.5 flex-wrap">
             <a
               href={heroContent.buttonLink}
-              className="px-9 py-3.5 rounded-lg bg-[#F5C800] text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity"
+              className="px-9 py-3.5 rounded-lg bg-[#F5C800] text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold"
             >
               {heroContent.buttonText}
             </a>
@@ -191,28 +217,42 @@ function PgMedicalEntranceExams() {
       {/* CONDITIONAL RENDERING BASED ON ROUTE */}
       {isUSMLEStep1 ? (
         <>
-         <MedicalExamDetail
-          data={examData?.exams[0]}
-          loading={loading}
-          examCategoryId={id as string}
-        />
+          <MedicalExamDetail
+            data={examData?.exams[0]}
+            loading={loading}
+            examCategoryId={id as string}
+          />
           <USMLEEnroll
             data={examData}
             loading={loading}
             examCategoryId={id as string}
           />
+          <USMLEPlan
+            data={examData}
+            userCurrency={userCurrency}
+            cartItems={cartItems}
+            examCategoryId={id as string}
+            onUpdateCart={fetchCartItems}
+          />
         </>
       ) : isUSMLEStep2 ? (
         <>
-         <MedicalExamDetail
-          data={examData?.exams[0]}
-          loading={loading}
-          examCategoryId={id as string}
-        />
+          <MedicalExamDetail
+            data={examData?.exams[0]}
+            loading={loading}
+            examCategoryId={id as string}
+          />
           <USMLEEnroll
             data={examData}
             loading={loading}
             examCategoryId={id as string}
+          />
+          <USMLEPlan
+            data={examData}
+            userCurrency={userCurrency}
+            cartItems={cartItems}
+            examCategoryId={id as string}
+            onUpdateCart={fetchCartItems}
           />
         </>
       ) : (

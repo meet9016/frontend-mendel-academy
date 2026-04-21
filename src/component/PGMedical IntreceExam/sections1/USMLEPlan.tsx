@@ -1,0 +1,513 @@
+"use client";
+
+import React, { useState } from "react";
+import { getAuthId } from "@/utils/tokenManager";
+import { getTempId, formatPrice } from "@/utils/helper";
+import endPointApi from "@/utils/endPointApi";
+import { api } from "@/utils/axiosInstance";
+import { store } from "@/redux/store";
+import { setCartCount } from "@/redux/cartSlice";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
+import { motion } from "framer-motion";
+import Sliders from "@/comman/Sliders";
+import { Plan, RapidTool, EliteMentorship, Tsunami, WhoEnrollData } from "../sections/WhoEnroll";
+
+interface USMLEPlanProps {
+  data: WhoEnrollData | null;
+  userCurrency: string;
+  cartItems: any[];
+  examCategoryId?: string;
+  onUpdateCart: () => void;
+}
+
+const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart }: USMLEPlanProps) => {
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+
+  const addToCart = async (plan: Plan) => {
+    try {
+      setLoadingPlanId(plan._id);
+      const categoryId = examCategoryId || data?._id;
+      if (!categoryId) { ErrorToast("Category ID is missing"); return; }
+      if (!plan._id) { ErrorToast("Plan ID is missing"); return; }
+
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: categoryId,
+        plan_id: plan._id,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddExamPlanToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) { ErrorToast("Unable to identify user. Please log in or refresh the page."); return; }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        await onUpdateCart();
+        res.data.alreadyInCart ? InfoToast("This plan is already in your cart") : SuccessToast("Plan added to cart successfully!");
+      }
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        InfoToast("This plan is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add plan to cart");
+      }
+    } finally {
+      setLoadingPlanId(null);
+    }
+  };
+
+  return (
+    <>
+      {/* Choose Your Plan */}
+      {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
+        <section className="py-[72px] px-6 usmle-bg-light">
+          <div className="max-w-[960px] mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
+                {data?.plan_section_title || "Choose Your Plan"}
+              </h2>
+              <p className="text-sm usmle-text-gray ff-font">Precision-focused digital library for Step 1 & 2</p>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-[#1A1A1A] rounded-2xl p-6 md:p-7 mb-8"
+            >
+              <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-[#F5C800] mb-4 text-center">
+                Everything included in every plan
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {data.choose_plan_list[0]?.plan_sub_title?.map((feature, index) => (
+                  <div key={index} className="flex items-center gap-2 text-[13px] text-[#e2e8f0] ff-font">
+                    <div className="w-[18px] h-[18px] rounded-full bg-[#F5C800] flex items-center justify-center flex-shrink-0">
+                      <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6l3 3 5-5" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    {feature}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {data.choose_plan_list.map((plan, index) => {
+                const price = userCurrency === "INR" ? plan.plan_pricing_inr : plan.plan_pricing_dollar;
+                const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+                const isSelected = cartItems.some(item =>
+                  item.cart_type === "exam_plan" &&
+                  (item.plan_id?._id === plan._id || item.plan_id === plan._id)
+                );
+                const isLoading = loadingPlanId === plan._id;
+
+                return (
+                  <motion.div
+                    key={plan._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
+                      plan.most_popular
+                        ? "border-2 border-[#F5C800] shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative"
+                        : "border border-[#E5E3DA] hover:border-[#d4a900]"
+                    }`}
+                  >
+                    {plan.most_popular && (
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-[#F5C800] text-black text-[9px] font-black px-3.5 py-1 rounded-full tracking-[0.08em] whitespace-nowrap">
+                          POPULAR
+                        </span>
+                      </div>
+                    )}
+                    <p className="text-[10px] font-extrabold tracking-[0.12em] text-[#d4a900] uppercase mb-2.5">{plan.plan_type}</p>
+                    <p className="text-xl font-black text-[#1A1A1A] mb-1.5 ff-font-bold">
+                      {plan.plan_month} Month{plan.plan_month && plan.plan_month > 1 ? "s" : ""}
+                    </p>
+                    <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
+                      {currencySymbol}{formatPrice(price ?? 0)}
+                    </p>
+                    <div className="flex-grow"></div>
+                    <button
+                      onClick={() => addToCart(plan)}
+                      disabled={isLoading || isSelected}
+                      className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${
+                        plan.most_popular
+                          ? "usmle-bg-black usmle-text-yellow hover:opacity-85"
+                          : "bg-[#F5C800] text-black hover:bg-[#d4a900]"
+                      }`}
+                    >
+                      {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Rapid Learning Tools */}
+          {data?.rapid_learning_tools && data.rapid_learning_tools.length > 0 && (
+            <div className="border-t border-[#E5E3DA] pt-12 mt-12">
+              <div className="max-w-[1380px] mx-auto">
+                <div className="text-center mb-8">
+                  <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4 usmle-text-black">
+                    {data?.rapid_tools_section_title || "Rapid Learning Tools"}
+                  </h2>
+                </div>
+                <Sliders
+                  settings={{
+                    accessibility: true,
+                    infinite: true,
+                    speed: 500,
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    arrows: true,
+                  }}
+                >
+                  {data.rapid_learning_tools.map((tool) => (
+                    <RapidToolCard
+                      key={tool._id}
+                      tool={tool}
+                      userCurrency={userCurrency}
+                      examCategoryId={examCategoryId}
+                      isSelected={cartItems.some(item =>
+                        item.cart_type === "rapid_tool" &&
+                        (item.tool_id?._id === tool._id || item.tool_id === tool._id)
+                      )}
+                      onUpdateCart={onUpdateCart}
+                    />
+                  ))}
+                </Sliders>
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Elite Mentorship & Tsunami Program */}
+      {(data?.elite_mentorship && data.elite_mentorship.length > 0) || data?.tsunami ? (
+        <section className="py-[72px] px-6 usmle-bg-white">
+          <div className="max-w-[960px] mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
+                {data?.mentorship_tsunami_section_title || "Elite Mentorship & Tsunami Program"}
+              </h2>
+              <p className="text-sm usmle-text-gray ff-font">Live, physician-led coaching. Includes 1-year Galaxy App access free.</p>
+            </div>
+
+            {data?.elite_mentorship && data.elite_mentorship.length > 0 && (
+              <div className="bg-white border border-[#E5E3DA] rounded-2xl overflow-hidden mb-5">
+                <div className="bg-[#1A1A1A] p-4 md:px-6">
+                  <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#F5C800]">Individual Courses</p>
+                  <p className="text-xs text-[#64748b] mt-1">Enroll in any course individually · Includes 1-year Galaxy App access free</p>
+                </div>
+                {data.elite_mentorship.map((mentorship, index) => {
+                  const price = userCurrency === "INR" ? mentorship.price_inr : mentorship.price_usd;
+                  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+                  return (
+                    <div
+                      key={mentorship._id || index}
+                      className="flex items-center p-4 md:px-6 gap-4 transition-colors duration-150 hover:bg-[#fffbe6] border-b border-[#F7F6F1] last:border-b-0"
+                    >
+                      <div className="flex-grow">
+                        <p className="text-sm font-extrabold text-[#1A1A1A] mb-1 ff-font-bold">{mentorship.name}</p>
+                      </div>
+                      <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
+                        {currencySymbol}{formatPrice(price ?? 0)}
+                      </p>
+                      <MentorshipButton
+                        mentorship={mentorship}
+                        examCategoryId={examCategoryId}
+                        cartItems={cartItems}
+                        onUpdateCart={onUpdateCart}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {data?.tsunami && data.tsunami.name && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <TsunamiBundleCard
+                  tsunami={data.tsunami}
+                  userCurrency={userCurrency}
+                  examCategoryId={examCategoryId}
+                  cartItems={cartItems}
+                  onUpdateCart={onUpdateCart}
+                />
+                <FullMatchBundleCard
+                  mentorships={data?.elite_mentorship?.slice(0, 3) || []}
+                  userCurrency={userCurrency}
+                  examCategoryId={examCategoryId}
+                  cartItems={cartItems}
+                  onUpdateCart={onUpdateCart}
+                />
+              </div>
+            )}
+          </div>
+        </section>
+      ) : null}
+    </>
+  );
+};
+
+export default USMLEPlan;
+
+// Rapid Tool Card
+const RapidToolCard = ({
+  tool, userCurrency, examCategoryId, isSelected, onUpdateCart,
+}: {
+  tool: RapidTool; userCurrency: string; examCategoryId?: string; isSelected?: boolean; onUpdateCart: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+  const price = userCurrency === "INR" ? tool.price_inr : tool.price_usd;
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const addToolToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) { ErrorToast("Category ID is missing"); return; }
+      if (!tool._id) { ErrorToast("Tool ID is missing"); return; }
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        tool_id: tool._id,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddRapidToolToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) { ErrorToast("Unable to identify user. Please log in or refresh the page."); return; }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        res.data.alreadyInCart ? InfoToast("This tool is already in your cart") : SuccessToast("Tool added to cart successfully!");
+        await onUpdateCart();
+      }
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        InfoToast("This tool is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add tool to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[180px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+      <div className="flex flex-col flex-grow justify-between">
+        <div className="space-y-2 text-center">
+          <h3 className="text-xl font-bold ff-font-bold capitalize">{tool.tool_type}</h3>
+          <p className="text-3xl ff-font-bold font-bold text-primary">{currencySymbol} {formatPrice(price ?? 0)}</p>
+        </div>
+        <button
+          onClick={addToolToCart}
+          disabled={isLoading || isSelected}
+          className="w-full py-2.5 rounded-lg bg-[#F5C800] text-black text-xs font-extrabold border-none cursor-pointer mt-4 hover:bg-[#d4a900] disabled:opacity-50"
+        >
+          {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Mentorship Button
+const MentorshipButton = ({
+  mentorship, examCategoryId, cartItems, onUpdateCart,
+}: {
+  mentorship: EliteMentorship; examCategoryId?: string; cartItems: any[]; onUpdateCart: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+
+  const isSelected = cartItems.some(item =>
+    item.cart_type === "elite_mentorship" &&
+    (item.mentorship_id?._id === mentorship._id || item.mentorship_id === mentorship._id)
+  );
+
+  const addMentorshipToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) { ErrorToast("Category ID is missing"); return; }
+      if (!mentorship._id) { ErrorToast("Mentorship ID is missing"); return; }
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        mentorship_id: mentorship._id,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddEliteMentorshipToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) { ErrorToast("Unable to identify user. Please log in or refresh the page."); return; }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        res.data.alreadyInCart ? InfoToast("This mentorship is already in your cart") : SuccessToast("Mentorship added to cart successfully!");
+        await onUpdateCart();
+      }
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        InfoToast("This mentorship is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add mentorship to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={addMentorshipToCart}
+      disabled={isLoading || isSelected}
+      className="flex-shrink-0 px-6 py-2 rounded-lg bg-[#1A1A1A] text-[#F5C800] text-xs font-extrabold border-none cursor-pointer transition-opacity duration-150 hover:opacity-80 disabled:opacity-50"
+    >
+      {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll"}
+    </button>
+  );
+};
+
+// Tsunami Bundle Card
+const TsunamiBundleCard = ({
+  tsunami, userCurrency, examCategoryId, cartItems, onUpdateCart,
+}: {
+  tsunami: Tsunami; userCurrency: string; examCategoryId?: string; cartItems: any[]; onUpdateCart: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+  const price = userCurrency === "INR" ? tsunami.included_service_price_inr : tsunami.included_service_price_usd;
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const isSelected = cartItems.some(item =>
+    item.cart_type === "tsunami" &&
+    (item.exam_category_id?._id === examCategoryId || item.exam_category_id === examCategoryId)
+  );
+
+  const addTsunamiToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) { ErrorToast("Category ID is missing"); return; }
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: examCategoryId,
+        bucket_type: true,
+      };
+      const res = await api.post(`${endPointApi.postAddTsunamiToCart}`, body);
+      if (res.data.success) {
+        const identifier = userId || tempId;
+        if (!identifier) { ErrorToast("Unable to identify user. Please log in or refresh the page."); return; }
+        const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+        store.dispatch(setCartCount(countRes.data.count));
+        res.data.alreadyInCart ? InfoToast("This program is already in your cart") : SuccessToast("Program added to cart successfully!");
+        await onUpdateCart();
+      }
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        InfoToast("This program is already in your cart");
+      } else {
+        ErrorToast(error.response?.data?.message || "Failed to add program to cart");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="usmle-bg-black border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
+      <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">Step 1 + Step 2 Bundle</p>
+      <h3 className="text-xl font-black usmle-text-yellow mb-5 ff-font-bold">{tsunami.name || "Mendel Tsunami"}</h3>
+      <div className="flex items-baseline gap-3 mb-1">
+        <p className="text-4xl font-black text-white leading-none ff-font-bold">{currencySymbol}{formatPrice(price ?? 0)}</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2 my-6">
+        {tsunami.description?.split("\n").filter(Boolean).map((line, index) => (
+          <div key={index} className="flex items-center gap-2 text-xs text-[#94a3b8] ff-font">
+            <span className="usmle-text-yellow">✓</span>
+            {line.trim()}
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={addTsunamiToCart}
+        disabled={isLoading || isSelected}
+        className="w-full py-3.5 rounded-lg bg-[#F5C800] text-black text-xs font-black border-none cursor-pointer tracking-[0.05em] mt-auto transition-colors duration-150 hover:bg-[#d4a900] disabled:opacity-50"
+      >
+        {isLoading ? "Adding..." : isSelected ? "Selected" : "GET DUAL MASTERY"}
+      </button>
+    </div>
+  );
+};
+
+// Full Match Bundle Card
+const FullMatchBundleCard = ({
+  mentorships, userCurrency, examCategoryId, cartItems, onUpdateCart,
+}: {
+  mentorships: EliteMentorship[]; userCurrency: string; examCategoryId?: string; cartItems: any[]; onUpdateCart: () => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = getAuthId();
+  const tempId = userId ? null : getTempId();
+
+  const totalPrice = mentorships.reduce((sum, m) => {
+    const price = userCurrency === "INR" ? m.price_inr : m.price_usd;
+    return sum + (price ?? 0);
+  }, 0);
+  const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+
+  const isSelected = cartItems.some(item =>
+    item.cart_type === "full_match" &&
+    (item.exam_category_id?._id === examCategoryId || item.exam_category_id === examCategoryId)
+  );
+
+  const addFullMatchToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!examCategoryId) { ErrorToast("Category ID is missing"); return; }
+    } catch (error: any) {
+      ErrorToast(error.response?.data?.message || "Failed to add program to cart");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="usmle-bg-white border-2 usmle-border-black rounded-2xl p-8 flex flex-col">
+      <p className="text-[10px] font-bold tracking-[0.1em] uppercase usmle-text-muted mb-2">Basic Science to Residency</p>
+      <h3 className="text-xl font-black usmle-text-black uppercase mb-5 ff-font-bold">The Full Match</h3>
+      <div className="flex items-baseline gap-3 mb-1">
+        <p className="text-4xl font-black usmle-text-black leading-none ff-font-bold">{currencySymbol}{formatPrice(totalPrice)}</p>
+      </div>
+      <div className="grid grid-cols-2 gap-2 my-6">
+        {mentorships.map((m, index) => (
+          <div key={index} className="flex items-center gap-2 text-xs usmle-text-gray ff-font">
+            <span className="usmle-text-yellow">✓</span>
+            {m.name}
+          </div>
+        ))}
+        <div className="flex items-center gap-2 text-xs usmle-text-gray ff-font"><span className="usmle-text-yellow">✓</span>CCS simulations</div>
+        <div className="flex items-center gap-2 text-xs usmle-text-gray ff-font"><span className="usmle-text-yellow">✓</span>Alumnus networking</div>
+      </div>
+      <button
+        onClick={addFullMatchToCart}
+        disabled={isLoading || isSelected}
+        className="w-full py-3.5 rounded-lg bg-transparent usmle-text-black text-xs font-black border-2 usmle-border-black cursor-pointer tracking-[0.05em] mt-auto transition-all duration-150 hover:usmle-bg-black hover:text-white disabled:opacity-50"
+      >
+        {isLoading ? "Adding..." : isSelected ? "Selected" : "ENROLL IN THE MATCH"}
+      </button>
+    </div>
+  );
+};
