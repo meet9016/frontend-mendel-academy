@@ -4,7 +4,6 @@ import endPointApi from "@/utils/endPointApi";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import MedicalExamDetail from "./sections/MedicalExamDetail";
-import USMLEStep1Detail from "./sections1/USMLEStep1Detail";
 import USMLEEnroll from "./sections1/USMLEEnroll";
 import CourseDes from "./sections/CourseDes";
 import Faq from "./sections/Faq";
@@ -192,11 +191,11 @@ function PgMedicalEntranceExams() {
       {/* CONDITIONAL RENDERING BASED ON ROUTE */}
       {isUSMLEStep1 ? (
         <>
-          <USMLEStep1Detail
-            data={examData?.exams[0]}
-            loading={loading}
-            examCategoryId={id as string}
-          />
+         <MedicalExamDetail
+          data={examData?.exams[0]}
+          loading={loading}
+          examCategoryId={id as string}
+        />
           <USMLEEnroll
             data={examData}
             loading={loading}
@@ -205,11 +204,11 @@ function PgMedicalEntranceExams() {
         </>
       ) : isUSMLEStep2 ? (
         <>
-          <USMLEStep1Detail
-            data={examData?.exams[0]}
-            loading={loading}
-            examCategoryId={id as string}
-          />
+         <MedicalExamDetail
+          data={examData?.exams[0]}
+          loading={loading}
+          examCategoryId={id as string}
+        />
           <USMLEEnroll
             data={examData}
             loading={loading}
