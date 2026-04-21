@@ -10,7 +10,10 @@ const Hero: React.FC<HeroProps> = ({ examName }) => {
   const handleScrollToPricing = () => {
     const pricingSection = document.getElementById("pricing");
     if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: "smooth" });
+      const offset = 100;
+      const elementPosition = pricingSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     }
   };
 

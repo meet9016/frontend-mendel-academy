@@ -63,7 +63,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
       {/* Choose Your Plan */}
       {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
         <section id="pricing" className="py-[72px] px-6 usmle-bg-light">
-          <div className="max-w-[960px] mx-auto">
+          <div className="max-w-[1280px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
                 {data?.plan_section_title || "Choose Your Plan"}
@@ -112,7 +112,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
+                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] ${
                       plan.most_popular
                         ? "border-2 border-[#F5C800] shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative"
                         : "border border-[#E5E3DA] hover:border-[#d4a900]"
@@ -132,7 +132,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
                       {currencySymbol}{formatPrice(price ?? 0)}
                     </p>
-                    <p className="text-[11px] text-[#64748b] mb-4 ff-font">Intensive polish for the last 30 days of prep.</p>
+                    <p className="text-[11px] text-[#64748b] mb-4 mt-4 ff-font">Intensive polish for the last 30 days of prep.</p>
                     <div className="flex-grow"></div>
                     <button
                       onClick={() => addToCart(plan)}

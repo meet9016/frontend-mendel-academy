@@ -122,7 +122,7 @@ const SketchySubjectSection: React.FC<Props> = ({
                     `/services/${examId}/${selectedSubject.id || selectedSubject._id}`
                   )
                 }
-                className="usmle-bg-black text-primary px-5 py-3 rounded-xl ff-font font-medium text-sm hover:opacity-90 transition"
+                className="usmle-bg-black text-primary px-5 py-3 rounded-xl ff-font font-bold text-sm hover:opacity-90 transition"
               >
                 Preview free lessons →
               </button>
