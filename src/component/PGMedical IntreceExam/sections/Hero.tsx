@@ -18,7 +18,7 @@ const Hero: React.FC<HeroProps> = ({ examName }) => {
   };
 
   return (
-    <section className="usmle-bg-black py-20 px-6 text-center border-b-4 border-primary">
+    <section className="bg-gray-900 py-20 px-6 text-center border-b-4 border-primary">
       <p className="text-primary text-xs font-bold tracking-[0.1em] uppercase mb-2 ff-font-bold">
         {examName || "Exam"} Preparation
       </p>

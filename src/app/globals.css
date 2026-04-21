@@ -206,10 +206,6 @@ html.hydrated [role="button"] {
   background-color: var(--usmle-gray-light);
 }
 
-.usmle-bg-black {
-  background-color: var(--usmle-black);
-}
-
 .usmle-bg-white {
   background-color: var(--usmle-white);
 }

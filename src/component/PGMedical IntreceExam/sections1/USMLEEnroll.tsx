@@ -293,7 +293,7 @@ const TsunamiBundleCard = ({
   };
 
   return (
-    <div className="usmle-bg-black border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
+    <div className="bg-gray-900 border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">
         Step 1 + Step 2 Bundle
       </p>
@@ -427,7 +427,7 @@ const FullMatchBundleCard = ({
       <button
         onClick={addFullMatchToCart}
         disabled={isLoading || isSelected}
-        className="w-full py-3.5 rounded-lg bg-transparent usmle-text-black text-xs font-black border-2 usmle-border-black cursor-pointer tracking-[0.05em] mt-auto transition-all duration-150 hover:usmle-bg-black hover:text-white disabled:opacity-50"
+        className="w-full py-3.5 rounded-lg bg-transparent usmle-text-black text-xs font-black border-2 usmle-border-black cursor-pointer tracking-[0.05em] mt-auto transition-all duration-150 hover:bg-gray-900 hover:text-white disabled:opacity-50"
       >
         {isLoading ? "Adding..." : (isSelected ? "Selected" : "ENROLL IN THE MATCH")}
       </button>
