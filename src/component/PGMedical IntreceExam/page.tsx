@@ -5,8 +5,6 @@ import { useParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import MedicalExamDetail from "./sections/MedicalExamDetail";
 import USMLEStep1Detail from "./sections1/USMLEStep1Detail";
-import USMLEStep2CKDetail from "./sections1/USMLEStep2CKDetail";
-import USMLEPricing from "./sections1/USMLEPricing";
 import USMLEEnroll from "./sections1/USMLEEnroll";
 import CourseDes from "./sections/CourseDes";
 import Faq from "./sections/Faq";
@@ -199,11 +197,6 @@ function PgMedicalEntranceExams() {
             loading={loading}
             examCategoryId={id as string}
           />
-          {/* <USMLEPricing
-            data={examData}
-            loading={loading}
-            examCategoryId={id as string}
-          /> */}
           <USMLEEnroll
             data={examData}
             loading={loading}
@@ -214,11 +207,6 @@ function PgMedicalEntranceExams() {
         <>
           <USMLEStep1Detail
             data={examData?.exams[0]}
-            loading={loading}
-            examCategoryId={id as string}
-          />
-          <USMLEPricing
-            data={examData}
             loading={loading}
             examCategoryId={id as string}
           />
