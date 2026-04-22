@@ -61,7 +61,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
   return (
     <>
       {/* Choose Your Plan */}
-      {data?.choose_plan_list && data.choose_plan_list.length > 0 && (
+      {data?.is_plan_visible !== false && data?.choose_plan_list && data.choose_plan_list.length > 0 && (
         <section id="pricing" className="py-[72px] px-6 usmle-bg-light">
           <div className="max-w-[1280px] mx-auto">
             <div className="text-center mb-10">
@@ -132,14 +132,16 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
                       {currencySymbol}{formatPrice(price ?? 0)}
                     </p>
-                    <p className="text-[11px] text-[#64748b] mb-4 mt-4 ff-font">Intensive polish for the last 30 days of prep.</p>
+                    {plan.plan_title && (
+                      <p className="text-[11px] text-[#64748b] mb-4 mt-4 ff-font">{plan.plan_title}</p>
+                    )}
                     <div className="flex-grow"></div>
                     <button
                       onClick={() => addToCart(plan)}
                       disabled={isLoading || isSelected}
                       className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${
                         plan.most_popular
-                          ? "usmle-bg-black usmle-text-yellow hover:opacity-85"
+                          ? "bg-gray-900 usmle-text-yellow hover:opacity-85"
                           : "bg-[#F5C800] text-black hover:bg-[#d4a900]"
                       }`}
                     >
@@ -152,7 +154,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           </div>
 
           {/* Rapid Learning Tools */}
-          {data?.rapid_learning_tools && data.rapid_learning_tools.length > 0 && (
+          {data?.is_rapid_tools_visible !== false && data?.rapid_learning_tools && data.rapid_learning_tools.length > 0 && (
             <div className="border-t border-[#E5E3DA] pt-12 mt-12">
               <div className="max-w-[1380px] mx-auto">
                 <div className="text-center mb-8">
@@ -200,7 +202,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           <div className="max-w-[960px] mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
-                {data?.mentorship_tsunami_section_title || "Elite Mentorship & Tsunami Program"}
+                {data?.mentorship_tsunami_section_title || "Elite Mdsentorshsdsdip & Tsunami Program"}
               </h2>
               <p className="text-sm usmle-text-gray ff-font">Live, physician-led coaching. Includes 1-year Galaxy App access free.</p>
             </div>
@@ -221,7 +223,9 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     >
                       <div className="flex-grow">
                         <p className="text-sm font-extrabold text-[#1A1A1A] mb-1 ff-font-bold">{mentorship.name}</p>
-                        <p className="text-xs text-[#64748b] ff-font">Weekly live sessions · Group mentorship</p>
+                        {mentorship.subtitle && (
+                          <p className="text-xs text-[#64748b] ff-font">{mentorship.subtitle}</p>
+                        )}
                       </div>
                       <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
                         {currencySymbol}{formatPrice(price ?? 0)}
@@ -261,9 +265,9 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
       ) : null}
 
       {/* Designer Customized 1:1 Mentoring CTA */}
-      <section className="py-[72px] px-6 usmle-bg-light">
-        <div className="max-w-[960px] mx-auto">
-          <div className="usmle-bg-black rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
+      <section className="py-[72px] px-6 usmle-bg-light ">
+        <div className="max-w-[960px] mx-auto ">
+          <div className="usmle-bg-black bg-gray-900 rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
             <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -457,7 +461,7 @@ const TsunamiBundleCard = ({
   };
 
   return (
-    <div className="usmle-bg-black border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col">
+    <div className="usmle-bg-black border-2 border-[#F5C800] rounded-2xl p-8 flex flex-col bg-gray-900">
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">Step 1 + Step 2 Bundle</p>
       <h3 className="text-xl font-black usmle-text-yellow mb-5 ff-font-bold">{tsunami.name || "Mendel Tsunami"}</h3>
       <div className="flex items-baseline gap-3 mb-1">
