@@ -82,7 +82,7 @@ export default function Login() {
               show={showPassword}
               toggle={() => setShowPassword((v) => !v)}
             />
-            <Checkbox />
+            <Checkbox onForgotPassword={() => { setStartAnimation(true); setTimeout(() => router.push("/auth/forgot-password"), 700); }} />
             <CommonButton
               className="bg-black text-white hover:bg-black hover:text-[#ffca00]"
               pyClass="py-4"
@@ -169,7 +169,7 @@ const PasswordField = ({ value, onChange, error, show, toggle }: {
   </div>
 );
 
-const Checkbox = () => (
+const Checkbox = ({ onForgotPassword }: { onForgotPassword: () => void }) => (
   <div className="flex items-center justify-between text-sm">
     <div className="flex items-center space-x-2">
       <input
@@ -182,9 +182,13 @@ const Checkbox = () => (
         Remember me
       </label>
     </div>
-    <a href="#" className="ff-font-bold hover:text-gray-800 transition-colors">
+    <button
+      type="button"
+      onClick={onForgotPassword}
+      className="ff-font-bold hover:text-gray-800 transition-colors cursor-pointer"
+    >
       Forgot Password?
-    </a>
+    </button>
   </div>
 );
 

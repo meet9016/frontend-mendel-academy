@@ -653,11 +653,11 @@ const CheckOut = () => {
                 key={index}
                 className="border rounded-lg p-3 flex gap-3 items-center mb-4"
               >
-                <img
+                {/* <img
                   src={item.product_id?.image || "/default.jpg"}
                   className="w-16 h-16 rounded-md object-cover"
                   alt="plan"
-                />
+                /> */}
 
                 <div className="flex-1">
                   <p className="font-semibold text-sm">

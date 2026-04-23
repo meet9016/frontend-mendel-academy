@@ -2,6 +2,8 @@ export interface EndPointApi {
     login: string;
     register: string;
     logout: string;
+    forgotPassword: string;
+    resetPassword: string;
     getProfile: string;
     updateProfile: string;
     updateProfilePhoto: string;
@@ -94,6 +96,8 @@ const endPointApi: EndPointApi = {
     login: 'auth/login',
     register: 'auth/register',
     logout: 'auth/logout',
+    forgotPassword: 'auth/forgot-password',
+    resetPassword: 'auth/reset-password',
     getProfile: 'auth/profile',
     updateProfile: 'auth/profile',
     updateProfilePhoto: 'auth/profile-photo',
