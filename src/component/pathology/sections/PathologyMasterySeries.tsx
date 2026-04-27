@@ -176,12 +176,12 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
       </main>:null}
       {showCounters ? <StatusSection /> : null}
       {/* ----  EndometrialPathology  ---- */}
-      {/* <EndometrialPathology /> */}
+      <EndometrialPathology />
 
       {/* ----  RECORDED PROGRAM---- */}
       <Section
         title="Recorded Programs"
-        subtitle="Self-paced learning with lifetime access"
+        subtitle="Self-paced learning"
       >
         {loading ? (
           <ProgramSkeleton />
@@ -192,7 +192,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
 
       {/* ----  UPCOMING PROGRAM ----- */}
       <Section
-        title={showCounters ? "Ongoing Programs" : "Upcoming Programs"}
+        title={showCounters ? "Upcoming Programs" : "Upcoming Programs"}
         subtitle="Join the waitlist and get early access"
       >
         {loading ? <UpcomeingProgramSkeleton /> : <UpcomingCourse />}
@@ -366,6 +366,7 @@ const RecordedGrid = ({
             return (
               <div
                 key={productId || i}
+                onClick={() => router.push(`/pathology/${productId}`)}
                 className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
               >
                 {/* Glow Border on Hover */}

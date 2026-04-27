@@ -42,6 +42,7 @@ interface ProgramDetail {
   subtitle: string;
   category: string;
   description: string;
+  image?: string;
   price: number; // Display price (already converted by backend)
   price_usd?: number; // Original USD price
   price_inr?: number; // Original INR price
@@ -339,7 +340,7 @@ export default function RecordedProgramDetails() {
 
   return (
     <main className="min-h-screen bg-[#f9fafb]">
-      <Hero />
+      <Hero image={program.image} />
 
       <section className="relative -mt-40 px-4 pb-24 z-10">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-10">
@@ -368,7 +369,7 @@ export default function RecordedProgramDetails() {
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-6 mt-6">
             <span className="flex items-center gap-2 bg-white border border-primary ff-font px-4 py-1 rounded-full text-sm">
-              <FiClock /> Lifetime Access
+              <FiClock /> {program.duration ? `${program.duration} Month Access` : 'Lifetime Access'}
             </span>
 
             <span className="text-2xl font-bold ff-font-bold">
@@ -518,10 +519,10 @@ export default function RecordedProgramDetails() {
 }
 
 /* ---------- HERO ---------- */
-const Hero = () => (
+const Hero = ({ image }: { image?: string }) => (
   <section className="relative w-full h-[80vh] overflow-hidden">
     <motion.img
-      src="https://t3.ftcdn.net/jpg/06/45/68/94/360_F_645689490_Fzwptjq0YLCW8JZpC6lASo1KJcAgzZPj.jpg"
+      src={image || "https://t3.ftcdn.net/jpg/06/45/68/94/360_F_645689490_Fzwptjq0YLCW8JZpC6lASo1KJdcAgzZPj.jpg"}
       alt="Blog Hero"
       className="w-full h-full object-cover object-center"
       initial={{ scale: 1.2, opacity: 0 }}
