@@ -192,7 +192,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
 
       {/* ----  UPCOMING PROGRAM ----- */}
       <Section
-        title={showCounters ? "Upcoming Programs" : "Upcoming Programs"}
+        title={"Upcoming Programs"}
         subtitle="Join the waitlist and get early access"
       >
         {loading ? <UpcomeingProgramSkeleton /> : <UpcomingCourse />}
