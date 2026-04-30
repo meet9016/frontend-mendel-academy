@@ -58,7 +58,7 @@ const SketchySubjectSection: React.FC<Props> = ({
 
         {/* HEADER */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold ff-font-bold usmle-text-black mb-3">
+          <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
             Explore the Core 7 curriculum
           </h2>
           <p className="text-sm ff-font usmle-text-gray max-w-md mx-auto">

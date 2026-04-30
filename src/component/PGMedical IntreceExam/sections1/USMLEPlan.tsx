@@ -155,10 +155,10 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
 
           {/* Rapid Learning Tools */}
           {data?.is_rapid_tools_visible !== false && data?.rapid_learning_tools && data.rapid_learning_tools.length > 0 && (
-            <div className="border-t border-[#E5E3DA] pt-12 mt-12">
+            <div className="border-t border-[#E5E3DA] pt-12 mt-10">
               <div className="max-w-[1380px] mx-auto">
-                <div className="text-center mb-8">
-                  <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4 usmle-text-black">
+                <div className="text-center mb-3">
+                  <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
                     {data?.rapid_tools_section_title || "Rapid Learning Tools"}
                   </h2>
                 </div>

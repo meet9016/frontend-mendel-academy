@@ -197,10 +197,10 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
           <section className="py-[72px] px-6 bg-white">
             <div className="max-w-[960px] mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-[30px] font-black text-[#1A1A1A] mb-2 ff-font-bold">
+                <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
                   {data?.mentorship_tsunami_section_title || "Elite Mentorship & Tsunami Program"}
                 </h2>
-                <p className="text-sm text-[#64748b] ff-font">Live, physician-led coaching. Includes 1-year Galaxy App access free.</p>
+                <p className="text-sm usmle-text-gray ff-font">Live, physician-led coaching. Includes 1-year Galaxy App access free.</p>
               </div>
 
               {data?.elite_mentorship && data.elite_mentorship.length > 0 && (
@@ -325,7 +325,7 @@ const ImageBlock = ({ src }: { src?: string }) => {
 const TextBlock = ({ title, html }: { title: string; html: string }) => (
   <div className="order-1 space-y-8 md:order-2">
     <div>
-      <h2 className="mb-4 text-4xl font-bold ff-font-bold md:text-5xl">
+      <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
         {title}
       </h2>
     </div>
@@ -391,8 +391,8 @@ const PricingSection = ({
 
 // Section Heading
 const SectionHeading = ({ title }: { title: string }) => (
-  <div className="text-center mb-8">
-    <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">
+  <div className="text-center mb-4">
+    <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
       {title}
     </h2>
   </div>

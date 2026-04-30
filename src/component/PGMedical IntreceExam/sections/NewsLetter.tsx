@@ -128,10 +128,10 @@ const SectionHeader = ({
   subtitle: string;
 }) => (
   <div className="mb-10 text-center">
-    <h2 className="mb-3 text-4xl font-bold ff-font-bold md:text-5xl">
+    <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
       {title}
     </h2>
-    <p className="mx-auto max-w-2xl text-xl ff-font">{subtitle}</p>
+    <p className="mx-auto max-w-2xl text-md ff-font">{subtitle}</p>
   </div>
 );
 

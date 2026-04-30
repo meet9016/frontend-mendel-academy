@@ -17,7 +17,7 @@ const CourseDes = ({ data = '', loading = false }: CourseDesProps) => {
   return (
     <section className="bg-white py-[72px] px-6">
       <div className="max-w-[960px] mx-auto text-center">
-        <h2 className="text-[34px] font-black mb-7 text-[#1A1A1A]">Course Description</h2>
+        <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">Course Description</h2>
 
           {loading ? (
             <ContentSkeleton />

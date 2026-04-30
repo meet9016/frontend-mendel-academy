@@ -71,7 +71,7 @@ export default Faq;
 // Reusable Heading
 const SectionHeading = ({ title }: { title: string }) => (
   <div className="text-center mb-5">
-    <h2 className="text-4xl md:text-5xl font-bold ff-font-bold mb-4">{title}</h2>
+    <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">{title}</h2>
   </div>
 );
 

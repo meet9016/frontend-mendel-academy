@@ -85,22 +85,24 @@ const HeroContent = ({ data, isSelected }: { data: Exam | null, isSelected: bool
   if (!data) return null;
 
   return (
-    <div className="relative mx-auto max-w-[1380px] px-4 md:px-6 lg:px-8 py-10 ">
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-        <LeftContent data={data} isSelected={isSelected} />
-        <RightImage data={data} />
-      </div>
+    <div className="relative mx-auto max-w-[1380px] px-4 md:px-6 lg:px-8 py-10">
+  <div className="flex justify-center">
+    <div className="w-full max-w-2xl">
+      <LeftContent data={data} isSelected={isSelected} />
+              {/* <RightImage data={data} /> */}
     </div>
+  </div>
+</div>
   );
 };
 
 // Left Content
 const LeftContent = ({ data, isSelected }: { data: Exam, isSelected: boolean }) => (
   <div className="space-y-5">
-    <h1 className="text-5xl md:text-6xl lg:text-5xl font-bold ff-font-bold leading-tight">
+    <h1 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
       {data.exam_name}
     </h1>
-    <p className="text-xl md:text-2xl font-medium ff-font">{data.title}</p>
+    <p className="text-xl md:text-xl font-medium ff-font">{data.title}</p>
 
     <div className="space-y-3">
       {data.sub_titles.map((feature, idx) => (
