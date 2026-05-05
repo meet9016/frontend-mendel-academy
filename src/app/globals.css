@@ -114,6 +114,10 @@ html.hydrated [role="button"] {
   color: #FFCA00;
 }
 
+.bg-black {
+  background-color: #1A1A1A
+}
+
 .border-primary {
   border-color: #FFCA00;
 }
@@ -126,6 +130,7 @@ html.hydrated [role="button"] {
 .exam-card-shadow {
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);
 }
+
 .bg-primary {
   background-color: #FFCA00;
 }

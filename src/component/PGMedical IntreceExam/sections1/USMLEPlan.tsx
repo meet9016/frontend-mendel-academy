@@ -209,7 +209,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
 
             {data?.elite_mentorship && data.elite_mentorship.length > 0 && (
               <div className="bg-white border border-[#E5E3DA] rounded-2xl overflow-hidden mb-5">
-                <div className="bg-[#1A1A1A] p-4 md:px-6">
+                <div className="bg-black p-4 md:px-6">
                   <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#F5C800]">Individual Courses</p>
                   <p className="text-xs text-[#64748b] mt-1">Enroll in any course individually · Includes 1-year Galaxy App access free</p>
                 </div>
