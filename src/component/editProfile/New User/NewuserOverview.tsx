@@ -36,11 +36,11 @@ const NewuserOverview = () => {
 
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
-                    <button className="px-4 py-2 border border-[#d6b95c] rounded-lg text-sm ff-font w-full sm:w-auto">
+                    <button className="px-4 py-2 border border-[#d6b95c] rounded-lg text-sm cursor-pointer ff-font w-full sm:w-auto">
                         See plans
                     </button>
 
-                    <button className="px-5 py-2 bg-primary text-black rounded-lg text-sm ff-font-bold flex items-center justify-center gap-2 w-full sm:w-auto">
+                    <button className="px-5 py-2 bg-primary text-black rounded-lg text-sm ff-font-bold cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
                         Start 5-day free trial →
                     </button>
                 </div>
@@ -63,7 +63,7 @@ const NewuserOverview = () => {
                     </p>
                 </div>
 
-                <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm ff-font flex items-center justify-center gap-2 w-full sm:w-auto">
+                <button className="px-4 py-2 border border-gray-300 cursor-pointer rounded-lg text-sm ff-font flex items-center justify-center gap-2 w-full sm:w-auto">
                     <FiEdit2 className="text-[14px]" />
                     Edit profile
                 </button>
@@ -94,7 +94,7 @@ const NewuserOverview = () => {
                 </div>
 
                 {/* Button */}
-                <button className="bg-primary text-black px-5 py-2 rounded-lg ff-font-bold flex items-center justify-center gap-2 w-full sm:w-auto">
+                <button className="bg-primary cursor-pointer text-black px-5 py-2 rounded-lg ff-font-bold flex items-center justify-center gap-2 w-full sm:w-auto">
                     <MdEmail />
                     Email support
                 </button>

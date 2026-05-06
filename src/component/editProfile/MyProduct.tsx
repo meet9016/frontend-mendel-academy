@@ -107,7 +107,7 @@ const MyProduct = () => {
                     {/* RIGHT BUTTON */}
                     <button className="bg-black text-primary px-5 sm:px-6 py-3 rounded-xl flex items-center justify-center gap-3 text-[12px] sm:text-[13px] ff-font-bold font-bold uppercase tracking-wider w-full sm:w-fit">
                         <IoPlaySharp className="text-primary" size={16} />
-                        <span className="ff-font text-primary">Resume course</span>
+                        <span className="ff-font text-primary cursor-pointer">Resume course</span>
                     </button>
                 </div>
 
@@ -311,7 +311,7 @@ const MyProduct = () => {
                             <h2 className="text-3xl ff-font-bold font-bold mb-2  text-[#1a1a1a]">Recommended for you</h2>
                             <p className="text-gray-400 ff-font text-[15px]">Based on your progress in Biochemistry and Immunology.</p>
                         </div>
-                        <button className="text-primary text-[11px] font-bold tracking-widest flex items-center gap-1 uppercase mt-2 hover:opacity-80 ff-font">
+                        <button className="text-primary cursor-pointer text-[11px] font-bold tracking-widest flex items-center gap-1 uppercase mt-2 hover:opacity-80 ff-font">
                             BROWSE ALL COURSES <BsArrowRight size={14} />
                         </button>
                     </div>

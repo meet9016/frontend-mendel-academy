@@ -66,7 +66,7 @@ const PayingMemberOverview = () => {
 
                     {/* Right side: Buttons */}
                     <div className="flex gap-3 w-full md:w-auto shrink-0">
-                        <button className="flex-1 md:flex-none flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
+                        <button className="flex-1 md:flex-none cursor-pointer flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
                             <FiPlay size={14} className="fill-current" /> Go to app
                         </button>
 
@@ -87,7 +87,7 @@ const PayingMemberOverview = () => {
                         </p>
                     </div>
 
-                    <button className="flex items-center gap-2 border border-gray-300  ff-font-bold px-4 py-2 rounded-lg text-sm font-medium w-fit sm:w-auto">
+                    <button className="flex cursor-pointer items-center gap-2 border border-gray-300  ff-font-bold px-4 py-2 rounded-lg text-sm font-medium w-fit sm:w-auto">
                         <FiEdit2 size={14} />
                         Edit profile
                     </button>
@@ -144,7 +144,7 @@ const PayingMemberOverview = () => {
                                 </p>
                             </div>
 
-                            <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 mt-5 rounded-lg text-sm  ff-font-bold ">
+                            <button className="flex items-center cursor-pointer gap-2 bg-white border border-gray-200 px-4 py-2 mt-5 rounded-lg text-sm  ff-font-bold ">
                                 Manage membership
                                 <span>→</span>
                             </button>
@@ -350,7 +350,7 @@ const PayingMemberOverview = () => {
                         </p>
                     </div>
 
-                    <button className="mt-6 md:mt-0 flex ff-font-bold  items-center gap-2 bg-primary text-black px-8 py-3 rounded-md text-sm font-bold ">
+                    <button className="mt-6 cursor-pointer md:mt-0 flex ff-font-bold  items-center gap-2 bg-primary text-black px-8 py-3 rounded-md text-sm font-bold ">
                         <FiMail size={18} />
                         Email support
                     </button>

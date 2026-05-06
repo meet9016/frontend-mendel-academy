@@ -260,7 +260,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Button */}
-                                <button className="text-[12px] font-bold border-b border-black hover:text-primary hover:border-primary transition-all w-fit pb-0.5 md:ml-auto">
+                                <button className="text-[12px] cursor-pointer font-bold border-b border-black hover:text-primary hover:border-primary transition-all w-fit pb-0.5 md:ml-auto">
                                     Verify email
                                 </button>
 
@@ -540,7 +540,7 @@ const Profile = () => {
                             </div>
                             <div className="md:col-span-9 flex justify-between items-center">
                                 <span className="text-sm tracking-widest font-bold text-[#1a1a1a]">••••••••••••</span>
-                                <button className="text-[13px] ff-font font-bold border-b border-black hover:text-gray-600 hover:border-gray-600 transition-all pb-0.5">
+                                <button className="text-[13px] cursor-pointer ff-font font-bold border-b border-black hover:text-gray-600 hover:border-gray-600 transition-all pb-0.5">
                                     Change password
                                 </button>
                             </div>
@@ -556,7 +556,7 @@ const Profile = () => {
                             </div>
                             <div className="md:col-span-9 flex justify-between items-center">
                                 <span className="text-sm ff-font text-[#1a1a1a]">Not enabled</span>
-                                <button className="text-[13px] ff-font font-bold text-primary border-b border-primary hover:opacity-80 transition-all pb-0.5">
+                                <button className="text-[13px] cursor-pointer ff-font font-bold text-primary border-b border-primary hover:opacity-80 transition-all pb-0.5">
                                     Enable 2FA
                                 </button>
                             </div>
@@ -572,7 +572,7 @@ const Profile = () => {
                             </div>
                             <div className="md:col-span-9 flex justify-between items-center">
                                 <span className="text-sm  ff-font text-[#1a1a1a]">2 devices</span>
-                                <button className="text-[13px] ff-font font-bold border-b border-black hover:text-gray-600 hover:border-gray-600 transition-all pb-0.5">
+                                <button className="text-[13px] cursor-pointer ff-font font-bold border-b border-black hover:text-gray-600 hover:border-gray-600 transition-all pb-0.5">
                                     Review & sign out
                                 </button>
                             </div>
@@ -595,10 +595,10 @@ const Profile = () => {
 
                     {/* Form Actions (Buttons) */}
                     <div className="flex justify-end gap-3 mt-10">
-                        <button className="px-6 py-2.5 text-sm  ff-fontfont-bold border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-[#1a1a1a]">
+                        <button className="px-6 cursor-pointer py-2.5 text-sm  ff-fontfont-bold border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-[#1a1a1a]">
                             Cancel
                         </button>
-                        <button className="px-6 py-2.5 text-sm font-bold bg-black ff-font text-primary rounded-lg hover:bg-black transition-colors shadow-sm">
+                        <button className="px-6 py-2.5 cursor-pointer text-sm font-bold bg-black ff-font text-primary rounded-lg hover:bg-black transition-colors shadow-sm">
                             Save changes
                         </button>
                     </div>
@@ -614,15 +614,15 @@ const Profile = () => {
                         </p>
 
                         <div className="flex flex-wrap gap-6 mt-6">
-                            <button className="text-[13px] ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-[#1a1a1a] hover:border-[#1a1a1a] transition-all pb-0.5">
+                            <button className="text-[13px] cursor-pointer ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-[#1a1a1a] hover:border-[#1a1a1a] transition-all pb-0.5">
                                 Export my data
                             </button>
 
-                            <button className="text-[13px] ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-[#1a1a1a] hover:border-[#1a1a1a] transition-all pb-0.5">
+                            <button className="text-[13px] cursor-pointer ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-[#1a1a1a] hover:border-[#1a1a1a] transition-all pb-0.5">
                                 Sign out of all devices
                             </button>
 
-                            <button className="text-[13px] ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-red-600 hover:border-red-600 transition-all pb-0.5">
+                            <button className="text-[13px] cursor-pointer ff-font font-bold text-gray-500 border-b border-gray-400 hover:text-red-600 hover:border-red-600 transition-all pb-0.5">
                                 Delete account
                             </button>
                         </div>

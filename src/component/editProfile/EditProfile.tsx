@@ -45,7 +45,7 @@ const EditProfile = () => {
               {/* Back */}
               <div className="px-5 py-6 border-b border-gray-200">
                 <div
-                  className="flex items-center gap-2 text-md text-gray-600 cursor-pointer">
+                  className="flex text-[13px] items-center gap-2 text-md text-gray-600 cursor-pointer">
                   <FaArrowLeft />
                   <span>Back to Mendel</span>
                 </div>
@@ -59,7 +59,7 @@ const EditProfile = () => {
                     setActiveMenu("overview");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "overview"
+                  className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "overview"
                     ? "bg-[#fff4d6] border-l-4 border-primary text-black"
                     : "text-gray-600 hover:bg-[#fffbf1]"
                     }`}
@@ -74,13 +74,13 @@ const EditProfile = () => {
                     setActiveMenu("membership");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "membership"
+                  className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "membership"
                     ? "bg-[#fff4d6] border-l-4 border-primary text-black"
                     : "text-gray-600 hover:bg-[#fffbf1]"
                     }`}
                 >
                   <FiCreditCard />
-                  <span>membership</span>
+                  <span>Membership</span>
                 </div>
 
                 {/* My Product */}
@@ -89,7 +89,7 @@ const EditProfile = () => {
                     setActiveMenu("myProduct");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "myProduct"
+                  className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "myProduct"
                     ? "bg-[#fff4d6] border-l-4 border-primary text-black"
                     : "text-gray-600 hover:bg-[#fffbf1]"
                     }`}
@@ -104,7 +104,7 @@ const EditProfile = () => {
                     setActiveMenu("profile");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "profile"
+                  className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "profile"
                     ? "bg-[#fff4d6] border-l-4 border-primary text-black"
                     : "text-gray-600 hover:bg-[#fffbf1]"
                     }`}
@@ -119,7 +119,7 @@ const EditProfile = () => {
                     setActiveMenu("contactUs");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "contactUs"
+                  className={`flex text-[14px] ff-font items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "contactUs"
                     ? "bg-[#fff4d6] border-l-4 border-primary text-black"
                     : "text-gray-600 hover:bg-[#fffbf1]"
                     }`}

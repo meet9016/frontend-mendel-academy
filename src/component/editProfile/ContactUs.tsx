@@ -96,14 +96,14 @@ const ContactUs = () => {
 
                     {/* Category Tabs */}
                     <div className="space-y-4">
-                        <label className="block font-bold text-[13px]">What is this about?</label>
+                        <label className="block font-bold text-[13px] ">What is this about?</label>
                         <div className="flex flex-wrap gap-3">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab}
                                     type="button"
                                     onClick={() => setSelectedTab(tab)}
-                                    className={`px-6 py-2.5 rounded-full border text-sm ff-font font-medium transition-all ${selectedTab === tab
+                                    className={`px-6 py-2.5 rounded-full border text-sm ff-font font-medium transition-all cursor-pointer ${selectedTab === tab
                                         ? "bg-black text-primary border-black"
                                         : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
                                         }`}
@@ -133,7 +133,7 @@ const ContactUs = () => {
                         </p>
                         <button
                             type="submit"
-                            className="bg-black text-primary ff-font px-10 py-4 rounded-xl flex items-center gap-3 hover:opacity-90 transition-opacity"
+                            className="bg-black cursor-pointer text-primary ff-font px-10 py-4 rounded-xl flex items-center gap-3 hover:opacity-90 transition-opacity"
                         >
                             Send message <IoSendSharp className="-rotate-12" />
                         </button>

@@ -53,7 +53,7 @@ const Membership = () => {
                                 </p>
                             </div>
                         </div>
-                        <button className="text-[13px] font-bold ff-font text-gray-700 hover:text-primary transition-colors">
+                        <button className="text-[13px] cursor-pointer font-bold ff-font text-gray-700 hover:text-primary transition-colors">
                             Edit account →
                         </button>
                     </div>
@@ -99,7 +99,7 @@ const Membership = () => {
                         </div>
 
                         {/* BUTTON */}
-                        <button className="text-[12px] sm:text-[11px] font-bold underline underline-offset-4 decoration-black hover:text-primary transition-all w-full  text-left sm:text-right">
+                        <button className="text-[12px] cursor-pointer sm:text-[11px] font-bold underline underline-offset-4 decoration-black hover:text-primary transition-all w-full  text-left sm:text-right">
                             Change plan
                         </button>
 
@@ -126,7 +126,7 @@ const Membership = () => {
                                 <p className="text-[13px] text-gray-500 ff-font">You'll be charged $249.00 on this date.</p>
                             </div>
                             <div className="md:col-span-3 md:text-right mt-4 md:mt-0">
-                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font">Manage renewal</button>
+                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font cursor-pointer">Manage renewal</button>
                             </div>
                         </div>
 
@@ -143,7 +143,7 @@ const Membership = () => {
                                 </div>
                             </div>
                             <div className="md:col-span-3 md:text-right mt-4 md:mt-0">
-                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font">Update</button>
+                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font cursor-pointer">Update</button>
                             </div>
                         </div>
 
@@ -155,7 +155,7 @@ const Membership = () => {
                                 <p className="text-[13px] text-gray-500 ff-font">Receipts and renewal notices are sent here.</p>
                             </div>
                             <div className="md:col-span-3 md:text-right mt-4 md:mt-0">
-                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font">Change</button>
+                                <button className="text-[13px] font-bold underline underline-offset-4 ff-font cursor-pointer">Change</button>
                             </div>
                         </div>
                     </div>
@@ -309,7 +309,7 @@ const Membership = () => {
                                             {item.amount}
                                         </span>
 
-                                        <button className="text-[12px] sm:text-[13px] font-bold underline text-gray-400 hover:text-black transition-colors whitespace-nowrap">
+                                        <button className="text-[12px] cursor-pointer sm:text-[13px] font-bold underline text-gray-400 hover:text-black transition-colors whitespace-nowrap">
                                             {item.isDiscount ? "—" : "View receipt"}
                                         </button>
                                     </div>
@@ -317,7 +317,7 @@ const Membership = () => {
                             ))}
                         </div>
 
-                        <button className="mt-6 text-primary font-bold text-sm underline underline-offset-4 decoration-primary">
+                        <button className="mt-6 cursor-pointer text-primary font-bold text-sm underline underline-offset-4 decoration-primary">
                             View all billing history →
                         </button>
                     </div>
@@ -325,8 +325,8 @@ const Membership = () => {
 
                     {/* --- FOOTER ACTIONS --- */}
                     <footer className="pt-1 flex gap-8">
-                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Pause subscription</button>
-                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Cancel membership</button>
+                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold cursor-pointer">Pause subscription</button>
+                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold cursor-pointer">Cancel membership</button>
                     </footer>
                 </div>
             </div>
