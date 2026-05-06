@@ -11,6 +11,8 @@ import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 import { motion } from "framer-motion";
 import Sliders from "@/comman/Sliders";
 import { Plan, RapidTool, EliteMentorship, Tsunami, WhoEnrollData } from "../sections/WhoEnroll";
+import { IoClose } from "react-icons/io5";
+import { FaPlay } from "react-icons/fa";
 
 interface USMLEPlanProps {
   data: WhoEnrollData | null;
@@ -22,6 +24,7 @@ interface USMLEPlanProps {
 
 const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart }: USMLEPlanProps) => {
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [selectedRapidTool, setSelectedRapidTool] = useState<RapidTool | null>(null);
   const userId = getAuthId();
   const tempId = userId ? null : getTempId();
 
@@ -112,11 +115,10 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] ${
-                      plan.most_popular
-                        ? "border-2 border-[#F5C800] shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative"
-                        : "border border-[#E5E3DA] hover:border-[#d4a900]"
-                    }`}
+                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] ${plan.most_popular
+                      ? "border-2 border-[#F5C800] shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative"
+                      : "border border-[#E5E3DA] hover:border-[#d4a900]"
+                      }`}
                   >
                     {plan.most_popular && (
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -139,11 +141,10 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <button
                       onClick={() => addToCart(plan)}
                       disabled={isLoading || isSelected}
-                      className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${
-                        plan.most_popular
-                          ? "bg-gray-900 usmle-text-yellow hover:opacity-85"
-                          : "bg-[#F5C800] text-black hover:bg-[#d4a900]"
-                      }`}
+                      className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${plan.most_popular
+                        ? "bg-gray-900 usmle-text-yellow hover:opacity-85"
+                        : "bg-[#F5C800] text-black hover:bg-[#d4a900]"
+                        }`}
                     >
                       {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
                     </button>
@@ -152,6 +153,9 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
               })}
             </div>
           </div>
+          
+          {/* Learning Video Section */}
+          <LearningVideoSection />
 
           {/* Rapid Learning Tools */}
           {data?.is_rapid_tools_visible !== false && data?.rapid_learning_tools && data.rapid_learning_tools.length > 0 && (
@@ -186,6 +190,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                           (item.tool_id?._id === tool._id || item.tool_id === tool._id)
                         )}
                         onUpdateCart={onUpdateCart}
+                        onOpenPopup={(tool) => setSelectedRapidTool(tool)}
                       />
                     ))}
                   </Sliders>
@@ -194,6 +199,72 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
             </div>
           )}
         </section>
+      )}
+
+      {/* Popup Modal */}
+      {selectedRapidTool && (
+        <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+
+          {/* Modal */}
+          <div className="relative w-full max-w-xl rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] overflow-hidden animate-in fade-in zoom-in duration-300">
+
+            {/* Top Bar */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-[#111] ff-font-bold">
+                {selectedRapidTool?.tool_type}
+              </h3>
+
+              <button
+                onClick={() => setSelectedRapidTool(null)}
+                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-black hover:text-white text-black flex items-center justify-center transition-all duration-300"
+              >
+                <IoClose size={22} />
+              </button>
+            </div>
+
+            {/* Slider Images */}
+            <div className="p-5 bg-[#fafafa]">
+
+              <Sliders
+                settings={{
+                  dots: false,
+                  infinite: true,
+                  speed: 500,
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  arrows: true,
+                }}
+              >
+
+
+                {/* Image 2 */}
+                <div>
+                  <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center h-[500px]">
+                    <img
+                      src="/images/main logo.png"
+                      alt="Rapid Tool"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                </div>
+
+
+                {/* Image 1 */}
+                <div>
+                  <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white flex items-center justify-center h-[500px]">
+                    <img
+                      src="/images/11.jpg"
+                      alt="Rapid Tool"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                </div>
+
+              </Sliders>
+
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Elite Mentorship & Tsunami Program */}
@@ -270,8 +341,8 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           <div className="usmle-bg-black bg-gray-900 rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
             <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
             <h3 className="text-[22px] font-black text-white mb-[10px] ff-font-bold">
@@ -297,9 +368,9 @@ export default USMLEPlan;
 
 // Rapid Tool Card
 const RapidToolCard = ({
-  tool, userCurrency, examCategoryId, isSelected, onUpdateCart,
+  tool, userCurrency, examCategoryId, isSelected, onUpdateCart, onOpenPopup,
 }: {
-  tool: RapidTool; userCurrency: string; examCategoryId?: string; isSelected?: boolean; onUpdateCart: () => void;
+  tool: RapidTool; userCurrency: string; examCategoryId?: string; isSelected?: boolean; onUpdateCart: () => void; onOpenPopup: (tool: RapidTool) => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const userId = getAuthId();
@@ -339,11 +410,21 @@ const RapidToolCard = ({
   };
 
   return (
-    <div className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[180px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
+    <div
+
+      className="relative bg-white border-2 border-[#e5e7eb] rounded-2xl m-3 my-8 p-6 flex flex-col h-full min-h-[180px] transition-all duration-300 hover:shadow-xl hover:border-[#ffca00]">
       <div className="flex flex-col flex-grow justify-between">
-        <div className="space-y-2 text-center">
+        <div
+          onClick={() => onOpenPopup(tool)}
+          className="space-y-2 text-center">
           <h3 className="text-xl font-bold ff-font-bold capitalize">{tool.tool_type}</h3>
           <p className="text-3xl ff-font-bold font-bold text-primary">{currencySymbol} {formatPrice(price ?? 0)}</p>
+          <p
+            onClick={() => onOpenPopup(tool)}
+            className="text-sm  cursor-pointer ff-font duration-300 line-clamp-2"
+          >
+            Quick revision tools designed to improve retention and boost exam.
+          </p>
         </div>
         <button
           onClick={addToolToCart}
@@ -353,6 +434,48 @@ const RapidToolCard = ({
           {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
         </button>
       </div>
+    </div>
+  );
+};
+
+
+const LearningVideoSection = () => {
+  const videos = [
+    "https://www.youtube.com/embed/VaSjiJMrq24?si=1a9h6aUSQo7uOwYT",
+    "https://www.youtube.com/embed/VaSjiJMrq24?si=1a9h6aUSQo7uOwYT",
+    "https://www.youtube.com/embed/VaSjiJMrq24?si=1a9h6aUSQo7uOwYT",
+  ];
+  return (
+    <div className="max-w-[1380px] mx-auto mb-16 mt-16 px-4 overflow-hidden">
+      <Sliders
+        settings={{
+          dots: false,
+          infinite: true,
+          speed: 600,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: true,
+          autoplaySpeed: 4000,
+          arrows: true,
+        }}
+      >
+        {videos.map((video, index) => (
+          <div key={index}>
+            {/* Video Wrapper */}
+            <div className="rounded-[32px] overflow-hidden leading-none ">
+              <iframe
+                className="w-full h-[300px] md:h-[550px] block"
+                src={video}
+                title={`Learning Video ${index + 1}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        ))}
+      </Sliders>
     </div>
   );
 };
