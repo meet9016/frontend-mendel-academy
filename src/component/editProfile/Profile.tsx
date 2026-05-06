@@ -1,5 +1,6 @@
 'use client';
 
+import InputField from '@/comman/InputField';
 import { useState } from 'react';
 import { FaCamera, FaFire } from 'react-icons/fa';
 import { FiCamera } from 'react-icons/fi';
@@ -7,9 +8,31 @@ import { HiOutlineFire } from 'react-icons/hi';
 
 const Profile = () => {
 
+    const timezones = [
+        "Pacific Time (UTC−8)",
+        "Eastern Time (UTC−5)",
+        "India Standard Time (UTC+5:30)",
+        "Central European Time (UTC+1)",
+        "Japan Standard Time (UTC+9)",
+    ];
+
+    const [selectedTZ, setSelectedTZ] = useState("Pacific Time (UTC−8)");
+    const [openTZ, setOpenTZ] = useState(false);
+
+    const languages = [
+        "English (US)",
+        "English (UK)",
+        "Hindi",
+        "Gujarati",
+        "Spanish",
+        "French",
+    ];
+
+    const [selectedLang, setSelectedLang] = useState("English (US)");
+    const [openLang, setOpenLang] = useState(false);
     return (
         <div className="min-h-screen  ff-font text-[#1a1a1a] ">
-            <div className="mx-auto px-6 ">
+            <div className="mx-auto px-0 ">
                 {/* ================= STUDENT PROFILE ================= */}
 
                 <div className="ff-font">
@@ -27,25 +50,39 @@ const Profile = () => {
                                     G
                                 </div>
 
-                                {/* Camera Button */}
-                                <div className="absolute bottom-1 right-1 bg-black text-primary p-1.5 rounded-full border-2 border-white cursor-pointer shadow-sm">
+                                <label className="absolute bottom-1 right-1 bg-black text-primary p-1.5 rounded-full border-2 border-white cursor-pointer shadow-sm flex items-center justify-center">
+
+                                    {/* Hidden Input */}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                console.log(file); // handle image here
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Camera Icon */}
                                     <FaCamera size={12} />
-                                </div>
+                                </label>
                             </div>
                         </div>
 
                         {/* 2. Info Section */}
                         <div className="flex-1">
-                            <span className="text-[10px] font-bold tracking-[0.2em] text-primary uppercase block mb-1">
+                            <span className="text-[11px] font-bold text-primary uppercase block mb-1">
                                 Student Profile
                             </span>
-                            <h1 className="text-4xl ff-font-bold font-bold text-[#1a1a1a] mb-6">
+                            <h1 className="text-[32px] ff-font-bold font-bold text-[#1a1a1a] mb-4">
                                 Gargi Patel
                             </h1>
 
                             <div className="flex flex-wrap gap-12">
                                 <div>
-                                    <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">
                                         Member since
                                     </p>
                                     <p className="text-[15px] font-bold text-[#1a1a1a]">
@@ -54,7 +91,7 @@ const Profile = () => {
                                 </div>
 
                                 <div>
-                                    <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">
                                         Target exam
                                     </p>
                                     <p className="text-[15px] font-bold text-[#1a1a1a]">
@@ -63,7 +100,7 @@ const Profile = () => {
                                 </div>
 
                                 <div>
-                                    <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">
                                         Study streak
                                     </p>
                                     <p className="text-[15px] font-bold text-primary flex items-center gap-1.5">
@@ -82,12 +119,12 @@ const Profile = () => {
 
                 {/* STUDY JOURNEY SECTION */}
                 <section className="py-10">
-                    {/* Label & Title */}
+                    {/* Header */}
                     <div className="mb-4">
                         <span className="text-[10px] font-bold tracking-[0.2em] text-primary uppercase block mb-1">
                             Your Path
                         </span>
-                        <h2 className="text-3xl font-bold ff-font-bold text-[#1a1a1a]">
+                        <h2 className="text-2xl sm:text-[22px] font-bold ff-font-bold text-[#1a1a1a]">
                             Study journey
                         </h2>
                         <p className="text-[13px] text-gray-500 mt-1">
@@ -95,113 +132,150 @@ const Profile = () => {
                         </p>
                     </div>
 
-                    {/* Timeline Component */}
-                    <div className="relative pt-8 pb-20">
-                        {/* Full Track (Gray) */}
-                        <div className="absolute top-[41px] left-0 w-full h-[1.5px] bg-gray-100"></div>
+                    {/* Timeline Wrapper (SCROLL FIX) */}
+                    <div className="relative pt-8 pb-8 overflow-x-auto">
+                        <div className="min-w-[600px] mx-auto">
 
-                        {/* Progress Track (Yellow) - Reaches until Today */}
-                        <div className="absolute top-[41px] left-0 w-[67%] h-[1.5px] bg-primary"></div>
+                            {/* Track */}
+                            <div className="absolute top-[41px] left-0 w-[94%] h-[1.5px] bg-gray-200"></div>
+                            <div className="absolute top-[41px] left-0 w-[65%] h-[1.5px] bg-primary"></div>
 
-                        <div className="relative flex justify-between">
+                            {/* Steps */}
+                            <div className="relative flex justify-between px-2">
 
-                            {/* Step 1: Completed */}
-                            <div className="relative flex flex-col items-center">
-                                <div className="w-3.5 h-3.5 rounded-full bg-primary border-2 border-white ring-1 ring-primary z-10"></div>
-                                <div className="absolute top-8 text-center w-max">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Apr 2024</p>
-                                    <p className="text-xs font-bold text-[#1a1a1a]">Joined Mendel</p>
+                                {/* Step 1 */}
+                                <div className="relative flex flex-col items-center min-w-[120px]">
+                                    <div className="w-3.5 h-3.5 rounded-full bg-primary border-2 border-white ring-1 ring-primary z-10"></div>
+                                    <div className="mt-4 text-center">
+                                        <p className="text-[13px] font-bold text-gray-400 uppercase mb-1">
+                                            Apr 2024
+                                        </p>
+                                        <p className="text-xs font-bold text-[#1a1a1a]">
+                                            Joined Mendel
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Step 2: Completed */}
-                            <div className="relative flex flex-col items-center">
-                                <div className="w-3.5 h-3.5 rounded-full bg-primary border-2 border-white ring-1 ring-primary z-10"></div>
-                                <div className="absolute top-8 text-center w-max">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Dec 2025</p>
-                                    <p className="text-xs font-bold text-[#1a1a1a]">Biochem completed</p>
+                                {/* Step 2 */}
+                                <div className="relative flex flex-col items-center min-w-[120px]">
+                                    <div className="w-3.5 h-3.5 rounded-full bg-primary border-2 border-white ring-1 ring-primary z-10"></div>
+                                    <div className="mt-4 text-center">
+                                        <p className="text-[13px] font-bold text-gray-400 uppercase mb-1">
+                                            Dec 2025
+                                        </p>
+                                        <p className="text-xs font-bold text-[#1a1a1a]">
+                                            Biochem completed
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Step 3: Current (Today) */}
-                            <div className="relative flex flex-col items-center">
-                                {/* Black dot with yellow glow/halo effect as seen in image */}
-                                <div className="w-4 h-4 rounded-full bg-black border-[3px] border-[#fcf3d7] ring-1 ring-black z-10"></div>
-                                <div className="absolute top-8 text-center w-max">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Today</p>
-                                    <p className="text-xs font-bold text-[#1a1a1a]">Immunology & Micro</p>
+                                {/* Step 3 (Today) */}
+                                <div className="relative flex flex-col items-center min-w-[120px]">
+                                    <div className="w-4 h-4 rounded-full bg-black border-[3px] border-[#fcf3d7] ring-1 ring-black z-10"></div>
+                                    <div className="mt-4 text-center">
+                                        <p className="text-[13px] font-bold text-gray-400 uppercase mb-1">
+                                            Today
+                                        </p>
+                                        <p className="text-xs font-bold text-[#1a1a1a]">
+                                            Immunology & Micro
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Step 4: Future */}
-                            <div className="relative flex flex-col items-center">
-                                <div className="w-3.5 h-3.5 rounded-full bg-white border-2 border-gray-200 z-10"></div>
-                                <div className="absolute top-8 text-center w-max">
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Jun 14, 2026</p>
-                                    <p className="text-xs font-bold text-gray-400">Step 1 exam day</p>
+                                {/* Step 4 */}
+                                <div className="relative flex flex-col items-center min-w-[120px]">
+                                    <div className="w-3.5 h-3.5 rounded-full bg-white border-2 border-gray-200 z-10"></div>
+                                    <div className="mt-4 text-center">
+                                        <p className="text-[13px] font-bold text-gray-400 uppercase mb-1">
+                                            Jun 14, 2026
+                                        </p>
+                                        <p className="text-xs font-bold text-gray-400">
+                                            Step 1 exam day
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
 
-                    {/* Exact Bottom Border as requested */}
+                    {/* Bottom border */}
                     <div className="w-full border-b border-gray-200"></div>
                 </section>
 
 
-                {/* ================= PERSONAL INFO ================= */}
+
 
                 {/* ================= PERSONAL INFO SECTION ================= */}
-                <section className=" max-w-5xl">
+                <section className=" max-w-5xl mb-10">
                     {/* Header Area */}
                     <div className="mb-10">
-                        <p className="text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-1">About You</p>
-                        <h2 className="text-3xl font-bold ff-font-bold text-[#1a1a1a]">Personal information</h2>
+                        <p className="text-[11px] tracking-[0.2em] text-primary uppercase font-bold mb-1">About You</p>
+                        <h2 className="text-[22px] font-bold ff-font-bold text-[#1a1a1a]">Personal information</h2>
                         <p className="text-[13px] text-gray-500 mt-1 font-medium">How we identify you and stay in touch.</p>
                     </div>
 
                     <div className="border-t border-gray-200">
 
                         {/* Full Name */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-5 border-b border-gray-200 items-start">
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold text-[#1a1a1a]">Full name</label>
-                                <p className="text-[12px] text-gray-400 mt-1">Shown on your certificates and profile.</p>
+                                <p className="text-[12px] text-[#6b6b66] mt-1">
+                                    Shown on your certificates and profile.
+                                </p>
                             </div>
-                            <div className="md:col-span-4">
-                                <input
-                                    type="text"
-                                    defaultValue="Gargi Patel"
-                                    className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-primary text-[#1a1a1a]"
+
+                            <div className="md:col-span-4 [&>div>input]:py-2.5 [&>div>input]:rounded-lg [&>div>input]:border-gray-300 [&>div>input]:text-sm">
+                                <InputField
+                                    name="fullName"
+                                    value="Gargi Patel"
+                                    onChange={() => { }}
                                 />
                             </div>
                         </div>
 
-                        {/* Email Address */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-5 border-b border-gray-200 items-start">
+                        {/* Email */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
+
                             <div className="md:col-span-3 pb-4 md:pb-0">
-                                <label className="text-[14px] font-bold text-[#1a1a1a]">Email address</label>
-                                <p className="text-[12px] text-gray-400 mt-1">For login, receipts, and important account notices.</p>
+                                <label className="text-[14px] font-bold text-[#1a1a1a]">
+                                    Email address
+                                </label>
+                                <p className="text-[12px] text-[#6b6b66] mt-1">
+                                    For login, receipts, and important account notices.
+                                </p>
                             </div>
-                            <div className="md:col-span-9 flex flex-col md:flex-row md:items-center gap-8">
-                                <input
-                                    type="email"
-                                    defaultValue="gargi.p@example.com"
-                                    className="w-full md:w-[44.5%] px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-primary text-[#1a1a1a]"
-                                />
-                                <button className="text-[12px] font-bold border-b border-black hover:text-primary hover:border-primary transition-all w-fit pb-0.5">
+
+                            <div className="md:col-span-9 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
+
+                                {/* Input */}
+                                <div className="w-full md:w-[44.5%] [&>div>input]:py-2.5 [&>div>input]:rounded-lg [&>div>input]:border-gray-300">
+                                    <InputField
+                                        type="email"
+                                        name="email"
+                                        value="gargi.p@example.com"
+                                        onChange={() => { }}
+                                    />
+                                </div>
+
+                                {/* Button */}
+                                <button className="text-[12px] font-bold border-b border-black hover:text-primary hover:border-primary transition-all w-fit pb-0.5 md:ml-auto">
                                     Verify email
                                 </button>
+
                             </div>
                         </div>
 
-                        {/* Bio */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-5 border-b border-gray-200 items-start">
+                        {/* Bio (same, no change needed) */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold text-[#1a1a1a]">Bio</label>
-                                <p className="text-[12px] text-gray-400 mt-1">A short description shown on your study profile.</p>
+                                <p className="text-[12px] text-[#6b6b66] mt-1">
+                                    A short description shown on your study profile.
+                                </p>
                             </div>
+
                             <div className="md:col-span-4">
                                 <textarea
                                     rows={2}
@@ -212,28 +286,97 @@ const Profile = () => {
                         </div>
 
                         {/* Time Zone */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-5 border-b border-gray-200 items-start">
+                        {/* Time Zone */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
+
                             <div className="md:col-span-3 pb-4 md:pb-0">
-                                <label className="text-[14px] font-bold text-[#1a1a1a]">Time zone</label>
+                                <label className="text-[14px] font-bold text-[#1a1a1a]">
+                                    Time zone
+                                </label>
                             </div>
-                            <div className="md:col-span-4">
-                                <select className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-primary text-[#1a1a1a] bg-white appearance-none cursor-pointer">
-                                    <option>Pacific Time (UTC−8)</option>
-                                </select>
+
+                            <div className="md:col-span-4 relative">
+
+                                {/* Selected */}
+                                <div
+                                    onClick={() => setOpenTZ(!openTZ)}
+                                    className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm 
+      text-[#1a1a1a] bg-white cursor-pointer flex justify-between items-center"
+                                >
+                                    <span>{selectedTZ}</span>
+                                    <span className="text-gray-400 text-xs">▼</span>
+                                </div>
+
+                                {/* Dropdown */}
+                                {openTZ && (
+                                    <div className="absolute top-full mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md z-50 max-h-52 overflow-y-auto">
+                                        {timezones.map((tz) => (
+                                            <div
+                                                key={tz}
+                                                onClick={() => {
+                                                    setSelectedTZ(tz);
+                                                    setOpenTZ(false);
+                                                }}
+                                                className="px-3 py-2 text-sm cursor-pointer hover:bg-[#fff4d6]"
+                                            >
+                                                {tz}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
                             </div>
                         </div>
 
-                        {/* Display Language */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-5 border-b border-gray-200 items-start">
+
+
+
+
+
+
+
+                        {/* Language */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
+
                             <div className="md:col-span-3 pb-4 md:pb-0">
-                                <label className="text-[14px] font-bold text-[#1a1a1a]">Display language</label>
+                                <label className="text-[14px] font-bold text-[#1a1a1a]">
+                                    Display language
+                                </label>
                             </div>
-                            <div className="md:col-span-4">
-                                <select className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-primary text-[#1a1a1a] bg-white appearance-none cursor-pointer">
-                                    <option>English (US)</option>
-                                </select>
+
+                            <div className="md:col-span-4 relative">
+
+                                {/* Selected */}
+                                <div
+                                    onClick={() => setOpenLang(!openLang)}
+                                    className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm 
+      text-[#1a1a1a] bg-white cursor-pointer flex justify-between items-center"
+                                >
+                                    <span>{selectedLang}</span>
+                                    <span className="text-gray-400 text-xs">▼</span>
+                                </div>
+
+                                {/* Dropdown */}
+                                {openLang && (
+                                    <div className="absolute top-full mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md z-50 max-h-52 overflow-y-auto">
+                                        {languages.map((lang) => (
+                                            <div
+                                                key={lang}
+                                                onClick={() => {
+                                                    setSelectedLang(lang);
+                                                    setOpenLang(false);
+                                                }}
+                                                className="px-3 py-2 text-sm cursor-pointer hover:bg-[#fff4d6]"
+                                            >
+                                                {lang}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
                             </div>
                         </div>
+
                     </div>
                 </section>
 
@@ -242,21 +385,21 @@ const Profile = () => {
 
 
                 {/* ================= STUDY PREF ================= */}
-                <section className="py-10 max-w-5xl">
+                <section className="mb-10 max-w-5xl">
                     {/* Header Area */}
                     <div className="mb-10">
-                        <p className="text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-1">How you study</p>
-                        <h2 className="text-3xl font-bold ff-font-bold text-[#1a1a1a]">Study preferences</h2>
+                        <p className="text-[11px] tracking-[0.2em] text-primary uppercase font-bold mb-1">How you study</p>
+                        <h2 className="text-[22px] font-bold ff-font-bold text-[#1a1a1a]">Study preferences</h2>
                         <p className="text-[13px] text-gray-500 mt-1 font-medium">Tune Mendel to fit your prep schedule.</p>
                     </div>
 
                     <div className="border-t border-gray-200">
 
                         {/* Target Exam */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-8 border-b border-gray-200 items-start">
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold text-[#1a1a1a]">Target exam</label>
-                                <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
+                                <p className="text-[12px] text-[#6b6b66] mt-1 leading-relaxed">
                                     We'll tailor question difficulty and pacing to this.
                                 </p>
                             </div>
@@ -273,27 +416,35 @@ const Profile = () => {
                         </div>
 
                         {/* Target Exam Date */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-8 border-b border-gray-200 items-start">
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
+
                             <div className="md:col-span-3 pb-4 md:pb-0">
-                                <label className="text-[14px] font-bold text-[#1a1a1a]">Target exam date</label>
+                                <label className="text-[14px] font-bold text-[#1a1a1a]">
+                                    Target exam date
+                                </label>
                             </div>
-                            <div className="md:col-span-9 flex flex-col md:flex-row md:items-center gap-8">
-                                <div className="w-full md:w-[44.5%] relative">
+
+                            <div className="md:col-span-9 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
+
+                                {/* Native Date Input */}
+                                <div className="w-full md:w-[44.5%]">
                                     <input
-                                        type="text"
-                                        defaultValue="06/14/2026"
+                                        type="date"
+                                        defaultValue="2026-06-14"
                                         className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-primary text-[#1a1a1a]"
                                     />
-                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    </div>
                                 </div>
-                                <span className="text-[13px] font-medium text-gray-400">408 days away</span>
+
+                                {/* Right Text */}
+                                <span className="text-[13px] font-medium text-gray-400 md:ml-auto">
+                                    408 days away
+                                </span>
+
                             </div>
                         </div>
 
                         {/* Daily Study Goal */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-8 border-b border-gray-200 items-start">
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold text-[#1a1a1a]">Daily study goal</label>
                                 <p className="text-[11px] text-gray-400 mt-1">Used for streaks and reminders.</p>
@@ -311,7 +462,7 @@ const Profile = () => {
                         </div>
 
                         {/* Study Schedule */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 py-8 border-b border-gray-200 items-start">
+                        <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold text-[#1a1a1a]">Study schedule</label>
                             </div>
@@ -331,13 +482,13 @@ const Profile = () => {
                 </section>
 
                 {/* ================= NOTIFICATIONS ================= */}
-                <section className="py-10 max-w-5xl mx-auto px-4">
+                <section className="mb-10  mx-auto px-0">
                     {/* Header Area */}
                     <div className="flex justify-between items-start mb-10">
                         <div>
-                            <p className="text-[10px] ff-font tracking-[0.2em] text-primary uppercase font-bold mb-1">Stay in touch</p>
-                            <h2 className="text-3xl font-bold ff-font ff-font-bold text-[#1a1a1a]">Notifications</h2>
-                            <p className="text-[14px] text-gray-500 ff-font mt-1 font-medium">Choose what you hear from us, and when.</p>
+                            <p className="text-[11px] ff-font text-primary uppercase font-bold mb-1">Stay in touch</p>
+                            <h2 className="text-[22px] font-bold ff-font ff-font-bold text-[#1a1a1a]">Notifications</h2>
+                            <p className="text-[13px] text-gray-500 ff-font mt-1 font-medium">Choose what you hear from us, and when.</p>
                         </div>
                         <button className="text-[13px] font-bold text-gray-400 hover:text-[#1a1a1a] transition-colors">
                             Pause all notifications
@@ -371,11 +522,11 @@ const Profile = () => {
 
                 {/* ================= SECURITY ================= */}
                 {/* ================= ACCOUNT SECURITY SECTION ================= */}
-                <section className="py-10 max-w-5xl mx-auto">
+                <section className="mb-10  mx-auto">
                     {/* Header Area */}
                     <div className="mb-10">
-                        <p className="text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-1 ff-font">Account security</p>
-                        <h2 className="text-3xl font-bold ff-font-bold text-[#1a1a1a] ff-font">Password & access</h2>
+                        <p className="text-[11px]  text-primary uppercase font-bold mb-1 ff-font">Account security</p>
+                        <h2 className="text-[22px] font-bold ff-font-bold text-[#1a1a1a] ff-font">Password & access</h2>
                         <p className="text-[13px] text-gray-500 mt-1 font-medium ff-font">Keep your account safe.</p>
                     </div>
 
@@ -415,7 +566,7 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-start">
                             <div className="md:col-span-3 pb-4 md:pb-0">
                                 <label className="text-[14px] font-bold ff-font text-[#1a1a1a]">Active sessions</label>
-                                <p className="text-[13px] text-gray-400 ff-font mt-1 leading-relaxed">
+                                <p className="text-[12px] text-[#6b6b66] ff-font mt-1 leading-relaxed">
                                     Devices currently signed in to your account.
                                 </p>
                             </div>
@@ -494,8 +645,8 @@ const Toggle = ({ label, sub, defaultActive }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-12 py-4 border-b border-gray-200 items-center transition-all">
             <div className="md:col-span-10">
-                <p className="text-[15px] font-bold ff-font">{label}</p>
-                <p className="text-[12px] text-gray-400 ff-font mt-1">{sub}</p>
+                <p className="text-[14px] font-bold ff-font">{label}</p>
+                <p className="text-[13px] text-[#6b6b66] ff-font mt-1">{sub}</p>
             </div>
             <div className="md:col-span-2 flex justify-end">
                 <div

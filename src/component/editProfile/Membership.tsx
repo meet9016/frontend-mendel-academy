@@ -13,22 +13,28 @@ const Membership = () => {
 
     return (
         <div className="min-h-screen  ff-font text-[#1a1a1a] ">
-            <div className="mx-auto px-6 ">
+            <div className="mx-auto px-0 ">
 
                 {/* --- HEADER --- */}
-                <header className="mb-10">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
-                        ACCOUNT
-                    </p>
-                    <h1 className="text-4xl ff-font-bold mb-3 font-bold ff-font tracking-tight">
-                        Membership
-                    </h1>
-                    <p className="text-gray-500 ff-font text-[15px]">
-                        Your plan, payment method, and billing history.
-                    </p>
-                </header>
+               
 
-                <hr className="border-gray-300 mb-10" />
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 pb-10 border-b border-gray-200">
+                    <div>
+                        <p className="text-[12px] font-bold text-[#6b6b66] uppercase ff-font-bold  mb-2">
+                            Account
+                        </p>
+                        <h1 className="text-[34px] font-bold ff-font-bold tracking-tight text-[#1a1a1a]">
+                           Membership
+                        </h1>
+                        <p className="text-[14px] ff-font text-[#6b6b66]">
+                            Your plan, payment method, and billing history.
+                        </p>
+                    </div>
+
+                   
+                </div>
+
+                <hr className="border-gray-200 mb-10" />
 
                 <div className="space-y-6">
                     {/* --- ACCOUNT HOLDER --- */}
@@ -38,11 +44,11 @@ const Membership = () => {
                                 G
                             </div>
                             <div>
-                                <p className="text-[11px] ff-font uppercase tracking-widest text-gray-400 font-bold mb-1">
+                                <p className="text-[11px] ff-font uppercase tracking-widest text-[#6b6b66] font-bold mb-1">
                                     ACCOUNT HOLDER
                                 </p>
-                                <h3 className="font-bold text-lg leading-tight ff-font-bold">Gargi P.</h3>
-                                <p className="text-sm text-gray-500 mt-0.5 ff-font">
+                                <h3 className="font-bold text-[17px] ff-font-bold">Gargi P.</h3>
+                                <p className="text-[13px] text-[#6b6b66] mt-0.5 ff-font">
                                     gargi.p@example.com · Member since April 2024
                                 </p>
                             </div>
@@ -66,7 +72,7 @@ const Membership = () => {
                             {/* Content */}
                             <div className="pt-1 min-w-0">
 
-                                <h3 className="font-bold text-base sm:text-xl mb-1 leading-tight">
+                                <h3 className="font-bold text-base sm:text-[20px] mb-1 ">
                                     USMLE Step 1 + Step 2 — Annual
                                 </h3>
 
@@ -102,7 +108,7 @@ const Membership = () => {
                     <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white">
                         {/* Status Row */}
                         <div className="grid grid-cols-1 md:grid-cols-12 p-6 border-b border-gray-100 items-start">
-                            <div className="md:col-span-3 text-[14px] text-gray-500 py-1 ff-font-bold">Status</div>
+                            <div className="md:col-span-3 text-[13px] text-[#6b6b66] py-1 ff-font-bold">Status</div>
                             <div className="md:col-span-9">
                                 <div className="flex items-center gap-2 mb-1">
                                     <div className="w-2 h-2 bg-[#22c55e] rounded-full"></div>
@@ -114,9 +120,9 @@ const Membership = () => {
 
                         {/* Billing Date Row */}
                         <div className="grid grid-cols-1 md:grid-cols-12 p-6 border-b border-gray-100 items-start">
-                            <div className="md:col-span-3 text-[14px] text-gray-500 py-1 ff-font-bold">Next billing date</div>
+                            <div className="md:col-span-3 text-[13px] text-[#6b6b66] py-1 ff-font-bold">Next billing date</div>
                             <div className="md:col-span-6">
-                                <p className="font-bold text-[15px] mb-1 ff-font">April 12, 2026</p>
+                                <p className="font-bold text-[14px] mb-1 ff-font">April 12, 2026</p>
                                 <p className="text-[13px] text-gray-500 ff-font">You'll be charged $249.00 on this date.</p>
                             </div>
                             <div className="md:col-span-3 md:text-right mt-4 md:mt-0">
@@ -126,7 +132,7 @@ const Membership = () => {
 
                         {/* Payment Method Row */}
                         <div className="grid grid-cols-1 md:grid-cols-12 p-6 border-b border-gray-100 items-start">
-                            <div className="md:col-span-3 text-[14px] text-gray-500 py-1 ff-font-bold">Payment method</div>
+                            <div className="md:col-span-3 text-[13px] text-[#6b6b66] py-1 ff-font-bold">Payment method</div>
                             <div className="md:col-span-6 flex items-center gap-4">
                                 <div className="bg-[#1a1f71] p-1.5 rounded-md">
                                     <div className="text-white text-[10px] font-black italic leading-none">VISA</div>
@@ -143,9 +149,9 @@ const Membership = () => {
 
                         {/* Email Row */}
                         <div className="grid grid-cols-1 md:grid-cols-12 p-6 items-start">
-                            <div className="md:col-span-3 text-[14px] text-gray-500 py-1 ff-font-bold">Billing email</div>
+                            <div className="md:col-span-3 text-[13px] text-[#6b6b66] py-1 ff-font-bold">Billing email</div>
                             <div className="md:col-span-6">
-                                <p className="font-bold text-[15px] mb-1 ff-font">gargi.p@example.com</p>
+                                <p className="font-bold text-[14px] mb-1 ff-font">gargi.p@example.com</p>
                                 <p className="text-[13px] text-gray-500 ff-font">Receipts and renewal notices are sent here.</p>
                             </div>
                             <div className="md:col-span-3 md:text-right mt-4 md:mt-0">
@@ -159,7 +165,7 @@ const Membership = () => {
 
                         {/* Header */}
                         <div className="flex items-center gap-3 sm:gap-4 mb-6">
-                            <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-gray-500 font-bold whitespace-nowrap">
+                            <p className="text-[10px] sm:text-[11px] uppercase  text-gray-500 font-bold whitespace-nowrap">
                                 CHANGE PLAN
                             </p>
                             <div className="h-[1px] w-full bg-gray-200"></div>
@@ -174,7 +180,7 @@ const Membership = () => {
                                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-gray-300 rounded-full mt-1 shrink-0"></div>
 
                                     <div className="min-w-0">
-                                        <h4 className="font-bold text-[14px] sm:text-[16px]">Step 1 only</h4>
+                                        <h4 className="font-bold text-[14px] sm:text-[15px]">Step 1 only</h4>
                                         <p className="text-[12px] sm:text-[13px] text-gray-500">
                                             All Step 1 subjects · 2,400+ practice questions · Visual flashcards
                                         </p>
@@ -196,7 +202,7 @@ const Membership = () => {
                                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-[5px] border-primary bg-black rounded-full mt-1 shrink-0"></div>
 
                                     <div className="min-w-0">
-                                        <h4 className="font-bold text-[14px] sm:text-[16px]">Step 1 + Step 2</h4>
+                                        <h4 className="font-bold text-[14px] sm:text-[15px]">Step 1 + Step 2</h4>
                                         <p className="text-[12px] sm:text-[13px] text-gray-500">
                                             Everything in Step 1 · All Step 2 CK subjects · 5,000+ questions · Mock exams
                                         </p>
@@ -211,7 +217,7 @@ const Membership = () => {
                                         </p>
                                     </div>
 
-                                    <span className="bg-primary px-2 py-1 text-[10px] font-black rounded-md whitespace-nowrap">
+                                    <span className="bg-primary px-2 py-1 text-[9px] font-black rounded-md whitespace-nowrap">
                                         CURRENT
                                     </span>
                                 </div>
@@ -224,7 +230,7 @@ const Membership = () => {
                                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-gray-300 rounded-full mt-1 shrink-0"></div>
 
                                     <div className="min-w-0">
-                                        <h4 className="font-bold text-[14px] sm:text-[16px]">1:1 Mentorship</h4>
+                                        <h4 className="font-bold text-[14px] sm:text-[15px]">1:1 Mentorship</h4>
                                         <p className="text-[12px] sm:text-[13px] text-gray-500">
                                             Everything in Step 1 + 2 · Monthly 1:1 with physician · Personalized study plan
                                         </p>
@@ -239,8 +245,8 @@ const Membership = () => {
                                         </p>
                                     </div>
 
-                                    <span className="bg-primary px-2 py-1 text-[10px] font-black rounded-md whitespace-nowrap">
-                                        CURRENT
+                                    <span className="bg-gray-200 px-2 py-1 text-[10px]  rounded-md whitespace-nowrap">
+                                        UPGRADE
                                     </span>
                                 </div>
                             </div>
@@ -261,7 +267,7 @@ const Membership = () => {
 
                         {/* Header */}
                         <div className="flex items-center gap-3 sm:gap-4 mb-6">
-                            <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-gray-500 font-bold whitespace-nowrap">
+                            <p className="text-[10px] sm:text-[11px] uppercase  text-gray-500 font-bold whitespace-nowrap">
                                 BILLING HISTORY
                             </p>
                             <div className="h-[1px] w-full bg-gray-200"></div>
@@ -273,20 +279,20 @@ const Membership = () => {
                                 <div
                                     key={idx}
                                     className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 gap-3 ${idx !== billingHistory.length - 1
-                                            ? "border-b border-gray-100"
-                                            : ""
+                                        ? "border-b border-gray-100"
+                                        : ""
                                         }`}
                                 >
 
                                     {/* LEFT */}
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-12 text-[13px] sm:text-[14px]">
 
-                                        <span className="text-gray-500 min-w-[100px]">
+                                        <span className="text-[#6b6b66] font-bold min-w-[100px] text-[13px] ">
                                             {item.date}
                                         </span>
 
                                         <span
-                                            className={`font-bold ${item.isDiscount ? "text-gray-400" : "text-[#1a1a1a]"
+                                            className={`font-medium ${item.isDiscount ? "" : "text-[#1a1a1a]"
                                                 }`}
                                         >
                                             {item.label}
@@ -319,8 +325,8 @@ const Membership = () => {
 
                     {/* --- FOOTER ACTIONS --- */}
                     <footer className="pt-1 flex gap-8">
-                        <button className="text-sm font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Pause subscription</button>
-                        <button className="text-sm font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Cancel membership</button>
+                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Pause subscription</button>
+                        <button className="text-[13px] font-bold underline underline-offset-4 text-gray-500 hover:text-black ff-font-bold">Cancel membership</button>
                     </footer>
                 </div>
             </div>

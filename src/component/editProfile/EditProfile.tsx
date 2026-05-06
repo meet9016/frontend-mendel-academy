@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FaBoxOpen, FaHome, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaBoxOpen, FaHome, FaUser } from "react-icons/fa";
 import { FiCreditCard } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 
@@ -12,48 +12,57 @@ import Membership from "./Membership";
 import MyProduct from "./MyProduct";
 import Profile from "./Profile";
 import ContactUs from "./ContactUs";
+import { useRouter } from "next/navigation";
 
 const EditProfile = () => {
-  // ✅ separated state
-  const [userType, setUserType] = useState("dashboard"); // dashboard / new / trial / paid
-  const [activeMenu, setActiveMenu] = useState("overview"); // sidebar control
+  const [userType, setUserType] = useState("dashboard");
+  const [activeMenu, setActiveMenu] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+
   return (
-    <div className="min-h-screen bg-[#f6f6f4]">
-      <div className="max-w-[1380px] mx-auto flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#f6f6f4] overflow-x-hidden">
+      <div className="max-w-[1380px] mx-auto flex">
 
         {/* ================= SIDEBAR ================= */}
         {userType !== "dashboard" && (
           <>
-            {sidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black/40 z-40 md:hidden"
-                onClick={() => setSidebarOpen(false)}
-              />
-            )}
+            {/* Overlay */}
+            <div
+              className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 
+              ${sidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"} lg:hidden`}
+              onClick={() => setSidebarOpen(false)}
+            />
 
-            <div className={`fixed md:sticky md:top-0 top-0 left-0 z-50 h-screen w-[260px] bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300
-              ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+            {/* Sidebar */}
+            <div
+              className={`fixed top-0 left-0 z-50 h-full w-[260px] bg-white border-r border-gray-200 flex flex-col 
+              transform transition-transform duration-300 ease-in-out
+              ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+              lg:translate-x-0 lg:static lg:min-h-screen`}
+            >
 
               {/* Back */}
-              <div className="px-5 py-4 border-b border-gray-200">
-                <div className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                  ← Back to Mendel
+              <div className="px-5 py-6 border-b border-gray-200">
+                <div
+                  className="flex items-center gap-2 text-md text-gray-600 cursor-pointer">
+                  <FaArrowLeft />
+                  <span>Back to Mendel</span>
                 </div>
               </div>
 
               {/* Menu */}
-              <div className="flex-1 py-2">
-
+              <div className="flex-1 py-4 overflow-y-auto">
                 {/* Overview */}
                 <div
-                  onClick={() => setActiveMenu("overview")}
-                  className={`flex items-center gap-3 px-5 py-[15px] cursor-pointer ${
-                    activeMenu === "overview"
-                      ? "bg-[#fff4d6] border-l-4 border-primary text-black font-bold"
-                      : "text-gray-600 hover:bg-[#fffbf1]"
-                  }`}
+                  onClick={() => {
+                    setActiveMenu("overview");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "overview"
+                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
+                    : "text-gray-600 hover:bg-[#fffbf1]"
+                    }`}
                 >
                   <FaHome />
                   <span>Overview</span>
@@ -61,12 +70,14 @@ const EditProfile = () => {
 
                 {/* Membership */}
                 <div
-                  onClick={() => setActiveMenu("membership")}
-                  className={`flex items-center gap-3 px-5 py-[15px] cursor-pointer ${
-                    activeMenu === "membership"
-                      ? "bg-[#fff4d6] border-l-4 border-primary text-black font-bold"
-                      : "text-gray-600 hover:bg-[#fffbf1]"
-                  }`}
+                  onClick={() => {
+                    setActiveMenu("membership");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "membership"
+                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
+                    : "text-gray-600 hover:bg-[#fffbf1]"
+                    }`}
                 >
                   <FiCreditCard />
                   <span>membership</span>
@@ -74,12 +85,14 @@ const EditProfile = () => {
 
                 {/* My Product */}
                 <div
-                  onClick={() => setActiveMenu("myProduct")}
-                  className={`flex items-center gap-3 px-5 py-[15px] cursor-pointer ${
-                    activeMenu === "myProduct"
-                      ? "bg-[#fff4d6] border-l-4 border-primary text-black font-bold"
-                      : "text-gray-600 hover:bg-[#fffbf1]"
-                  }`}
+                  onClick={() => {
+                    setActiveMenu("myProduct");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "myProduct"
+                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
+                    : "text-gray-600 hover:bg-[#fffbf1]"
+                    }`}
                 >
                   <FaBoxOpen />
                   <span>My products</span>
@@ -87,12 +100,14 @@ const EditProfile = () => {
 
                 {/* Profile */}
                 <div
-                  onClick={() => setActiveMenu("profile")}
-                  className={`flex items-center gap-3 px-5 py-[15px] cursor-pointer ${
-                    activeMenu === "profile"
-                      ? "bg-[#fff4d6] border-l-4 border-primary text-black font-bold"
-                      : "text-gray-600 hover:bg-[#fffbf1]"
-                  }`}
+                  onClick={() => {
+                    setActiveMenu("profile");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "profile"
+                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
+                    : "text-gray-600 hover:bg-[#fffbf1]"
+                    }`}
                 >
                   <FaUser />
                   <span>Profile</span>
@@ -100,12 +115,14 @@ const EditProfile = () => {
 
                 {/* Contact */}
                 <div
-                  onClick={() => setActiveMenu("contactUs")}
-                  className={`flex items-center gap-3 px-5 py-[15px] cursor-pointer ${
-                    activeMenu === "contactUs"
-                      ? "bg-[#fff4d6] border-l-4 border-primary text-black font-bold"
-                      : "text-gray-600 hover:bg-[#fffbf1]"
-                  }`}
+                  onClick={() => {
+                    setActiveMenu("contactUs");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "contactUs"
+                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
+                    : "text-gray-600 hover:bg-[#fffbf1]"
+                    }`}
                 >
                   <MdEmail />
                   <span>Contact us</span>
@@ -113,7 +130,7 @@ const EditProfile = () => {
 
                 {/* Divider */}
                 <div className="px-5">
-                  <div className="border-t border-gray-300 my-4"></div>
+                  <div className="border-t border-gray-300 my-6"></div>
                 </div>
 
                 {/* Help */}
@@ -130,27 +147,27 @@ const EditProfile = () => {
                     </p>
                   </div>
                 </div>
-
               </div>
             </div>
           </>
         )}
 
-        {/* ================= RIGHT CONTENT ================= */}
-        <div className="flex-1 p-4 md:p-8 space-y-6">
+        {/* ================= CONTENT ================= */}
+        <div className="flex-1 w-full p-4 lg:p-8 space-y-6">
 
+          {/* Hamburger (VISIBLE till 1023px including 768) */}
           {userType !== "dashboard" && (
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="p-2 bg-white border rounded-lg"
+                className="p-2 bg-white border rounded-lg shadow-sm"
               >
                 ☰
               </button>
             </div>
           )}
 
-          {/* ✅ Render Logic */}
+          {/* Render */}
           {userType === "dashboard" && <Dashboard />}
 
           {activeMenu === "overview" && userType === "new" && <NewuserOverview />}
@@ -164,64 +181,31 @@ const EditProfile = () => {
         </div>
       </div>
 
-      {/* ================= DEMO SWITCH ================= */}
-      <div className="fixed bottom-4 right-1/2 translate-x-1/2 md:right-6 md:translate-x-0 bg-black rounded-2xl p-1 flex gap-1 z-[9999] overflow-x-auto max-w-[95%]">
+      {/* ================= BOTTOM SWITCH ================= */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:left-auto lg:right-6 lg:translate-x-0 
+      bg-black rounded-2xl p-1 flex gap-1 z-[9999] overflow-x-auto max-w-[95%] whitespace-nowrap">
 
-        <button
-          onClick={() => {
-            setUserType("dashboard");
-            setActiveMenu("overview");
-          }}
-          className={`px-4 py-2 rounded-xl text-sm ${
-            userType === "dashboard"
+        {["dashboard", "new", "trial", "paid"].map((type) => (
+          <button
+            key={type}
+            onClick={() => {
+              setUserType(type);
+              setActiveMenu("overview");
+            }}
+            className={`px-4 py-2 rounded-xl text-sm ${userType === type
               ? "bg-yellow-400 text-black"
               : "text-white"
-          }`}
-        >
-          Demo State
-        </button>
-
-        <button
-          onClick={() => {
-            setUserType("new");
-            setActiveMenu("overview");
-          }}
-          className={`px-4 py-2 rounded-xl text-sm ${
-            userType === "new"
-              ? "bg-yellow-400 text-black"
-              : "text-white"
-          }`}
-        >
-          New user
-        </button>
-
-        <button
-          onClick={() => {
-            setUserType("trial");
-            setActiveMenu("overview");
-          }}
-          className={`px-4 py-2 rounded-xl text-sm ${
-            userType === "trial"
-              ? "bg-yellow-400 text-black"
-              : "text-white"
-          }`}
-        >
-          On trial
-        </button>
-
-        <button
-          onClick={() => {
-            setUserType("paid");
-            setActiveMenu("overview");
-          }}
-          className={`px-4 py-2 rounded-xl text-sm ${
-            userType === "paid"
-              ? "bg-yellow-400 text-black"
-              : "text-white"
-          }`}
-        >
-          Paying member
-        </button>
+              }`}
+          >
+            {type === "dashboard"
+              ? "Demo State"
+              : type === "new"
+                ? "New user"
+                : type === "trial"
+                  ? "On trial"
+                  : "Paying member"}
+          </button>
+        ))}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ const NewuserOverview = () => {
         <div className="space-y-6">
 
             {/* ================= TOP TRIAL BANNER ================= */}
-            <div className="bg-[#f6e7b5] border border-[#e8c96a] rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
+            <div className="bg-[linear-gradient(135deg,_#FFF8DC_0%,_#FFE99A_100%)] border border-[#e8c96a] rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
 
                 <div className="flex items-start gap-3 sm:gap-4">
 
@@ -54,7 +54,7 @@ const NewuserOverview = () => {
                         ACCOUNT
                     </p>
 
-                    <h1 className="text-2xl sm:text-3xl ff-font-bold mb-1">
+                    <h1 className="text-2xl sm:text-[34px] font-bold ff-font-bold mb-1">
                         Welcome back, Gargi.
                     </h1>
 
@@ -75,11 +75,11 @@ const NewuserOverview = () => {
             <div className="bg-black rounded-2xl border-t-4 border-primary p-4 sm:p-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
 
                 <div>
-                    <p className="text-[10px] sm:text-[11px] text-primary ff-font mb-2 tracking-widest">
+                    <p className="text-[10px] sm:text-[11px] font-semibold text-primary ff-font mb-2 tracking-widest">
                         CONTACT US
                     </p>
 
-                    <h2 className="text-white text-lg sm:text-xl ff-font-bold mb-2">
+                    <h2 className="text-white text-lg sm:text-[22px] font-semibold ff-font-bold mb-2">
                         Questions about your studies or account?
                     </h2>
 

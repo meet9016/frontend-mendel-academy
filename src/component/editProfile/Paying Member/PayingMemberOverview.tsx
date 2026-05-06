@@ -46,14 +46,14 @@ const PayingMemberOverview = () => {
                         <div className="flex flex-col space-y-1">
                             {/* Badge with Dot */}
                             <div className="flex items-center gap-2">
-                             
+
                                 <span className="text-[10px] font-bold text-[#FFCA00] tracking-[0.15em] uppercase">
                                     Pick up where you left off
                                 </span>
                             </div>
 
                             {/* Heading */}
-                            <h2 className="text-white text-xl md:text-2xl font-bold tracking-tight">
+                            <h2 className="text-white text-[19px] md:text-2xl font-bold tracking-tight">
                                 Continue Step 1 — Immunology
                             </h2>
 
@@ -74,20 +74,20 @@ const PayingMemberOverview = () => {
                 </div>
 
                 {/* ================= HEADER ================= */}
-                <div className="flex justify-between items-end pb-8 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 pb-8 border-b border-gray-200">
                     <div>
-                        <p className="text-[14px] text-gray-500 uppercase ff-font-bold tracking-[0.15em] mb-2">
+                        <p className="text-[12px] font-bold text-[#6b6b66] uppercase ff-font-bold  mb-2">
                             Account
                         </p>
-                        <h1 className="text-3xl font-bold ff-font-bold tracking-tight text-[#1a1a1a]">
+                        <h1 className="text-[34px] font-bold ff-font-bold tracking-tight text-[#1a1a1a]">
                             Welcome back, Gargi.
                         </h1>
-                        <p className="text-md ff-font text-gray-500 mt-1">
+                        <p className="text-[14px] ff-font text-[#6b6b66]">
                             Here's what's happening with your studies today.
                         </p>
                     </div>
 
-                    <button className="flex items-center gap-2 border border-gray-200 bg-white ff-font-bold px-4 py-2 highlight-mark  rounded-lg text-sm font-medium ff-font">
+                    <button className="flex items-center gap-2 border border-gray-300  ff-font-bold px-4 py-2 rounded-lg text-sm font-medium w-fit sm:w-auto">
                         <FiEdit2 size={14} />
                         Edit profile
                     </button>
@@ -97,11 +97,12 @@ const PayingMemberOverview = () => {
                 <section className="ff-font">
                     {/* Header with Line */}
                     <div className="flex items-center gap-4 mb-4">
-                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                        <p className="text-[11px] font-medium text-[#6b6b66] uppercase tracking-widest whitespace-nowrap">
                             Membership Details
                         </p>
                         <div className="h-[1px] bg-gray-200 w-full"></div>
                     </div>
+
 
                     {/* Card */}
                     <div className="bg-white rounded-2xl p-8 flex flex-col md:flex-row justify-between items-center border border-gray-200 relative overflow-hidden">
@@ -110,13 +111,13 @@ const PayingMemberOverview = () => {
 
                         <div className="absolute -right-10 -top-10 w-48 h-48 bg-[#FFF9E5] rounded-full opacity-60 z-0"></div>
 
-                        <div className="relative z-10 space-y-4">
-                            <div className="inline-flex items-center gap-2 bg-black text-primary text-[10px] font-bold px-3 py-1.5 rounded uppercase tracking-wider">
+                        <div className="relative z-10 space-y-1">
+                            <div className="inline-flex items-center gap-2 bg-black text-primary text-[10px] font-semibold px-3 py-1.5 rounded uppercase tracking-wider">
                                 <span className="w-1.5 h-1.5 bg-primary rounded-full "></span>
                                 Member since April 2024
                             </div>
 
-                            <h2 className="text-2xl ff-font-bold text-[#1a1a1a] tracking-tight">
+                            <h2 className="text-[22px] font-semibold ff-font-bold text-[#1a1a1a]">
                                 USMLE Step 1 + Step 2 — Annual
                             </h2>
 
@@ -133,9 +134,9 @@ const PayingMemberOverview = () => {
                         <div className="relative z-10 text-center md:text-right mt-8 md:mt-0 flex flex-col items-center md:items-end">
                             <div className="flex flex-col items-center md:items-end">
                                 <div className="flex items-start">
-                                    <span className="text-xl font-bold mt-1 text-[#1a1a1a]">$</span>
-                                    <span className="text-[44px] font-bold leading-none tracking-tight text-[#1a1a1a]">
-                                        249
+
+                                    <span className="text-[20px] font-bold  text-[#1a1a1a]">
+                                        $249
                                     </span>
                                 </div>
                                 <p className="text-sm text-gray-500 font-medium mt-1 tracking-wide">
@@ -154,11 +155,12 @@ const PayingMemberOverview = () => {
                 {/* ================= PROGRESS STATS ================= */}
                 <section>
                     <div className="flex items-center gap-4 mb-4">
-                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
-                            My products
+                        <p className="text-[11px] font-medium text-[#6b6b66] uppercase tracking-widest whitespace-nowrap">
+                            My Product
                         </p>
                         <div className="h-[1px] bg-gray-200 w-full"></div>
                     </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         {[
                             { label: "Active courses", value: "3", sub: "2 in progress, 1 upcoming" },
@@ -183,7 +185,7 @@ const PayingMemberOverview = () => {
                 {/* ================= MY PRODUCTS ================= */}
                 <section>
                     <div className="flex items-center gap-4 mb-4">
-                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                        <p className="text-[11px] font-bold text-[#6b6b66] uppercase tracking-widest whitespace-nowrap">
                             My products
                         </p>
                         <div className="h-[1px] bg-gray-200 w-full"></div>
@@ -248,15 +250,15 @@ const PayingMemberOverview = () => {
 
 
                 {/* ================= BOTTOM GRID ================= */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-0">
 
                     {/* QUICK LINKS SECTION */}
                     <section>
                         <div className="flex items-center gap-4 mb-4">
-                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
-                                Quick links
+                            <p className="text-[11px] font-bold text-[#6b6b66] uppercase tracking-widest whitespace-nowrap">
+                                Quick Link
                             </p>
-                            <div className="h-[1px] bg-gray-100 flex-1"></div>
+                            <div className="h-[1px] bg-gray-200 w-full"></div>
                         </div>
 
                         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -283,10 +285,10 @@ const PayingMemberOverview = () => {
                     {/* STUDENT PROFILE SECTION */}
                     <section>
                         <div className="flex items-center gap-4 mb-4">
-                            <p className="text-[11px]  font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">
+                            <p className="text-[11px] font-bold text-[#6b6b66] uppercase tracking-widest whitespace-nowrap">
                                 Student Profile
                             </p>
-                            <div className="h-[1px] bg-gray-100 flex-1"></div>
+                            <div className="h-[1px] bg-gray-200 w-full"></div>
                         </div>
 
                         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col h-[356px]">
@@ -297,7 +299,7 @@ const PayingMemberOverview = () => {
                                         G
                                     </div>
                                     <div>
-                                        <p className="text-[19px] ff-font-bold font-bold text-gray-900">Gargi P.</p>
+                                        <p className="text-[18px] ff-font-bold font-bold text-gray-900">Gargi P.</p>
                                         <p className="text-[13px] ff-font-bold text-gray-400 font-medium">
                                             USMLE candidate • MS3
                                         </p>
