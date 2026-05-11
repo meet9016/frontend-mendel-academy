@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {Toastify} from "@/comman/Toastify";
+import { Toastify } from "@/comman/Toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +33,21 @@ export default function RootLayout({
   }, []);
 
   const pathname = usePathname();
-  const isFullScreen = pathname.startsWith("/test-run");
+  // const isFullScreen = pathname.startsWith("/test-run");
+
+  const hideLayoutRoutes = [
+    "/test-run",
+    "/question-bank",
+    "/configure-practice",
+    "/practice-setup",
+    "/subject-detail",
+    "/session-summary",
+    "/flash-card",
+  ];
+
+  const isFullScreen = hideLayoutRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
   return (
     <html lang="en">

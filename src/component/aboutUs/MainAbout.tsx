@@ -1,200 +1,261 @@
-"use client";
-import { FaEarthAmericas, FaTrophy } from "react-icons/fa6";
-import { motion } from "framer-motion";
 
-/* ----------  TYPES  ---------- */
-type Stat = { icon: React.ReactNode; value: string; label: string };
+'use client';
+import React from "react";
 
-/* ----------  DATA  ---------- */
-const stats: Stat[] = [
-  { icon: <FaTrophy />, value: "10,000+", label: "USMLE-style MCQs" },
-  { icon: <FaEarthAmericas />, value: "15–20%", label: "Performance Boost" },
+const EXAM_TAGS = ["USMLE Step 1", "USMLE Step 2", "USMLE Step 3", "UKMLE", "NEET-PG", "INICET", "FMGE", "AMC"];
+const SPECIALIZED_TAGS = ["MD", "DNB", "NEET-SS", "ABPath", "FRCPath", "Residents", "Fellows", "Consultants"];
+const CORPORATE_TAGS = ["Pharma", "Biotech", "CROs", "Corporate labs", "Clinical Oncology", "Consultant Pathologists & Residents"];
+
+const LEADERSHIP = [
+  { name: "Gargi Managoli, MBA", role: "Chief Operations · Global Business Development · Marketing & Sales", location: "California, USA", initials: "GM" },
+  { name: "Savita Managoli", role: "AI · Marketing · Content Strategy", location: "California, USA", initials: "SM" },
 ];
 
-/* ----------  MAIN COMPONENT  ---------- */
-export default function MainAbout() {
+function MainAbout() {
   return (
-    <>
-      <Hero />
-      <CompanyInfo />
-      <Mission />
-    </>
+    <div className="ff-font min-h-screen bg-[#fcfcfc] text-[#1a1a1a] selection:bg-yellow-200">
+      {/* HERO */}
+      <section className="pt-12 md:pt-10 pb-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 md:mb-12 gap-6">
+            <div className="max-w-2xl font-bold">
+              <h1 className="ff-font-bold text-4xl sm:text-5xl md:text-[38px] font-bold tracking-tight mb-4 leading-tight">
+                We simplify learning, <br />
+                <span className="bg-primary px-3 sm:px-4 py-1 rounded-2xl inline-block mt-2">amplify</span> success.
+              </h1>
+              <p className=" font-medium  sm:text-[13px]">
+                MedTech · Surgical Pathology · Molecular Pathology · Precision Oncology
+              </p>
+            </div>
+     <div className="flex gap-3 mt-6 md:mt-10 lg:mt-25 sm:gap-4 flex-wrap">
+              <button className="px-5 sm:px-6 py-3 rounded-xl border border-gray-200">View programs</button>
+              <button className="px-5 sm:px-6 py-3 rounded-xl bg-black text-primary">Contact us</button>
+            </div>
+          </div>
+
+          {/* Horizontal Line */}
+          <div className="w-full h-px bg-gray-200 mb-10 md:mb-12" />
+
+          <div className="relative bg-white border border-primary rounded-[1rem] p-6 sm:p-8 md:p-12 overflow-hidden exam-card-shadow border-l-[6px] border-l-primary">
+            <div className="relative z-10 max-w-3xl">
+              <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+                <span className="bg-black text-primary text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-md inline-flex items-center gap-2">
+                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse" /> MENDEL ACADEMY
+                </span>
+                <span className="bg-white border border-gray-200 text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-md">FOUNDED 2015</span>
+                <span className="bg-white border border-gray-200  text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-2 rounded-md uppercase">Corporate Offices in USA &amp; India</span>
+              </div>
+              <p className="text-base sm:text-xl md:text-[16px] leading-relaxed text-zinc-700">
+                A <span className="font-bold text-black">family-owned MedTech company</span> serving multiple audiences: PG Medical Aspirants, Consultant Pathologists &amp; Residents, Medical Oncologists, Surgical Oncologists, Hemato-Oncologists, Radiation Oncologists, Corporate Labs, Pharma, Biotech and CROs.
+              </p>
+            </div>
+            <div className="absolute top-[-10%] right-[-5%] w-48 sm:w-64 h-48 sm:h-64 bg-yellow-100/60 rounded-full blur-3xl animate-spin-slowest" />
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="px-4 sm:px-6 py-4">
+        <div className="max-w-[1380px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+          <StatCard title="Founded in" value="2015" sub="By Dr. Kishor Managoli, MD" />
+          <StatCard title="Founder experience" value="35+ yrs" sub="Surgical & molecular pathology" />
+          <StatCard title="Reach" value="10+" sub="Countries served" />
+        </div>
+      </section>
+
+      {/* WHAT WE OFFER */}
+      <section className="py-16 md:py-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <SectionHeading label="What we offer" />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+            <OfferCard index="01" category="EXAM PREP" title="PG Medical Entrance Exams" label="EXAMS COVERED" tags={EXAM_TAGS} />
+            <OfferCard index="02" category="ADVANCED PATHOLOGY" title="Specialized Pathology Courses" label="DESIGNED FOR" tags={SPECIALIZED_TAGS} />
+            <OfferCard index="03" category="CORPORATE" title="Molecular Pathology & Precision Oncology Training" label="CONSULTANTS FOR" tags={CORPORATE_TAGS} />
+          </div>
+        </div>
+      </section>
+
+      {/* CLINICIANS */}
+      <section className="pb-16 md:pb-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <SectionHeading label="For Clinicians" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+            <ClinicianCard
+              tag="For Pathologists"
+              title="Surgical & Molecular Pathology"
+              items={[
+                "Medico-legal safe reporting to MTB leadership.",
+                "IHC/IF, Flow Cytometry, FISH, PCR, Karyotyping, Sanger Sequencing, NGS, AI-Pathology, Bioinformatics, PGx, CDx, Biomarkers.",
+                "Lab Director and Head of Molecular Pathology readiness.",
+                "Confident Molecular Tumor Board (MTB) participation.",
+                "Expert second opinions in Histopathology, Cytopathology, Hemato-Oncology & Molecular Pathology.",
+              ]}
+            />
+            <ClinicianCard
+              tag="For Oncologists"
+              title="Hematology, Medical, Surgical & Radiation"
+              items={[
+                "Molecular to Clinical integration to Targeted therapeutics.",
+                "Therapy selection, resistance, and PGx implications.",
+                "Lead or contribute to Molecular Tumor Boards (MTB).",
+                "Faster, sharper collaboration with Pathology.",
+                "AI-Pathology, Biomarkers, CDx, Bioinformatics, Drug Discovery & Clinical Research/Trials.",
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* FOUNDER */}
+      <section className="pb-16 md:pb-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <SectionHeading label="Founder" />
+          <div className="bg-black text-white rounded-[1rem] p-6 sm:p-8 md:p-12 border-t-4 border-primary">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary flex items-center justify-center shrink-0">
+                <span className="text-black text-2xl sm:text-3xl ff-font-bold font-bold">KM</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-primary font-bold text-xs uppercase mb-1">Founder &amp; Chief Medical Mentor</p>
+                <h3 className="ff-font-bold text-2xl sm:text-3xl font-bold mb-1">Dr. Kishor Managoli, MD</h3>
+                <p className="text-zinc-400 mb-6 text-sm sm:text-base">MD Surgical &amp; Molecular Pathology · Precision Oncology Strategist · 12-US Patent Holder</p>
+                <p className="text-base sm:text-xl italic mb-6 sm:mb-8 ">
+                  "A <span className="text-white font-bold">Surgical Pathologist</span> by training, a <span className="text-primary font-bold">Molecular Strategist</span> by practice, and an <span className="text-primary font-bold">Educator</span> by passion."
+                </p>
+                <p className="text-zinc-400 leading-relaxed max-w-4xl mb-6 sm:mb-8 text-sm sm:text-base">
+                  With 35+ years of clinical experience and 12 US patents, Dr. Managoli bridges traditional histopathology and the molecular future — NGS, FISH, Flow Cytometry, PCR, RT-PCR, and AI-Pathology. He founded Mendel Academy to mentor the next generation of pathologists and serves as a strategic advisor to academia, corporate labs, pharma, and CROs.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { t: "12 US Patents", primary: true },
+                    { t: "35+ years practice", primary: false },
+                    { t: "Pharma | Biotech | CROs | Corporate Labs", primary: false },
+                    { t: "Surgical, Molecular & AI-Pathology", primary: false },
+                    { t: "USA & India", primary: false },
+                  ].map((tag) => (
+                    <span
+                      key={tag.t}
+                      className={`px-3 sm:px-4 py-2 rounded-lg text-[11px] sm:text-xs font-semibold ${tag.primary
+                        ? "bg-primary text-black border border-primary"
+                        : "border border-zinc-700 text-zinc-300"
+                        }`}
+                    >
+                      {tag.t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* LEADERSHIP */}
+      <section className="pb-16 md:pb-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <SectionHeading label="Leadership Team" />
+          <div className="space-y-0">
+            {LEADERSHIP.map((person) => (
+              <div key={person.name} className="bg-white border border-gray-200 p-5 sm:p-6 rounded-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:shadow-md transition-all">
+                <div className="flex items-center gap-5 sm:gap-6">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black text-primary flex items-center justify-center font-bold text-base sm:text-lg group-hover:scale-105 transition-transform border-2 border-primary">
+                    {person.initials}
+                  </div>
+                  <div>
+                    <h4 className="text-lg sm:text-xl font-bold">{person.name}</h4>
+                    <div className="bg-black text-primary text-[10px] uppercase font-bold px-3 py-1 rounded inline-block mt-2">
+                      {person.role}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-left sm:text-right pl-[76px] sm:pl-0">
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Based in</p>
+                  <p className="font-bold text-sm">{person.location}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="pb-16 md:pb-10 px-4 sm:px-6">
+        <div className="max-w-[1380px] mx-auto">
+          <div className="bg-white border-l-[6px] border-primary rounded-2xl p-6 sm:p-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 exam-card-shadow">
+            <div>
+              <h3 className="ff-font-bold text-2xl sm:text-3xl font-bold mb-2">Ready to work with us?</h3>
+              <p className="text-gray-500 text-sm sm:text-base">For students, pathologists, and oncology teams. Response within one business day.</p>
+            </div>
+            <div className="flex gap-3 sm:gap-4 flex-wrap">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl border border-gray-200 ">View programs</button>
+              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-black text-primary  inline-flex items-center gap-2">
+                Get in touch <span className="text-lg">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
-/* ----------  SECTIONS  ---------- */
-const Hero = () => (
-  <section className="relative overflow-hidden h-[400px] md:h-[500px]">
-    <div
-      className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url(https://www.shutterstock.com/image-photo/artificial-intelligence-content-generator-man-600nw-2471042165.jpg)" }}
-    >
-      <div className="absolute inset-0 bg-black/50" />
+/* ---------- Sub components ---------- */
+function SectionHeading({ label, centered = false }: { label: string; centered?: boolean }) {
+  return (
+    <div className="flex items-center gap-4 mb-8 md:mb-10">
+      {centered && <div className="h-[1px] flex-1 bg-gray-200" />}
+      <h2 className="uppercase tracking-[0.2em] font-semibold text-xs sm:text-[11px] font-bold text-[#6b6b66]">{label}</h2>
+      <div className="h-[1px] flex-1 bg-gray-200" />
     </div>
-    <div className="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-5xl md:text-7xl font-bold ff-font-bold text-white drop-shadow-2xl"
-      >
-        About Mendel Academy
-      </motion.h1>
+  );
+}
+
+function StatCard({ title, value, sub }: { title: string; value: string; sub: string }) {
+  return (
+    <div className="bg-[#0a0a0a] text-white p-6 sm:p-8 rounded-[1rem] hover:opacity-95 transition-colors">
+      <p className="text-[#fffffb80] text-xs sm:text-[11.5px]  mb-1">{title}</p>
+      <h4 className="ff-font-bold text-3xl sm:text-4xl font-bold text-primary mb-2">{value}</h4>
+      <p className="text-[#fffffb80] text-[11px]">{sub}</p>
     </div>
-  </section>
-);
+  );
+}
 
-const CompanyInfo = () => (
-  <section className="py-15 bg-gradient-to-b from-background to-secondary/30">
-    <div className="container mx-auto px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-12 gap-12 items-center">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="md:col-span-4 flex justify-center"
-          >
-            <div className="relative group flex items-center gap-5">
-              <div className="relative bg-white rounded-2xl p-6 shadow-xl border border-gray-200 hover:border-[#ffcc09] transition-all duration-500 hover:shadow-[0_0_35px_#ffcc09]">
-                <img
-                  src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
-                  alt="Mendel Academy Logo"
-                  className="w-24 h-auto transform group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div>
-                <h2 className="text-3xl font-extrabold ff-font-bold tracking-tight">
-                  Mendel <span className="text-primary ff-font-bold">Academy</span>
-                </h2>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="md:col-span-8 space-y-6"
-          >
-            <Paragraph>
-              <span className="font-bold ff-font text-primary">Mendel EdTech Pvt Ltd (Mendel Academy)</span> is a family-owned startup offering a digital education platform for medical school graduates. Founded in 2015, Mendel Academy offers an adaptive <span className="font-semibold ff-font text-primary">live-online course</span> for students to prepare for highly specialized licensure exams.
-            </Paragraph>
-            <Paragraph>
-              Here at <span className="font-bold ff-font text-primary">Mendel Academy</span>, we have been providing personalized coaching to over <span className="font-bold ff-font text-primary">1000 medical students</span> for licensure exams with special focus on the USMLEs; resulting in over <span className="font-bold ff-font text-primary">90% students matching into top residency programs</span>. In the wake of the pandemic, Mendel Academy has adapted to the changing times and incorporated modern EdTech tools to provide an online coaching paradigm which is now easily accessible for medical students all around the world.
-            </Paragraph>
-          </motion.div>
+function OfferCard({ index, category, title, label, tags }: { index: string; category: string; title: string; label: string; tags: string[] }) {
+  return (
+    <div className="bg-white border border-gray-100 rounded-[1.5rem] p-6 sm:p-8 exam-card-shadow hover:shadow-lg transition-all flex flex-col h-full">
+      <p className="text-primary font-bold text-[11px] sm:text-xs mb-1">{index} · {category}</p>
+      <h3 className="ff-font-bold text-xl sm:text-2xl font-extrabold mb-6 sm:mb-8 min-h-[56px] sm:min-h-[50px]">{title}</h3>
+      {/* Horizontal Line */}
+      <div className="w-full h-px bg-gray-200 mb-6 sm:mb-4" />
+      <div className="mt-auto">
+        <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-3 sm:mb-4">{label}</p>
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span key={tag} className="px-3 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-[12px] font-bold text-gray-600 transition-colors">
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </div>
-  </section>
-);
+  );
+}
 
-const Mission = () => (
-  <section className="relative py-12 sm:py-16 bg-[#f9fafb] overflow-hidden">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-20 relative z-10">
-      {/* Heading */}
-      <div className="text-center mb-12 sm:mb-16">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-5xl font-extrabold ff-font-bold mb-4"
-        >
-          Our Achievements & Vision
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="ff-font max-w-2xl mx-auto text-base sm:text-lg"
-        >
-          Building excellence in medical education through innovation, accessibility, and precision learning.
-        </motion.p>
-      </div>
-
-      {/* Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-start">
-
-        {/* Achievements Card */}
-        <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-3xl border border-primary p-6 sm:p-10 shadow-sm"
-        >
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl bg-white border border-primary text-primary text-2xl sm:text-3xl">
-              <FaTrophy />
-            </div>
-            <h3 className="text-xl sm:text-2xl font-bold ff-font-bold">Our Achievements</h3>
-          </div>
-
-          <p className="ff-font text-base sm:text-lg leading-relaxed">
-            At <span className="font-semibold ff-font text-primary">Mendel Academy</span>, we’ve developed a proprietary
-            <span className="font-bold ff-font text-primary"> question bank </span>
-            of over <span className="font-bold ff-font text-primary">10,000 USMLE-style MCQs</span>, helping students enhance their performance by{" "}
-            <span className="font-bold ff-font text-primary">15–20%</span>.
-          </p>
-
-          <p className="ff-font text-base sm:text-lg leading-relaxed mt-4">
-            We take pride in our unique <span className="font-bold ff-font text-primary">"Mendel SketchNotes"</span>, designed to simplify complex concepts with elegant visuals. Mendel Academy has established its presence in{" "}
-            <span className="font-semibold ff-font text-primary">India, USA, Russia, China</span> and beyond.
-          </p>
-        </motion.div>
-
-        {/* Vision Card */}
-        <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-3xl border border-primary p-6 sm:p-10 shadow-sm"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4 mb-6">
-            <img
-              src="https://mendelacademy.com/mendel-logo/mendel-logo-main.svg"
-              alt="Mendel Academy"
-              className="w-16 sm:w-20 h-auto"
-            />
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold ff-font-bold leading-tight">Mendel</h2>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-primary leading-tight">Academy</h3>
-            </div>
-          </div>
-
-          <h3 className="text-xl sm:text-2xl font-bold ff-font-bold mb-4">Our Vision</h3>
-
-          <p className="ff-font text-base sm:text-lg leading-relaxed">
-            Our vision at <span className="font-semibold ff-font text-primary">Mendel Academy</span> is to create an{" "}
-            <span className="font-bold ff-font text-primary">accessible digital coaching platform</span> that empowers medical students globally — regardless of cost or location.
-          </p>
-
-          <div className="mt-6 flex justify-start">
-            <div className="flex items-center gap-3 ff-font text-primary font-semibold text-base sm:text-lg">
-              <FaEarthAmericas className="text-xl sm:text-2xl" />
-              <span>Global Learning, Limitless Access</span>
-            </div>
-          </div>
-        </motion.div>
-
-      </div>
+function ClinicianCard({ tag, title, items }: { tag: string; title: string; items: string[] }) {
+  return (
+    <div className="bg-white border border-gray-100 p-6 sm:p-8 rounded-[1.5rem] exam-card-shadow">
+      <p className="text-primary font-bold text-[11px] sm:text-xs uppercase mb-2">{tag}</p>
+      <h3 className="ff-font-bold text-xl sm:text-2xl font-bold mb-5 sm:mb-6">{title}</h3>
+      <ul className="space-y-3 sm:space-y-3">
+        {items.map((it, i) => (
+          <li key={i} className="flex gap-3 sm:gap-4 items-start border-b border-gray-200 pb-3 last:border-0 last:pb-0">
+            <span className="w-4 sm:w-5 h-[2px] bg-primary mt-3 shrink-0" />
+            <span className="text-zinc-600 font-medium leading-relaxed text-sm sm:text-base">{it}</span>
+          </li>
+        ))}
+      </ul>
     </div>
-  </section>
-);
+  );
+}
 
-
-/* ----------  HELPER  ---------- */
-const Paragraph = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-white rounded-2xl p-8 border border-primary transition-all duration-500">
-    <p className="text-lg leading-relaxed ff-font-bold">{children}</p>
-  </div>
-);
+export default MainAbout;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
     FiClock,
     FiMail,
@@ -17,6 +18,7 @@ import {
     FiEdit3
 } from "react-icons/fi";
 const PayingMemberOverview = () => {
+    const router = useRouter();
     const products = [
         { title: "Step 1 — Immunology", progress: 68, info: "68% complete", subInfo: "142 questions remaining", status: "ACTIVE", icon: <FiTarget size={20} /> },
         { title: "Step 1 — Microbiology", progress: 42, info: "42% complete", subInfo: "218 questions remaining", status: "ACTIVE", icon: <FiShield size={20} /> },
@@ -66,7 +68,9 @@ const PayingMemberOverview = () => {
 
                     {/* Right side: Buttons */}
                     <div className="flex gap-3 w-full md:w-auto shrink-0">
-                        <button className="flex-1 md:flex-none cursor-pointer flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
+                        <button
+                        onClick={() => router.push('/flash-card')}
+                        className="flex-1 md:flex-none cursor-pointer flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
                             <FiPlay size={14} className="fill-current" /> Go to app
                         </button>
 

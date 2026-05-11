@@ -43,7 +43,7 @@ export const ThemeSidePanel = ({
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed right-0 top-0 h-full w-150 bg-white ${theme === 'dark' ? 'dark:bg-gray-900' : ''} shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto border-l border-gray-200 ${theme === 'dark' ? 'dark:border-gray-700' : ''}`}>
+    <div className={`fixed right-0 top-0 h-full w-130 bg-white ${theme === 'dark' ? 'dark:bg-gray-900' : ''} shadow-xl z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto border-l border-gray-200 ${theme === 'dark' ? 'dark:border-gray-700' : ''}`}>
       
       {/* Header */}
       <div className={`sticky top-0 bg-white ${theme === 'dark' ? 'dark:bg-gray-900' : ''} border-b border-gray-200 ${theme === 'dark' ? 'dark:border-gray-700' : ''} px-4 py-3 flex justify-between items-center`}>

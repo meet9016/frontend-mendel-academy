@@ -66,9 +66,14 @@ const OntrialOverview = () => {
 
         {/* Right side: Buttons */}
         <div className="flex gap-3 w-full md:w-auto shrink-0">
-          <button className="flex-1 md:flex-none flex ff-font items-center cursor-pointer justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-[13px]  hover:bg-white/5 transition-all">
+          <a
+            href="/question-bank"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 md:flex-none flex ff-font items-center cursor-pointer justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-[13px]  hover:bg-white/5 transition-all">
             <FiPlay size={14} className="fill-current" /> Go to app
-          </button>
+          </a>
+          
           <button className="flex-1 cursor-pointer md:flex-none px-6 py-2.5 bg-primary  text-black rounded-lg text-[13px] font-medium ">
             Upgrade now
           </button>
