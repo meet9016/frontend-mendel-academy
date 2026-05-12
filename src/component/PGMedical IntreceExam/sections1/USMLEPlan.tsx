@@ -65,7 +65,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
     <>
       {/* Choose Your Plan */}
       {data?.is_plan_visible !== false && data?.choose_plan_list && data.choose_plan_list.length > 0 && (
-        <section id="pricing" className="py-[72px] px-6 usmle-bg-light">
+        <section id="pricing" className="py-[72px] px-6 bg-[#f9fafb]">
           <div className="max-w-[1280px] mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-[30px] font-black usmle-text-black mb-2 ff-font-bold">
@@ -336,7 +336,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
       ) : null}
 
       {/* Designer Customized 1:1 Mentoring CTA */}
-      <section className="py-[72px] px-6 usmle-bg-light ">
+      <section className="py-[72px] px-6 bg-[#f9fafb]">
         <div className="max-w-[960px] mx-auto ">
           <div className="usmle-bg-black bg-gray-900 rounded-2xl border-2 border-[#F5C800] p-12 flex flex-col items-center justify-center text-center">
             <div className="w-[52px] h-[52px] bg-[#F5C800] rounded-xl flex items-center justify-center mb-[18px]">

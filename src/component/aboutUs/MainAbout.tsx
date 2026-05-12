@@ -8,7 +8,7 @@ const CORPORATE_TAGS = ["Pharma", "Biotech", "CROs", "Corporate labs", "Clinical
 
 const LEADERSHIP = [
   { name: "Gargi Managoli, MBA", role: "Chief Operations · Global Business Development · Marketing & Sales", location: "California, USA", initials: "GM" },
-  { name: "Savita Managoli", role: "AI · Marketing · Content Strategy", location: "California, USA", initials: "SM" },
+  { name: "Savita Managoli", role: "Data analytics | Tech Support | Business Strategy", location: "California, USA", initials: "SM" },
 ];
 
 function MainAbout() {
@@ -224,7 +224,7 @@ function OfferCard({ index, category, title, label, tags }: { index: string; cat
   return (
     <div className="bg-white border border-gray-100 rounded-[1.5rem] p-6 sm:p-8 exam-card-shadow hover:shadow-lg transition-all flex flex-col h-full">
       <p className="text-primary font-bold text-[11px] sm:text-xs mb-1">{index} · {category}</p>
-      <h3 className="ff-font-bold text-xl sm:text-2xl font-extrabold mb-6 sm:mb-8 min-h-[56px] sm:min-h-[50px]">{title}</h3>
+      <h3 className="ff-font-bold text-xl sm:text-2xl font-bold mb-6 sm:mb-8 min-h-[56px] sm:min-h-[50px]">{title}</h3>
       {/* Horizontal Line */}
       <div className="w-full h-px bg-gray-200 mb-6 sm:mb-4" />
       <div className="mt-auto">

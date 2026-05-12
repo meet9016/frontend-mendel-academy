@@ -34,12 +34,12 @@ export default CourseDes;
 const ContentBox = ({ html }: { html: string }) => (
   <div
     dangerouslySetInnerHTML={{ __html: html }}
-    className="bg-[#F7F6F1] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left leading-[1.85] text-[15px] text-[#1A1A1A] ff-font"
+    className="bg-[#f9fafb] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left leading-[1.85] text-[15px] text-[#1A1A1A] ff-font"
   />
 );
 
 const ContentSkeleton = () => (
-  <div className="bg-[#F7F6F1] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left space-y-4">
+  <div className="bg-[#f9fafb] border border-[#E5E3DA] border-l-[5px] border-l-[#F5C800] rounded-xl px-9 py-8 text-left space-y-4">
     {[...Array(4)].map((_, i) => (
       <Skeleton key={i} height={22} width="100%" />
     ))}
