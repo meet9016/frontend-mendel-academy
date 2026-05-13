@@ -130,7 +130,7 @@ function SessionSummary() {
                         className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-[#1A1A1A] transition hover:border-primary hover:text-[#1A1A1A]"
                     >
                         <FiRefreshCw className="text-base" />
-                        <span className="hidden sm:inline">Repeat Topics</span>
+                        <span className="hidden sm:inline cursor-pointer">Repeat Topics</span>
                     </button>
                 </div>
             </header>
@@ -248,7 +248,7 @@ function SessionSummary() {
                 <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10">
 
                     <div className="flex w-full items-center justify-end">
-                        <button className="min-w-[180px] rounded-2xl bg-black px-10 py-3.5 text-sm font-bold tracking-wide text-white shadow-lg transition-all duration-200 hover:scale-[1.02] hover:bg-[#1A1A1A] active:scale-[0.98]">
+                        <button className="min-w-[180px] rounded-2xl bg-black px-10 py-3.5 text-sm font-bold tracking-wide text-white shadow-lg cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:bg-[#1A1A1A] active:scale-[0.98]">
                             Done
                         </button>
                     </div>

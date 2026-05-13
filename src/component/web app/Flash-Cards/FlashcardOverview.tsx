@@ -190,7 +190,7 @@ const FlashcardOverview = () => {
                             </div>
                             <button
 
-                                className="flex items-center gap-2 rounded-2xl bg-black px-8 py-4 text-sm font-bold text-white transition-all hover:bg-slate-800 hover:shadow-xl active:scale-95 shadow-lg shadow-slate-200"
+                                className="flex cursor-pointer items-center gap-2 rounded-2xl bg-black px-8 py-4 text-sm font-bold text-white transition-all hover:bg-slate-800 hover:shadow-xl active:scale-95 shadow-lg shadow-slate-200"
                             >
                                 <FiPlay className="fill-current" /> START SESSION
                             </button>
@@ -227,7 +227,7 @@ const FlashcardOverview = () => {
                         </div>
                         <button
 
-                            className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-black"
+                            className="flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-black"
                         >
                             <FiPlus size={16} /> NEW DECK
                         </button>

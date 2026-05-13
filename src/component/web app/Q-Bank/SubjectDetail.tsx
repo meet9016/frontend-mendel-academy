@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import {
     FaChevronLeft,
     FaRegUser,
@@ -7,6 +8,7 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 
 
 const SubjectDetail = () => {
+    const router = useRouter();
     return (
         <>
             <div className="ff-font min-h-screen bg-[#EFEFEA] text-[#0F1B33]">
@@ -18,7 +20,9 @@ const SubjectDetail = () => {
                             <div className="flex items-start gap-3">
                                 <div
                                     aria-label="Back"
-                                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-white transition hover:bg-white/10"
+
+                                    onClick={() => router.back()}
+                                    className="flex h-10 w-10 cursor-pointer shrink-0 items-center justify-center rounded-xl bg-white/5 text-white transition hover:bg-white/10"
                                 >
                                     <FaChevronLeft className="text-sm" />
                                 </div>
@@ -109,7 +113,7 @@ const SubjectDetail = () => {
                             6900 questions available
                         </div>
 
-                        <button className="mt-6 w-full rounded-xl bg-primary py-4 text-sm font-semibold text-black transition hover:bg-[#1a2747] sm:text-base">
+                        <button className="mt-6 w-full cursor-pointer rounded-xl bg-primary py-4 text-sm font-semibold text-black transition hover:bg-[#1a2747] sm:text-base">
                             Take Calibration Block
                         </button>
                     </article>

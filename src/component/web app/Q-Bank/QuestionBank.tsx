@@ -256,7 +256,7 @@ const QuestionBank = () => {
                                                     <FaFire size={14} className="text-orange-500" />
                                                     12-day streak
                                                 </p>
-                                                <button className="bg-[#091a32] ff-font text-white px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm transition shrink-0">
+                                                <button className="bg-[#091a32] cursor-pointer ff-font text-white px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm transition shrink-0">
                                                     Continue
                                                 </button>
                                             </div>
@@ -388,13 +388,13 @@ const QuestionBank = () => {
 
                             {/* tabs — scrollable on mobile */}
                             <div className="mt-3 sm:mt-4 overflow-x-auto pb-1">
-                                <div className="inline-flex items-center bg-[#F3EFE6] border border-[#E6DED0] rounded-2xl p-1 sm:p-1.5 gap-1 min-w-max">
-                                    <button className="relative h-[44px] sm:h-[52px] px-4 sm:px-7 rounded-xl bg-white shadow-[0_4px_18px_rgba(0,0,0,0.06)] text-[#071B44] font-semibold text-xs sm:text-sm">
+                                <div className="inline-flex  items-center bg-[#F3EFE6] border border-[#E6DED0] rounded-2xl p-1 sm:p-1.5 gap-1 min-w-max">
+                                    <button className="cursor-pointer relative h-[44px] sm:h-[52px] px-4 sm:px-7 rounded-xl bg-white shadow-[0_4px_18px_rgba(0,0,0,0.06)] text-[#071B44] font-semibold text-xs sm:text-sm">
                                         <span className="relative z-10 ff-font">General Principles</span>
                                         <div className="absolute inset-0 rounded-xl border border-[#E8E1D5]" />
                                         <div className="absolute left-4 right-4 bottom-1 h-[3px] rounded-full bg-[#FFCA00]" />
                                     </button>
-                                    <button className="h-[44px] sm:h-[52px] ff-font px-4 sm:px-7 rounded-xl text-[#8E877C] hover:text-[#071B44] hover:bg-white/70 font-medium text-xs sm:text-sm whitespace-nowrap">
+                                    <button className="cursor-pointer h-[44px] sm:h-[52px] ff-font px-4 sm:px-7 rounded-xl text-[#8E877C] hover:text-[#071B44] hover:bg-white/70 font-medium text-xs sm:text-sm whitespace-nowrap">
                                         Organ systems
                                     </button>
 
@@ -526,7 +526,7 @@ const QuestionBank = () => {
                                         <p className="uppercase ff-font text-[10px] text-gray-400">EPC</p>
                                         <h4 className="ff-font-bold text-[20px] sm:text-[24px] font-bold text-[#071B44]">{item.epc}</h4>
                                     </div>
-                                    <button className="font-semibold text-xs sm:text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-[#FFCA00] hover:bg-[#FFCA00] hover:text-[#1A1A1A] transition whitespace-nowrap">
+                                    <button className="font-semibold cursor-pointer text-xs sm:text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-[#FFCA00] hover:bg-[#FFCA00] hover:text-[#1A1A1A] transition whitespace-nowrap">
                                         Review
                                     </button>
                                 </div>

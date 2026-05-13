@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
     HiOutlineArrowLeft,
@@ -75,6 +76,8 @@ const TOPICS: Topic[] = [
 
 function DeckDetail() {
     const [open, setOpen] = useState<string | null>("Physiology");
+    const router = useRouter();
+
 
     return (
         <main className="min-h-screen bg-background py-6 px-4 sm:py-10 sm:px-6 lg:px-8">
@@ -134,7 +137,7 @@ function DeckDetail() {
                     </div>
 
                     {/* CTA */}
-                    <button className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0f1b3d] px-5 py-3.5 text-sm sm:text-base font-semibold text-white shadow hover:bg-[#152555] transition">
+                    <button className="mt-6 cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0f1b3d] px-5 py-3.5 text-sm sm:text-base font-semibold text-white shadow hover:bg-[#152555] transition">
                         <HiOutlinePlay className="text-lg" />
                         Start Custom Session
                     </button>
@@ -219,8 +222,9 @@ function DeckDetail() {
                                             <ul className="mt-4 divide-y divide-border">
                                                 {t.items.map((it) => (
                                                     <li
+                                                        onClick={() => router.push("/flash-card/Deckpractice")}
                                                         key={it.title}
-                                                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-3"
+                                                        className="flex cursor-pointer flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-3"
                                                     >
                                                         <div>
                                                             <p className="font-medium text-foreground">{it.title}</p>

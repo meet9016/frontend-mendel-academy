@@ -13,7 +13,7 @@ const LEADERSHIP = [
 
 function MainAbout() {
   return (
-    <div className="ff-font min-h-screen bg-[#fcfcfc] text-[#1a1a1a] selection:bg-yellow-200">
+    <div className="ff-font min-h-screen bg-[#fcfcfc] text-[#1a1a1a] ">
       {/* HERO */}
       <section className="pt-12 md:pt-10 pb-10 px-4 sm:px-6">
         <div className="max-w-[1380px] mx-auto">
@@ -27,9 +27,9 @@ function MainAbout() {
                 MedTech · Surgical Pathology · Molecular Pathology · Precision Oncology
               </p>
             </div>
-     <div className="flex gap-3 mt-6 md:mt-10 lg:mt-25 sm:gap-4 flex-wrap">
-              <button className="px-5 sm:px-6 py-3 rounded-xl border border-gray-200">View programs</button>
-              <button className="px-5 sm:px-6 py-3 rounded-xl bg-black text-primary">Contact us</button>
+            <div className="flex gap-3 mt-6 md:mt-10 lg:mt-25 sm:gap-4 flex-wrap">
+              <button className="px-5 cursor-pointer sm:px-6 py-3 rounded-xl border border-gray-200">View programs</button>
+              <button className="px-5 sm:px-6 py-3 cursor-pointer rounded-xl bg-black text-primary">Contact us</button>
             </div>
           </div>
 
@@ -187,8 +187,8 @@ function MainAbout() {
               <p className="text-gray-500 text-sm sm:text-base">For students, pathologists, and oncology teams. Response within one business day.</p>
             </div>
             <div className="flex gap-3 sm:gap-4 flex-wrap">
-              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl border border-gray-200 ">View programs</button>
-              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-black text-primary  inline-flex items-center gap-2">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl border border-gray-200 cursor-pointer">View programs</button>
+              <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-black text-primary cursor-pointer inline-flex items-center gap-2">
                 Get in touch <span className="text-lg">→</span>
               </button>
             </div>

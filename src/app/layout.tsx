@@ -38,10 +38,10 @@ export default function RootLayout({
   const hideLayoutRoutes = [
     "/test-run",
     "/question-bank",
-    "/configure-practice",
-    "/practice-setup",
-    "/subject-detail",
-    "/session-summary",
+    // "/configure-practice",
+    // "/practice-setup",
+    // "/subject-detail",
+    // "/session-summary",
     "/flash-card",
   ];
 

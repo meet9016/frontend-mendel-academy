@@ -458,7 +458,7 @@ function PracticeSetup() {
                                                 ? { background: PRIMARY, borderColor: PRIMARY, color: "#0f172a" }
                                                 : { borderColor: PRIMARY }
                                         }
-                                        className="ml-auto flex-none inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md border bg-white text-xs font-semibold transition-colors text-slate-600"
+                                        className="ml-auto cursor-pointer flex-none inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md border bg-white text-xs font-semibold transition-colors text-slate-600"
                                     >
                                         {marked[q.id] ? <BiCheck size={14} /> : <BiBookmark size={14} />}
                                         <span className="hidden xs:inline sm:inline">{marked[q.id] ? "Marked" : "Mark"}</span>
@@ -489,7 +489,7 @@ function PracticeSetup() {
                                                 key={opt.key}
                                                 onClick={() => select(opt.key)}
                                                 disabled={isSubmitted}
-                                                className={`w-full text-left flex items-center rounded-lg border-2 overflow-hidden transition-all ${cls}`}
+                                                className={`w-full cursor-pointer text-left flex items-center rounded-lg border-2 overflow-hidden transition-all ${cls}`}
                                             >
                                                 <div
                                                     className={`w-10 sm:w-11 self-stretch flex-none grid place-items-center font-bold text-sm ${isSubmitted && isRightOpt
@@ -579,7 +579,7 @@ function PracticeSetup() {
                                         onClick={handleSubmit}
                                         disabled={!userAnswer}
                                         style={{ background: PRIMARY }}
-                                        className="inline-flex items-center gap-2 h-10 sm:h-11 px-4 sm:px-5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 text-sm font-bold transition-all shadow-lg"
+                                        className="inline-flex cursor-pointer items-center gap-2 h-10 sm:h-11 px-4 sm:px-5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 text-sm font-bold transition-all shadow-lg"
                                     >
                                         <FaLayerGroup size={14} />
                                         Submit Answer
@@ -853,11 +853,11 @@ function PaletteSidebar({
             <div className="text-[11px] tracking-wider text-slate-500 font-semibold">QUESTION NAVIGATOR</div>
             <div className="text-sm text-slate-700 mb-3">{total} questions · jump to any</div>
 
-            <div className="grid grid-cols-3 gap-2 mb-3">
+            {/* <div className="grid grid-cols-3 gap-2 mb-3">
                 <Stat label="Done" value={answeredCount} tone="primary" />
                 <Stat label="Left" value={total - answeredCount} tone="muted" />
                 <Stat label="Marked" value={markedCount} tone="outline" />
-            </div>
+            </div> */}
 
             <div className="relative mb-2">
                 <BiSearch size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -880,7 +880,7 @@ function PaletteSidebar({
                                 ? { background: PRIMARY, borderColor: PRIMARY, color: "#0f172a" }
                                 : undefined
                         }
-                        className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${filter === f.key ? "" : "bg-white border-slate-200 text-slate-600 hover:border-slate-400"
+                        className={`px-2 py-0.5 cursor-pointer rounded-full text-[11px] font-semibold border ${filter === f.key ? "" : "bg-white border-slate-200 text-slate-600 hover:border-slate-400"
                             }`}
                     >
                         {f.label} {f.count}
@@ -900,7 +900,7 @@ function PaletteSidebar({
                             <button
                                 key={i}
                                 onClick={() => goto(i)}
-                                className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-md border text-left transition-all ${isCurrent
+                                className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-md border text-left transition-all cursor-pointer ${isCurrent
                                     ? "border-amber-400 bg-amber-50"
                                     : "border-transparent bg-slate-50 hover:bg-white hover:border-slate-200"
                                     }`}

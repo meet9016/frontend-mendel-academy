@@ -192,7 +192,7 @@ const EditProfile = () => {
               setUserType(type);
               setActiveMenu("overview");
             }}
-            className={`px-4 py-2 rounded-xl text-sm ${userType === type
+            className={`px-4 py-2 cursor-pointer rounded-xl text-sm ${userType === type
               ? "bg-yellow-400 text-black"
               : "text-white"
               }`}
