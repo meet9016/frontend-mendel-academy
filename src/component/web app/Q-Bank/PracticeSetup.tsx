@@ -20,7 +20,8 @@ import {
     TbPlayerPause,
 } from "react-icons/tb";
 import { FiFileText } from "react-icons/fi";
-import Calculator from "@/component/exam/Calculator";
+import dynamic from "next/dynamic";
+const Calculator = dynamic(() => import("@/component/exam/Calculator"), { ssr: false });
 import { NoteModal } from "@/component/exam/NoteModal";
 import { ThemeSidePanel } from "@/component/exam/SidePanel";
 import { LAB_VALUES } from "@/utils/constant";

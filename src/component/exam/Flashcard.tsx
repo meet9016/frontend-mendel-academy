@@ -112,8 +112,8 @@ export const Modal = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({
-    x: window.innerWidth / 2 - 400,
-    y: window.innerHeight / 2 - 250
+    x: typeof window !== "undefined" ? window.innerWidth / 2 - 400 : 100,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 - 250 : 100
   });
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
