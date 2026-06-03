@@ -182,7 +182,7 @@ const EditProfile = () => {
       </div>
 
       {/* ================= BOTTOM SWITCH ================= */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:left-auto lg:right-6 lg:translate-x-0 
+      {/* <div className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:left-auto lg:right-6 lg:translate-x-0 
       bg-black rounded-2xl p-1 flex gap-1 z-[9999] overflow-x-auto max-w-[95%] whitespace-nowrap">
 
         {["dashboard", "new", "trial", "paid"].map((type) => (
@@ -206,7 +206,7 @@ const EditProfile = () => {
                   : "Paying member"}
           </button>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
