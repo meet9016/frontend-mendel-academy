@@ -102,7 +102,21 @@ const Contact = () => (
   <div>
     <h4 className="font-semibold ff-font-bold text-lg mb-4">Contact Us</h4>
     <div className="space-y-3 ff-font text-sm">
-      <p className="flex items-center gap-2">🇮🇳 <span>+91 99255-11511</span></p>
+      <div className="flex flex-col gap-1">
+        <a
+          href="https://wa.me/919925511511"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 hover:text-[#ffca00] transition group"
+        >
+          🇮🇳{" "}
+          <span className="group-hover:text-[#ffca00] transition">+91 99255-11511</span>
+        </a>
+        <span className="flex items-center gap-1 text-[11px] text-[#25d366] font-semibold">
+          <FaWhatsapp className="text-[#25d366] text-sm" />
+          WhatsApp only
+        </span>
+      </div>
       <p className="flex items-center gap-2">🇺🇸 <span>+1 310-708-3244</span></p>
       <p className="pt-2">
         <a href="mailto:info@mendelacademy.com" className="hover:text-[#ffca00] ff-font-bold transition">
