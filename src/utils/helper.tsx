@@ -10,11 +10,12 @@ export function formatDateWithMonthNameDayjs(dateString: string | undefined) {
   return dayjs(dateString).format("D MMM YYYY");
 }
 
-export function formatPrice(value: string | number) {
+export function formatPrice(value: string | number, currency: string = "INR") {
   if (!value && value !== 0) return "";
   const num = Number(value);
   if (isNaN(num)) return value;
-  return num.toLocaleString("en-IN");
+  const locale = currency.toUpperCase() === "INR" ? "en-IN" : "en-US";
+  return num.toLocaleString(locale);
 }
 
 // ✅ Session-only temp_id (resets on browser close)
@@ -35,8 +36,10 @@ export const removeTempId = () => {
   sessionStorage.removeItem("temp_id");
 };
 
-export const formatCurrency = (amount: number, currency: string) =>
-  new Intl.NumberFormat("en-IN", { style: "currency", currency: currency.toUpperCase() }).format(amount / 100);
+export const formatCurrency = (amount: number, currency: string) => {
+  const locale = currency.toUpperCase() === "INR" ? "en-IN" : "en-US";
+  return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase() }).format(amount / 100);
+};
 
 export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(new Date(iso));
@@ -51,6 +54,12 @@ export const limitChars = (text: string, limit: number) => {
 
 // Country detect
 export const isIndia = () => {
-  if (typeof window === "undefined") return false;
-  return Intl.DateTimeFormat().resolvedOptions().timeZone === "Asia/Kolkata";
+  if (typeof window === "undefined") {
+    console.log("[isIndia] window is undefined (SSR). Returning false.");
+    return false;
+  }
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const result = tz === "Asia/Kolkata" || tz === "Asia/Calcutta";
+  console.log(`[isIndia] Detected timezone: "${tz}". isIndia result: ${result}`);
+  return result;
 };

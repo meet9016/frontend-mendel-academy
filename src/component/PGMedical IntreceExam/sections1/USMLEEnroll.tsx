@@ -302,7 +302,7 @@ const TsunamiBundleCard = ({
       </h3>
       <div className="flex items-baseline gap-3 mb-1">
         <p className="text-4xl font-black text-white leading-none">
-          {currencySymbol}{formatPrice(price ?? 0)}
+          {currencySymbol}{formatPrice(price ?? 0, userCurrency)}
         </p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
@@ -405,7 +405,7 @@ const FullMatchBundleCard = ({
       </h3>
       <div className="flex items-baseline gap-3 mb-1">
         <p className="text-4xl font-black usmle-text-black leading-none">
-          {currencySymbol}{formatPrice(totalPrice)}
+          {currencySymbol}{formatPrice(totalPrice, userCurrency)}
         </p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
@@ -512,7 +512,7 @@ const RapidToolCardSimple = ({
         {tool.tool_type}
       </span>
       <strong className="text-sm font-black ff-font-bold text-primary">
-        {currencySymbol}{formatPrice(price ?? 0)}
+        {currencySymbol}{formatPrice(price ?? 0, userCurrency)}
       </strong>
     </div>
   );
@@ -595,7 +595,7 @@ const PlanCardUSMLE = ({
 
           <div className="space-y-2 text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
 
@@ -692,7 +692,7 @@ const RapidToolCard = ({
           </div>
           <div className="text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
         </div>

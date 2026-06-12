@@ -132,7 +132,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                       {plan.plan_month} Month{plan.plan_month && plan.plan_month > 1 ? "s" : ""}
                     </p>
                     <p className="text-3xl font-black text-[#F5C800] leading-none mb-1 ff-font-bold">
-                      {currencySymbol}{formatPrice(price ?? 0)}
+                      {currencySymbol}{formatPrice(price ?? 0, userCurrency)}
                     </p>
                     {plan.plan_title && (
                       <p className="text-[11px] text-[#64748b] mb-4 mt-4 ff-font">{plan.plan_title}</p>
@@ -299,7 +299,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                         )}
                       </div>
                       <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
-                        {currencySymbol}{formatPrice(price ?? 0)}
+                        {currencySymbol}{formatPrice(price ?? 0, userCurrency)}
                       </p>
                       <MentorshipButton
                         mentorship={mentorship}
@@ -418,7 +418,7 @@ const RapidToolCard = ({
           onClick={() => onOpenPopup(tool)}
           className="space-y-2 text-center">
           <h3 className="text-xl font-bold ff-font-bold capitalize">{tool.tool_type}</h3>
-          <p className="text-3xl ff-font-bold font-bold text-primary">{currencySymbol} {formatPrice(price ?? 0)}</p>
+          <p className="text-3xl ff-font-bold font-bold text-primary">{currencySymbol} {formatPrice(price ?? 0, userCurrency)}</p>
           <p
             onClick={() => onOpenPopup(tool)}
             className="text-sm  cursor-pointer ff-font duration-300 line-clamp-2"
@@ -588,7 +588,7 @@ const TsunamiBundleCard = ({
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">Step 1 + Step 2 Bundle</p>
       <h3 className="text-xl font-black usmle-text-yellow mb-5 ff-font-bold">{tsunami.name || "Mendel Tsunami"}</h3>
       <div className="flex items-baseline gap-3 mb-1">
-        <p className="text-4xl font-black text-white leading-none ff-font-bold">{currencySymbol}{formatPrice(price ?? 0)}</p>
+        <p className="text-4xl font-black text-white leading-none ff-font-bold">{currencySymbol}{formatPrice(price ?? 0, userCurrency)}</p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
         {tsunami.description?.split("\n").filter(Boolean).map((line, index) => (
@@ -646,7 +646,7 @@ const FullMatchBundleCard = ({
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase usmle-text-muted mb-2">Basic Science to Residency</p>
       <h3 className="text-xl font-black usmle-text-black uppercase mb-5 ff-font-bold">The Full Match</h3>
       <div className="flex items-baseline gap-3 mb-1">
-        <p className="text-4xl font-black usmle-text-black leading-none ff-font-bold">{currencySymbol}{formatPrice(totalPrice)}</p>
+        <p className="text-4xl font-black usmle-text-black leading-none ff-font-bold">{currencySymbol}{formatPrice(totalPrice, userCurrency)}</p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
         {mentorships.map((m, index) => (

@@ -227,7 +227,7 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
                           )} */}
                         </div>
                         <p className="text-lg font-black text-[#1A1A1A] flex-shrink-0 min-w-[70px] text-right ff-font-bold">
-                          {currencySymbol}{formatPrice(price ?? 0)}
+                          {currencySymbol}{formatPrice(price ?? 0, userCurrency)}
                         </p>
                         <MentorshipButton
                           mentorship={mentorship}
@@ -439,7 +439,7 @@ const PlanCard = ({
 
           <div className="space-y-2 text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
 
@@ -627,7 +627,7 @@ const RapidToolCard = ({
           </div>
           <div className="text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
         </div>
@@ -819,7 +819,7 @@ const EliteMentorshipCardInLine = ({
           </div>
           <div className="text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
           {mentorship.included_services && (
@@ -905,7 +905,7 @@ const TsunamiCardInLine = ({
           </div>
           <div className="text-center">
             <p className="text-3xl ff-font-bold font-bold text-primary">
-              {currencySymbol} {formatPrice(price ?? 0)}
+              {currencySymbol} {formatPrice(price ?? 0, userCurrency)}
             </p>
           </div>
           {tsunami.description && (
@@ -1030,7 +1030,7 @@ const TsunamiBundleCardUSMLE = ({
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#475569] mb-2">Step 1 + Step 2 Bundle</p>
       <h3 className="text-xl font-black text-[#F5C800] mb-5 ff-font-bold">{tsunami.name || "Mendel Tsunami"}</h3>
       <div className="flex items-baseline gap-3 mb-1">
-        <p className="text-4xl font-black text-white leading-none ff-font-bold">{currencySymbol}{formatPrice(price ?? 0)}</p>
+        <p className="text-4xl font-black text-white leading-none ff-font-bold">{currencySymbol}{formatPrice(price ?? 0, userCurrency)}</p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
         {tsunami.description?.split("\n").filter(Boolean).map((line, index) => (
@@ -1088,7 +1088,7 @@ const FullMatchBundleCard = ({
       <p className="text-[10px] font-bold tracking-[0.1em] uppercase text-[#64748b] mb-2">Basic Science to Residency</p>
       <h3 className="text-xl font-black text-[#1A1A1A] uppercase mb-5 ff-font-bold">The Full Match</h3>
       <div className="flex items-baseline gap-3 mb-1">
-        <p className="text-4xl font-black text-[#1A1A1A] leading-none ff-font-bold">{currencySymbol}{formatPrice(totalPrice)}</p>
+        <p className="text-4xl font-black text-[#1A1A1A] leading-none ff-font-bold">{currencySymbol}{formatPrice(totalPrice, userCurrency)}</p>
       </div>
       <div className="grid grid-cols-2 gap-2 my-6">
         {mentorships.map((m, index) => (
