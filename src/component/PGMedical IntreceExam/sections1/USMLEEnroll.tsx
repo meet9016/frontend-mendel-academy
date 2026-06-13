@@ -6,9 +6,10 @@ import { getAuthId } from "@/utils/tokenManager";
 import { getTempId, formatPrice, isIndia } from "@/utils/helper";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
-import { store } from "@/redux/store";
+import { store, RootState } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
 import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
+import { useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import CommonButton from "@/comman/Button";
 import { FaCheckCircle } from "react-icons/fa";
@@ -25,9 +26,10 @@ const USMLEEnroll = ({ data, loading, examCategoryId }: USMLEEnrollProps) => {
   const tempId = userId ? null : getTempId();
   const [cartItems, setCartItems] = useState<any[]>([]);
 
+  const { userCurrency: globalCurrency } = useSelector((state: RootState) => state.currency);
   const backendCurrency = data?.user_currency;
   const fallbackCurrency = isIndia() ? "INR" : "USD";
-  const userCurrency = backendCurrency || fallbackCurrency;
+  const userCurrency = globalCurrency || backendCurrency || fallbackCurrency;
 
   const fetchCartItems = async () => {
     try {

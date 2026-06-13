@@ -3,6 +3,8 @@ import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId, isIndia } from "@/utils/helper";
 import MedicalExamDetail from "./sections/MedicalExamDetail";
@@ -32,7 +34,8 @@ function PgMedicalEntranceExams() {
   const isUSMLEStep1 = pathname?.includes("usmle-step-1");
   const isUSMLEStep2 = pathname?.includes("usmle-step-2-ck");
 
-  const userCurrency = examData?.user_currency || (isIndia() ? "INR" : "USD");
+  const { userCurrency: globalCurrency } = useSelector((state: RootState) => state.currency);
+  const userCurrency = globalCurrency || examData?.user_currency || (isIndia() ? "INR" : "USD");
 
   const fetchCartItems = async () => {
     try {

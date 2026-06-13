@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import dataReducer from "./dataSlice";
 import cartReducer from "./cartSlice";
+import currencyReducer from "./currencySlice";
 
 export const store = configureStore({
   reducer: {
     data: dataReducer,
     cart: cartReducer,
+    currency: currencyReducer,
   },
 });
 

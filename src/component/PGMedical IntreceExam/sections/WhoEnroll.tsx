@@ -5,13 +5,14 @@ import DOMPurify from "dompurify";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { FaCheckCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 import { formatPrice, getTempId, isIndia } from "@/utils/helper";
 import CommonButton from "@/comman/Button";
 import { getAuthId } from "@/utils/tokenManager";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
-import { store } from "@/redux/store";
+import { store, RootState } from "@/redux/store";
 import { setCartCount } from "@/redux/cartSlice";
 import { toast } from "react-toastify";
 import Sliders from "@/comman/Sliders";
@@ -110,9 +111,10 @@ const WhoEnroll = ({ data, loading, examCategoryId }: WhoEnrollProps) => {
     USE_PROFILES: { html: true },
   });
 
+  const { userCurrency: globalCurrency } = useSelector((state: RootState) => state.currency);
   const backendCurrency = data?.user_currency;
   const fallbackCurrency = isIndia() ? "INR" : "USD";
-  const userCurrency = backendCurrency || fallbackCurrency;
+  const userCurrency = globalCurrency || backendCurrency || fallbackCurrency;
 
   const addToCart = async (plan: Plan) => {
     try {

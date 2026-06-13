@@ -1,5 +1,7 @@
 "use client";
 import axios from "axios";
+import { store } from "@/redux/store";
+import { setCurrencyContext } from "@/redux/currencySlice";
 
 // const baseURL = process.env.NEXT_PUBLIC_APP_URL;
 const baseURL =
@@ -29,6 +31,14 @@ apiAdminInstance.interceptors.request.use(
 
 apiAdminInstance.interceptors.response.use(
   function (response) {
+    if (response.data && response.data.user_currency && response.data.user_country) {
+      store.dispatch(
+        setCurrencyContext({
+          userCountry: response.data.user_country,
+          userCurrency: response.data.user_currency,
+        })
+      );
+    }
     return response;
   },
   (error) => {

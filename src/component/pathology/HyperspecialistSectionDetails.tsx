@@ -6,9 +6,9 @@ import CommonButton from "@/comman/Button";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCartCount } from "@/redux/cartSlice";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import { getAuthId } from "@/utils/tokenManager";
 import { getTempId } from "@/utils/helper";
 import { HyperspecialistCardSkeleton } from "../Skeletons";
@@ -39,7 +39,9 @@ export default function Hero() {
   const [data, setData] = useState<HyperSpecialistItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
-  const [currency, setCurrency] = useState("USD");
+  const { userCurrency: globalCurrency } = useSelector((state: RootState) => state.currency);
+  const [localCurrency, setLocalCurrency] = useState("USD");
+  const currency = globalCurrency || localCurrency;
   const [cartItemsLoaded, setCartItemsLoaded] = useState(false);
 
   const toggle = (id: string) => {
@@ -97,7 +99,7 @@ export default function Hero() {
 
       if (res.data.success) {
         setData(res.data.data as HyperSpecialistItem[]);
-        setCurrency(res.data.currency || "USD");
+        setLocalCurrency(res.data.currency || res.data.user_currency || "USD");
       }
     } catch (err) {
       console.error("Error fetching HyperSpecialist modules:", err);
