@@ -100,6 +100,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               {data.choose_plan_list.map((plan, index) => {
+                {console.log(userCurrency)}
                 const price = userCurrency === "INR" ? plan.plan_pricing_inr : plan.plan_pricing_dollar;
                 const currencySymbol = userCurrency === "INR" ? "₹" : "$";
                 const isSelected = cartItems.some(item =>

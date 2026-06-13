@@ -17,6 +17,7 @@ import { ErrorToast, InfoToast, SuccessToast, WarningToast } from "@/comman/Toas
 export default function QBankPlansPage() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [userCurrency, setUserCurrency] = useState<string>("USD");
   const [purchasedPlanId, setPurchasedPlanId] = useState<string | null>(null);
   const [pendingCartPlanId, setPendingCartPlanId] = useState<string | null>(null);
   const [addingToCartId, setAddingToCartId] = useState<string | null>(null);
@@ -68,7 +69,8 @@ export default function QBankPlansPage() {
         total: number;
       }>(`${endPointApi.getActivePlans}`);
       if (data.success) {
-        setPlans(data.data)
+        setPlans(data.data);
+        if (data.user_currency) setUserCurrency(data.user_currency);
       }
     } catch (error) {
       console.error('Error fetching plans:', error);
@@ -214,7 +216,7 @@ export default function QBankPlansPage() {
                   {/* Price */}
                   <div className="mb-8">
                     <span className="text-4xl font-bold text-gray-900">
-                      {`₹ ${plan.price_inr}` || `$ ${plan.price_usd}`}
+                      {userCurrency === "INR" ? `₹ ${plan.price_inr}` : `$ ${plan.price_usd}`}
                     </span>
                   </div>
 
