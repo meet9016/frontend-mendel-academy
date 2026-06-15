@@ -2,6 +2,7 @@
 import axios from "axios";
 import { store } from "@/redux/store";
 import { setCurrencyContext } from "@/redux/currencySlice";
+import { isIndia } from "@/utils/helper";
 
 // const baseURL = process.env.NEXT_PUBLIC_APP_URL;
 const baseURL =
@@ -24,6 +25,10 @@ apiAdminInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.headers["ngrok-skip-browser-warning"] = "true";
+    
+    // Add timezone-based country header for backend fallback when Nginx IP fails
+    config.headers["x-country-code"] = isIndia() ? "IN" : "US";
+
     return config;
   },
   (error) => Promise.reject(error)
