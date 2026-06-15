@@ -20,6 +20,7 @@ export function formatPrice(value: string | number, currency: string = "INR") {
 
 // ✅ Session-only temp_id (resets on browser close)
 export const getTempId = () => {
+  if (typeof window === "undefined") return null;
   let tempId = sessionStorage.getItem("temp_id");
 
   // ✅ Generate new ID if none exists in session
