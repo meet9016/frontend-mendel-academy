@@ -16,6 +16,9 @@ import WhoEnroll from "./sections/WhoEnroll";
 import NewsLetter from "./sections/NewsLetter";
 import SketchySubjectSection from "./sections1/SketchySubjectSection";
 import Hero from "./sections/Hero";
+import WhatIsProgram from "./sections1/WhatIsProgram";
+import GalaxyAppSection from "./sections1/GalaxyAppSection";
+import TestimonialsSection from "./sections1/TestimonialsSection";
 
 function PgMedicalEntranceExams() {
   const { id } = useParams();
@@ -106,10 +109,26 @@ function PgMedicalEntranceExams() {
   return (
     <div>
       {/* DYNAMIC HERO SECTION */}
-      <Hero examName={examData?.name} />
-
-      {/* SUBJECTS SECTION */}
-      {(isUSMLEStep1 || isUSMLEStep2) && (
+      <Hero examName={examData?.name} isUSMLEStep1={isUSMLEStep1} isUSMLEStep2={isUSMLEStep2} />
+       <USMLEEnroll
+            data={examData}
+            loading={loading}
+            examCategoryId={id as string}
+          />
+        {/* {isUSMLEStep1 || && ( */}
+        <>
+          <WhatIsProgram />
+          <SketchySubjectSection
+            subjectData={subjectData}
+            loading={loading}
+            examId={id as string}
+          />
+          <GalaxyAppSection />
+         
+          </>
+           {/* )} */}
+      {/* SUBJECTS SECTION FOR OTHER EXAMS */}
+      {(isUSMLEStep2) && (
         <SketchySubjectSection
           subjectData={subjectData}
           loading={loading}
@@ -130,11 +149,11 @@ function PgMedicalEntranceExams() {
             loading={loading}
             examCategoryId={id as string}
           />
-          <USMLEEnroll
+          {/* <USMLEEnroll
             data={examData}
             loading={loading}
             examCategoryId={id as string}
-          />
+          /> */}
           <USMLEPlan
             data={examData}
             userCurrency={userCurrency}
@@ -150,11 +169,11 @@ function PgMedicalEntranceExams() {
             loading={loading}
             examCategoryId={id as string}
           />
-          <USMLEEnroll
+          {/* <USMLEEnroll
             data={examData}
             loading={loading}
             examCategoryId={id as string}
-          />
+          /> */}
           <USMLEPlan
             data={examData}
             userCurrency={userCurrency}
@@ -180,6 +199,9 @@ function PgMedicalEntranceExams() {
           examCategoryId={id as string}
         />
       )}
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* FAQs */}
       <Faq />

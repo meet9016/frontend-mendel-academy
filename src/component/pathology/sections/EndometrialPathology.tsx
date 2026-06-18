@@ -238,7 +238,7 @@ const NextSessionCard = ({ date }: { date: string }) => {
       <span className="text-xs sm:text-sm ff-font opacity-80">
         Next Session
       </span>
-      <div className="bg-white/20 text-black ff-font flex items-center gap-1 px-2 py-1 rounded-md text-xs sm:text-sm">
+      <div className="bg-white/80 text-black ff-font flex items-center gap-1 px-2 py-1 rounded-md text-xs sm:text-sm">
         <FaCalendarAlt className="w-3 h-3" /> Live
       </div>
     </div>

@@ -44,7 +44,7 @@ const Faq = () => {
     <section className="py-10 bg-[#f9fafb]">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <SectionHeading title="FAQs" />
+          <SectionHeading title="Frequently asked questions" />
 
           <div className="space-y-4">
             {loading ? (

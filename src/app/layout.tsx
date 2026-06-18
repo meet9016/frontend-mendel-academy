@@ -1,17 +1,7 @@
-"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// import { Toastify } from "@/comman/Toastify";
-import Header from "@/component/auth/Header";
-import Footer from "@/component/auth/Footer";
-import { store } from "@/redux/store";
-import { Provider } from "react-redux";
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { Toastify } from "@/comman/Toastify";
+import ClientLayout from "./ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,43 +13,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+  title: "Mendel Academy",
+  description: "Personalized Medical Coaching",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    document.documentElement.classList.add("hydrated");
-  }, []);
-
-  const pathname = usePathname();
-  // const isFullScreen = pathname.startsWith("/test-run");
-
-  const hideLayoutRoutes = [
-    "/test-run",
-    "/question-bank",
-    // "/configure-practice",
-    // "/practice-setup",
-    // "/subject-detail",
-    // "/session-summary",
-    "/flash-card",
-  ];
-
-  const isFullScreen = hideLayoutRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider store={store}>
-          {!isFullScreen && <Header />}
-          {children}
-          <Toastify />
-          {!isFullScreen && <Footer />}
-        </Provider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
