@@ -84,7 +84,7 @@ const toolSections = [
 ];
 
 const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
-  const [activeDevice, setActiveDevice] = useState("ipad");
+  const [activeDevice, setActiveDevice] = useState("iphone");
   const [selectedCardIndices, setSelectedCardIndices] = useState([0, 1, 1]);
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
   
@@ -188,12 +188,15 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
             <button
               key={device}
               onClick={() => setActiveDevice(device)}
-              className={`px-4 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ${
+              className={`px-4 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border flex items-center gap-1.5 ${
                 activeDevice === device
-                  ? "bg-gray-900 text-primary border-gray-900"
-                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                  ? "bg-[#1A1A1A] text-primary border-[#1A1A1A]"
+                  : "bg-white text-gray-800 border-gray-300 hover:border-gray-400"
               }`}
             >
+              {device === "iphone" && <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>}
+              {device === "ipad" && <svg width="14" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>}
+              {device === "desktop" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>}
               {device === "iphone" ? "iPhone" : device === "ipad" ? "iPad" : "Desktop/Laptop"}
             </button>
           ))}
@@ -277,8 +280,6 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-1.5 bg-gray-600 rounded-b-lg"></div>
-                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-700 rounded"></div>
                 </div>
               )}
               <span className="text-[11px] font-bold text-gray-900">{tool.name}</span>
@@ -302,26 +303,26 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
               {section.subtitle}
             </h3>
 
-            {/* Qbanks / Chitras / Flashcards View */}
-            {sectionIndex <= 2 && (
+            {/* Qbanks / Chitras View */}
+            {sectionIndex <= 1 && (
               <div className="mt-6">
                 <div className="flex items-center gap-4 mb-4">
                   <button
                     onClick={() => handleCardPrev(sectionIndex)}
-                    className="w-10 h-10 rounded-full border border-gray-300 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                    className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
                   >
-                    ←
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                   </button>
                   <div ref={cardContainerRefs[sectionIndex]} className="flex gap-4 flex-1 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {section.cards?.map((card, index) => (
                       <div
                         key={index}
-                        className={`flex-shrink-0 w-64 p-4 rounded-xl border ${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-lg" : "border-gray-200"} bg-gray-900 transition-all`}
+                        className={`flex-shrink-0 w-64 p-4 rounded-xl border ${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-lg" : "border-gray-200"} ${sectionIndex === 0 ? "bg-gray-900" : "bg-[#fefce8]"} transition-all`}
                       >
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
+                        <span className={`text-[10px] font-bold ${sectionIndex === 0 ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider block mb-2`}>
                           {card.badge}
                         </span>
-                        <p className="text-[13px] font-semibold text-white leading-relaxed">
+                        <p className={`text-[13px] font-semibold ${sectionIndex === 0 ? "text-white" : "text-black"} leading-relaxed`}>
                           {card.title}
                         </p>
                         {sectionIndex === 0 && (
@@ -341,21 +342,8 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                           </div>
                         )}
                         {sectionIndex === 1 && (
-                          <div className="mt-3 h-28 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500 text-[11px]">
-                            [Chitra Visual]
-                          </div>
-                        )}
-                        {sectionIndex === 2 && (
-                          <div className="mt-3 flex justify-center gap-2">
-                            <button className="px-2 py-1 rounded bg-red-900 text-red-300 text-[10px]">
-                              Hard
-                            </button>
-                            <button className="px-2 py-1 rounded bg-orange-900 text-orange-300 text-[10px]">
-                              Medium
-                            </button>
-                            <button className="px-2 py-1 rounded bg-green-900 text-green-300 text-[10px]">
-                              Easy
-                            </button>
+                          <div className="mt-3 h-28 border border-gray-300 rounded-lg flex items-center justify-center text-gray-400 text-[11px] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-cover opacity-80">
+                            [Chitra Visual Map]
                           </div>
                         )}
                       </div>
@@ -363,9 +351,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                   </div>
                   <button
                     onClick={() => handleCardNext(sectionIndex)}
-                    className="w-10 h-10 rounded-full border border-gray-300 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                    className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
                   >
-                    →
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </button>
                 </div>
                 <div className="max-w-md mx-auto">
@@ -381,6 +369,44 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                     {section.bottomText}
                   </p>
                 )}
+              </div>
+            )}
+
+            {/* Flashcards View */}
+            {sectionIndex === 2 && (
+              <div className="mt-6 flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
+                {/* Question Card */}
+                <div className="flex-1 bg-[#1e293b] rounded-xl p-6 border border-gray-700 flex flex-col items-center justify-center min-h-[200px] relative">
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                    <span className="text-[10px] font-bold text-gray-400 tracking-wider">QUESTION</span>
+                  </div>
+                  <h4 className="text-white font-serif italic text-lg text-center max-w-[80%] leading-snug">What phase of the cell cycle involves DNA replication?</h4>
+                  <p className="absolute bottom-4 text-[10px] text-gray-500">Tap to reveal answer</p>
+                </div>
+                {/* Answer Card */}
+                <div className="flex-1 bg-[#1e293b] rounded-xl p-6 border border-gray-700 flex flex-col items-center justify-center min-h-[200px] relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                    <span className="text-[10px] font-bold text-gray-400 tracking-wider">ANSWER</span>
+                  </div>
+                  <h4 className="text-white font-serif italic text-2xl mb-1">S phase (Synthesis)</h4>
+                  <p className="text-[10px] text-gray-400 mb-6">cell cycle</p>
+                  <div className="flex gap-3 mt-auto mb-2">
+                    <div className="flex flex-col items-center">
+                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-red-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Hard</button>
+                      <span className="text-[9px] text-gray-500">1 day</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-orange-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Medium</button>
+                      <span className="text-[9px] text-gray-500">3 days</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-green-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Easy</button>
+                      <span className="text-[9px] text-gray-500">7 days</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -440,9 +466,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleSubjectPrev}
-                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
                     >
-                      ←
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                     </button>
                     <div ref={subjectContainerRef} className="flex gap-3 flex-1 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       {section.subjects?.map((subject, index) => (
@@ -461,21 +487,22 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                     </div>
                     <button
                       onClick={handleSubjectNext}
-                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
                     >
-                      →
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-start mt-6">
               <button
-                className="px-5 py-2.5 rounded-lg text-[10px] font-bold text-black shadow-md"
+                className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow"
                 style={{ backgroundColor: appTools[sectionIndex].color }}
               >
-                {section.title} details & pricing →
+                <div className="text-[13px] font-bold text-black leading-tight">{section.title}</div>
+                <div className="text-[10px] text-black">details & pricing →</div>
               </button>
             </div>
 
@@ -534,12 +561,13 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                   </div>
                 )}
 
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-start mt-6">
                   <button
-                    className="px-5 py-2.5 rounded-lg text-[10px] font-bold text-black shadow-md"
+                    className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow"
                     style={{ backgroundColor: appTools[sectionIndex].color }}
                   >
-                    {section.title} details & pricing →
+                    <div className="text-[13px] font-bold text-black leading-tight">{section.title}</div>
+                    <div className="text-[10px] text-black">details & pricing →</div>
                   </button>
                 </div>
               </div>

@@ -117,7 +117,10 @@ function PgMedicalEntranceExams() {
           />
         {/* {isUSMLEStep1 || && ( */}
         <>
-          <WhatIsProgram />
+          <CourseDes
+            data={examData?.exams[0]?.description}
+            loading={loading}
+          />  
           <SketchySubjectSection
             subjectData={subjectData}
             loading={loading}
@@ -125,8 +128,7 @@ function PgMedicalEntranceExams() {
           />
           <GalaxyAppSection />
          
-          </>
-           {/* )} */}
+        </>
       {/* SUBJECTS SECTION FOR OTHER EXAMS */}
       {(isUSMLEStep2) && (
         <SketchySubjectSection
@@ -135,11 +137,6 @@ function PgMedicalEntranceExams() {
           examId={id as string}
         />
       )}
-      
-      <CourseDes
-        data={examData?.exams[0]?.description}
-        loading={loading}
-      />  
       
       {/* CONDITIONAL RENDERING BASED ON ROUTE */}
       {isUSMLEStep1 ? (

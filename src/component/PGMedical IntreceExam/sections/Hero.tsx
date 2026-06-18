@@ -124,61 +124,43 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary mb-6">
+            <div className="mb-6">
               <span className="text-primary text-[10px] font-black tracking-[0.15em] uppercase">
-                {examName || "USMLE Step 1"} Preparation
+                USMLE STEP 1 PREPARATION PROGRAM
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-5 ff-font-bold">
+            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-8 ff-font-bold">
               Your success is built on your best choices.
               <br />
               <span className="text-primary">Choose Mendel.</span>
             </h1>
-            <p className="text-base text-[#64748b] max-w-lg mx-auto md:mx-0 mb-8 leading-relaxed ff-font">
-              From self-paced visual app tools to elite 1:1 physician mentorship. All pricing, no secrets.
-            </p>
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto md:mx-0">
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-                <div className="text-primary text-2xl font-black">248</div>
-                <div className="text-gray-400 text-[10px]">Avg mentorship score</div>
-              </div>
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-                <div className="text-primary text-2xl font-black">87%</div>
-                <div className="text-gray-400 text-[10px]">QBank accuracy</div>
-              </div>
-              <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-                <div className="text-primary text-2xl font-black">1,200+</div>
-                <div className="text-gray-400 text-[10px]">Students matched</div>
-              </div>
-            </div>
-            <div className="flex justify-center md:justify-start gap-3.5 flex-wrap mb-8">
+            <div className="flex justify-center md:justify-start gap-3.5 flex-wrap mb-10">
               <button
                 onClick={handleScrollToPricing}
-                className="px-9 py-3.5 rounded-lg bg-primary text-black font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold cursor-pointer"
+                className="px-8 py-3 rounded-md bg-primary text-black font-black text-sm hover:opacity-90 transition-opacity ff-font-bold cursor-pointer"
               >
                 Pricing
               </button>
               <button
-                className="px-9 py-3.5 rounded-lg border border-[#64748b] text-white font-black text-sm tracking-wide hover:bg-white/10 transition-colors ff-font-bold cursor-pointer"
+                className="px-8 py-3 rounded-md border border-white text-white font-black text-sm hover:bg-white/10 transition-colors ff-font-bold cursor-pointer"
               >
                 Explore the Curriculum
               </button>
             </div>
             {/* App Available On */}
             <div className="text-center md:text-left">
-              <p className="text-[#64748b] text-[10px] font-bold tracking-[0.1em] uppercase mb-3 ff-font-bold">
-                App available on
+              <p className="text-primary text-[10px] font-bold tracking-[0.1em] uppercase mb-4 ff-font-bold">
+                APP AVAILABLE ON
               </p>
               <div className="flex justify-center md:justify-start gap-3">
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">📱</span> iPhone
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="10" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> iPhone
                 </div>
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">📱</span> iPad
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> iPad
                 </div>
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">💻</span> Desktop/Laptop
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> Desktop/Laptop
                 </div>
               </div>
             </div>
@@ -248,11 +230,11 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
                 </div>
               </div>
               {/* "See the app in action" Label */}
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-xl shadow-xl whitespace-nowrap">
-  <span className="text-black text-base font-bold">
-    See the app in action ↓
-  </span>
-</div>
+              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-xl whitespace-nowrap">
+                <span className="text-black text-[12px] font-extrabold ff-font-bold">
+                  See the app in action &darr;
+                </span>
+              </div>
             </div>
           </div>
         </div>

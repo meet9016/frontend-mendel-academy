@@ -35,19 +35,22 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
       <div className="max-w-6xl mx-auto">
         {/* Mentoring Section */}
         <div className="mb-16">
-          <div className="bg-gray-900 rounded-2xl p-8 border-4 border-primary">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-gray-900 text-2xl flex-shrink-0">
-                👨‍⚕️
+          <div className="bg-gray-900 rounded-2xl p-10 border-4 border-primary">
+            <div className="flex flex-col items-center text-center gap-6">
+              <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-gray-900 text-3xl flex-shrink-0">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-xl font-black text-white mb-2">
+              <div className="flex-1">
+                <h3 className="text-2xl font-black text-white mb-3">
                   Designer Customized 1:1 Mentoring
                 </h3>
-                <p className="text-sm text-gray-400 mb-4">
-                  For the student who requires a high performance roadmap tailored to personal clinical strengths and weaknesses.
+                <p className="text-sm text-gray-500 mb-6 max-w-xl mx-auto leading-relaxed">
+                  For the student who requires a high-performance roadmap tailored to personal clinical strengths and weaknesses.
                 </p>
-                <button className="px-6 py-2.5 bg-primary text-black font-black text-xs uppercase tracking-wide rounded cursor-pointer hover:opacity-90 transition-opacity">
+                <button className="px-10 py-3.5 bg-primary text-black font-black text-sm uppercase tracking-wide rounded-lg cursor-pointer hover:opacity-90 transition-opacity">
                   Contact us for details
                 </button>
               </div>

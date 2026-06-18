@@ -22,6 +22,34 @@ interface USMLEPlanProps {
   onUpdateCart: () => void;
 }
 
+const NextArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <button
+      onClick={onClick}
+      className="absolute right-[-14px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer shadow-md hover:opacity-90 transition-opacity border-none"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <button
+      onClick={onClick}
+      className="absolute left-[-14px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer shadow-md hover:opacity-90 transition-opacity border-none"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+  );
+};
+
 const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart }: USMLEPlanProps) => {
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
   const [selectedRapidTool, setSelectedRapidTool] = useState<RapidTool | null>(null);
@@ -65,16 +93,18 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
   const plans = [
     { plan_type: "ESSENTIAL", plan_month: 1, price: 309, plan_title: "Intensive polish for the last 30 days of prep.", most_popular: false },
     { plan_type: "STANDARD", plan_month: 3, price: 429, plan_title: "Mastery of core organ systems.", most_popular: false },
-    { plan_type: "SILVER", plan_month: 6, price: 499, plan_title: "Support through clinical clerkships.", most_popular: false },
-    { plan_type: "GOLD", plan_month: 12, price: 699, plan_title: "Full 360-day foundation for board success.", most_popular: true },
-    { plan_type: "PLATINUM", plan_month: 24, price: 999, plan_title: "Support from Day 1 of Med School.", most_popular: false },
+    { plan_type: "SILVER", plan_month: 6, price: 449, plan_title: "Support through clinical clerkships.", most_popular: false },
+    { plan_type: "GOLD", plan_month: 12, price: 499, plan_title: "Full 365-day foundation for board success.", most_popular: true },
+    { plan_type: "PLATINUM", plan_month: 24, price: 699, plan_title: "Support from Day 1 of Med School.", most_popular: false },
   ];
 
   const rapidTools = [
-    { tool_type: "Rapid Recall", price: 16.99 },
-    { tool_type: "Fast Facts", price: 16.99 },
-    { tool_type: "Mendel Study Notes", price: 25.00 },
     { tool_type: "Mendel Chitras", price: 16.99 },
+    { tool_type: "Mendel Flashcards", price: 16.99 },
+    { tool_type: "Recorded Lectures", price: 16.99 },
+    { tool_type: "Mendel Qbanks", price: 16.99 },
+    { tool_type: "Mendel Qbanks", price: 16.99 },
+    { tool_type: "Mendel Qbanks", price: 16.99 },
   ];
 
   return (
@@ -89,137 +119,146 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
             <p className="text-sm text-gray-600 ff-font">Your complete USMLE Step 1 prep, in one app.</p>
           </div>
 
-          {/* Everything Included */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gray-900 rounded-2xl p-6 md:p-7 mb-8"
-          >
-            <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-primary mb-4 text-center">
-              Everything included in every plan
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-              {[
-                "5,500+ High-Yield Questions",
-                "Mendel Chitras (Visual Memory)",
-                "Mendel Flashcards",
-                "6 Full-Length Grand Tests",
-                "Mendel Study Notes",
-                "Rapid Recall",
-              ].map((feature, index) => (
-                <div key={index} className="flex items-center gap-2 text-[13px] text-gray-300 ff-font">
-                  <div className="w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 6l3 3 5-5" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
-                  {feature}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Plans */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {plans.map((plan, index) => {
-              const currencySymbol = userCurrency === "INR" ? "₹" : "$";
-              const isSelected = cartItems.some(item =>
-                item.cart_type === "exam_plan" &&
-                item.plan_id?.plan_type === plan.plan_type
-              );
-              const isLoading = false;
-
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] border border-gray-200 ${
-                    plan.most_popular ? "border-primary shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative" : ""
-                  }`}
-                >
-                  {plan.most_popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-black text-[9px] font-black px-3.5 py-1 rounded-full tracking-[0.08em] whitespace-nowrap">
-                        POPULAR
-                      </span>
+          <div className="bg-[#FAF9F6] border border-gray-200 rounded-[32px] p-6 sm:p-10 shadow-sm">
+            {/* Everything Included */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-[#1c1c1c] rounded-2xl p-6 md:p-8 mb-10"
+            >
+              <p className="text-[14px] font-black tracking-[0.05em] uppercase text-primary mb-2 text-center ff-font-bold">
+                EVERYTHING INCLUDED IN EVERY PLAN
+              </p>
+              <p className="text-[13px] text-white text-center mb-8 ff-font">
+                Every Mendel plan includes all six core study tools.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 max-w-[700px] mx-auto pl-4">
+                {[
+                  "5,500+ High-Yield Questions",
+                  "6 Full-Length Grand Tests",
+                  "Mendel Chitras (Visual Memory)",
+                  "Mendel Flashcards",
+                  "Rapid Recall",
+                  "The Mendel Study Notes",
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-center gap-3 text-[13px] text-gray-100 ff-font font-medium">
+                    <div className="w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                        <path d="M3 6.5l2 2 4-4" stroke="#1A1A1A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </div>
-                  )}
-                  <p className="text-[10px] font-extrabold tracking-[0.12em] text-primary uppercase mb-2.5">{plan.plan_type}</p>
-                  <p className="text-xl font-black text-gray-900 mb-1.5 ff-font-bold">
-                    {plan.plan_month} Month{plan.plan_month > 1 ? "s" : ""}
-                  </p>
-                  <p className="text-3xl font-black text-primary leading-none mb-1 ff-font-bold">
-                    {currencySymbol}{plan.price}
-                  </p>
-                  <p className="text-[11px] text-gray-500 mb-4 mt-4 ff-font">{plan.plan_title}</p>
-                  <div className="flex-grow"></div>
-                  <button
-                    onClick={() => {}}
-                    disabled={isLoading || isSelected}
-                    className={`w-full py-2.5 rounded-lg text-xs font-extrabold transition-all duration-150 border-none cursor-pointer ${
-                      plan.most_popular ? "bg-gray-900 text-primary hover:opacity-85" : "bg-primary text-black hover:bg-opacity-90"
+                    {feature}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Plans */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {plans.map((plan, index) => {
+                const currencySymbol = userCurrency === "INR" ? "₹" : "$";
+                const isSelected = cartItems.some(item =>
+                  item.cart_type === "exam_plan" &&
+                  item.plan_id?.plan_type === plan.plan_type
+                );
+                const isLoading = false;
+
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className={`bg-white rounded-2xl p-5 md:p-6 flex flex-col text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg min-h-[250px] border border-gray-200 ${
+                      plan.most_popular ? "border-primary shadow-[0_8px_32px_rgba(245,200,0,0.18)] relative" : ""
                     }`}
                   >
-                    {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
-                  </button>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Rapid Learning Tools */}
-          <div className="mt-16">
-            <div className="text-center mb-8">
-              <h2 className="text-[30px] font-black text-gray-900 mb-2 ff-font-bold">
-                Rapid Learning Tools
-              </h2>
+                    {plan.most_popular && (
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-primary text-black text-[9px] font-black px-3.5 py-1 rounded-full tracking-[0.08em] whitespace-nowrap">
+                          POPULAR
+                        </span>
+                      </div>
+                    )}
+                    <p className="text-[10px] font-extrabold tracking-[0.12em] text-primary uppercase mb-2.5">{plan.plan_type}</p>
+                    <p className="text-[17px] font-black text-gray-900 mb-1.5 ff-font-bold">
+                      {plan.plan_month} Month{plan.plan_month > 1 ? "s" : ""}
+                    </p>
+                    <p className="text-[28px] font-black text-primary leading-none mb-1 ff-font-bold">
+                      {currencySymbol}{plan.price}
+                    </p>
+                    <p className="text-[10px] text-gray-500 mb-4 mt-3 ff-font px-2">{plan.plan_title}</p>
+                    <div className="flex-grow"></div>
+                    <button
+                      onClick={() => {}}
+                      disabled={isLoading || isSelected}
+                      className={`w-full py-2 rounded-md text-[11px] font-extrabold transition-all duration-150 border-none cursor-pointer ${
+                        plan.most_popular ? "bg-[#1c1c1c] text-primary hover:opacity-85" : "bg-primary text-gray-900 hover:bg-opacity-90"
+                      }`}
+                    >
+                      {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
+                    </button>
+                  </motion.div>
+                );
+              })}
             </div>
 
-            <div className="bg-gray-900 rounded-2xl p-8">
-              <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-primary mb-4 text-center">
-                Available as individual add-ons
-              </p>
-              <p className="text-sm text-gray-300 text-center mb-8 ff-font">
-                Already have a plan? Add specialty tools by subject · $16.99/month each.
-              </p>
+            {/* Rapid Learning Tools */}
+            <div className="mt-16">
+              <div className="text-center mb-6">
+                <h2 className="text-[24px] font-black text-gray-900 mb-2 ff-font-bold">
+                  Rapid Learning Tools
+                </h2>
+              </div>
 
-              <div className="relative px-10">
-                <Sliders
-                  settings={{
-                    accessibility: true,
-                    infinite: true,
-                    speed: 500,
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: true,
-                  }}
-                >
-                  {rapidTools.map((tool, index) => (
-                    <div key={index} className="p-4">
-                      <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <h3 className="text-lg font-bold text-gray-900 mb-2 ff-font-bold">{tool.tool_type}</h3>
-                        <p className="text-3xl font-black text-gray-900 mb-4 ff-font-bold">
-                          ${tool.price.toFixed(2)}
-                        </p>
-                        <p className="text-xs text-gray-500 mb-6 ff-font">
-                          per subject / month
-                        </p>
-                        <button
-                          className="w-full py-2.5 rounded-lg bg-primary text-black text-xs font-bold cursor-pointer"
-                        >
-                          Enroll Now
-                        </button>
+              <div className="bg-[#1c1c1c] rounded-2xl p-8">
+                <p className="text-[12px] font-black tracking-[0.05em] uppercase text-primary mb-3 text-center ff-font-bold">
+                  AVAILABLE AS INDIVIDUAL ADD-ONS
+                </p>
+                <p className="text-[13px] text-white text-center mb-8 ff-font">
+                  Already have a plan? Add specialty tools by subject — $16.99/month each.
+                </p>
+
+                <div className="relative px-3">
+                  <Sliders
+                    settings={{
+                      accessibility: true,
+                      infinite: true,
+                      speed: 500,
+                      slidesToShow: 4,
+                      slidesToScroll: 1,
+                      autoplay: true,
+                      autoplaySpeed: 3000,
+                      arrows: true,
+                      nextArrow: <NextArrow />,
+                      prevArrow: <PrevArrow />,
+                    }}
+                  >
+                    {rapidTools.map((tool, index) => (
+                      <div key={index} className="px-2">
+                        <div className="bg-white rounded-xl p-5 flex flex-col text-left h-[170px] justify-between">
+                          <h3 className="text-[13px] font-bold text-gray-900 mb-2 ff-font-bold leading-tight pr-4">{tool.tool_type}</h3>
+                          <div>
+                            <p className="text-[22px] font-black text-gray-900 mb-0.5 ff-font-bold">
+                              $ {tool.price.toFixed(2)}
+                            </p>
+                            <p className="text-[9px] text-gray-500 mb-4 ff-font">
+                              per subject / month
+                            </p>
+                            <button
+                              className="w-full py-2 rounded text-gray-900 bg-primary text-[11px] font-bold cursor-pointer"
+                            >
+                              Enroll Now
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </Sliders>
+                    ))}
+                  </Sliders>
+                </div>
               </div>
             </div>
           </div>
@@ -240,18 +279,21 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
 
           {/* See Our Teaching Style */}
           <div className="mb-10">
-            <div className="bg-primary/10 border-2 border-primary rounded-2xl p-4 text-center">
-              <p className="text-sm font-bold text-gray-900 ff-font-bold">
+            <div className="bg-[#FFF7D6] border-2 border-primary rounded-2xl p-6 text-center">
+              <p className="text-base font-black text-gray-900 mb-2 ff-font-bold">
                 See our teaching style
               </p>
-              <p className="text-xs text-gray-600 mt-1 ff-font">
-                These sample lectures give you how Dr. teaches. Virtual group and 1:1 classes follow the same concept-first, visual approach.
+              <p className="text-sm text-gray-600 max-w-2xl mx-auto ff-font">
+                These sample lectures give you a feel for how Dr. Managoli teaches. Virtual group and 1:1 classes follow the same concept-first, visual approach.
               </p>
             </div>
           </div>
 
           {/* Sample Recorded Lectures */}
           <div className="mb-12">
+            <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-gray-500 mb-6 ff-font-bold">
+              Sample recorded lectures
+            </p>
             <Sliders
               settings={{
                 dots: false,
@@ -262,18 +304,40 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                 arrows: true,
               }}
             >
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-4">
-                  <div className="bg-gray-900 rounded-2xl overflow-hidden aspect-video flex items-center justify-center relative">
-                    <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                      <img src="/images/main logo.png" alt="Lecture" className="h-20 object-contain opacity-50" />
+              {[
+                { title: "Heart Failure: Compensation Mechanisms", stripL: "MCQ of", stripR: "- Kidney" },
+                { title: "Arrhythmias: AFib vs Flutter", stripL: "MCQ of", stripR: "- Kidney" },
+                { title: "Valvular Disease: Aortic Stenosis", stripL: "Hematology | Ac", stripR: "oblastic Leukemia" },
+              ].map((item, i) => (
+                <div key={i} className="p-3">
+                  <div className="bg-[#d4d4d4] rounded-t-xl overflow-hidden aspect-[16/9] flex flex-col relative border border-gray-400 border-b-0">
+                    <div className="flex-[1.2] flex items-center justify-center pt-2 relative z-0">
+                      <img src="/images/main logo.png" alt="Lecture" className="h-10 object-contain opacity-80" />
                     </div>
-                    <button className="relative z-10 w-16 h-16 rounded-full bg-primary flex items-center justify-center text-black">
-                      <FaPlay size={24} className="ml-1" />
-                    </button>
+                    <div className="w-full h-7 bg-[#1A1A1A] flex items-center justify-between px-6 relative z-10">
+                      <p className="text-white text-[10px] ff-font truncate max-w-[40%]">{item.stripL}</p>
+                      <button className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#F5C800] flex items-center justify-center shadow-lg z-20 hover:scale-105 transition-transform border border-yellow-400">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="black" className="ml-1">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </button>
+                      <p className="text-white text-[10px] ff-font truncate text-right max-w-[40%]">{item.stripR}</p>
+                    </div>
+                    <div className="flex-[1.5] flex items-center justify-center gap-3 bg-[#b5b5b5] relative z-0">
+                      <div className="w-10 h-10 bg-gray-600 rounded flex flex-shrink-0 items-center justify-center overflow-hidden shadow-sm">
+                        <img src="/images/main logo.png" alt="Profile" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-gray-900 text-[11px] font-black ff-font-bold">Dr. Kishore Managoli, MD</p>
+                        <p className="text-gray-800 text-[9px] font-bold ff-font">Founder & CEO</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-2 text-center">
-                    <p className="text-xs font-bold text-gray-500 uppercase">CARDIOLOGY</p>
+                  <div className="bg-[#1c1c1c] rounded-b-xl p-4">
+                    <p className="text-[9px] font-bold text-gray-500 uppercase mb-1.5 ff-font-bold">CARDIOLOGY</p>
+                    <p className="text-[13px] font-bold text-white ff-font-bold leading-snug">
+                      {item.title}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -281,41 +345,48 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           </div>
 
           {/* Individual Courses */}
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-8">
-            <div className="bg-gray-900 p-4 md:px-6">
-              <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-primary">Course</p>
-              <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-primary text-right -mt-5">Price</p>
+          <div className="mb-12">
+            <div className="bg-[#1A1A1A] px-4 md:px-8 py-4 grid grid-cols-[1fr_auto_1fr] items-center rounded-t-md gap-4">
+              <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-primary">COURSE</p>
+              <p className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-primary text-center w-28 mx-auto">PRICE</p>
+              <div></div>
             </div>
             {[
-              { name: "USMLE Step 1", price: 1199 },
-              { name: "USMLE Step 2 CK", price: 1499, popular: true },
-              { name: "USMLE Step 3", price: 899 },
-              { name: "COMLEX 1", price: 1199 },
-              { name: "Shelf Exams", price: 299, perExam: true },
-            ].map((course, index) => (
+              { name: "USMLE Step 1", price: "1,199" },
+              { name: "USMLE Step 2 CK", price: "1,499", popular: true },
+              { name: "USMLE Step 3", price: "899" },
+              { name: "COMLEX 1", price: "1,199" },
+              { name: "Shelf Exams", price: "299", perExam: true },
+            ].map((course, index, arr) => (
               <div
                 key={index}
-                className={`flex items-center p-4 md:px-6 gap-4 transition-colors duration-150 hover:bg-yellow-50 border-b border-gray-100 last:border-b-0 ${
-                  course.popular ? "bg-yellow-50" : ""
+                className={`px-4 md:px-8 py-5 grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-gray-200 ${
+                  index === arr.length - 1 ? 'border-b-2' : ''
+                } ${
+                  course.popular ? "bg-[#FFF9E6]" : "bg-white"
                 }`}
               >
-                <div className="flex-grow">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-extrabold text-gray-900 ff-font-bold">{course.name}</p>
-                    {course.popular && (
-                      <span className="px-2 py-0.5 bg-primary text-black text-[10px] font-bold rounded-full">POPULAR</span>
-                    )}
-                  </div>
-                  {course.perExam && <p className="text-xs text-gray-500 ff-font">per exam</p>}
+                <div className="flex items-center gap-3">
+                  <p className="text-base font-black text-gray-900 ff-font-bold">{course.name}</p>
+                  {course.popular && (
+                    <span className="px-2.5 py-0.5 bg-primary text-black text-[10px] font-bold rounded-full ff-font-bold">POPULAR</span>
+                  )}
                 </div>
-                <p className="text-lg font-black text-gray-900 flex-shrink-0 min-w-[100px] text-right ff-font-bold">
-                  ${course.price}
-                </p>
-                <button
-                  className="px-6 py-2 rounded-lg bg-primary text-black text-xs font-extrabold cursor-pointer"
-                >
-                  Enroll
-                </button>
+                <div className="flex items-baseline gap-1 justify-start whitespace-nowrap w-28 mx-auto">
+                  <p className="text-xl font-black text-gray-900 ff-font-bold">
+                    ${course.price}
+                  </p>
+                  {course.perExam && <p className="text-[11px] text-gray-500 ff-font">/exam</p>}
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    className={`px-6 py-2 rounded text-[11px] font-bold cursor-pointer w-[88px] text-center shadow-sm ${
+                      course.popular ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-[#F5C800] text-gray-900 hover:opacity-90"
+                    }`}
+                  >
+                    Enroll
+                  </button>
+                </div>
               </div>
             ))}
           </div>
