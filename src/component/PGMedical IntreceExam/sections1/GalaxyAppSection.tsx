@@ -5,12 +5,89 @@ import React, { useState, useRef } from "react";
 interface GalaxyAppSectionProps {}
 
 const appTools = [
-  { name: "Mendel Qbanks", color: "#FFCA00", price: "$99", icon: "📝" },
-  { name: "Mendel Chitras", color: "#10B981", price: "$79", icon: "🎨" },
-  { name: "Mendel Flashcards", color: "#8B5CF6", price: "$49", icon: "🃏" },
-  { name: "Mendel Study Notes", color: "#EC4899", price: "$59", icon: "📓" },
-  { name: "Rapid Recall", color: "#3B82F6", price: "$39", icon: "⚡" },
-  { name: "Fast Facts", color: "#F59E0B", price: "$29", icon: "📌" },
+  {
+    name: "Mendel Qbanks",
+    color: "#FFCA00",
+    bg: "#fffbeb",
+    price: "$16.99/mo",
+    desc: "5,500+ exam-style questions with detailed explanations",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFCA00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+      </svg>
+    ),
+  },
+  {
+    name: "Mendel Chitras",
+    color: "#10B981",
+    bg: "#ecfdf5",
+    price: "$16.99/mo",
+    desc: "Visual memory maps that replace 10 pages of notes",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+        <line x1="9" y1="9" x2="9.01" y2="9" />
+        <line x1="15" y1="9" x2="15.01" y2="9" />
+      </svg>
+    ),
+  },
+  {
+    name: "Mendel Flashcards",
+    color: "#8B5CF6",
+    bg: "#f5f3ff",
+    price: "$16.99/mo",
+    desc: "Spaced repetition system built for USMLE mastery",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <path d="M16 2l-4 3-4-3" />
+      </svg>
+    ),
+  },
+  {
+    name: "Mendel Study Notes",
+    color: "#EC4899",
+    bg: "#fdf2f8",
+    price: "$25/mo",
+    desc: "Deep-dive write-ups with flowcharts and clinical visuals",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+      </svg>
+    ),
+  },
+  {
+    name: "Rapid Recall",
+    color: "#3B82F6",
+    bg: "#eff6ff",
+    price: "$16.99/mo",
+    desc: "Condensed last-minute review sheets per subject",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+    ),
+  },
+  {
+    name: "Fast Facts",
+    color: "#F59E0B",
+    bg: "#fffbeb",
+    price: "$16.99/mo",
+    desc: "High-yield mnemonics and key facts for rapid review",
+    svg: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+    ),
+  },
 ];
 
 const toolSections = [
@@ -167,7 +244,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
 
   return (
     <section className="py-16 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-[960px] mx-auto">
         {/* Header: Here's what you get */}
         <div className="text-center mb-12">
           <p className="text-[10px] font-black tracking-[0.15em] uppercase text-primary mb-2">
@@ -177,118 +254,184 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
             Here's what you get
           </h2>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Six high-yield study tools built for USMLE Step 1 — Mendel Qbanks, Chitras, Mendel Flashcards,
-            Mendel Study Notes, Rapid Recall, and Fast Facts. Click any tool below to explore details & pricing.
+            Six high-yield study tools built for USMLE Step 1 — included in every plan or available individually.
           </p>
         </div>
 
         {/* Device Tabs */}
         <div className="flex justify-center gap-2 mb-10">
-          {["iphone", "ipad", "desktop"].map((device) => (
+          {[
+            { key: "iphone", label: "iPhone" },
+            { key: "ipad", label: "iPad" },
+            { key: "desktop", label: "Desktop / Laptop" },
+          ].map((d) => (
             <button
-              key={device}
-              onClick={() => setActiveDevice(device)}
-              className={`px-4 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border flex items-center gap-1.5 ${
-                activeDevice === device
+              key={d.key}
+              onClick={() => setActiveDevice(d.key)}
+              className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ${
+                activeDevice === d.key
                   ? "bg-[#1A1A1A] text-primary border-[#1A1A1A]"
-                  : "bg-white text-gray-800 border-gray-300 hover:border-gray-400"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
               }`}
             >
-              {device === "iphone" && <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>}
-              {device === "ipad" && <svg width="14" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>}
-              {device === "desktop" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>}
-              {device === "iphone" ? "iPhone" : device === "ipad" ? "iPad" : "Desktop/Laptop"}
+              {d.label}
             </button>
           ))}
         </div>
 
-        {/* 6 Device Frames Row */}
-        <div className="flex justify-center gap-6 mb-12 overflow-x-auto">
+        {/* Device Frames Row */}
+        <div className="flex justify-center gap-5 mb-16 overflow-x-auto pb-2">
           {appTools.map((tool, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center gap-3 cursor-pointer"
-            >
-              {/* Device Frame based on activeDevice - Reduced size! */}
+            <div key={index} className="flex flex-col items-center gap-3 flex-shrink-0">
+
+              {/* === iPhone === */}
               {activeDevice === "iphone" && (
-                <div className="relative">
-                  <div className="w-28 h-[300px] bg-gray-900 border-6 border-gray-700 rounded-[2.5rem] p-1 shadow-xl">
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-full"></div>
-                    <div className="w-full h-full bg-gray-800 rounded-[2rem] overflow-hidden flex flex-col items-center justify-center gap-2">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white text-2xl"
-                        style={{ backgroundColor: tool.color }}
-                      >
-                        ▶
-                      </div>
-                      <span className="text-[10px] font-bold" style={{ color: tool.color }}>
-                        {tool.name}
-                      </span>
-                      <button
-                        className="mt-2 px-3 py-1 rounded-full text-[8px] font-bold text-black border-2"
-                        style={{ backgroundColor: tool.color, borderColor: tool.color }}
-                      >
-                        TAP TO EXPLORE
-                      </button>
+                <div className="relative w-[88px] h-[188px]">
+                  {/* Outer frame */}
+                  <div className="absolute inset-0 bg-[#1c1c1e] rounded-[22px] shadow-xl" />
+                  {/* Side buttons */}
+                  <div className="absolute left-[-3px] top-10 w-[3px] h-6 bg-[#3a3a3c] rounded-l" />
+                  <div className="absolute left-[-3px] top-[68px] w-[3px] h-5 bg-[#3a3a3c] rounded-l" />
+                  <div className="absolute right-[-3px] top-12 w-[3px] h-8 bg-[#3a3a3c] rounded-r" />
+                  {/* Screen */}
+                  <div className="absolute inset-[4px] bg-[#0a0a0a] rounded-[19px] overflow-hidden flex flex-col">
+                    {/* Notch */}
+                    <div className="flex justify-center pt-1 pb-0.5">
+                      <div className="w-10 h-[5px] bg-[#1c1c1e] rounded-full" />
                     </div>
-                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16 h-0.5 bg-gray-600 rounded-full"></div>
+                    {/* Status bar */}
+                    <div className="flex justify-between px-2 pb-1">
+                      <span className="text-[5px] text-gray-400 font-bold">9:41</span>
+                      <div className="flex gap-0.5 items-center">
+                        <div className="w-2 h-1 bg-gray-400 rounded-sm" />
+                        <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                      </div>
+                    </div>
+                    {/* App content */}
+                    <div className="flex-1 flex flex-col px-2 pb-2">
+                      {/* Header accent */}
+                      <div className="h-1 w-full rounded-full mb-2" style={{ backgroundColor: tool.color }} />
+                      <div className="w-5 h-5 rounded-md flex items-center justify-center mb-1" style={{ backgroundColor: tool.bg }}>
+                        <div style={{ transform: "scale(0.6)" }}>{tool.svg}</div>
+                      </div>
+                      <p className="text-[6px] font-black text-white leading-tight mb-1">{tool.name}</p>
+                      {/* Mini content lines */}
+                      <div className="space-y-1">
+                        <div className="h-[3px] bg-gray-700 rounded-full w-full" />
+                        <div className="h-[3px] bg-gray-700 rounded-full w-3/4" />
+                        <div className="h-[3px] bg-gray-700 rounded-full w-5/6" />
+                      </div>
+                      {/* Mini price badge */}
+                      <div className="mt-auto">
+                        <div className="px-1.5 py-0.5 rounded-full text-[5px] font-bold text-black inline-block" style={{ backgroundColor: tool.color }}>
+                          {tool.price}
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                  {/* Home bar */}
+                  <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-gray-600 rounded-full" />
                 </div>
               )}
+
+              {/* === iPad === */}
               {activeDevice === "ipad" && (
-                <div className="relative">
-                  <div className="w-36 h-[260px] bg-gray-900 border-6 border-gray-700 rounded-[1.5rem] p-1 shadow-xl">
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-gray-700 rounded-full"></div>
-                    <div className="w-full h-full bg-gray-800 rounded-[1.2rem] overflow-hidden flex flex-col items-center justify-center gap-2">
-                      <div
-                        className="w-14 h-14 rounded-full flex items-center justify-center text-white text-3xl"
-                        style={{ backgroundColor: tool.color }}
-                      >
-                        ▶
+                <div className="relative w-[130px] h-[170px]">
+                  {/* Outer frame */}
+                  <div className="absolute inset-0 bg-[#1c1c1e] rounded-[16px] shadow-xl" />
+                  {/* Camera dot */}
+                  <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#3a3a3c] rounded-full" />
+                  {/* Screen */}
+                  <div className="absolute inset-[5px] bg-[#0a0a0a] rounded-[12px] overflow-hidden flex flex-col">
+                    {/* Top bar */}
+                    <div className="flex justify-between items-center px-2 py-1.5 border-b border-gray-800">
+                      <p className="text-[6px] font-black text-white">{tool.name}</p>
+                      <div className="w-4 h-[3px] bg-gray-600 rounded-full" />
+                    </div>
+                    {/* Sidebar + main */}
+                    <div className="flex flex-1 overflow-hidden">
+                      {/* Sidebar */}
+                      <div className="w-[30px] border-r border-gray-800 flex flex-col gap-1 p-1 pt-1.5">
+                        {[0,1,2,3].map((i) => (
+                          <div key={i} className="h-3 rounded flex items-center justify-center" style={{ backgroundColor: i === 0 ? tool.bg : "transparent" }}>
+                            <div className="w-2 h-[2px] rounded" style={{ backgroundColor: i === 0 ? tool.color : "#4b5563" }} />
+                          </div>
+                        ))}
                       </div>
-                      <span className="text-[11px] font-bold" style={{ color: tool.color }}>
-                        {tool.name}
-                      </span>
-                      <button
-                        className="mt-2 px-3 py-1 rounded-full text-[8px] font-bold text-black border-2"
-                        style={{ backgroundColor: tool.color, borderColor: tool.color }}
-                      >
-                        TAP TO EXPLORE
-                      </button>
+                      {/* Main content */}
+                      <div className="flex-1 p-1.5 space-y-1">
+                        <div className="h-1 w-full rounded" style={{ backgroundColor: tool.color, opacity: 0.3 }} />
+                        <div className="h-[3px] bg-gray-700 rounded w-full" />
+                        <div className="h-[3px] bg-gray-700 rounded w-4/5" />
+                        <div className="h-[3px] bg-gray-700 rounded w-3/4" />
+                        <div className="h-[3px] bg-gray-700 rounded w-full" />
+                        <div className="h-[3px] bg-gray-700 rounded w-2/3" />
+                      </div>
+                    </div>
+                    {/* Bottom bar */}
+                    <div className="px-2 py-1 flex justify-end">
+                      <div className="px-2 py-0.5 rounded text-[5px] font-bold text-black" style={{ backgroundColor: tool.color }}>Explore</div>
                     </div>
                   </div>
                 </div>
               )}
+
+              {/* === Desktop / Laptop === */}
               {activeDevice === "desktop" && (
-                <div className="relative">
-                  <div className="w-40 h-[160px] bg-gray-900 border-6 border-gray-700 rounded-lg p-1 shadow-xl">
-                    <div className="w-full h-full bg-gray-800 rounded-md overflow-hidden flex flex-col items-center justify-center gap-2">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white text-2xl"
-                        style={{ backgroundColor: tool.color }}
-                      >
-                        ▶
+                <div className="flex flex-col items-center">
+                  {/* Monitor */}
+                  <div className="relative w-[152px] h-[100px]">
+                    <div className="absolute inset-0 bg-[#1c1c1e] rounded-[8px] shadow-xl" />
+                    {/* Screen bezel */}
+                    <div className="absolute inset-[4px] bg-[#0a0a0a] rounded-[5px] overflow-hidden flex flex-col">
+                      {/* Browser bar */}
+                      <div className="flex items-center gap-1 px-2 py-1 bg-[#1c1c1e] border-b border-gray-800">
+                        <div className="flex gap-0.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                        </div>
+                        <div className="flex-1 h-2 rounded bg-gray-800 mx-1" />
                       </div>
-                      <span className="text-[10px] font-bold" style={{ color: tool.color }}>
-                        {tool.name}
-                      </span>
-                      <button
-                        className="mt-2 px-3 py-1 rounded-full text-[8px] font-bold text-black border-2"
-                        style={{ backgroundColor: tool.color, borderColor: tool.color }}
-                      >
-                        TAP TO EXPLORE
-                      </button>
+                      {/* Page content */}
+                      <div className="flex flex-1 overflow-hidden">
+                        {/* Left sidebar */}
+                        <div className="w-[28px] border-r border-gray-800 p-1 flex flex-col gap-1">
+                          <div className="h-2 rounded" style={{ backgroundColor: tool.bg }}>
+                            <div className="h-full w-full rounded flex items-center justify-center">
+                              <div style={{ transform: "scale(0.3)" }}>{tool.svg}</div>
+                            </div>
+                          </div>
+                          {[0,1,2].map(i => <div key={i} className="h-1.5 bg-gray-800 rounded" />)}
+                        </div>
+                        {/* Main area */}
+                        <div className="flex-1 p-1.5">
+                          <div className="flex items-center gap-1 mb-1">
+                            <div className="w-3 h-1.5 rounded" style={{ backgroundColor: tool.color }} />
+                            <p className="text-[5px] font-bold text-white truncate">{tool.name}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <div className="h-[2.5px] bg-gray-700 rounded w-full" />
+                            <div className="h-[2.5px] bg-gray-700 rounded w-4/5" />
+                            <div className="h-[2.5px] bg-gray-700 rounded w-3/4" />
+                            <div className="h-[2.5px] bg-gray-700 rounded w-full" />
+                          </div>
+                          <div className="mt-1.5">
+                            <div className="px-1.5 py-[2px] rounded text-[4px] font-bold text-black inline-block" style={{ backgroundColor: tool.color }}>Explore →</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {/* Stand */}
+                  <div className="w-8 h-2 bg-[#2c2c2e] rounded-b" />
+                  <div className="w-16 h-1 bg-[#1c1c1e] rounded" />
                 </div>
               )}
-              <span className="text-[11px] font-bold text-gray-900">{tool.name}</span>
-              <button
-                className="px-4 py-1.5 rounded-xl text-[9px] font-bold text-black shadow-md"
-                style={{ backgroundColor: tool.color }}
-              >
-                Details & pricing →
-              </button>
+
+              {/* Label + Price below */}
+              <p className="text-[11px] font-bold text-gray-900 text-center">{tool.name}</p>
+              <span className="text-[10px] font-extrabold" style={{ color: tool.color }}>{tool.price}</span>
             </div>
           ))}
         </div>
