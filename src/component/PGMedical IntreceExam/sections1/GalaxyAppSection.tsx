@@ -265,19 +265,20 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
         {/* Device Tabs */}
         <div className="flex justify-center gap-2 mb-10">
           {[
-            { key: "iphone", label: "iPhone" },
-            { key: "ipad", label: "iPad" },
-            { key: "desktop", label: "Desktop / Laptop" },
+            { key: "iphone", label: "iPhone", icon: "📱" },
+            { key: "ipad", label: "iPad", icon: "📲" },
+            { key: "desktop", label: "Desktop/Laptop", icon: "💻" },
           ].map((d) => (
             <button
               key={d.key}
               onClick={() => setActiveDevice(d.key)}
-              className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ff-font-bold ${
+              className={`px-4 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ff-font-bold flex items-center gap-2 ${
                 activeDevice === d.key
                   ? "bg-[#1A1A1A] text-primary border-[#1A1A1A]"
                   : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
               }`}
             >
+              <span>{d.icon}</span>
               {d.label}
             </button>
           ))}
