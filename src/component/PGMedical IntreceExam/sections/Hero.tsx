@@ -121,15 +121,15 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
   if (isUSMLEStep1) {
     return (
       <section className="bg-gray-900 py-12 px-6 border-b-4 border-primary">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
           {/* Left Content */}
-          <div className="text-center md:text-left">
+          <div className="text-center md:text-left md:col-span-3">
             <div className="mb-6">
               <span className="text-primary text-[10px] font-black tracking-[0.15em] uppercase">
                 USMLE STEP 1 PREPARATION PROGRAM
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-8 ff-font-bold">
+            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-8 ff-font-bold">
               Your success is built on your best choices.
               <br />
               <span className="text-primary">Choose Mendel.</span>
@@ -166,72 +166,75 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
             </div>
           </div>
           {/* Right Phone Mockup */}
-          <div className="flex justify-center">
+          <div className="flex justify-center md:col-span-2">
             <div className="relative">
               {/* Phone Frame */}
-              <div className="w-52 h-[420px] bg-gray-900 border-8 border-gray-200 rounded-[2.5rem] p-1.5 relative shadow-2xl">
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-gray-900 rounded-full"></div>
-                <div className="w-full h-full bg-gray-800 rounded-[2rem] overflow-hidden flex flex-col">
+              <div className="w-[280px] h-[540px] bg-[#222] border-[12px] border-[#333] rounded-[3rem] p-1.5 relative shadow-2xl">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#333] rounded-full z-10"></div>
+                <div className="w-full h-full bg-[#111111] rounded-[2.2rem] overflow-hidden flex flex-col relative scrollbar-hide">
                   {/* Phone Screen Content */}
-                  <div className="p-4 bg-gray-900">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-black font-black text-base">M</div>
-                      <div>
-                        <div className="text-white text-sm font-bold">Mendel Galaxy</div>
+                  <div className="p-3.5 bg-[#111111] flex-1 overflow-hidden pb-6 flex flex-col justify-between">
+                    {/* Header */}
+                    <div className="flex items-center gap-2 mb-3 mt-1">
+                      <div className="w-6 h-6 bg-[#FFCA00] rounded-[5px] flex items-center justify-center text-black font-black text-xs">M</div>
+                      <div className="text-white text-sm font-bold tracking-wide">Mendel Galaxy</div>
+                    </div>
+                    
+                    {/* Today's Study */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-2.5 mb-3 border border-white/5">
+                      <div className="text-[#FFCA00] text-[8px] font-black uppercase tracking-wider mb-1.5">Today's Study</div>
+                      <div className="text-gray-300 text-[10px] mb-2 font-medium">Cardiology · 12 Qbank Qs</div>
+                      <div className="w-full h-1 bg-[#111] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#FFCA00] w-[40%] rounded-full"></div>
                       </div>
                     </div>
-                    <div className="mb-3">
-                      <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1">Today's Study</div>
-                      <div className="bg-gray-800 px-3 py-1.5 rounded-lg text-white text-xs">Cardiology - 12 Qbank Qs</div>
-                    </div>
-                  </div>
-                  <div className="flex-1 bg-gray-800 p-3 space-y-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-gray-900 p-2.5 rounded-xl border border-gray-700">
-                        <div className="text-primary text-xl font-black text-center">248</div>
-                        <div className="text-gray-400 text-[8px] text-center">Avg Score</div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-2.5 mb-3">
+                      <div className="bg-[#1C1C1C] p-2.5 rounded-xl border border-white/5 flex flex-col items-center justify-center">
+                        <div className="text-[#FFCA00] text-xl font-black mb-0.5">248</div>
+                        <div className="text-gray-500 text-[9px] font-medium">Avg Score</div>
                       </div>
-                      <div className="bg-gray-900 p-2.5 rounded-xl border border-gray-700">
-                        <div className="text-primary text-xl font-black text-center">87%</div>
-                        <div className="text-gray-400 text-[8px] text-center">Accuracy</div>
+                      <div className="bg-[#1C1C1C] p-2.5 rounded-xl border border-white/5 flex flex-col items-center justify-center">
+                        <div className="text-[#FFCA00] text-xl font-black mb-0.5">87%</div>
+                        <div className="text-gray-500 text-[9px] font-medium">Accuracy</div>
                       </div>
                     </div>
-                    <div className="mb-2">
-                      <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1.5">Mendel Chitras</div>
-                      <div className="bg-gray-100 p-2 rounded-lg">
-                        <div className="text-gray-800 text-[7px] mb-1.5">Renal - Cellular components, Major histocompatibility complex I and II, NK cells</div>
-                        <div className="w-full h-20 bg-gray-300 rounded flex items-center justify-center">
-                          <span className="text-gray-500 text-[8px]">[Chitra Image]</span>
+
+                    {/* Mendel Chitras */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-2.5 mb-3 border border-white/5">
+                      <div className="text-[#FFCA00] text-[8px] font-black uppercase tracking-wider mb-2">Mendel Chitras</div>
+                      <div className="w-full rounded-lg overflow-hidden border border-white/10 bg-[#EAE1D0]">
+                        <img src="/images/download.jpg" alt="Mendel Chitra" className="w-full h-[85px] object-cover" />
+                      </div>
+                    </div>
+
+                    {/* Rapid Recall */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-2.5 border border-white/5 mb-2">
+                      <div className="text-[#FFCA00] text-[8px] font-black uppercase tracking-wider mb-2">Rapid Recall · Cardiology</div>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#FFCA00] font-bold text-[10px] w-10">HFrEF</span>
+                          <span className="text-gray-400 text-[10px]">EF &lt;40% · ACEi + BB</span>
                         </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1.5">Rapid Recall - Cardiology</div>
-                      <div className="bg-gray-900 p-2.5 rounded-lg text-white text-[8px] space-y-1">
-                        <div className="flex justify-between">
-                          <span className="font-bold">HFrEF</span>
-                          <span className="text-gray-400">EF &lt;40% - ACEi + BB</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#FFCA00] font-bold text-[10px] w-10">HFpEF</span>
+                          <span className="text-gray-400 text-[10px]">EF ≥50% · Diuretics</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="font-bold">HFpEF</span>
-                          <span className="text-gray-400">EF ≥50% - Diuretics</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="font-bold">BNP</span>
-                          <span className="text-gray-400">&gt;400 = HF likely</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#FFCA00] font-bold text-[10px] w-10">BNP</span>
+                          <span className="text-gray-400 text-[10px]">&gt;400 = HF likely</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   {/* Home Indicator */}
-                  <div className="p-2.5 flex justify-center">
-                    <div className="w-24 h-0.5 bg-gray-600 rounded-full"></div>
-                  </div>
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-gray-500 rounded-full"></div>
                 </div>
               </div>
               {/* "See the app in action" Label */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-xl whitespace-nowrap">
-                <span className="text-black text-[12px] font-extrabold ff-font-bold">
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-lg shadow-xl whitespace-nowrap z-20">
+                <span className="text-black text-sm font-bold">
                   See the app in action &darr;
                 </span>
               </div>
@@ -244,9 +247,9 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
 
   return (
     <section className="bg-gray-900 py-12 px-6 border-b-4 border-primary">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
         {/* Left Content */}
-        <div className="text-center md:text-left">
+        <div className="text-center md:text-left md:col-span-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary mb-6">
             <span className="text-primary text-[10px] font-black tracking-[0.15em] uppercase">
               {examName || "Exam"} Preparation
@@ -307,73 +310,78 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
           </div>
         </div>
         {/* Right Phone Mockup */}
-        <div className="flex justify-center">
+        <div className="flex justify-center md:col-span-2">
           <div className="relative">
             {/* Phone Frame */}
-            <div className="w-52 h-[420px] bg-gray-900 border-8 border-gray-200 rounded-[2.5rem] p-1.5 relative shadow-2xl">
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-gray-900 rounded-full"></div>
-              <div className="w-full h-full bg-gray-800 rounded-[2rem] overflow-hidden flex flex-col">
-                {/* Phone Screen Content */}
-                <div className="p-4 bg-gray-900">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-black font-black text-base">M</div>
-                    <div>
-                      <div className="text-white text-sm font-bold">Mendel Galaxy</div>
+              <div className="w-[280px] h-[540px] bg-[#222] border-[12px] border-[#333] rounded-[3rem] p-1.5 relative shadow-2xl">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#333] rounded-full z-10"></div>
+                <div className="w-full h-full bg-[#111111] rounded-[2.2rem] overflow-hidden flex flex-col relative scrollbar-hide">
+                  {/* Phone Screen Content */}
+                  <div className="p-4 bg-[#111111] flex-1 overflow-y-auto pb-8">
+                    {/* Header */}
+                    <div className="flex items-center gap-2 mb-6 mt-3">
+                      <div className="w-7 h-7 bg-[#FFCA00] rounded-[6px] flex items-center justify-center text-black font-black text-sm">M</div>
+                      <div className="text-white text-base font-bold tracking-wide">Mendel Galaxy</div>
                     </div>
-                  </div>
-                  <div className="mb-3">
-                    <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1">Today's Study</div>
-                    <div className="bg-gray-800 px-3 py-1.5 rounded-lg text-white text-xs">Cardiology - 12 Qbank Qs</div>
-                  </div>
-                </div>
-                <div className="flex-1 bg-gray-800 p-3 space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-gray-900 p-2.5 rounded-xl border border-gray-700">
-                      <div className="text-primary text-xl font-black text-center">248</div>
-                      <div className="text-gray-400 text-[8px] text-center">Avg Score</div>
+                    
+                    {/* Today's Study */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-3.5 mb-4 border border-white/5">
+                      <div className="text-[#FFCA00] text-[9px] font-black uppercase tracking-wider mb-2.5">Today's Study</div>
+                      <div className="text-gray-300 text-xs mb-3 font-medium">Cardiology · 12 Qbank Qs</div>
+                      <div className="w-full h-1 bg-[#111] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#FFCA00] w-[40%] rounded-full"></div>
+                      </div>
                     </div>
-                    <div className="bg-gray-900 p-2.5 rounded-xl border border-gray-700">
-                      <div className="text-primary text-xl font-black text-center">87%</div>
-                      <div className="text-gray-400 text-[8px] text-center">Accuracy</div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-[#1C1C1C] p-3.5 rounded-xl border border-white/5 flex flex-col items-center justify-center">
+                        <div className="text-[#FFCA00] text-2xl font-black mb-1">248</div>
+                        <div className="text-gray-500 text-[10px] font-medium">Avg Score</div>
+                      </div>
+                      <div className="bg-[#1C1C1C] p-3.5 rounded-xl border border-white/5 flex flex-col items-center justify-center">
+                        <div className="text-[#FFCA00] text-2xl font-black mb-1">87%</div>
+                        <div className="text-gray-500 text-[10px] font-medium">Accuracy</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="mb-2">
-                    <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1.5">Mendel Chitras</div>
-                    <div className="bg-gray-100 p-2 rounded-lg">
-                      <div className="text-gray-800 text-[7px] mb-1.5">Renal - Cellular components, Major histocompatibility complex I and II, NK cells</div>
-                      <div className="w-full h-20 bg-gray-300 rounded flex items-center justify-center">
-                        <span className="text-gray-500 text-[8px]">[Chitra Image]</span>
+
+                    {/* Mendel Chitras */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-3.5 mb-4 border border-white/5">
+                      <div className="text-[#FFCA00] text-[9px] font-black uppercase tracking-wider mb-3">Mendel Chitras</div>
+                      <div className="w-full rounded-lg overflow-hidden border border-white/10 bg-[#EAE1D0]">
+                        <img src="/images/11.jpg" alt="Mendel Chitra" className="w-full h-auto object-cover" />
+                      </div>
+                    </div>
+
+                    {/* Rapid Recall */}
+                    <div className="bg-[#1C1C1C] rounded-xl p-3.5 border border-white/5">
+                      <div className="text-[#FFCA00] text-[9px] font-black uppercase tracking-wider mb-3">Rapid Recall · Cardiology</div>
+                      <div className="space-y-2.5">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[#FFCA00] font-bold text-xs w-12">HFrEF</span>
+                          <span className="text-gray-400 text-xs">EF &lt;40% · ACEi + BB</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[#FFCA00] font-bold text-xs w-12">HFpEF</span>
+                          <span className="text-gray-400 text-xs">EF ≥50% · Diuretics</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[#FFCA00] font-bold text-xs w-12">BNP</span>
+                          <span className="text-gray-400 text-xs">&gt;400 = HF likely</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <div className="text-primary text-[8px] font-bold uppercase tracking-wider mb-1.5">Rapid Recall - Cardiology</div>
-                    <div className="bg-gray-900 p-2.5 rounded-lg text-white text-[8px] space-y-1">
-                      <div className="flex justify-between">
-                        <span className="font-bold">HFrEF</span>
-                        <span className="text-gray-400">EF &lt;40% - ACEi + BB</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-bold">HFpEF</span>
-                        <span className="text-gray-400">EF ≥50% - Diuretics</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="font-bold">BNP</span>
-                        <span className="text-gray-400">&gt;400 = HF likely</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Home Indicator */}
-                <div className="p-2.5 flex justify-center">
-                  <div className="w-24 h-0.5 bg-gray-600 rounded-full"></div>
+                  {/* Home Indicator */}
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-1.5 bg-gray-500 rounded-full"></div>
                 </div>
               </div>
-            </div>
-            {/* "See the app in action" Label */}
-            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white px-10 py-4 rounded-xl shadow-xl">
-              <span className="text-black text-base font-bold">See the app in action ↓</span>
-            </div>
+              {/* "See the app in action" Label */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-lg shadow-xl whitespace-nowrap z-20">
+                <span className="text-black text-sm font-bold">
+                  See the app in action &darr;
+                </span>
+              </div>
           </div>
         </div>
       </div>

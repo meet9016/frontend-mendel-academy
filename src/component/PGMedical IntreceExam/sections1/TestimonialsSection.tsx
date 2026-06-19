@@ -86,7 +86,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
                     <p className="text-xs text-gray-500 ff-font">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed italic ff-font">
+                <p className="text-sm text-gray-600 leading-relaxed      ">
                   "{testimonial.text}"
                 </p>
               </div>

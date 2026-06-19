@@ -65,15 +65,15 @@ const MedicalExamDetail = ({ data, loading = false, examCategoryId }: Props) => 
     return itemCategoryId === examCategoryId;
   });
   return (
-    <div className="bg-gray-50">
-      <motion.section
+    <div className="">
+      {/* <motion.section
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         className="relative overflow-hidden bg-[#f9fafb]"
       >
         {loading ? <HeroSkeleton /> : <HeroContent data={data} isSelected={isSelected} />}
-      </motion.section>
+      </motion.section> */}
     </div>
   );
 };
@@ -89,7 +89,7 @@ const HeroContent = ({ data, isSelected }: { data: Exam | null, isSelected: bool
   <div className="flex justify-center">
     <div className="w-full max-w-2xl">
       <LeftContent data={data} isSelected={isSelected} />
-              {/* <RightImage data={data} /> */}
+              <RightImage data={data} />
     </div>
   </div>
 </div>

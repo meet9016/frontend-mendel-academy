@@ -108,11 +108,15 @@ const toolSections = [
     title: "Mendel Chitras",
     subtitle: "Visual maps that replace 10 pages of notes",
     cards: [
-      { title: "Renal Physiology - Laboratory techniques, CRISPR-Cas9 - Gene Editing System", badge: "LABORATORY TECHNIQUES" },
-      { title: "Renal Physiology - Laboratory techniques, CRISPR-Cas9 - Gene Editing System", badge: "LABORATORY TECHNIQUES" },
-      { title: "Renal Physiology - Laboratory techniques, CRISPR-Cas9 - Gene Editing System", badge: "LABORATORY TECHNIQUES" },
-      { title: "Renal Physiology - Laboratory techniques, CRISPR-Cas9 - Gene Editing System", badge: "LABORATORY TECHNIQUES" },
-      { title: "Immunology - MHC II - Cellular Component", badge: "IMMUNOLOGY" },
+      { title: "CRISPR-Cas9 Gene Editing", badge: "LABORATORY TECHNIQUES", image: "/images/download (13).jpg" },
+      { title: "CRISPR-Cas9 Gene Editing System", badge: "LABORATORY TECHNIQUES", image: "/images/download (14).jpg" },
+      { title: "MHC II – Cellular Components", badge: "IMMUNOLOGY", image: "/images/download (15).jpg" },
+      { title: "MHC II – Comprehensive Overview", badge: "IMMUNOLOGY", image: "/images/download (16).jpg" },
+      { title: "Regulatory T Cells – Mechanism", badge: "IMMUNOLOGY", image: "/images/download (17).jpg" },
+        { title: "Regulatory T Cells – Clinical Overview", badge: "IMMUNOLOGY", image: "/images/download-_23_.jpg" },
+      { title: "T-Cell Activation – Full Overview", badge: "IMMUNOLOGY", image: "/images/download (19).jpg" },
+      { title: "Immune Privilege – Location & Mechanism", badge: "IMMUNOLOGY", image: "/images/download (20).jpg" },
+      { title: "Immune Privilege – Comprehensive", badge: "IMMUNOLOGY", image: "/images/download (21).jpg" },
     ],
     bottomText: "Scroll to explore more Chitras →",
   },
@@ -247,7 +251,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
   };
 
   return (
-    <section className="py-16 px-6 bg-white">
+    <section className=" px-6 bg-white">
       <div className="max-w-[960px] mx-auto">
         {/* Header: Here's what you get */}
         <div className="text-center mb-12">
@@ -265,9 +269,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
         {/* Device Tabs */}
         <div className="flex justify-center gap-2 mb-10">
           {[
-            { key: "iphone", label: "iPhone", icon: "📱" },
-            { key: "ipad", label: "iPad", icon: "📲" },
-            { key: "desktop", label: "Desktop/Laptop", icon: "💻" },
+            { key: "iphone", label: "iPhone", icon: <svg width="10" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> },
+            { key: "ipad", label: "iPad", icon: <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> },
+            { key: "desktop", label: "Desktop/Laptop", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> },
           ].map((d) => (
             <button
               key={d.key}
@@ -476,34 +480,53 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                     {section.cards?.map((card, index) => (
                       <div
                         key={index}
-                        className={`flex-shrink-0 w-64 p-4 rounded-xl border ${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-lg" : "border-gray-200"} ${sectionIndex === 0 ? "bg-gray-900" : "bg-[#fefce8]"} transition-all`}
+                        className={`flex-shrink-0 w-72 p-4 rounded-xl border transition-all ${
+                          sectionIndex === 0 
+                            ? `bg-gray-900 ${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-xl scale-105" : "border-gray-700 shadow-sm"}` 
+                            : `${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-xl scale-105" : "border-gray-200 shadow-sm"} bg-white p-0`
+                        }`}
                       >
-                        <span className={`text-[10px] font-bold ${sectionIndex === 0 ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider block mb-2`}>
-                          {card.badge}
-                        </span>
-                        <p className={`text-[13px] font-semibold ${sectionIndex === 0 ? "text-white" : "text-black"} leading-relaxed`}>
-                          {card.title}
-                        </p>
-                        {sectionIndex === 0 && (
-                          <div className="mt-3 space-y-1.5">
-                            <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
-                              Decreased systemic vascular resistance
+                        {sectionIndex === 0 ? (
+                          <>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
+                              {card.badge}
+                            </span>
+                            <p className="text-[13px] font-semibold text-white leading-relaxed">
+                              {card.title}
+                            </p>
+                            <div className="mt-3 space-y-1.5">
+                              <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
+                                Decreased systemic vascular resistance
+                              </div>
+                              <div className="px-2 py-1.5 rounded border border-primary text-primary text-[11px]">
+                                ✓ Increased ventricular end-diastolic pressure
+                              </div>
+                              <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
+                                Reduced cardiac output from arrhythmia
+                              </div>
+                              <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
+                                Pericardial tamponade physiology
+                              </div>
                             </div>
-                            <div className="px-2 py-1.5 rounded border border-primary text-primary text-[11px]">
-                              ✓ Increased ventricular end-diastolic pressure
-                            </div>
-                            <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
-                              Reduced cardiac output from arrhythmia
-                            </div>
-                            <div className="px-2 py-1.5 rounded border border-gray-700 text-gray-400 text-[11px]">
-                              Pericardial tamponade physiology
-                            </div>
-                          </div>
-                        )}
-                        {sectionIndex === 1 && (
-                          <div className="mt-3 h-28 border border-gray-300 rounded-lg flex items-center justify-center text-gray-400 text-[11px] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-cover opacity-80">
-                            [Chitra Visual Map]
-                          </div>
+                          </>
+                        ) : (
+                          <>
+                            {sectionIndex === 1 && (
+                              <div className="rounded-xl overflow-hidden bg-white">
+                                <div className="h-40 overflow-hidden">
+                                  <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
+                                </div>
+                                <div className="p-4">
+                                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">
+                                    {card.badge}
+                                  </span>
+                                  <p className="text-[13px] font-semibold text-black leading-relaxed">
+                                    {card.title}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
                     ))}

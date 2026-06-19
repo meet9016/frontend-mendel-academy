@@ -205,7 +205,7 @@ function PgMedicalEntranceExams() {
 
 
       {/* REGISTER SECTION */}
-      <NewsLetter />
+      {/* <NewsLetter />   */}
     </div>
   );
 }
