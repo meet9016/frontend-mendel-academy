@@ -44,13 +44,13 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-2xl font-black text-white mb-3">
+                <h3 className="text-2xl font-black text-white mb-3 ff-font-bold">
                   Designer Customized 1:1 Mentoring
                 </h3>
-                <p className="text-sm text-gray-500 mb-6 max-w-xl mx-auto leading-relaxed">
+                <p className="text-sm text-gray-500 mb-6 max-w-xl mx-auto leading-relaxed ff-font">
                   For the student who requires a high-performance roadmap tailored to personal clinical strengths and weaknesses.
                 </p>
-                <button className="px-10 py-3.5 bg-primary text-black font-black text-sm uppercase tracking-wide rounded-lg cursor-pointer hover:opacity-90 transition-opacity">
+                <button className="px-10 py-3.5 bg-primary text-black font-black text-sm uppercase tracking-wide rounded-lg cursor-pointer hover:opacity-90 transition-opacity ff-font-bold" style={{ backgroundColor: "#FFCA00" }}>
                   Contact us for details
                 </button>
               </div>
@@ -61,10 +61,10 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
         {/* Testimonials Section */}
         <div className="mb-12">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-black text-gray-900 mb-2">
+            <h2 className="text-2xl font-black text-gray-900 mb-2 ff-font-bold">
               Students who matched their dream residency
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 ff-font">
               Real outcomes from real Mendel students.
             </p>
           </div>
@@ -80,13 +80,13 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-gray-900">
+                    <p className="text-sm font-bold text-gray-900 ff-font-bold">
                       {testimonial.name}
                     </p>
-                    <p className="text-xs text-gray-500">{testimonial.role}</p>
+                    <p className="text-xs text-gray-500 ff-font">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed italic">
+                <p className="text-sm text-gray-600 leading-relaxed italic ff-font">
                   "{testimonial.text}"
                 </p>
               </div>
@@ -99,10 +99,10 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl font-black text-primary mb-1">
+                <div className="text-3xl font-black text-primary mb-1 ff-font-bold">
                   {stat.number}
                 </div>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">
+                <p className="text-xs text-gray-400 uppercase tracking-wide ff-font">
                   {stat.label}
                 </p>
               </div>

@@ -65,7 +65,7 @@ const appTools = [
   {
     name: "Rapid Recall",
     color: "#3B82F6",
-    bg: "#eff6ff",
+    bg: "#fdf2f8",
     price: "$16.99/mo",
     desc: "Condensed last-minute review sheets per subject",
     svg: (
@@ -77,7 +77,7 @@ const appTools = [
   {
     name: "Fast Facts",
     color: "#F59E0B",
-    bg: "#fffbeb",
+    bg: "#fdf2f8",
     price: "$16.99/mo",
     desc: "High-yield mnemonics and key facts for rapid review",
     svg: (
@@ -98,6 +98,9 @@ const toolSections = [
       { title: "A 67-year-old with hypertension presents with progressive dyspnea and orthopnea. Exam shows S3 gallop, bilateral crackles. BNP 680. Best mechanism?", badge: "Q1 - Cardiology - Medium" },
       { title: "First-line therapy for HFrEF with EF 35%?", badge: "Q2 - Cardiology - Easy" },
       { title: "45-year-old non-smoker, FEV1/FVC 0.58, no bronchodilator response, ground-glass opacities. Diagnosis?", badge: "Q3 - Pulmonology - Hard" },
+      { title: "45-year-old non-smoker, FEV1/FVC 0.58, no bronchodilator response, ground-glass opacities. Diagnosis?", badge: "Q3 - Pulmonology - Hard" },
+      { title: "45-year-old non-smoker, FEV1/FVC 0.58, no bronchodilator response, ground-glass opacities. Diagnosis?", badge: "Q3 - Pulmonology - Hard" },
+       { title: "45-year-old non-smoker, FEV1/FVC 0.58, no bronchodilator response, ground-glass opacities. Diagnosis?", badge: "Q3 - Pulmonology - Hard" },
     ],
     bottomText: "Scroll to explore sample questions →",
   },
@@ -122,6 +125,7 @@ const toolSections = [
       { title: "What phase of the cell cycle involves DNA replication?", badge: "QUESTION" },
       { title: "What phase of the cell cycle involves DNA replication?", badge: "QUESTION" },
       { title: "What phase of the cell cycle involves DNA replication?", badge: "QUESTION" },
+      { title: "S phase (Synthesis)", badge: "ANSWERED" },
       { title: "S phase (Synthesis)", badge: "ANSWERED" },
     ],
   },
@@ -247,14 +251,14 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
       <div className="max-w-[960px] mx-auto">
         {/* Header: Here's what you get */}
         <div className="text-center mb-12">
-          <p className="text-[10px] font-black tracking-[0.15em] uppercase text-primary mb-2">
+          <p className="text-[10px] font-black tracking-[0.15em] uppercase text-primary mb-2 ff-font-bold">
             THE MENDEL GALAXY APP
           </p>
-          <h2 className="text-[32px] font-black text-gray-900 mb-3">
+          <h2 className="text-[32px] font-black text-gray-900 mb-3 ff-font-bold">
             Here's what you get
           </h2>
-          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Six high-yield study tools built for USMLE Step 1 — included in every plan or available individually.
+          <p className="text-sm text-gray-600 max-w-2xl mx-auto ff-font">
+           Six high-yield study tools built for USMLE Step 1 — Mendel Qbanks, Chitras, Mendel Flashcards, Mendel Study Notes, Rapid Recall, and Fast Facts. Click any tool below to explore details & pricing.
           </p>
         </div>
 
@@ -268,7 +272,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
             <button
               key={d.key}
               onClick={() => setActiveDevice(d.key)}
-              className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ${
+              className={`px-5 py-2 rounded-full text-[11px] font-bold transition-all duration-200 border ff-font-bold ${
                 activeDevice === d.key
                   ? "bg-[#1A1A1A] text-primary border-[#1A1A1A]"
                   : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
@@ -417,7 +421,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                             <div className="h-[2.5px] bg-gray-700 rounded w-full" />
                           </div>
                           <div className="mt-1.5">
-                            <div className="px-1.5 py-[2px] rounded text-[4px] font-bold text-black inline-block" style={{ backgroundColor: tool.color }}>Explore →</div>
+                            <div className="px-1.5 py-[2px] rounded text-[4px] font-bold text-black inline-block" style={{ backgroundColor: "#FFCA00" }}>Explore →</div>
                           </div>
                         </div>
                       </div>
@@ -429,9 +433,18 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                 </div>
               )}
 
-              {/* Label + Price below */}
-              <p className="text-[11px] font-bold text-gray-900 text-center">{tool.name}</p>
-              <span className="text-[10px] font-extrabold" style={{ color: tool.color }}>{tool.price}</span>
+              {/* Label + Button below */}
+              <p className="text-[11px] font-bold text-gray-900 text-center mb-2 ff-font-bold">{tool.name}</p>
+              <button
+                className="px-4 py-1.5 rounded-full text-[10px] font-black text-black flex items-center gap-1 ff-font-bold"
+                style={{ backgroundColor: tool.color }}
+              >
+                Details & pricing
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="M12 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           ))}
         </div>
@@ -439,24 +452,26 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
         {/* All Tool Sections (One After Another) */}
         {toolSections.slice(0, 4).map((section, sectionIndex) => (
           <div key={sectionIndex} className="mb-16">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ff-font-bold">
               {section.title.toUpperCase()}
             </p>
-            <h3 className="text-xl font-black text-gray-900 mb-1">
+            <h3 className="text-xl font-black text-gray-900 mb-1 ff-font-bold">
               {section.subtitle}
             </h3>
 
             {/* Qbanks / Chitras View */}
             {sectionIndex <= 1 && (
               <div className="mt-6">
-                <div className="flex items-center gap-4 mb-4">
+                <div className="relative flex items-center">
+                  {/* Previous Button - Outside */}
                   <button
                     onClick={() => handleCardPrev(sectionIndex)}
-                    className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
+                    className="absolute left-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                   </button>
-                  <div ref={cardContainerRefs[sectionIndex]} className="flex gap-4 flex-1 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  {/* Cards Container */}
+                  <div ref={cardContainerRefs[sectionIndex]} className="flex gap-4 w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {section.cards?.map((card, index) => (
                       <div
                         key={index}
@@ -492,14 +507,15 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Next Button - Outside */}
                   <button
                     onClick={() => handleCardNext(sectionIndex)}
-                    className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
+                    className="absolute right-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </button>
                 </div>
-                <div className="max-w-md mx-auto">
+                <div className="max-w-md mt-4">
                   <div className="h-1.5 bg-gray-200 rounded-full">
                     <div
                       className="h-full bg-gray-400 rounded-full transition-all duration-300"
@@ -508,7 +524,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                   </div>
                 </div>
                 {section.bottomText && (
-                  <p className="text-center text-[11px] text-gray-500 mt-4">
+                  <p className="text-left text-[11px] text-gray-500 mt-4">
                     {section.bottomText}
                   </p>
                 )}
@@ -517,36 +533,36 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
 
             {/* Flashcards View */}
             {sectionIndex === 2 && (
-              <div className="mt-6 flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
+              <div className="mt-6 flex flex-col md:flex-row gap-4">
                 {/* Question Card */}
-                <div className="flex-1 bg-[#1e293b] rounded-xl p-6 border border-gray-700 flex flex-col items-center justify-center min-h-[200px] relative">
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                <div className="w-full md:w-64 bg-[#1e293b] rounded-xl p-4 border border-gray-700 flex flex-col items-start justify-center min-h-[150px] relative">
+                  <div className="absolute top-3 left-3 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                    <span className="text-[10px] font-bold text-gray-400 tracking-wider">QUESTION</span>
+                    <span className="text-[9px] font-bold text-gray-400 tracking-wider">QUESTION</span>
                   </div>
-                  <h4 className="text-white font-serif italic text-lg text-center max-w-[80%] leading-snug">What phase of the cell cycle involves DNA replication?</h4>
-                  <p className="absolute bottom-4 text-[10px] text-gray-500">Tap to reveal answer</p>
+                  <h4 className="text-white font-serif italic text-base max-w-full leading-snug mt-6">What phase of the cell cycle involves DNA replication?</h4>
+                  <p className="absolute bottom-3 text-[9px] text-gray-500">Tap to reveal answer</p>
                 </div>
                 {/* Answer Card */}
-                <div className="flex-1 bg-[#1e293b] rounded-xl p-6 border border-gray-700 flex flex-col items-center justify-center min-h-[200px] relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                <div className="w-full md:w-64 bg-[#1e293b] rounded-xl p-4 border border-gray-700 flex flex-col items-start justify-center min-h-[150px] relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
+                  <div className="absolute top-3 left-3 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                    <span className="text-[10px] font-bold text-gray-400 tracking-wider">ANSWER</span>
+                    <span className="text-[9px] font-bold text-gray-400 tracking-wider">ANSWER</span>
                   </div>
-                  <h4 className="text-white font-serif italic text-2xl mb-1">S phase (Synthesis)</h4>
-                  <p className="text-[10px] text-gray-400 mb-6">cell cycle</p>
-                  <div className="flex gap-3 mt-auto mb-2">
+                  <h4 className="text-white font-serif italic text-xl mb-1 mt-6">S phase (Synthesis)</h4>
+                  <p className="text-[9px] text-gray-400 mb-4">cell cycle</p>
+                  <div className="flex gap-2 mt-auto mb-1">
                     <div className="flex flex-col items-center">
-                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-red-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Hard</button>
-                      <span className="text-[9px] text-gray-500">1 day</span>
+                      <button className="px-3 py-1 rounded-lg bg-[#0f172a] text-red-400 text-[10px] font-bold mb-1 shadow-inner border border-gray-700">Hard</button>
+                      <span className="text-[8px] text-gray-500">1 day</span>
                     </div>
                     <div className="flex flex-col items-center">
-                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-orange-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Medium</button>
-                      <span className="text-[9px] text-gray-500">3 days</span>
+                      <button className="px-3 py-1 rounded-lg bg-[#0f172a] text-orange-400 text-[10px] font-bold mb-1 shadow-inner border border-gray-700">Medium</button>
+                      <span className="text-[8px] text-gray-500">3 days</span>
                     </div>
                     <div className="flex flex-col items-center">
-                      <button className="px-4 py-1.5 rounded-lg bg-[#0f172a] text-green-400 text-[11px] font-bold mb-1 shadow-inner border border-gray-700">Easy</button>
-                      <span className="text-[9px] text-gray-500">7 days</span>
+                      <button className="px-3 py-1 rounded-lg bg-[#0f172a] text-green-400 text-[10px] font-bold mb-1 shadow-inner border border-gray-700">Easy</button>
+                      <span className="text-[8px] text-gray-500">7 days</span>
                     </div>
                   </div>
                 </div>
@@ -556,7 +572,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
             {/* Study Notes View */}
             {sectionIndex === 3 && (
               <div className="mt-6">
-                <div className="max-w-2xl mx-auto bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-6">
+                <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-800 text-[10px] font-bold">
                       CARDIOLOGY
@@ -606,14 +622,15 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
                     COVERING EVERY CORE SUBJECT
                   </p>
-                  <div className="flex items-center gap-3">
+                  <div className="relative flex items-center">
+                    {/* Previous Button - Outside */}
                     <button
                       onClick={handleSubjectPrev}
-                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
+                      className="absolute left-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                     </button>
-                    <div ref={subjectContainerRef} className="flex gap-3 flex-1 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div ref={subjectContainerRef} className="flex gap-3 w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       {section.subjects?.map((subject, index) => (
                         <div
                           key={index}
@@ -628,9 +645,10 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
                         </div>
                       ))}
                     </div>
+                    {/* Next Button - Outside */}
                     <button
                       onClick={handleSubjectNext}
-                      className="w-10 h-10 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0"
+                      className="absolute right-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
@@ -641,8 +659,8 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
 
             <div className="flex justify-start mt-6">
               <button
-                className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow"
-                style={{ backgroundColor: appTools[sectionIndex].color }}
+                className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow ff-font-bold"
+                style={{ backgroundColor: "#FFCA00" }}
               >
                 <div className="text-[13px] font-bold text-black leading-tight">{section.title}</div>
                 <div className="text-[10px] text-black">details & pricing →</div>
@@ -662,10 +680,10 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
             const sectionIndex = 4 + idx;
             return (
               <div key={sectionIndex} className="flex flex-col">
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ff-font-bold">
                   {section.title.toUpperCase()}
                 </p>
-                <h3 className="text-xl font-black text-gray-900 mb-1">
+                <h3 className="text-xl font-black text-gray-900 mb-1 ff-font-bold">
                   {section.subtitle}
                 </h3>
 
@@ -706,8 +724,8 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = () => {
 
                 <div className="flex justify-start mt-6">
                   <button
-                    className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow"
-                    style={{ backgroundColor: appTools[sectionIndex].color }}
+                    className="px-5 py-2.5 rounded-lg text-left shadow-sm hover:shadow-md transition-shadow ff-font-bold"
+                    style={{ backgroundColor: "#FFCA00" }}
                   >
                     <div className="text-[13px] font-bold text-black leading-tight">{section.title}</div>
                     <div className="text-[10px] text-black">details & pricing →</div>

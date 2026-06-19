@@ -195,9 +195,10 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                     <button
                       onClick={() => {}}
                       disabled={isLoading || isSelected}
-                      className={`w-full py-2 rounded-md text-[11px] font-extrabold transition-all duration-150 border-none cursor-pointer ${
-                        plan.most_popular ? "bg-[#1c1c1c] text-primary hover:opacity-85" : "bg-primary text-gray-900 hover:bg-opacity-90"
+                      className={`w-full py-2 rounded-md text-[11px] font-extrabold transition-all duration-150 border-none cursor-pointer ff-font-bold ${
+                        plan.most_popular ? "bg-[#1c1c1c] text-primary hover:opacity-85" : "bg-[#FFCA00] text-gray-900 hover:bg-opacity-90"
                       }`}
+                      style={plan.most_popular ? undefined : { backgroundColor: "#FFCA00" }}
                     >
                       {isLoading ? "Adding..." : isSelected ? "Selected" : "Enroll Now"}
                     </button>
@@ -249,7 +250,8 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                               per subject / month
                             </p>
                             <button
-                              className="w-full py-2 rounded text-gray-900 bg-primary text-[11px] font-bold cursor-pointer"
+                              className="w-full py-2 rounded text-gray-900 bg-primary text-[11px] font-bold cursor-pointer ff-font-bold"
+                              style={{ backgroundColor: "#FFCA00" }}
                             >
                               Enroll Now
                             </button>
@@ -380,9 +382,10 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
                 </div>
                 <div className="flex justify-end">
                   <button
-                    className={`px-6 py-2 rounded text-[11px] font-bold cursor-pointer w-[88px] text-center shadow-sm ${
-                      course.popular ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-[#F5C800] text-gray-900 hover:opacity-90"
+                    className={`px-6 py-2 rounded text-[11px] font-bold cursor-pointer w-[88px] text-center shadow-sm ff-font-bold ${
+                      course.popular ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-[#FFCA00] text-gray-900 hover:opacity-90"
                     }`}
+                    style={course.popular ? undefined : { backgroundColor: "#FFCA00" }}
                   >
                     Enroll
                   </button>
@@ -398,7 +401,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
               <h3 className="text-xl font-black text-gray-900 mb-2 ff-font-bold">Tsunami Bundle</h3>
               <p className="text-sm text-gray-600 mb-4 ff-font">Step 1 + Step 2 CK — the complete board sequence.</p>
               <p className="text-4xl font-black text-gray-900 mb-6 ff-font-bold">$2,235</p>
-              <button className="w-full py-3 rounded-lg bg-primary text-black text-xs font-bold cursor-pointer">
+              <button className="w-full py-3 rounded-lg bg-primary text-black text-xs font-bold cursor-pointer ff-font-bold" style={{ backgroundColor: "#FFCA00" }}>
                 Enroll Now
               </button>
             </div>
