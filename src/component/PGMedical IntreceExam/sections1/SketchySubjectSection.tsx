@@ -68,11 +68,11 @@ const SketchySubjectSection: React.FC<Props> = ({
 
         {/* CATEGORY TOGGLE (Static Mockup) */}
         <div className="flex justify-center mb-8">
-          <div className="flex bg-white rounded-lg border border-gray-300 p-1">
-            <button className="px-6 py-2 bg-[#1A1A1A] text-primary text-xs font-bold rounded-md cursor-pointer">
+          <div className="flex  border-gray-600 p-1 gap-2">
+            <button className="px-6 py-2 bg-[#1A1A1A] border border-gray-700 text-primary text-xs font-bold rounded-md cursor-pointer">
               General Principles
             </button>
-            <button className="px-6 py-2 bg-transparent text-gray-500 text-xs font-medium rounded-md hover:bg-gray-50 cursor-pointer">
+            <button className="px-6 py-2 bg-transparent  border border-gray-700 text-gray-500 text-xs font-medium rounded-md hover:bg-gray-50 cursor-pointer">
               Organ Systems
             </button>
           </div>
