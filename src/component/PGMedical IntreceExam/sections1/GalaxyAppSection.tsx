@@ -62,16 +62,48 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
     description: galaxySection?.section_description || "",
   }), [galaxySection]);
 
-  const appTools = useMemo(() => dynamicTools.map((tool: any, i: number) => {
-    const meta = getToolMeta(tool.tool_name || "", i);
-    return {
-      name: tool.tool_name || "",
-      price: tool.individual_price || tool.galaxy_price || "",
-      color: meta.color,
-      bg: meta.bg,
-      svg: meta.svg,
-    };
-  }), [dynamicTools]);
+  const appTools = useMemo(() => {
+    const dynamicAppTools = dynamicTools.map((tool: any, i: number) => {
+      const meta = getToolMeta(tool.tool_name || "", i);
+      return {
+        name: tool.tool_name || "",
+        price: tool.individual_price || tool.galaxy_price || "",
+        color: meta.color,
+        bg: meta.bg,
+        svg: meta.svg,
+      };
+    });
+
+    // Static app tools for last 3 sections
+    const staticAppTools = [
+      {
+        name: "Mendel Study Notes",
+        color: "#EC4899",
+        bg: "#fdf2f8",
+        price: "$25/mo",
+        svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+      },
+      {
+        name: "Rapid Recall",
+        color: "#3B82F6",
+        bg: "#fdf2f8",
+        price: "$16.99/mo",
+        svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+      },
+      {
+        name: "Fast Facts",
+        color: "#F59E0B",
+        bg: "#fdf2f8",
+        price: "$16.99/mo",
+        svg: <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+      },
+    ];
+
+    return [
+      ...dynamicAppTools.slice(0, 3),
+      ...staticAppTools
+    ];
+  }, [dynamicTools]);
 
   const toolSections = useMemo(() => {
     // First, get dynamic data for first 3 sections
@@ -234,6 +266,82 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
   }, [dynamicTools]);
 
   const getToolDetail = (index: number) => {
+    // Static tool details for last 3 tools
+    const staticToolDetails = [
+      // Mendel Study Notes (index 3)
+      {
+        name: "Mendel Study Notes",
+        tagline: "STUDY TOOL",
+        description: "1-2 page write-ups for every core topic, woven with flowcharts, illustrations, and clinical visuals. Built to be your textbook replacement, not a summary.",
+        included: [
+          "Deep-dive notes for every core topic",
+          "Flowcharts and clinical visuals embedded",
+          "Organized by subject and system",
+          "Updated for USMLE Step 1 blueprint",
+          "Printable PDF format available",
+        ],
+        sampleQuestion: {
+          badge: "CARDIOLOGY - HFrEF",
+          question: "HFrEF develops when myocardial injury reduces left ventricular contractility, lowering ejection fraction below 40%. RAAS activation, sympathetic surge, and ADH release become maladaptive — driving volume overload, ventricular remodeling, and progressive pump failure.",
+          options: [],
+        },
+        individualPrice: "$25.00",
+        individualPer: "per subject / month",
+        galaxyPrice: "From $309",
+        galaxyPer: "Everything included • 1 month +",
+      },
+      // Rapid Recall (index 4)
+      {
+        name: "Rapid Recall",
+        tagline: "STUDY TOOL",
+        description: "Condensed last-minute review sheets per subject. One-page summaries distilled from high-yield sources — perfect for exam-week cramming.",
+        included: [
+          "One-page review sheets per subject",
+          "High-yield mnemonics included",
+          "Updated for latest exam blueprint",
+          "Printable format available",
+          "Integrated with Galaxy App",
+        ],
+        sampleQuestion: {
+          badge: "CARDIOLOGY - RAPID RECALL",
+          question: "HFrEF: EF <40% — ACEi + BB + MRA + SGLT2i\nHFpEF: EF ≥50% — Diuretics + SGLT2i\nBNP: >400 = HF likely, <100 = unlikely",
+          options: [],
+        },
+        individualPrice: "$16.99",
+        individualPer: "per subject / month",
+        galaxyPrice: "From $309",
+        galaxyPer: "Everything included • 1 month +",
+      },
+      // Fast Facts (index 5)
+      {
+        name: "Fast Facts",
+        tagline: "STUDY TOOL",
+        description: "High-yield mnemonics and key facts for rapid review. Bite-sized, memorable, and clinically relevant — designed so facts stick the first time.",
+        included: [
+          "Mnemonics for every core topic",
+          "Key facts organized by subject",
+          "Clinically relevant examples",
+          "Regularly updated content",
+          "Integrated with Galaxy App",
+        ],
+        sampleQuestion: {
+          badge: "CARDIOLOGY - FAST FACTS",
+          question: "HF DRUGS TO AVOID:\nVery Cool Drugs Never Go Well\nVerapamil • Class IC • Dronedarone • NSAIDs • Glitazones",
+          options: [],
+        },
+        individualPrice: "$16.99",
+        individualPer: "per subject / month",
+        galaxyPrice: "From $309",
+        galaxyPer: "Everything included • 1 month +",
+      },
+    ];
+
+    // If index is 3,4,5 use static data
+    if (index >= 3) {
+      return staticToolDetails[index - 3];
+    }
+
+    // Otherwise use dynamic data for first 3 tools
     const t = dynamicTools[index] || {};
     const flashcardQA = (t.flashcard_qa || []).map((f: any) => ({
       question: f.question || "",
