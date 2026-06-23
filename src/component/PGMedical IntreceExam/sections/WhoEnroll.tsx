@@ -62,6 +62,15 @@ export interface Tsunami {
   description?: string;
 }
 
+export interface SampleRecordedLecture {
+  _id?: string;
+  title?: string;
+  video_link?: string;
+  subject?: string;
+  strip_left?: string;
+  strip_right?: string;
+}
+
 export interface WhoEnrollData {
   _id?: string;
   who_can_enroll_title?: string;
@@ -74,6 +83,7 @@ export interface WhoEnrollData {
   rapid_learning_tools?: RapidTool[];
   elite_mentorship?: EliteMentorship[];
   tsunami?: Tsunami;
+  sample_recorded_lectures?: SampleRecordedLecture[];
   user_currency?: string;
   user_country?: string;
   is_plan_visible?: boolean;

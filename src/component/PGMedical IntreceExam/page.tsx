@@ -126,17 +126,17 @@ function PgMedicalEntranceExams() {
             loading={loading}
             examId={id as string}
           />
-          <GalaxyAppSection />
+          <GalaxyAppSection examData={examData} loading={loading} />
          
         </>
       {/* SUBJECTS SECTION FOR OTHER EXAMS */}
-      {(isUSMLEStep2) && (
+      {/* {(isUSMLEStep2) && (
         <SketchySubjectSection
           subjectData={subjectData}
           loading={loading}
           examId={id as string}
         />
-      )}
+      )} */}
       
       {/* CONDITIONAL RENDERING BASED ON ROUTE */}
       {isUSMLEStep1 ? (

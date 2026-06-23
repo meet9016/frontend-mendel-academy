@@ -10,7 +10,7 @@ import { setCartCount } from "@/redux/cartSlice";
 import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 import { motion } from "framer-motion";
 import Sliders from "@/comman/Sliders";
-import { Plan, RapidTool, EliteMentorship, Tsunami, WhoEnrollData } from "../sections/WhoEnroll";
+import { Plan, RapidTool, EliteMentorship, Tsunami, WhoEnrollData, SampleRecordedLecture } from "../sections/WhoEnroll";
 import { IoClose } from "react-icons/io5";
 import { FaPlay } from "react-icons/fa";
 
@@ -292,59 +292,109 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
           </div>
 
           {/* Sample Recorded Lectures */}
-          <div className="mb-12">
-            <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-gray-500 mb-6 ff-font-bold">
-              Sample recorded lectures
-            </p>
-            <Sliders
-              settings={{
-                dots: false,
-                infinite: true,
-                speed: 600,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                arrows: true,
-              }}
-            >
-              {[
-                { title: "Heart Failure: Compensation Mechanisms", stripL: "MCQ of", stripR: "- Kidney" },
-                { title: "Arrhythmias: AFib vs Flutter", stripL: "MCQ of", stripR: "- Kidney" },
-                { title: "Valvular Disease: Aortic Stenosis", stripL: "Hematology | Ac", stripR: "oblastic Leukemia" },
-              ].map((item, i) => (
-                <div key={i} className="p-3">
-                  <div className="bg-[#d4d4d4] rounded-t-xl overflow-hidden aspect-[16/9] flex flex-col relative border border-gray-400 border-b-0">
-                    <div className="flex-[1.2] flex items-center justify-center pt-2 relative z-0">
-                      <img src="/images/main logo.png" alt="Lecture" className="h-10 object-contain opacity-80" />
+          {data?.sample_recorded_lectures && data.sample_recorded_lectures.length > 0 && (
+            <div className="mb-12">
+              <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-gray-500 mb-6 ff-font-bold">
+                Sample recorded lectures
+              </p>
+              {(() => {
+                const lectures = data.sample_recorded_lectures;
+
+                if (lectures.length <= 3) {
+                  return (
+                    <div className="grid grid-cols-3 gap-6">
+                      {lectures.map((item, i) => (
+                        <div key={i} className="flex flex-col">
+                          <div className="bg-[#d4d4d4] rounded-t-xl overflow-hidden aspect-[16/9] flex flex-col relative border border-gray-400 border-b-0">
+                            <div className="flex-[1.2] flex items-center justify-center pt-2 relative z-0">
+                              <img src="/images/main logo.png" alt="Lecture" className="h-10 object-contain opacity-80" />
+                            </div>
+                            <div className="w-full h-7 bg-[#1A1A1A] flex items-center justify-between px-6 relative z-10">
+                              <p className="text-white text-[10px] ff-font truncate max-w-[40%]">{item.strip_left}</p>
+                              <button 
+                                onClick={() => item.video_link && window.open(item.video_link, "_blank")}
+                                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#F5C800] flex items-center justify-center shadow-lg z-20 hover:scale-105 transition-transform border border-yellow-400 cursor-pointer"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="black" className="ml-1">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </button>
+                              <p className="text-white text-[10px] ff-font truncate text-right max-w-[40%]">{item.strip_right}</p>
+                            </div>
+                            <div className="flex-[1.5] flex items-center justify-center gap-3 bg-[#b5b5b5] relative z-0">
+                              <div className="w-10 h-10 bg-gray-600 rounded flex flex-shrink-0 items-center justify-center overflow-hidden shadow-sm">
+                                <img src="/images/main logo.png" alt="Profile" className="w-full h-full object-cover" />
+                              </div>
+                              <div className="text-left">
+                                <p className="text-gray-900 text-[11px] font-black ff-font-bold">Dr. Kishore Managoli, MD</p>
+                                <p className="text-gray-800 text-[9px] font-bold ff-font">Founder & CEO</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="bg-[#1c1c1e] rounded-b-xl p-4 flex-1">
+                            <p className="text-[9px] font-bold text-gray-500 uppercase mb-1.5 ff-font-bold">{item.subject || "CARDIOLOGY"}</p>
+                            <p className="text-[13px] font-bold text-white ff-font-bold leading-snug">
+                              {item.title}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="w-full h-7 bg-[#1A1A1A] flex items-center justify-between px-6 relative z-10">
-                      <p className="text-white text-[10px] ff-font truncate max-w-[40%]">{item.stripL}</p>
-                      <button className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#F5C800] flex items-center justify-center shadow-lg z-20 hover:scale-105 transition-transform border border-yellow-400">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="black" className="ml-1">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </button>
-                      <p className="text-white text-[10px] ff-font truncate text-right max-w-[40%]">{item.stripR}</p>
-                    </div>
-                    <div className="flex-[1.5] flex items-center justify-center gap-3 bg-[#b5b5b5] relative z-0">
-                      <div className="w-10 h-10 bg-gray-600 rounded flex flex-shrink-0 items-center justify-center overflow-hidden shadow-sm">
-                        <img src="/images/main logo.png" alt="Profile" className="w-full h-full object-cover" />
+                  );
+                }
+
+                return (
+                  <Sliders
+                    settings={{
+                      dots: false,
+                      infinite: lectures.length > 3,
+                      speed: 600,
+                      slidesToShow: 3,
+                      slidesToScroll: 1,
+                      arrows: true,
+                    }}
+                  >
+                    {lectures.map((item, i) => (
+                      <div key={i} className="p-3">
+                        <div className="bg-[#d4d4d4] rounded-t-xl overflow-hidden aspect-[16/9] flex flex-col relative border border-gray-400 border-b-0">
+                          <div className="flex-[1.2] flex items-center justify-center pt-2 relative z-0">
+                            <img src="/images/main logo.png" alt="Lecture" className="h-10 object-contain opacity-80" />
+                          </div>
+                          <div className="w-full h-7 bg-[#1A1A1A] flex items-center justify-between px-6 relative z-10">
+                            <p className="text-white text-[10px] ff-font truncate max-w-[40%]">{item.strip_left}</p>
+                            <button 
+                              onClick={() => item.video_link && window.open(item.video_link, "_blank")}
+                              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#F5C800] flex items-center justify-center shadow-lg z-20 hover:scale-105 transition-transform border border-yellow-400 cursor-pointer"
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="black" className="ml-1">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </button>
+                            <p className="text-white text-[10px] ff-font truncate text-right max-w-[40%]">{item.strip_right}</p>
+                          </div>
+                          <div className="flex-[1.5] flex items-center justify-center gap-3 bg-[#b5b5b5] relative z-0">
+                            <div className="w-10 h-10 bg-gray-600 rounded flex flex-shrink-0 items-center justify-center overflow-hidden shadow-sm">
+                              <img src="/images/main logo.png" alt="Profile" className="w-full h-full object-cover" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-gray-900 text-[11px] font-black ff-font-bold">Dr. Kishore Managoli, MD</p>
+                              <p className="text-gray-800 text-[9px] font-bold ff-font">Founder & CEO</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="bg-[#1c1c1e] rounded-b-xl p-4">
+                          <p className="text-[9px] font-bold text-gray-500 uppercase mb-1.5 ff-font-bold">{item.subject || "CARDIOLOGY"}</p>
+                          <p className="text-[13px] font-bold text-white ff-font-bold leading-snug">
+                            {item.title}
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-left">
-                        <p className="text-gray-900 text-[11px] font-black ff-font-bold">Dr. Kishore Managoli, MD</p>
-                        <p className="text-gray-800 text-[9px] font-bold ff-font">Founder & CEO</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-[#1c1c1c] rounded-b-xl p-4">
-                    <p className="text-[9px] font-bold text-gray-500 uppercase mb-1.5 ff-font-bold">CARDIOLOGY</p>
-                    <p className="text-[13px] font-bold text-white ff-font-bold leading-snug">
-                      {item.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </Sliders>
-          </div>
+                    ))}
+                  </Sliders>
+                );
+              })()}
+            </div>
+          )}
 
           {/* Individual Courses */}
           <div className="mb-12">
