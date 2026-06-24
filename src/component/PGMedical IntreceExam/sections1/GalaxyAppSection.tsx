@@ -384,12 +384,14 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(0);
   const [previewModal, setPreviewModal] = useState<{ open: boolean; toolIndex: number }>({ open: false, toolIndex: 0 });
   const [detailModal, setDetailModal] = useState<{ open: boolean; toolIndex: number }>({ open: false, toolIndex: 0 });
+  const [chitraLightbox, setChitraLightbox] = useState({ open: false, index: 0 });
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setPreviewModal(prev => ({ ...prev, open: false }));
         setDetailModal(prev => ({ ...prev, open: false }));
+        setChitraLightbox({ open: false, index: 0 });
       }
     };
     window.addEventListener("keydown", handleKey);
@@ -397,13 +399,13 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
   }, []);
 
   useEffect(() => {
-    if (previewModal.open || detailModal.open) {
+    if (previewModal.open || detailModal.open || chitraLightbox.open) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
-  }, [previewModal.open, detailModal.open]);
+  }, [previewModal.open, detailModal.open, chitraLightbox.open]);
 
   const cardContainerRefs = [
     useRef<HTMLDivElement>(null),
@@ -682,7 +684,13 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                             ? `bg-gray-900 ${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-xl scale-105" : "border-gray-700 shadow-sm"}`
                             : `${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-xl scale-105" : "border-gray-200 shadow-sm"} bg-white p-0`
                         }`}
-                        onClick={() => setDetailModal({ open: true, toolIndex: sectionIndex })}
+                        onClick={() => {
+                          if (sectionIndex === 1 && card.image) {
+                            setChitraLightbox({ open: true, index });
+                          } else {
+                            setDetailModal({ open: true, toolIndex: sectionIndex });
+                          }
+                        }}
                       >
                         {sectionIndex === 0 ? (
                           <>
@@ -1324,6 +1332,58 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
           </div>
         );
       })()}
+
+      {chitraLightbox.open && toolSections[1]?.cards && (
+        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-4" style={{ backgroundColor: "rgba(18, 18, 18, 0.95)", backdropFilter: "blur(8px)" }} onClick={() => setChitraLightbox({ open: false, index: 0 })}>
+          <button className="absolute top-6 right-6 w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white hover:bg-gray-700 transition" onClick={() => setChitraLightbox({ open: false, index: 0 })}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+          </button>
+
+          <button
+            className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800/80 rounded-full flex items-center justify-center text-white hover:bg-gray-700 transition"
+            onClick={(e) => {
+               e.stopPropagation();
+               setChitraLightbox(prev => ({ ...prev, index: (prev.index - 1 + toolSections[1].cards.length) % toolSections[1].cards.length }));
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+
+          <button
+            className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-800/80 rounded-full flex items-center justify-center text-white hover:bg-gray-700 transition"
+            onClick={(e) => {
+               e.stopPropagation();
+               setChitraLightbox(prev => ({ ...prev, index: (prev.index + 1) % toolSections[1].cards.length }));
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+
+          <div className="flex flex-col items-center justify-center w-full max-w-5xl" onClick={e => e.stopPropagation()}>
+            <img
+              src={toolSections[1].cards[chitraLightbox.index].image}
+              alt={toolSections[1].cards[chitraLightbox.index].title}
+              className="max-h-[75vh] w-auto object-contain rounded-xl shadow-2xl mb-6"
+            />
+            <div className="text-center">
+              {toolSections[1].cards[chitraLightbox.index].badge && (
+                <span className="text-[#FFCA00] text-sm font-bold tracking-widest uppercase block mb-2">
+                  {toolSections[1].cards[chitraLightbox.index].badge}
+                </span>
+              )}
+              {toolSections[1].cards[chitraLightbox.index].title && (
+                <h2 className="text-white text-2xl font-black mb-2">
+                  {toolSections[1].cards[chitraLightbox.index].title}
+                </h2>
+              )}
+              <p className="text-gray-400 text-sm">
+                {chitraLightbox.index + 1} of {toolSections[1].cards.length}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };
