@@ -137,6 +137,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
               badge: "",
               card_type: "answer",
               options: [],
+              hardDays: flashcardQA[0].hard_days || 1,
+              mediumDays: flashcardQA[0].medium_days || 3,
+              easyDays: flashcardQA[0].easy_days || 7,
             },
           ];
         } else if (sampleQuestions.length > 0) {
@@ -190,6 +193,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                 badge: fallbackCard.badge,
                 card_type: "answer",
                 options: [],
+                hardDays: 1,
+                mediumDays: 3,
+                easyDays: 7,
               }
             ];
           } else {
@@ -346,6 +352,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
     const flashcardQA = (t.flashcard_qa || []).map((f: any) => ({
       question: f.question || "",
       answer: f.answer || "",
+      hardDays: f.hard_days || 1,
+      mediumDays: f.medium_days || 3,
+      easyDays: f.easy_days || 7,
     }));
     return {
       name: t.tool_name || "",
@@ -480,11 +489,11 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
   }
 
   return (
-    <section className=" px-6 bg-white">
-      <div className="max-w-[960px] mx-auto">
+    <section className=" px-6 bg-white pt-12 md:pt-12">
+      <div className="max-w-[1100px] mx-auto">
         <div className="text-center mb-12">
           {sectionHeader.label && (
-          <p className="text-[10px] font-black tracking-[0.15em] uppercase text-primary mb-2 ff-font-bold">
+          <p className="text-[13px] font-black tracking-[0.15em] uppercase text-primary mb-2 ff-font-bold">
             {sectionHeader.label}
           </p>
           )}
@@ -685,6 +694,9 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                             : `${selectedCardIndices[sectionIndex] === index ? "border-primary shadow-xl scale-105" : "border-gray-200 shadow-sm"} bg-white p-0`
                         }`}
                         onClick={() => {
+                          if (sectionIndex === 0) {
+                            return; // Disable detail modal on Qbanks
+                          }
                           if (sectionIndex === 1 && card.image) {
                             setChitraLightbox({ open: true, index });
                           } else {
@@ -698,16 +710,18 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                             <p className="text-[13px] font-semibold text-white leading-relaxed">{card.title}</p>
                             {card.options?.length > 0 && (
                             <div className="mt-3 space-y-1.5">
-                              {card.options.map((opt: any, oi: number) => (
+                              {card.options.map((opt: any, oi: number) => {
+                                const optionLetter = String.fromCharCode(97 + oi);
+                                return (
                                 <div
                                   key={oi}
                                   className={`px-2 py-1.5 rounded border text-[11px] ${
                                     opt.is_correct ? "border-primary text-primary" : "border-gray-700 text-gray-400"
                                   }`}
                                 >
-                                  {opt.is_correct ? "✓ " : ""}{opt.text}
+                                  {opt.is_correct ? "✓ " : ""}{optionLetter}. {opt.text}
                                 </div>
-                              ))}
+                              )})}
                             </div>
                             )}
                           </>
@@ -783,6 +797,20 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                   {flashcardAnswer.badge && (
                     <p className="text-[9px] text-gray-400 mb-4">{flashcardAnswer.badge}</p>
                   )}
+                  <div className="flex gap-2 mt-4 w-full justify-center">
+                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
+                      <div className="text-[11px] text-red-500 font-semibold mb-0.5">Hard</div>
+                      <div className="text-[9px] text-gray-400">{flashcardAnswer.hardDays || 1} day{flashcardAnswer.hardDays !== 1 ? 's' : ''}</div>
+                    </div>
+                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
+                      <div className="text-[11px] text-yellow-500 font-semibold mb-0.5">Medium</div>
+                      <div className="text-[9px] text-gray-400">{flashcardAnswer.mediumDays || 3} days</div>
+                    </div>
+                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
+                      <div className="text-[11px] text-green-500 font-semibold mb-0.5">Easy</div>
+                      <div className="text-[9px] text-gray-400">{flashcardAnswer.easyDays || 7} days</div>
+                    </div>
+                  </div>
                 </div>
                 )}
               </div>
@@ -1176,7 +1204,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
         const tool = appTools[detailModal.toolIndex];
         return (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(6px)" }} onClick={() => setDetailModal(prev => ({ ...prev, open: false }))}>
-            <div className="relative bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col" style={{ maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
+            <div className="relative bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col" style={{ maxHeight: "90vh" }} onClick={e => e.stopPropagation()}>
               <div className="bg-[#1a1a1a] p-5 flex items-center justify-between sticky top-0 z-20">
                 <div>
                   <p className="text-[10px] font-black text-[#FFCA00] uppercase tracking-widest mb-1">{detail.tagline}</p>
@@ -1237,13 +1265,19 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                             <span className="text-[9px] font-bold text-gray-400 tracking-widest">ANSWER</span>
                           </div>
                           <p className="text-[14px] font-bold text-white leading-relaxed font-serif italic flex-1">{card.answer}</p>
-                          {card.question && (
-                            <p className="text-[9px] text-gray-500 mb-2">{detail.sampleQuestions?.[0]?.badge || ""}</p>
-                          )}
-                          <div className="flex gap-1.5 mt-2">
-                            <button className="px-2.5 py-1 rounded-md text-[9px] font-bold bg-red-900/60 text-red-300 border border-red-700">Hard</button>
-                            <button className="px-2.5 py-1 rounded-md text-[9px] font-bold bg-yellow-900/60 text-yellow-300 border border-yellow-700">Medium</button>
-                            <button className="px-2.5 py-1 rounded-md text-[9px] font-bold bg-green-900/60 text-green-300 border border-green-700">Easy</button>
+                          <div className="flex gap-2 mt-2">
+                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                              <span className="text-[11px] font-bold text-red-500 mb-0.5">Hard</span>
+                              <span className="text-[9px] text-gray-400">{card.hard_days || card.hardDays || 1} {parseInt(card.hard_days || card.hardDays || 1) === 1 ? 'day' : 'days'}</span>
+                            </button>
+                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                              <span className="text-[11px] font-bold text-yellow-500 mb-0.5">Medium</span>
+                              <span className="text-[9px] text-gray-400">{card.medium_days || card.mediumDays || 3} {parseInt(card.medium_days || card.mediumDays || 3) === 1 ? 'day' : 'days'}</span>
+                            </button>
+                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                              <span className="text-[11px] font-bold text-green-500 mb-0.5">Easy</span>
+                              <span className="text-[9px] text-gray-400">{card.easy_days || card.easyDays || 7} {parseInt(card.easy_days || card.easyDays || 7) === 1 ? 'day' : 'days'}</span>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1269,9 +1303,11 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                         )}
                         {q.options && q.options.length > 0 && (
                           <div className="space-y-2">
-                            {q.options.map((opt: any, i: number) => (
-                              <div key={i} className={`px-3 py-2 rounded-lg text-[12px] border ${opt.correct ? "border-yellow-400 text-yellow-300 bg-yellow-400/10" : "border-gray-700 text-gray-400"}`}>{opt.text}</div>
-                            ))}
+                            {q.options.map((opt: any, i: number) => {
+                              const optionLetter = String.fromCharCode(97 + i);
+                              return (
+                              <div key={i} className={`px-3 py-2 rounded-lg text-[12px] border ${opt.correct || opt.isCorrect ? "border-yellow-400 text-yellow-300 bg-yellow-400/10" : "border-gray-700 text-gray-400"}`}>{optionLetter}. {opt.text}</div>
+                            )})}
                           </div>
                         )}
                       </div>
@@ -1293,9 +1329,11 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                         )}
                         {q.options && q.options.length > 0 && (
                           <div className="space-y-2">
-                            {q.options.map((opt: any, i: number) => (
-                              <div key={i} className={`px-3 py-2 rounded-lg text-[12px] border ${opt.correct ? "border-yellow-400 text-yellow-300 bg-yellow-400/10" : "border-gray-700 text-gray-400"}`}>{opt.text}</div>
-                            ))}
+                            {q.options.map((opt: any, i: number) => {
+                              const optionLetter = String.fromCharCode(97 + i);
+                              return (
+                              <div key={i} className={`px-3 py-2 rounded-lg text-[12px] border ${opt.correct || opt.isCorrect ? "border-yellow-400 text-yellow-300 bg-yellow-400/10" : "border-gray-700 text-gray-400"}`}>{optionLetter}. {opt.text}</div>
+                            )})}
                           </div>
                         )}
                       </div>
