@@ -46,7 +46,7 @@ const experiences = [
 const PathologyExperience = () => {
   return (
     <section id="learning-experience" className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-6xl mx-auto text-left">
+      <div className="max-w-7xl mx-auto text-left">
         <div
           className="flex items-center justify-center md:justify-start gap-3 mb-6"
         >
@@ -57,7 +57,7 @@ const PathologyExperience = () => {
         </div>
         
         <h2
-          className="text-3xl md:text-5xl font-black text-black leading-[1.15] mb-16 ff-font-bold tracking-tight text-center md:text-left"
+          className="text-3xl md:text-4xl font-black text-black leading-[1.15] mb-16 ff-font-bold tracking-tight text-center md:text-left"
         >
           The Mendel Learning Experience
         </h2>

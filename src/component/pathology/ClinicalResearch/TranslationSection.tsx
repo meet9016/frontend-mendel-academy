@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 const TranslationSection = () => {
   return (
     <section className="bg-[#FAF8F5] pt-24 pb-0 relative">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col items-start text-left">
+        <div className="max-w-6xl w-full">
         
         {/* Header */}
         <div className="mb-16 flex flex-col items-start">
@@ -99,6 +100,7 @@ const TranslationSection = () => {
             </button>
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );

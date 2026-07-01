@@ -4,7 +4,8 @@ import React from 'react';
 const audience = ["Practicing Surgical Pathologists ready to add molecular authority", "Hematopathologists integrating NGS and flow into daily sign-out", "Pathologists preparing for subspecialty or leadership roles", "Lab Directors building precision oncology capability in-house", "Oncologists seeking deeper laboratory integration", "Industry professionals in biomarker / CDx strategy roles"];
 const TargetAudienceSection = () => {
   return <section className="bg-[#FAF8F5] py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         
         {/* Top Part: Designed for pathologists in practice */}
         <div className="mb-24">
@@ -95,6 +96,7 @@ const TargetAudienceSection = () => {
             </div>
 
           </div>
+        </div>
         </div>
       </div>
     </section>;

@@ -6,7 +6,7 @@ import DNAGraphic from './DNAGraphic';
 const HeroSection = () => {
   return (
     <section id="fellowship" className="bg-[#100b16] py-24 px-6 overflow-hidden relative">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
         
         {/* Left Column Content */}
         <div className="flex-1 text-left max-w-2xl">

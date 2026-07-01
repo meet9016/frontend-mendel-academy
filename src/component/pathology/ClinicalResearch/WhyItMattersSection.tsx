@@ -4,7 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 const WhyItMattersSection = () => {
   return <section className="bg-[#FAF8F5] py-24 px-6 relative">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-6xl w-full">
         
         {/* Header */}
         <div className="mb-16 flex flex-col items-start">
@@ -176,7 +177,7 @@ const WhyItMattersSection = () => {
           </motion.div>
 
         </div>
-
+        </div>
       </div>
     </section>;
 };

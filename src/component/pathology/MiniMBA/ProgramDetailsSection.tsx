@@ -4,7 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 const ProgramDetailsSection = () => {
   return <section className="bg-[#FAF8F5] pt-12 pb-0 px-6">
-      <div className="max-w-4xl mx-auto mb-24">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-4xl w-full mb-24">
         
         {/* Format */}
         <div className="mb-16">
@@ -263,8 +264,8 @@ const ProgramDetailsSection = () => {
         <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold flex items-center gap-2 mx-auto">
           Join the Next Cohort <span className="font-normal">→</span>
         </button>
+        </div>
       </div>
-
     </section>;
 };
 export default ProgramDetailsSection;

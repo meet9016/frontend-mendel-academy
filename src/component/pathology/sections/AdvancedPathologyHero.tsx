@@ -9,9 +9,9 @@ const AdvancedPathologyHero = () => {
       {/* Background glow */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#E94E8F]/20 via-[#100b16] to-[#100b16] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-50 pointer-events-none"></div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-start">
         
-        <div className="max-w-4xl w-full flex flex-col items-start">
+        <div className="max-w-5xl w-full flex flex-col items-start">
           
           {/* Top Label */}
           <div className="flex items-center gap-3 mb-6">
@@ -27,15 +27,15 @@ const AdvancedPathologyHero = () => {
           </div>
 
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-6 ff-font-bold"
+            className="text-3xl md:text-3xl lg:text-4xl font-black text-white leading-[1.1] mb-6 ff-font-bold"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            12-Month Virtual <br />
+            12-Month Virtual
             Fellowship in <br />
-            <span className="text-[#E94E8F]">Molecular Pathology</span><br />
-            <span className="text-[#E94E8F]">Interpretation &</span><br />
+            <span className="text-white">Molecular Pathology</span><br />
+            <span className="text-[#fff]">Interpretation &</span><br />
             <span className="text-white">Precision Oncology</span>
           </motion.h1>
 

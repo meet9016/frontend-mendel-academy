@@ -18,7 +18,7 @@ const ConsultingHeroSection = () => {
       duration: 0.6
     }}></motion.div>
       
-      <div className="max-w-5xl mx-auto w-full relative z-10">
+      <div className="max-w-7xl mx-auto w-full relative z-10">
         
         <div className="text-left">
           <motion.div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FFCA00] mb-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{

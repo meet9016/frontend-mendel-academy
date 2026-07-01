@@ -10,7 +10,7 @@ const PathologyCTA = () => {
         <div className="absolute w-[700px] h-[700px] rounded-full border border-gray-800"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center">
+      <div className="max-w-7xl mx-auto text-left relative z-10 flex flex-col items-start">
         
         <p
           className="text-gray-300 text-sm md:text-base font-serif italic mb-8 max-w-2xl"
@@ -31,7 +31,7 @@ const PathologyCTA = () => {
         </p>
 
         <div
-          className="flex flex-wrap justify-center gap-4"
+          className="flex flex-wrap justify-start gap-4"
         >
           <button className="px-6 py-3 rounded-full bg-[#FFCA00] text-black font-bold text-[11px] hover:bg-yellow-400 transition-colors ff-font-bold tracking-wide">
             Enroll in the Fellowship →

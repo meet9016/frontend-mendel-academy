@@ -3,7 +3,8 @@
 import React from 'react';
 const MethodologySection = () => {
   return <section className="bg-[#100b16] py-24 px-6 border-b-2 border-[#1E1A29]">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         
         {/* Header */}
         <div className="mb-14">
@@ -74,7 +75,7 @@ const MethodologySection = () => {
           </div>
 
         </div>
-
+        </div>
       </div>
     </section>;
 };

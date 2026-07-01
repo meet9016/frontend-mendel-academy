@@ -6,8 +6,9 @@ const EngagementProcessSection = () => {
   return <section className="bg-[#FAF8F5] pt-0 pb-0">
       
       {/* Dark Banner Process */}
-      <div className="max-w-5xl mx-auto px-6 mb-24">
-        <motion.div className="bg-[#181424] rounded-3xl p-10 md:p-14 shadow-2xl relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+      <div className="max-w-7xl mx-auto flex flex-col items-start px-6 mb-24">
+        <div className="max-w-5xl w-full">
+          <motion.div className="bg-[#181424] rounded-3xl p-10 md:p-14 shadow-2xl relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
         once: true,
         margin: "-50px"
       }} transition={{
@@ -131,29 +132,34 @@ const EngagementProcessSection = () => {
 
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* Bottom Footer Banner */}
-      <div id="start-conversation" className="bg-[#100b16] py-24 px-6 text-center border-t border-[#1E1A29]">
-        <motion.h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-        once: true,
-        margin: "-50px"
-      }} transition={{
-        duration: 0.6
-      }}>
-          Start with a conversation.
-        </motion.h2>
-        <motion.p className="text-[#A3A8B8] text-sm md:text-base max-w-xl mx-auto mb-10 ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-        once: true,
-        margin: "-50px"
-      }} transition={{
-        duration: 0.6
-      }}>
-          30 minutes. No obligation. Bring your hardest problem.
-        </motion.p>
-        <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold flex items-center gap-2 mx-auto">
-          Schedule a 30-Minute Discovery Call
-        </button>
+      <div id="start-conversation" className="bg-[#100b16] py-24 px-6 border-t border-[#1E1A29]">
+        <div className="max-w-7xl mx-auto flex flex-col items-start">
+          <div className="max-w-5xl w-full">
+            <motion.h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+            once: true,
+            margin: "-50px"
+          }} transition={{
+            duration: 0.6
+          }}>
+              Start with a conversation.
+            </motion.h2>
+            <motion.p className="text-[#A3A8B8] text-sm md:text-base max-w-xl mb-10 ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+            once: true,
+            margin: "-50px"
+          }} transition={{
+            duration: 0.6
+          }}>
+              30 minutes. No obligation. Bring your hardest problem.
+            </motion.p>
+            <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold flex items-center gap-2">
+              Schedule a 30-Minute Discovery Call
+            </button>
+          </div>
+        </div>
       </div>
 
     </section>;

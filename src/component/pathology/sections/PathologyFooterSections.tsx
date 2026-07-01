@@ -3,12 +3,13 @@ import React from 'react';
 const PathologyFooterSections = () => {
   return (
     <section className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         
         {/* AUDIENCE Section */}
-        <div className="mb-32 text-center md:text-left">
+        <div className="mb-32 text-left flex flex-col items-start">
           <div
-            className="flex items-center justify-center md:justify-start gap-3 mb-6"
+            className="flex items-center gap-3 mb-6"
           >
             <div className="w-6 h-[1px] bg-yellow-500"></div>
             <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
@@ -46,9 +47,9 @@ const PathologyFooterSections = () => {
         </div>
 
         {/* FREE RESOURCES Section */}
-        <div className="mb-32 text-center md:text-left">
+        <div className="mb-32 text-left flex flex-col items-start">
           <div
-            className="flex items-center justify-center md:justify-start gap-3 mb-6"
+            className="flex items-center gap-3 mb-6"
           >
             <div className="w-6 h-[1px] bg-yellow-500"></div>
             <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
@@ -112,9 +113,9 @@ const PathologyFooterSections = () => {
         </div>
 
         {/* RESULTS Section */}
-        <div className="text-center md:text-left">
+        <div className="text-left flex flex-col items-start">
           <div
-            className="flex items-center justify-center md:justify-start gap-3 mb-6"
+            className="flex items-center gap-3 mb-6"
           >
             <div className="w-6 h-[1px] bg-yellow-500"></div>
             <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
@@ -189,6 +190,7 @@ const PathologyFooterSections = () => {
           </div>
         </div>
 
+      </div>
       </div>
     </section>
   );

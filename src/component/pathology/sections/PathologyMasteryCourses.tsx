@@ -4,7 +4,7 @@ const PathologyMasteryCourses = () => {
   return (
     <section id="mastery-courses" className="bg-[#fcfcfb] py-24 px-6 relative border-t border-gray-100">
       {/* MASTERY COURSES Section */}
-      <div className="max-w-4xl mx-auto text-left mb-32">
+      <div className="max-w-7xl mx-auto text-left mb-32 flex flex-col items-start">
         <div
           className="flex items-center gap-3 mb-6"
         >
@@ -128,7 +128,7 @@ const PathologyMasteryCourses = () => {
       </div>
 
       {/* BOARD PREPARATION Section */}
-      <div id="board-prep" className="max-w-4xl mx-auto text-left pt-12">
+      <div id="board-prep" className="max-w-7xl mx-auto text-left pt-12 flex flex-col items-start">
         <div
           className="flex items-center gap-3 mb-6"
         >

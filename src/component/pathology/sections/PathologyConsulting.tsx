@@ -4,7 +4,7 @@ import { FaHeart, FaUserMd, FaHospital, FaFlask } from 'react-icons/fa';
 const PathologyConsulting = () => {
   return (
     <section id="consulting" className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-4xl mx-auto text-center md:text-left">
+      <div className="max-w-7xl mx-auto text-left flex flex-col items-start">
         
         {/* CONSULTING Section */}
         <div className="mb-24">

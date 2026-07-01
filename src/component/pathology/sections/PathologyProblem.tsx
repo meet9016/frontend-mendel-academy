@@ -6,10 +6,10 @@ const PathologyProblem = () => {
     <>
       {/* Light background section for the card */}
       <section className="bg-[#fcfcfb] py-24 px-6 relative">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto flex flex-col items-start">
           {/* Card */}
           <div
-            className="bg-white rounded-3xl shadow-xl shadow-pink-900/5 border border-gray-100 p-10 md:p-14 relative overflow-hidden"
+            className="bg-white rounded-3xl shadow-xl shadow-pink-900/5 border border-gray-100 p-10 md:p-14 relative overflow-hidden max-w-5xl"
           >
             {/* Top Pink Gradient */}
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-white via-pink-100 to-[#E94E8F]/20"></div>
@@ -45,7 +45,7 @@ const PathologyProblem = () => {
       {/* Dark background section for the problem */}
       <section className="bg-[#100b16] py-24 px-6 relative">
         <div
-          className="max-w-4xl mx-auto text-left"
+          className="max-w-7xl mx-auto text-left flex flex-col items-start"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-6 h-[1px] bg-gray-600"></div>
@@ -54,20 +54,20 @@ const PathologyProblem = () => {
             </span>
           </div>
           
-          <h2 className="text-3xl md:text-5xl font-black text-white leading-[1.15] mb-4 ff-font-bold tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-black text-white leading-[1.15] mb-4 ff-font-bold tracking-tight">
             The tests exist.<br />
             The <span className="text-[#E94E8F]">interpretation</span> is what's missing.
           </h2>
           
-          <p className="text-[#FFCA00] text-lg font-bold mb-10 ff-font-bold">
+          <p className="text-[#FFCA00] text-md font-bold mb-10 ff-font-bold">
             Mendel Academy was built to close that gap.
           </p>
           
-          <p className="text-white text-base md:text-lg leading-relaxed ff-font mb-6 max-w-3xl">
+          <p className="text-white text-base md:text-md leading-relaxed ff-font mb-6 max-w-3xl">
             In an era of exploding biomarkers, NGS reports and targeted therapies, even experienced oncologists and pathologists can be overwhelmed and indecisive. Information overload, complex data and misinterpreted reporting can cost patients precious time — and sometimes their lives.
           </p>
           
-          <p className="text-[#E94E8F] text-lg font-bold mb-12 ff-font-bold">
+          <p className="text-[#E94E8F] text-md font-bold mb-12 ff-font-bold">
             We demystify complex diagnoses to improve patient outcomes.
           </p>
 

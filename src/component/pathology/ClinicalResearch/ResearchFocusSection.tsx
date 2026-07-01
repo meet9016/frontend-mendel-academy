@@ -3,8 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 const ResearchFocusSection = () => {
-  return <section className="bg-[#100b16] py-24 px-6 relative border-t-2 border-[#1E1A29]">
-      <div className="max-w-6xl mx-auto">
+  return    <section className="bg-[#100b16] py-24 px-6 relative border-t-2 border-[#1E1A29]">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-6xl w-full">
         
         {/* Header */}
         <div className="mb-14 text-left">
@@ -128,7 +129,7 @@ const ResearchFocusSection = () => {
           </motion.div>
 
         </div>
-
+        </div>
       </div>
     </section>;
 };

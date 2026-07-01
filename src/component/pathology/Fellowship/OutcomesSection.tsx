@@ -3,7 +3,8 @@
 import React from 'react';
 const OutcomesSection = () => {
   return <section className="bg-[#FAF8F5] py-24 px-6 relative">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         
         {/* vMTB Banner */}
         <div className="bg-[#181424] rounded-3xl p-10 md:p-14 relative overflow-hidden mb-24 shadow-2xl">
@@ -119,7 +120,7 @@ const OutcomesSection = () => {
             </div>
           </div>
         </div>
-
+        </div>
       </div>
     </section>;
 };

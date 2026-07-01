@@ -26,7 +26,8 @@ const FAQSection = () => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
   return <section className="bg-[#FAF8F5] py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         <div className="mb-12 flex flex-col items-start">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
@@ -54,6 +55,7 @@ const FAQSection = () => {
                 {faq.a}
               </div>
             </div>)}
+        </div>
         </div>
       </div>
     </section>;

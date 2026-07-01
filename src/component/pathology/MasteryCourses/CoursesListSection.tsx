@@ -153,7 +153,8 @@ const CoursesListSection = () => {
 
   return (
     <section className="bg-[#FAF8F5] py-24 px-6 relative" id="mastery-courses">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-6xl w-full">
         
         {/* Header Section */}
         <div className="max-w-3xl mb-12">
@@ -487,6 +488,7 @@ const CoursesListSection = () => {
           </div>
         </motion.div>
 
+        </div>
       </div>
     </section>
   );

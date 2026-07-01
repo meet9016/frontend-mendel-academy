@@ -20,9 +20,9 @@ const PathologyHero = () => {
             </span>
           </div>
           
-          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black text-white leading-[1.05] mb-6 ff-font-bold tracking-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-6xl font-black text-white leading-[1.05] mb-6 ff-font-bold tracking-tight">
             See what others<br />
-            miss. <span className="text-[#E94E8F]">Diagnose<br />what others<br />can't.</span>
+            miss. <span className="text-[#E94E8F]">Diagnose </span><br />what others<br />can't.
           </h1>
           
           <p className="text-[#FFCA00] text-xl md:text-2xl font-bold mb-10 ff-font-bold">

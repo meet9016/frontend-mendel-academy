@@ -41,9 +41,10 @@ const PathologyFAQ = () => {
 
   return (
     <section id="faq" className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="max-w-7xl mx-auto flex flex-col items-start text-left">
+        <div className="max-w-4xl w-full">
+          <div className="mb-12">
+          <div className="flex items-center justify-start gap-3 mb-4">
             <div className="w-4 h-[1px] bg-yellow-500"></div>
             <span className="text-gray-400 text-[9px] font-bold tracking-widest uppercase ff-font-bold">
               FAQ
@@ -81,6 +82,7 @@ const PathologyFAQ = () => {
               )}
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>

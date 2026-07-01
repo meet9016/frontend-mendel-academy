@@ -6,7 +6,7 @@ const PathologyCommunity = () => {
     <>
       {/* COMMUNITY Section */}
       <section id="community" className="bg-[#fcfcfb] pb-24 px-6 relative">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto flex flex-col items-start text-left">
           <div
             className="bg-[#161221] rounded-3xl p-10 md:p-14 relative overflow-hidden shadow-2xl"
           >
@@ -72,7 +72,7 @@ const PathologyCommunity = () => {
 
       {/* ONION SKIN TECHNIQUE Section */}
       <section className="bg-[#100b16] py-32 px-6 relative border-t border-[#1E1A29]">
-        <div className="max-w-4xl mx-auto text-left">
+        <div className="max-w-7xl mx-auto text-left flex flex-col items-start">
           <div
             className="flex items-center justify-center md:justify-start gap-3 mb-6"
           >

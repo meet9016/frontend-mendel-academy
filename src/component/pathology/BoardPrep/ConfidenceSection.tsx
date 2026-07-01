@@ -4,7 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 const ConfidenceSection = () => {
   return <section className="bg-[#FAF8F5] pb-24 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto flex flex-col items-start">
+        <div className="max-w-5xl w-full">
         <motion.div className="bg-[#181424] rounded-3xl p-10 md:p-14 shadow-2xl overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
         once: true,
         margin: "-50px"
@@ -118,6 +119,7 @@ const ConfidenceSection = () => {
           </div>
 
         </motion.div>
+        </div>
       </div>
     </section>;
 };
