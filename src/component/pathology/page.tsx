@@ -4,13 +4,14 @@ import PathologyHero from "./sections/PathologyHero";
 import PathologyProblem from "./sections/PathologyProblem";
 import PathologyExperience from "./sections/PathologyExperience";
 import PathologyProgramsIntro from "./sections/PathologyProgramsIntro";
-import FellowshipHeroSection from "./Fellowship/HeroSection";
 import PathologyMasteryCourses from "./sections/PathologyMasteryCourses";
 import PathologyConsulting from "./sections/PathologyConsulting";
 import PathologyCommunity from "./sections/PathologyCommunity";
 import PathologyFooterSections from "./sections/PathologyFooterSections";
 import PathologyFAQ from "./sections/PathologyFAQ";
 import PathologyCTA from "./sections/PathologyCTA";
+
+import AdvancedPathologyHero from "./sections/AdvancedPathologyHero";
 
 function Pathology() {
   return (
@@ -21,7 +22,7 @@ function Pathology() {
       <PathologyExperience />
       <PathologyProgramsIntro />
       <div className="bg-[#100b16]">
-        <FellowshipHeroSection />
+        <AdvancedPathologyHero />
       </div>
       <PathologyMasteryCourses />
       <PathologyConsulting />

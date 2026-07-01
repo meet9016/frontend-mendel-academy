@@ -33,7 +33,7 @@ const BoardHeroSection = () => {
             </span>
           </motion.div>
           
-          <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-6 ff-font-bold tracking-tight max-w-xl" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.1] mb-6 ff-font-bold tracking-tight max-w-xl" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{

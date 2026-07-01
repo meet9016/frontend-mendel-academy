@@ -13,7 +13,7 @@ const MethodologySection = () => {
               HOW YOU LEARN
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-white leading-tight ff-font-bold max-w-xl">
+          <h2 className="text-3xl md:text-4xl font-black text-white leading-tight ff-font-bold max-w-xl">
             A methodology you won&apos;t find anywhere else
           </h2>
         </div>

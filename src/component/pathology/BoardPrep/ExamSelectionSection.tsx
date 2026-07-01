@@ -36,7 +36,7 @@ const ExamSelectionSection = () => {
       <div className="max-w-5xl mx-auto">
         
         {/* Header */}
-        <div className="text-center mb-16 flex flex-col items-center">
+        <div className="mb-16 flex flex-col items-start">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
             <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">

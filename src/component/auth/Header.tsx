@@ -330,10 +330,13 @@ export default function Header() {
             </button>
 
             {/* Exam Dropdown Menu */}
-            <div className="relative">
+            <div className="relative" onMouseEnter={() => setIsExamDropdownOpen(true)} onMouseLeave={() => setIsExamDropdownOpen(false)}>
               <button
                 id="exam-button"
-                onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
+                onClick={() => {
+                  router.push('/medicalexam');
+                  setIsExamDropdownOpen(false);
+                }}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
                   ${isExamActive ? "" : ""}
                 `}
@@ -392,10 +395,13 @@ export default function Header() {
             </div>
 
             {/* Advanced Pathology Prep Dropdown */}
-            <div className="relative">
+            <div className="relative" onMouseEnter={() => setIsPathologyDropdownOpen(true)} onMouseLeave={() => setIsPathologyDropdownOpen(false)}>
               <button
                 id="pathology-button"
-                onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
+                onClick={() => {
+                  router.push('/pathology');
+                  setIsPathologyDropdownOpen(false);
+                }}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
                   ${isPathologyActive ? "" : ""}
                 `}
@@ -413,7 +419,7 @@ export default function Header() {
                   id="pathology-dropdown"
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
                 >
-                  <h3 className="text-sm font-bold text-[#E94E8F] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#E94E8F]">
+                  <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
                     Mendel Pathology Programs
                   </h3>
 
@@ -517,7 +523,7 @@ export default function Header() {
                   </div>
                   */}
 
-                  <div className="border-t border-gray-200 mt-4 pt-4 text-center">
+                  {/* <div className="border-t border-gray-200 mt-4 pt-4 text-center">
                     <button
                       onClick={() => {
                         router.push('/pathology');
@@ -527,7 +533,7 @@ export default function Header() {
                     >
                       View All Pathology Programs →
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>

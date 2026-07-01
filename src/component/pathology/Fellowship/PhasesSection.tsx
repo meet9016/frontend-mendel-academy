@@ -12,23 +12,23 @@ const phases = [{
   num: "02",
   title: "Molecular Methods",
   duration: "Months 4-6",
-  contentTitle: "Mastering Molecular Technologies",
-  contentDesc: "Deep dive into NGS, PCR, FISH, and liquid biopsy. Understand the mechanics, limitations, and clinical applications of each method to confidently select the right test for the right patient.",
-  pills: ["NGS", "PCR", "FISH", "LIQUID BIOPSY"]
+  contentTitle: "Molecular Methods & Interpretation",
+  contentDesc: "FISH, PCR, and NGS from the interpreter's chair: panel design logic, variant classification, report anatomy, quality pitfalls, and when to trust — or challenge — a molecular result.",
+  pills: ["FISH","PCR", "NGS", "VARIANT CLASSIFICATION","QC PITFALLS"]
 }, {
   num: "03",
   title: "Precision Oncology",
   duration: "Months 7-9",
-  contentTitle: "Clinical Integration and Actionability",
-  contentDesc: "Translate molecular findings into therapeutic decisions. Learn to interpret complex variants, understand resistance mechanisms, and guide oncologists in matching patients with targeted therapies.",
-  pills: ["VARIANT INTERPRETATION", "TARGETED THERAPIES", "RESISTANCE"]
+  contentTitle: "Precision Oncology in Practice",
+  contentDesc: "Liquid biopsy, PGx, resistance mechanisms, and CDx/ADC biomarkers — connecting every result to therapy selection and the questions oncologists actually ask at the tumor board.",
+  pills: ["LIQUID BIOPSY"," PGx", "RESISTANCE", "CDX/ADC","THERAPY SELECTION"]
 }, {
   num: "04",
   title: "Leadership",
   duration: "Months 10-12",
-  contentTitle: "Leading the Molecular Tumor Board",
-  contentDesc: "Synthesize all skills to actively contribute or lead Molecular Tumor Boards. Develop comprehensive molecular reports and establish yourself as the indispensable diagnostic authority in your institution.",
-  pills: ["MTB LEADERSHIP", "COMPREHENSIVE REPORTING", "CONSULTATION"]
+  contentTitle: "Leadership & Implementation",
+  contentDesc: "Reflex testing algorithms, institutional CDx strategy, leading molecular tumor boards, mentoring your team — and a capstone case portfolio that demonstrates your new capabilities.",
+  pills: ["REFLEX ALGORITHMS", "MTB LEADERSHIP ", "CDx STRATEGY","CAPSTONE"]
 }];
 const PhasesSection = () => {
   const [activePhase, setActivePhase] = useState(0);
@@ -41,7 +41,7 @@ const PhasesSection = () => {
               THE JOURNEY
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-[#1E1A29] leading-tight mb-4 ff-font-bold">
+          <h2 className="text-4xl md:text-4xl font-black text-[#1E1A29] leading-tight mb-4 ff-font-bold">
             Twelve months. Four phases. <br />
             One <span className="text-[#E94E8F]">transformed practice.</span>
           </h2>
@@ -53,9 +53,9 @@ const PhasesSection = () => {
 
         <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
           {/* Tabs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 border-b border-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-4 border-b border-gray-200">
             {phases.map((phase, index) => <button key={index} onClick={() => setActivePhase(index)} className={`p-6 text-left transition-colors duration-200 relative ${activePhase === index ? 'bg-white' : 'bg-[#FAFAFA] hover:bg-gray-50'}`}>
-                {activePhase === index && <div className="absolute top-0 left-0 w-full h-1 bg-[#E94E8F]"></div>}
+                <div className={`absolute bottom-0 left-0 w-full h-1 ${index < activePhase ? 'bg-[#E94E8F]' : index === activePhase ? 'bg-[#FFCA00]' : 'bg-transparent'}`}></div>
                 <div className="text-[#FFCA00] text-xs font-black mb-1 ff-font-bold">{phase.num}</div>
                 <div className={`text-base font-black mb-1 ff-font-bold ${activePhase === index ? 'text-[#E94E8F]' : 'text-[#1E1A29]'}`}>
                   {phase.title}

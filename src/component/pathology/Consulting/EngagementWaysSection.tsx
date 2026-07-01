@@ -18,7 +18,7 @@ const EngagementWaysSection = () => {
       <div className="max-w-5xl mx-auto">
         
         {/* Header */}
-        <div className="mb-12 text-center flex flex-col items-center">
+        <div className="mb-12 flex flex-col items-start">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
             <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">
@@ -34,6 +34,14 @@ const EngagementWaysSection = () => {
         }}>
             Three ways to engage
           </motion.h2>
+        </div>
+
+        
+        {/* Highlight Stats Box */}
+        <div className="mb-16 border border-dashed border-[#FFCA00] rounded-xl p-6 text-center max-w-4xl">
+          <p className="text-[#1E1A29] text-xs md:text-sm font-medium tracking-wide ff-font">
+            22+ years leading high-volume labs (50,000+ accessions/year) • 40+ Pharma/CRO collaborations • US-India dual regulatory and operational perspective
+          </p>
         </div>
 
         {/* Tab Pills */}

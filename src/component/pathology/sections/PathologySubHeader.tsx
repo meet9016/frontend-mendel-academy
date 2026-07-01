@@ -1,21 +1,23 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const links = [
   { name: "WHY MENDEL", id: "why-mendel" },
-  { name: "FELLOWSHIP", id: "fellowship" },
-  { name: "MASTERY COURSES", id: "mastery-courses" },
-  { name: "BOARD PREP", id: "board-prep" },
-  { name: "CONSULTING", id: "consulting" },
-  { name: "CLINICAL RESEARCH", id: "consulting" }, // fallback
-  { name: "MINI-MEDICAL MBAS", id: "consulting" }, // fallback
-  { name: "COMMUNITY", id: "community" },
-  { name: "LEARNING EXPERIENCE", id: "learning-experience" },
+  { name: "FELLOWSHIP", id: "fellowship", href: "/pathology/fellowship" },
+  { name: "MASTERY COURSES", id: "mastery-courses", href: "/pathology/mastery-courses" },
+  { name: "BOARD PREP", id: "board-prep", href: "/pathology/board-prep" },
+  { name: "CONSULTING", id: "consulting", href: "/pathology/consulting" },
+  { name: "CLINICAL RESEARCH", id: "clinical-research", href: "/pathology/clinical-research" },
+  { name: "MINI-MEDICAL MBAS", id: "mini-mba", href: "/pathology/mini-mba" },
+  { name: "COMMUNITY", id: "community", href: "/pathology#community" },
+  { name: "LEARNING EXPERIENCE", id: "learning-experience", href: "/pathology#learning-experience" },
   { name: "FAQ", id: "faq" }
 ];
 
 const PathologySubHeader = () => {
   const [activeId, setActiveId] = useState("fellowship");
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +47,11 @@ const PathologySubHeader = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeId]);
 
-  const handleLinkClick = (id: string) => {
+  const handleLinkClick = (id: string, href?: string) => {
+    if (href) {
+      router.push(href);
+      return;
+    }
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
@@ -63,7 +69,7 @@ const PathologySubHeader = () => {
           {links.map((link) => (
             <li key={link.name}>
               <button
-                onClick={() => handleLinkClick(link.id)}
+                onClick={() => handleLinkClick(link.id, link.href)}
                 className={`text-[10px] font-bold tracking-widest uppercase ff-font-bold transition-colors ${
                   activeId === link.id 
                     ? "text-[#FFCA00] border-b-2 border-[#FFCA00] h-12" 

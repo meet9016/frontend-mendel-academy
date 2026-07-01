@@ -14,7 +14,7 @@ const WhyItMattersSection = () => {
               WHY IT MATTERS
             </span>
           </div>
-          <motion.h2 className="text-3xl md:text-5xl font-black text-[#1E1A29] leading-tight mb-6 ff-font-bold max-w-2xl" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.h2 className="text-3xl md:text-4xl font-black text-[#1E1A29] leading-tight mb-6 ff-font-bold max-w-2xl" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
@@ -35,12 +35,14 @@ const WhyItMattersSection = () => {
         {/* 3 Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300 group relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
           duration: 0.6
         }}>
+            {/* Hover accent */}
+            <div className="absolute top-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-[#FFCA00] to-[#E94E8F] transition-all duration-500 ease-out"></div>
             <motion.div className="w-12 h-12 rounded-xl bg-[#E94E8F]/10 flex items-center justify-center mb-6 text-[#E94E8F]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
             once: true,
             margin: "-50px"
@@ -67,12 +69,14 @@ const WhyItMattersSection = () => {
             </motion.p>
           </motion.div>
 
-          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300 group relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
           duration: 0.6
         }}>
+            {/* Hover accent */}
+            <div className="absolute top-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-[#FFCA00] to-[#E94E8F] transition-all duration-500 ease-out"></div>
             <motion.div className="w-12 h-12 rounded-xl bg-[#E94E8F]/10 flex items-center justify-center mb-6 text-[#E94E8F]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
             once: true,
             margin: "-50px"
@@ -99,12 +103,14 @@ const WhyItMattersSection = () => {
             </motion.p>
           </motion.div>
 
-          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(233,78,143,0.1)] transition-all duration-300 group relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
           duration: 0.6
         }}>
+            {/* Hover accent */}
+            <div className="absolute top-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-[#FFCA00] to-[#E94E8F] transition-all duration-500 ease-out"></div>
             <motion.div className="w-12 h-12 rounded-xl bg-[#E94E8F]/10 flex items-center justify-center mb-6 text-[#E94E8F]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
             once: true,
             margin: "-50px"

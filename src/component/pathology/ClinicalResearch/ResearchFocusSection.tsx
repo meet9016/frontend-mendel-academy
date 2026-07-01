@@ -14,7 +14,7 @@ const ResearchFocusSection = () => {
               RESEARCH FOCUS
             </span>
           </div>
-          <motion.h2 className="text-3xl md:text-5xl font-black text-white leading-tight ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.h2 className="text-3xl md:text-4xl font-black text-white leading-tight ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{

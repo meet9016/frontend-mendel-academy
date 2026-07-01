@@ -8,14 +8,13 @@ const ProgramDetailsSection = () => {
         
         {/* Format */}
         <div className="mb-16">
-          <div className="flex items-center gap-2 mb-4 justify-center">
+          <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
             <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">
               FORMAT
             </span>
-            <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
           </div>
-          <motion.h2 className="text-3xl font-black text-[#1E1A29] leading-tight mb-8 ff-font-bold text-center" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.h2 className="text-3xl font-black text-[#1E1A29] leading-tight mb-8 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
@@ -42,7 +41,7 @@ const ProgramDetailsSection = () => {
               margin: "-50px"
             }} transition={{
               duration: 0.6
-            }}>Leave with an actionable plan or portfolio — no busywork.</motion.p>
+            }}>Part-time · Live virtual</motion.p>
             </motion.div>
             <motion.div className="bg-white rounded-xl p-6 border border-gray-100 text-center shadow-sm" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
             once: true,
@@ -61,7 +60,7 @@ const ProgramDetailsSection = () => {
               margin: "-50px"
             }} transition={{
               duration: 0.6
-            }}>Weekly live sessions and asynchronous case analysis.</motion.p>
+            }}>Per week, evenings.</motion.p>
             </motion.div>
             <motion.div className="bg-white rounded-xl p-6 border border-gray-100 text-center shadow-sm" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
             once: true,
@@ -80,21 +79,19 @@ const ProgramDetailsSection = () => {
               margin: "-50px"
             }} transition={{
               duration: 0.6
-            }}>Get a certificate of completion from Mendel Academy.</motion.p>
+            }}>Certificate on completion</motion.p>
             </motion.div>
           </div>
         </div>
-
         {/* Outcomes */}
         <div className="mb-20">
-          <div className="flex items-center gap-2 mb-4 justify-center">
+          <div className="flex items-center gap-2 mb-4">
             <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
             <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">
               OUTCOMES
             </span>
-            <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
           </div>
-          <motion.h2 className="text-3xl font-black text-[#1E1A29] leading-tight mb-10 ff-font-bold text-center" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+          <motion.h2 className="text-3xl font-black text-[#1E1A29] leading-tight mb-10 ff-font-bold text-left" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
           once: true,
           margin: "-50px"
         }} transition={{
@@ -254,7 +251,7 @@ const ProgramDetailsSection = () => {
 
       {/* Bottom Footer Banner */}
       <div className="bg-[#100b16] py-24 px-6 text-center">
-        <motion.h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-8 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
+        <motion.h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-8 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
         once: true,
         margin: "-50px"
       }} transition={{

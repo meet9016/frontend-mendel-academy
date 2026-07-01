@@ -14,12 +14,12 @@ const TargetAudienceSection = () => {
               IS THIS YOU?
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-[#1E1A29] leading-tight mb-12 ff-font-bold max-w-xl">
+          <h2 className="text-3xl md:text-4xl font-black text-[#1E1A29] leading-tight mb-12 ff-font-bold max-w-xl">
             Designed for pathologists in practice
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {audience.map((text, idx) => <div key={idx} className="bg-white rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 p-6 flex gap-3 items-start">
+            {audience.map((text, idx) => <div key={idx} className="bg-white rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 p-6 flex gap-3 items-start hover:border-[#E94E8F] transition-colors duration-300 cursor-default">
                 <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
                 <p className="text-[#1E1A29] text-xs font-semibold leading-relaxed ff-font">
                   {text}
