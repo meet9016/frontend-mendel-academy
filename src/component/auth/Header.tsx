@@ -400,7 +400,7 @@ export default function Header() {
                   ${isPathologyActive ? "" : ""}
                 `}
               >
-                Advanced Pathology Prep
+                Advanced Pathology Programs
                 <span
                   className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
                     ${isPathologyActive ? "w-full" : "w-0 group-hover:w-full"}
@@ -411,18 +411,99 @@ export default function Header() {
               {isPathologyDropdownOpen && (
                 <div
                   id="pathology-dropdown"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[400px] bg-white border border-gray-200 rounded-xl shadow-xl p-6 animate-fadeIn"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
                 >
-                  <h3 className="text-sm font-bold text-[#FFCA00] mb-4 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
-                    Pathology Programs
+                  <h3 className="text-sm font-bold text-[#E94E8F] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#E94E8F]">
+                    Mendel Pathology Programs
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-6">
-                    {/* Hyper Specialist Option */}
-                    <div
+                  <div className="grid grid-cols-2 gap-4">
+                    <ul className="space-y-1">
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/fellowship');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Fellowship
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/mastery-courses');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Mastery Courses
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/board-prep');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Board Prep
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/consulting');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Consulting
+                        </button>
+                      </li>
+                    </ul>
+                    <ul className="space-y-1">
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/clinical-research');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Clinical Research
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/mini-mba');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Mini-Medical MBAs
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
+                          onClick={() => {
+                            router.push('/pathology/mastery-series');
+                            setIsPathologyDropdownOpen(false);
+                          }}
+                        >
+                          Mastery Series
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
 
-                      className="group cursor-pointer text-center"
-                    >
+                  {/* 
+                  <div className="grid grid-cols-2 gap-6 mt-6 hidden">
+                    <div className="group cursor-pointer text-center">
                       <button
                         className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
                         onClick={() => {
@@ -432,31 +513,11 @@ export default function Header() {
                       >
                         Hyper Specialist
                       </button>
-
-
-                    </div>
-
-                    {/* Mastery Series Option */}
-                    <div
-                      onClick={() => {
-                        router.push('/pathology/mastery-series');
-                        setIsPathologyDropdownOpen(false);
-                      }}
-                      className="group cursor-pointer text-center"
-                    >
-                      <button
-                        className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                        onClick={() => {
-                          router.push('/pathology/mastery-series');
-                          setIsPathologyDropdownOpen(false);
-                        }}
-                      >
-                        Mastery Series
-                      </button>
                     </div>
                   </div>
+                  */}
 
-                  {/* <div className="border-t border-gray-200 mt-4 pt-4 text-center">
+                  <div className="border-t border-gray-200 mt-4 pt-4 text-center">
                     <button
                       onClick={() => {
                         router.push('/pathology');
@@ -466,7 +527,7 @@ export default function Header() {
                     >
                       View All Pathology Programs →
                     </button>
-                  </div> */}
+                  </div>
                 </div>
               )}
             </div>
@@ -634,7 +695,7 @@ export default function Header() {
                   onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
                   className="ff-font font-medium py-2 w-full text-left hover:text-yellow-500"
                 >
-                  Advanced Pathology Prep
+                  Advanced Pathology Programs
                 </button>
                 {isPathologyDropdownOpen && (
                   <div className="mt-2 pl-4 space-y-3">

@@ -71,20 +71,20 @@ const HeroSection = ({ course }: { course: any }) => (
     <div className="max-w-[1380px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="text-center mb-12 space-y-4">
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-2xl md:text-4xl ff-font-bold  font-bold"
+          className="text-black text-2xl md:text-4xl ff-font-bold  font-bold"
         >
           {course.course_title}
         </motion.h1>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-lg ff-font mt-auto max-w-4xl mx-auto"
+          className="text-black text-lg ff-font mt-auto max-w-4xl mx-auto"
         >
           {course.hero_subtitle}
         </motion.p>
@@ -93,8 +93,8 @@ const HeroSection = ({ course }: { course: any }) => (
       <div className="grid grid-cols-1 mt-10 lg:grid-cols-12 gap-10">
         {/* Left Image Card */}
         <motion.div
-          initial={{ opacity: 0, x: -60 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacitx: -60 }}
+          whileInView={{ opacitx: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
           className="lg:col-span-5"
@@ -104,8 +104,8 @@ const HeroSection = ({ course }: { course: any }) => (
 
         {/* Right Details */}
         <motion.div
-          initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacitx: 60 }}
+          whileInView={{ opacitx: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
           className="lg:col-span-7 space-y-8"
@@ -144,7 +144,7 @@ const ImageCard = ({ course }: { course: any }) => {
             className="bg-white rounded-2xl p-4 text-center border border-[#f0b100]/30 shadow-md hover:shadow-lg transition-all"
           >
             <stat.icon className="w-6 h-6 mx-auto text-primary mb-2" />
-            <div className="text-xl sm:text-2xl ff-font-bold font-bold">{stat.value}</div>
+            <div className="text-black text-xl sm:text-2xl ff-font-bold font-bold">{stat.value}</div>
             <div className="text-xs ff-font text-gray-500">{stat.label}</div>
           </div>
         ))}
@@ -175,14 +175,14 @@ const DetailsCard = ({ course }: { course: any }) => {
 
   return (
     <div className="bg-white/70 rounded-3xl p-8 shadow-lg border-2 border-[#f0b100]/30 backdrop-blur-sm hover:shadow-xl transition-all duration-500">
-      <h2 className="text-3xl font-bold ff-font-bold mb-4">{course.course_title}</h2>
-      <p className="text-muted-foreground ff-font mb-6">{course.hero_subtitle}</p>
+      <h2 className="text-black text-3xl font-bold ff-font-bold mb-4">{course.course_title}</h2>
+      <p className="text-gray-700 text-muted-foreground ff-font mb-6">{course.hero_subtitle}</p>
 
       <InstructorCard instructor={course.instructor} />
 
       {masterFeatures.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-xl font-semibold ff-font-bold flex items-center gap-2">
+          <h3 className="text-black text-xl font-semibold ff-font-bold flex items-center gap-2">
             <FaChartLine className="w-5 h-5 text-primary" />
             What You'll Master:
           </h3>
@@ -199,7 +199,7 @@ const DetailsCard = ({ course }: { course: any }) => {
 
       {courseIncludes.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-xl font-semibold ff-font-bold flex items-center gap-2">
+          <h3 className="text-black text-xl font-semibold ff-font-bold flex items-center gap-2">
             <FaMagic className="w-5 h-5 text-primary" />
             Course Includes:
           </h3>
@@ -243,7 +243,7 @@ const NextSessionCard = ({ date }: { date: string }) => {
       </div>
     </div>
     {/* Date */}
-    <div className="text-lg sm:text-xl ff-font-bold font-bold">
+    <div className="text-black text-lg sm:text-xl ff-font-bold font-bold">
         {formattedDate}
     </div>
     {/* Time */}
@@ -279,7 +279,7 @@ const InstructorCard = ({ instructor }: { instructor: any }) => (
         className="w-20 h-20 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-primary"
       />
       <div className="text-center sm:text-left">
-        <h3 className="text-lg ff-font-bold">{instructor?.name}</h3>
+        <h3 className="text-black text-lg ff-font-bold">{instructor?.name}</h3>
         <p className="text-sm ff-font">
           {instructor?.qualification}
         </p>

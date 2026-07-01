@@ -34,8 +34,8 @@ export default function MeetYourMentor() {
 const Header = () => (
   <div className="text-center mb-10">
     <motion.h2
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
       className="text-2xl ff-font-bold md:text-4xl font-bold mb-2"
@@ -57,8 +57,8 @@ const Content = ({ achievements }: { achievements: Achievement[] }) => (
 
 const ProfileCard = () => (
   <motion.div
-    initial={{ opacity: 0, x: -60 }}
-    whileInView={{ opacity: 1, x: 0 }}
+    initial={{ opacitx: -60 }}
+    whileInView={{ opacitx: 0 }}
     transition={{ duration: 0.8 }}
     viewport={{ once: true }}
     className="relative"
@@ -106,8 +106,8 @@ const AchievementsList = ({ achievements }: { achievements: Achievement[] }) => 
     {achievements.map((achievement, index) => (
       <motion.div
         key={index}
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacitscale: 0.95 }}
+        whileInView={{ opacitscale: 1 }}
         transition={{ delay: index * 0.15, duration: 0.5 }}
         viewport={{ once: true }}
         className="group relative"

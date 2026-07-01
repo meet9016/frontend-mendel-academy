@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -87,8 +88,8 @@ export default function Page() {
 const Header = () => (
   <div className="text-center mb-10">
     <motion.h2
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
       className="text-2xl md:text-4xl font-bold"

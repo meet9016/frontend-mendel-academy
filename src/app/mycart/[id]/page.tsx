@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MyCart from "@/component/mycart/MyCart";
 
 

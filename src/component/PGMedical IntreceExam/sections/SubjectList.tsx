@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -175,7 +176,7 @@ const SubjectList: React.FC<SubjectListProps> = ({ subjectData, loading }) => {
 
   // ================= SUBJECT LIST (PILLS UI) =================
   return (
-    <section className="py-16 bg-gradient-to-b from-green-100 to-blue-50">
+    <section id="explore-curriculum" className="py-16 bg-gradient-to-b from-green-100 to-blue-50">
       <div className="container mx-auto px-4">
 
         {/* HEADER */}

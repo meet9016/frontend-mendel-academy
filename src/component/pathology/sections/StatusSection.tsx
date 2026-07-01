@@ -20,8 +20,8 @@ export default function StatusSection() {
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             transition={{ delay: i * 0.15, duration: 0.6 }}
             viewport={{ once: true }}
             className="flex flex-col items-center space-y-2"
@@ -29,8 +29,8 @@ export default function StatusSection() {
             <div className="p-3 border-primary rounded-xl">
               <s.icon className="text-primary w-6 h-6" />
             </div>
-            <h3 className="text-2xl font-bold ff-font-bold">{s.value}</h3>
-            <p className="ff-font text-md">
+            <h3 className="text-black text-2xl font-bold ff-font-bold">{s.value}</h3>
+            <p className="text-black ff-font text-md">
               {s.label} 
               {s.highlight && (
                 <>

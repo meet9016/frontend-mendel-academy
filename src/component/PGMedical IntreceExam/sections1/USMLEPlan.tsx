@@ -110,7 +110,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
   return (
     <>
       {/* 1. The Mendel Galaxy App */}
-      <section className="py-[72px] px-6 bg-white">
+      <section id="pricing" className="py-[72px] px-6 bg-white">
         <div className="max-w-[960px] mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-[30px] font-black text-gray-900 mb-2 ff-font-bold">

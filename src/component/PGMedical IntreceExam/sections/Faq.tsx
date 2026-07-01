@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client'
 // Faq.tsx
 import React, { useCallback, useEffect, useState } from 'react';

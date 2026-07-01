@@ -227,9 +227,9 @@ const UpcomingCourse = () => {
                       className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-[999] px-4 "
                     >
                       <motion.div
-                        initial={{ scale: 0.92, opacity: 0, y: 30 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.92, opacity: 0, y: 30 }}
+                        initial={{ scale: 0.92, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.92, opacity: 0 }}
                         transition={{ duration: 0.25, ease: "easeOut" }}
                         className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 relative border-2 border-[#f0b100]/40"
                       >

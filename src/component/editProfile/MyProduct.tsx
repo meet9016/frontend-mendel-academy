@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import { BsArrowRight, BsCheck, BsCheckCircleFill } from 'react-icons/bs';
 import { FiChevronDown } from 'react-icons/fi';

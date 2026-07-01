@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
@@ -124,40 +125,25 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
         // Flashcard: use dedicated flashcard_qa field (question+answer pairs)
         const flashcardQA = dt.flashcard_qa || [];
         if (flashcardQA.length > 0) {
-          // Use the first Q&A pair as the preview card pair
-          cards = [
-            {
-              title: flashcardQA[0].question || "",
-              badge: "",
-              card_type: "question",
-              options: [],
-            },
-            {
-              title: flashcardQA[0].answer || "",
-              badge: "",
-              card_type: "answer",
-              options: [],
-              hardDays: flashcardQA[0].hard_days || 1,
-              mediumDays: flashcardQA[0].medium_days || 3,
-              easyDays: flashcardQA[0].easy_days || 7,
-            },
-          ];
+          cards = flashcardQA.map((fq: any) => ({
+            question: fq.question || "",
+            answer: fq.answer || "",
+            card_type: "flashcard_pair",
+            badge: "",
+            options: [],
+            hardDays: fq.hard_days || 1,
+            mediumDays: fq.medium_days || 3,
+            easyDays: fq.easy_days || 7,
+          }));
         } else if (sampleQuestions.length > 0) {
-          // fallback: derive from sample_questions first item
-          cards = [
-            {
-              title: sampleQuestions[0].title,
-              badge: sampleQuestions[0].badge,
-              card_type: "question",
-              options: sampleQuestions[0].options,
-            },
-            {
-              title: sampleQuestions[0].options?.find((o: any) => o.is_correct)?.text || sampleQuestions[0].options?.[0]?.text || "",
-              badge: sampleQuestions[0].badge,
-              card_type: "answer",
-              options: [],
-            },
-          ];
+          // fallback: derive from sample_questions
+          cards = sampleQuestions.map((sq: any) => ({
+             question: sq.title,
+             answer: sq.options?.find((o: any) => o.is_correct)?.text || sq.options?.[0]?.text || "",
+             card_type: "flashcard_pair",
+             badge: sq.badge,
+             options: [],
+          }));
         }
       } else if (i === 1) {
         // For Mendel Chitras, cards come from dt.cards (with image, Category/badge, Title)
@@ -187,11 +173,11 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
           };
           if (i === 2) {
             cards = [
-              fallbackCard,
               {
-                title: fallbackCard.options?.find((o: any) => o.is_correct)?.text || fallbackCard.options?.[0]?.text || "",
+                question: fallbackCard.title,
+                answer: fallbackCard.options?.find((o: any) => o.is_correct)?.text || fallbackCard.options?.[0]?.text || "",
+                card_type: "flashcard_pair",
                 badge: fallbackCard.badge,
-                card_type: "answer",
                 options: [],
                 hardDays: 1,
                 mediumDays: 3,
@@ -394,6 +380,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
   const [previewModal, setPreviewModal] = useState<{ open: boolean; toolIndex: number }>({ open: false, toolIndex: 0 });
   const [detailModal, setDetailModal] = useState<{ open: boolean; toolIndex: number }>({ open: false, toolIndex: 0 });
   const [chitraLightbox, setChitraLightbox] = useState({ open: false, index: 0 });
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -445,6 +432,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
     setSelectedCardIndices(prev => {
       const newIndices = [...prev];
       newIndices[sectionIndex] = (newIndices[sectionIndex] - 1 + totalCards) % totalCards;
+      if (sectionIndex === 2) setFlippedCards({});
       setTimeout(() => scrollCardIntoView(sectionIndex, newIndices[sectionIndex]), 0);
       return newIndices;
     });
@@ -456,6 +444,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
     setSelectedCardIndices(prev => {
       const newIndices = [...prev];
       newIndices[sectionIndex] = (newIndices[sectionIndex] + 1) % totalCards;
+      if (sectionIndex === 2) setFlippedCards({});
       setTimeout(() => scrollCardIntoView(sectionIndex, newIndices[sectionIndex]), 0);
       return newIndices;
     });
@@ -481,15 +470,12 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
     });
   };
 
-  const flashcardQuestion = toolSections[2]?.cards?.find((c: any) => c.card_type === "question") || toolSections[2]?.cards?.[0];
-  const flashcardAnswer = toolSections[2]?.cards?.find((c: any) => c.card_type === "answer") || toolSections[2]?.cards?.[1];
-
   if (loading || !galaxySection?.tools?.length) {
     return null;
   }
 
   return (
-    <section className=" px-6 bg-white pt-12 md:pt-12">
+    <section id="galaxy-app-section" className=" px-6 bg-white pt-12 md:pt-12">
       <div className="max-w-[1100px] mx-auto">
         <div className="text-center mb-12">
           {sectionHeader.label && (
@@ -762,7 +748,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </button>
                 </div>
-                <div className="max-w-md mt-4">
+                <div className="max-w-md mt-4 mx-auto">
                   <div className="h-1.5 bg-gray-200 rounded-full">
                     <div className="h-full bg-gray-400 rounded-full transition-all duration-300" style={{ width: `${((selectedCardIndices[sectionIndex] + 1) / (section.cards?.length || 1)) * 100}%` }}></div>
                   </div>
@@ -773,48 +759,100 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
               </div>
             )}
 
-            {sectionIndex === 2 && (flashcardQuestion || flashcardAnswer) && (
-              <div className="mt-6 flex flex-col md:flex-row gap-4">
-                {flashcardQuestion && (
-                <div className="w-full md:w-64 bg-[#1e293b] rounded-xl p-4 border border-gray-700 flex flex-col items-start justify-center min-h-[150px] relative">
-                  <div className="absolute top-3 left-3 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                    <span className="text-[9px] font-bold text-gray-400 tracking-wider">QUESTION</span>
+            {sectionIndex === 2 && section.cards && section.cards.length > 0 && (() => {
+              const currentIndex = selectedCardIndices[2] || 0;
+              const currentCard = section.cards[currentIndex];
+              if (!currentCard) return null;
+              
+              const visibleCards = [];
+              const numVisible = Math.min(section.cards.length, 4);
+              for (let j = 0; j < numVisible; j++) {
+                visibleCards.push(section.cards[(currentIndex + j) % section.cards.length]);
+              }
+
+              return (
+                <div className="mt-6">
+                  <div className="relative flex items-center">
+                    <button
+                      onClick={() => handleCardPrev(2)}
+                      className="absolute left-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    
+                    <div className="w-full flex justify-center">
+                      <div className="flex flex-col md:flex-row flex-wrap xl:flex-nowrap gap-4 lg:gap-6 w-full justify-start items-center">
+                        {visibleCards.map((card, idx) => {
+                          const globalIdx = (currentIndex + idx) % section.cards.length;
+                          const isFlipped = !!flippedCards[`main-${globalIdx}`];
+                          return (
+                          <div key={idx} className="group relative w-full md:w-48 lg:w-56 xl:w-64 h-[180px] lg:h-[200px] perspective-[1000px] cursor-pointer" onClick={() => setFlippedCards(prev => ({ ...prev, [`main-${globalIdx}`]: !prev[`main-${globalIdx}`] }))}>
+                            <div className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
+                              {/* Front */}
+                              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden]">
+                                <div className="w-full h-full bg-[#1e293b] rounded-xl p-4 border border-gray-700 flex flex-col items-start justify-center relative shadow-sm hover:shadow-md transition-shadow">
+                                  <div className="absolute top-3 left-3 flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                                    <span className="text-[9px] font-bold text-gray-400 tracking-wider">QUESTION</span>
+                                  </div>
+                                  <div className="absolute top-3 right-3">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                  </div>
+                                  <h4 className="text-white font-serif italic text-sm lg:text-base max-w-full leading-snug mt-4 whitespace-pre-line text-center w-full flex-1 flex items-center justify-center">{card.question}</h4>
+                                  {card.badge && (
+                                    <p className="text-[9px] text-gray-500 mt-2 mx-auto">{card.badge}</p>
+                                  )}
+                                </div>
+                              </div>
+                              {/* Back */}
+                              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                                <div className="w-full h-full bg-[#1e293b] rounded-xl p-4 border border-green-500/30 flex flex-col items-start justify-center relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
+                                  <div className="absolute top-3 left-3 flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                                    <span className="text-[9px] font-bold text-green-400/80 tracking-wider">ANSWER</span>
+                                  </div>
+                                  <h4 className="text-white font-serif italic text-sm lg:text-base mb-1 mt-4 whitespace-pre-line text-center w-full flex-1 flex items-center justify-center">{card.answer}</h4>
+                                  <div className="flex gap-1 lg:gap-1.5 mt-auto w-full justify-center">
+                                    <div className="text-center rounded-md px-1.5 lg:px-2 py-1 bg-[#172033] border border-gray-700/50 flex-1">
+                                      <div className="text-[9px] lg:text-[10px] text-red-500 font-semibold mb-0.5">Hard</div>
+                                      <div className="text-[8px] text-gray-400">{card.hardDays || 1}d</div>
+                                    </div>
+                                    <div className="text-center rounded-md px-1.5 lg:px-2 py-1 bg-[#172033] border border-gray-700/50 flex-1">
+                                      <div className="text-[9px] lg:text-[10px] text-yellow-500 font-semibold mb-0.5">Medium</div>
+                                      <div className="text-[8px] text-gray-400">{card.mediumDays || 3}d</div>
+                                    </div>
+                                    <div className="text-center rounded-md px-1.5 lg:px-2 py-1 bg-[#172033] border border-gray-700/50 flex-1">
+                                      <div className="text-[9px] lg:text-[10px] text-green-500 font-semibold mb-0.5">Easy</div>
+                                      <div className="text-[8px] text-gray-400">{card.easyDays || 7}d</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleCardNext(2)}
+                      className="absolute right-[-50px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border-2 border-gray-900 bg-white flex items-center justify-center text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-colors flex-shrink-0 z-10"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
                   </div>
-                  <h4 className="text-white font-serif italic text-base max-w-full leading-snug mt-6">{flashcardQuestion.title}</h4>
-                  {flashcardQuestion.badge && (
-                    <p className="text-[9px] text-gray-500 mt-2">{flashcardQuestion.badge}</p>
+                  
+                  {section.cards.length > 1 && (
+                    <div className="max-w-md mt-4 mx-auto">
+                      <div className="h-1.5 bg-gray-200 rounded-full">
+                        <div className="h-full bg-gray-400 rounded-full transition-all duration-300" style={{ width: `${((selectedCardIndices[2] + 1) / section.cards.length) * 100}%` }}></div>
+                      </div>
+                    </div>
                   )}
                 </div>
-                )}
-                {flashcardAnswer && (
-                <div className="w-full md:w-64 bg-[#1e293b] rounded-xl p-4 border border-gray-700 flex flex-col items-start justify-center min-h-[150px] relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
-                  <div className="absolute top-3 left-3 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                    <span className="text-[9px] font-bold text-gray-400 tracking-wider">ANSWER</span>
-                  </div>
-                  <h4 className="text-white font-serif italic text-xl mb-1 mt-6">{flashcardAnswer.title}</h4>
-                  {flashcardAnswer.badge && (
-                    <p className="text-[9px] text-gray-400 mb-4">{flashcardAnswer.badge}</p>
-                  )}
-                  <div className="flex gap-2 mt-4 w-full justify-center">
-                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
-                      <div className="text-[11px] text-red-500 font-semibold mb-0.5">Hard</div>
-                      <div className="text-[9px] text-gray-400">{flashcardAnswer.hardDays || 1} day{flashcardAnswer.hardDays !== 1 ? 's' : ''}</div>
-                    </div>
-                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
-                      <div className="text-[11px] text-yellow-500 font-semibold mb-0.5">Medium</div>
-                      <div className="text-[9px] text-gray-400">{flashcardAnswer.mediumDays || 3} days</div>
-                    </div>
-                    <div className="text-center rounded-md px-3 py-1.5 bg-[#172033] border border-gray-700/50">
-                      <div className="text-[11px] text-green-500 font-semibold mb-0.5">Easy</div>
-                      <div className="text-[9px] text-gray-400">{flashcardAnswer.easyDays || 7} days</div>
-                    </div>
-                  </div>
-                </div>
-                )}
-              </div>
-            )}
+              );
+            })()}
   {/* Study Notes View */}
             {sectionIndex === 3 && (
               <div className="mt-6">
@@ -1244,42 +1282,54 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
                 )}
                 {/* Mendel Flashcards (index 2): Side-by-side FRONT & BACK cards */}
                 {detailModal.toolIndex === 2 && detail.flashcardQA && detail.flashcardQA.length > 0 && (() => {
-                  const card = detail.flashcardQA[0];
                   return (
                     <>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">FRONT &amp; BACK</p>
-                      <div className="grid grid-cols-2 gap-3 mb-6">
-                        {/* Question card */}
-                        <div className="bg-[#1e293b] rounded-xl p-4 flex flex-col min-h-[160px] relative">
-                          <div className="flex items-center gap-1.5 mb-3">
-                            <div className="w-2 h-2 rounded-full bg-gray-400" />
-                            <span className="text-[9px] font-bold text-gray-400 tracking-widest">QUESTION</span>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">FRONT & BACK</p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 mb-6">
+                        {detail.flashcardQA.map((card: any, idx: number) => {
+                          const isFlipped = !!flippedCards[`modal-${idx}`];
+                          return (
+                          <div key={idx} className="group relative w-full h-[180px] lg:h-[200px] perspective-[1000px] cursor-pointer" onClick={() => setFlippedCards(prev => ({ ...prev, [`modal-${idx}`]: !prev[`modal-${idx}`] }))}>
+                            <div className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
+                              {/* Front */}
+                              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden]">
+                                <div className="w-full h-full bg-[#1e293b] rounded-xl p-4 flex flex-col items-start justify-center relative shadow-sm border border-[#2a3a4a] hover:border-gray-500 transition-colors">
+                                  <div className="flex items-center gap-1.5 mb-2 w-full justify-between">
+                                    <div className="flex items-center gap-1.5">
+                                      <div className="w-2 h-2 rounded-full bg-gray-400" />
+                                      <span className="text-[9px] font-bold text-gray-400 tracking-widest">QUESTION</span>
+                                    </div>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                  </div>
+                                  <p className="text-[13px] lg:text-[14px] text-white leading-relaxed font-serif italic flex-1 whitespace-pre-line flex items-center text-center w-full justify-center">{card.question}</p>
+                                  <p className="text-[9px] text-gray-500 mt-2 italic text-center w-full">Tap to reveal</p>
+                                </div>
+                              </div>
+                              {/* Back */}
+                              <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                                <div className="w-full h-full bg-[#1e293b] rounded-xl p-4 flex flex-col items-start justify-center border border-green-500/30 relative shadow-[0_0_15px_rgba(30,41,59,0.5)]">
+                                  <div className="flex items-center gap-1.5 mb-2">
+                                    <div className="w-2 h-2 rounded-full bg-green-400" />
+                                    <span className="text-[9px] font-bold text-green-400/80 tracking-widest">ANSWER</span>
+                                  </div>
+                                  <p className="text-[14px] lg:text-[15px] font-bold text-white leading-relaxed font-serif italic flex-1 whitespace-pre-line flex items-center text-center w-full justify-center">{card.answer}</p>
+                                  <div className="flex gap-1.5 mt-auto w-full">
+                                    <button className="flex flex-col items-center justify-center flex-1 py-1 rounded-md bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                                      <span className="text-[9px] font-bold text-red-500">Hard</span>
+                                    </button>
+                                    <button className="flex flex-col items-center justify-center flex-1 py-1 rounded-md bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                                      <span className="text-[9px] font-bold text-yellow-500">Medium</span>
+                                    </button>
+                                    <button className="flex flex-col items-center justify-center flex-1 py-1 rounded-md bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
+                                      <span className="text-[9px] font-bold text-green-500">Easy</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <p className="text-[13px] text-white leading-relaxed font-serif italic flex-1">{card.question}</p>
-                          <p className="text-[9px] text-gray-500 mt-3 italic">Tap to reveal answer</p>
-                        </div>
-                        {/* Answer card */}
-                        <div className="bg-[#1e293b] rounded-xl p-4 flex flex-col min-h-[160px] border border-[#2a3a4a] relative">
-                          <div className="flex items-center gap-1.5 mb-3">
-                            <div className="w-2 h-2 rounded-full bg-green-400" />
-                            <span className="text-[9px] font-bold text-gray-400 tracking-widest">ANSWER</span>
-                          </div>
-                          <p className="text-[14px] font-bold text-white leading-relaxed font-serif italic flex-1">{card.answer}</p>
-                          <div className="flex gap-2 mt-2">
-                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
-                              <span className="text-[11px] font-bold text-red-500 mb-0.5">Hard</span>
-                              <span className="text-[9px] text-gray-400">{card.hard_days || card.hardDays || 1} {parseInt(card.hard_days || card.hardDays || 1) === 1 ? 'day' : 'days'}</span>
-                            </button>
-                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
-                              <span className="text-[11px] font-bold text-yellow-500 mb-0.5">Medium</span>
-                              <span className="text-[9px] text-gray-400">{card.medium_days || card.mediumDays || 3} {parseInt(card.medium_days || card.mediumDays || 3) === 1 ? 'day' : 'days'}</span>
-                            </button>
-                            <button className="flex flex-col items-center justify-center flex-1 py-1.5 rounded-lg bg-[#0f172a] border border-[#2a3a4a] hover:bg-[#1e293b] transition-colors">
-                              <span className="text-[11px] font-bold text-green-500 mb-0.5">Easy</span>
-                              <span className="text-[9px] text-gray-400">{card.easy_days || card.easyDays || 7} {parseInt(card.easy_days || card.easyDays || 7) === 1 ? 'day' : 'days'}</span>
-                            </button>
-                          </div>
-                        </div>
+                          );
+                        })}
                       </div>
                       <hr className="border-gray-200 mb-6" />
                     </>

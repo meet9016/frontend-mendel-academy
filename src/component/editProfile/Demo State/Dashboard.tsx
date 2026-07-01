@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";

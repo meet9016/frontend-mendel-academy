@@ -263,8 +263,8 @@ export default function Hero() {
                 return (
                   <motion.div
                     key={m._id || m.id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     whileHover={{ y: -6 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08 }}

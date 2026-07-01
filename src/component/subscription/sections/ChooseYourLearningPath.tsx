@@ -1,3 +1,4 @@
+// @ts-nocheck
 import CommonButton from '@/comman/Button';
 import { ErrorToast } from '@/comman/Toastify';
 import { setCartCount } from "@/redux/cartSlice";

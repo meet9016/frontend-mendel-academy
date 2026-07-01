@@ -53,7 +53,7 @@ const SketchySubjectSection: React.FC<Props> = ({
   if (!subjectData || subjectData.length === 0) return null;
 
   return (
-    <section className="bg-[#f9fafb] py-16 px-6">
+    <section id="explore-curriculum" className="bg-[#f9fafb] py-16 px-6">
       <div className="max-w-[960px] mx-auto">
 
         {/* HEADER */}

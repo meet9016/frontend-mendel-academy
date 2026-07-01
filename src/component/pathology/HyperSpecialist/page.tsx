@@ -1,12 +1,12 @@
+"use client";
 import StatusSection from "../sections/StatusSection";
 import MendelStudent from "../sections/MendelStudent";
 import MeetYourMentor from "../sections/MeetYourMentor";
 import HyperspecialistSection from "../sections/HyperspecialistSection";
 
 function HyperSpecialist() {
-  return (
-    <div>
-      <HyperspecialistSection/>
+  return <div>
+      <HyperspecialistSection />
       
       {/* --- Stats Section --- */}
       <StatusSection />
@@ -16,8 +16,7 @@ function HyperSpecialist() {
 
       {/* MEET YOUR MENTOR */}
       <MeetYourMentor />
-    </div>
-  );
+    </div>;
 }
 
 export default HyperSpecialist;

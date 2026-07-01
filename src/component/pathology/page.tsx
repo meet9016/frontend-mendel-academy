@@ -1,26 +1,35 @@
 import React from "react";
-import PathologyMasterySeries from "./sections/PathologyMasterySeries";
-import StatusSection from "./sections/StatusSection";
-import EndometrialPathology from "./sections/EndometrialPathology";
-import UpcomingCourse from "./sections/UpcomingCourse";
-import MendelStudent from "./sections/MendelStudent";
-import MeetYourMentor from "./sections/MeetYourMentor";
-import AdvancedPathology from "./sections/AdvancedPathology";
-import HyperspecialistSection from "./sections/HyperspecialistSection";
+import PathologySubHeader from "./sections/PathologySubHeader";
+import PathologyHero from "./sections/PathologyHero";
+import PathologyProblem from "./sections/PathologyProblem";
+import PathologyExperience from "./sections/PathologyExperience";
+import PathologyProgramsIntro from "./sections/PathologyProgramsIntro";
+import FellowshipHeroSection from "./Fellowship/HeroSection";
+import PathologyMasteryCourses from "./sections/PathologyMasteryCourses";
+import PathologyConsulting from "./sections/PathologyConsulting";
+import PathologyCommunity from "./sections/PathologyCommunity";
+import PathologyFooterSections from "./sections/PathologyFooterSections";
+import PathologyFAQ from "./sections/PathologyFAQ";
+import PathologyCTA from "./sections/PathologyCTA";
 
 function Pathology() {
   return (
-    <div>
-      <HyperspecialistSection/>
-
-      <PathologyMasterySeries />
-
-      <AdvancedPathology />
-      
-      {/* --- Stats Section --- */}
-      <StatusSection />
-
-      {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
+    <div className="bg-[#100b16] min-h-screen relative">
+      <PathologySubHeader />
+      <PathologyHero />
+      <PathologyProblem />
+      <PathologyExperience />
+      <PathologyProgramsIntro />
+      <div className="bg-[#100b16]">
+        <FellowshipHeroSection />
+      </div>
+      <PathologyMasteryCourses />
+      <PathologyConsulting />
+      <PathologyCommunity />
+      <PathologyFooterSections />
+      <PathologyFAQ />
+      <PathologyCTA />
+        {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
       {/* <EndometrialPathology /> */}
 
       {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
@@ -28,12 +37,6 @@ function Pathology() {
 
       {/* UPCOMING COURSE */}
       {/* <UpcomingCourse /> */}
-
-      {/* MENDEL STUDENT */}
-      <MendelStudent />
-
-      {/* MEET YOUR MENTOR */}
-      <MeetYourMentor />
     </div>
   );
 }

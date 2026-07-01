@@ -19,6 +19,26 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
     }
   };
 
+  const handleScrollToGalaxyApp = () => {
+    const galaxyAppSection = document.getElementById("galaxy-app-section");
+    if (galaxyAppSection) {
+      const offset = 80;
+      const elementPosition = galaxyAppSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }
+  };
+
+  const handleScrollToCurriculum = () => {
+    const curriculumSection = document.getElementById("explore-curriculum");
+    if (curriculumSection) {
+      const offset = 80;
+      const elementPosition = curriculumSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }
+  };
+
   // USMLE Step 2 Hero
   if (isUSMLEStep2) {
     return (
@@ -64,6 +84,7 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
                 Start your free trial
               </button>
               <button
+                onClick={handleScrollToCurriculum}
                 className="px-9 py-3.5 rounded-lg border border-[#64748b] text-white font-black text-sm tracking-wide hover:bg-white/10 transition-colors ff-font-bold cursor-pointer"
               >
                 Explore the curriculum
@@ -71,18 +92,18 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
             </div>
             {/* App Available On */}
             <div className="text-center md:text-left">
-              <p className="text-[#64748b] text-[10px] font-bold tracking-[0.1em] uppercase mb-3 ff-font-bold">
+              <p className="text-primary text-[10px] font-bold tracking-[0.1em] uppercase mb-4 ff-font-bold">
                 Study anywhere
               </p>
               <div className="flex justify-center md:justify-start gap-3">
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">📱</span> iPhone
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="10" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> iPhone
                 </div>
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">📱</span> iPad
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> iPad
                 </div>
-                <div className="flex items-center gap-1 px-3 py-1.5 border border-[#64748b] rounded-lg text-[#64748b] text-[10px] ff-font">
-                  <span className="text-sm">💻</span> Desktop
+                <div className="flex items-center gap-2 px-4 py-2 border border-[#475569] rounded-[14px] text-white text-[11px] ff-font opacity-80">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> Desktop
                 </div>
               </div>
             </div>
@@ -142,6 +163,7 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
                 Pricing
               </button>
               <button
+                onClick={handleScrollToCurriculum}
                 className="px-8 py-3 rounded-md border border-white text-white font-black text-sm hover:bg-white/10 transition-colors ff-font-bold cursor-pointer"
               >
                 Explore the Curriculum
@@ -286,6 +308,7 @@ const Hero: React.FC<HeroProps> = ({ examName, isUSMLEStep1, isUSMLEStep2 }) => 
               Pricing
             </button>
             <button
+              onClick={handleScrollToCurriculum}
               className="px-9 py-3.5 rounded-lg border border-[#64748b] text-white font-black text-sm tracking-wide hover:bg-white/10 transition-colors ff-font-bold cursor-pointer"
             >
               Explore the Curriculum

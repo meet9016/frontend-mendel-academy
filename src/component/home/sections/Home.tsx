@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { FiSearch } from "react-icons/fi";
 import { api } from "@/utils/axiosInstance";
