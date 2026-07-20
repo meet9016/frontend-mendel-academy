@@ -77,6 +77,16 @@ const PaymentLoader = () => (
   </div>
 );
 
+// Country → Currency mapping
+const getCountryCurrency = (countryCode: string): string => {
+  const map: Record<string, string> = {
+    IN: "INR", US: "USD", GB: "GBP", EU: "EUR", AU: "AUD",
+    CA: "CAD", SG: "SGD", AE: "AED", SA: "SAR", MY: "MYR",
+    NZ: "NZD", QA: "QAR", BH: "BHD", OM: "OMR",
+  };
+  return map[countryCode?.toUpperCase()] || "USD";
+};
+
 const StripeCheckoutForm = ({
   full_name,
   phone,
@@ -84,14 +94,29 @@ const StripeCheckoutForm = ({
   plan,
   onSuccess,
   id,
+  plan_id,
   currency,
+  onCurrencyChange,
 }: any) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [activeCurrency, setActiveCurrency] = useState(currency);
+
+  const handlePaymentElementChange = (e: any) => {
+    const country = e?.value?.address?.country;
+    if (country) {
+      const newCurrency = getCountryCurrency(country);
+      if (newCurrency !== activeCurrency) {
+        setActiveCurrency(newCurrency);
+        onCurrencyChange(newCurrency, country);
+      }
+    }
+  };
 
   const handleSubmit = (e: any) => {
+    e.preventDefault();
     if (!stripe || !elements) return;
 
     setLoading(true);
@@ -118,16 +143,16 @@ const StripeCheckoutForm = ({
             full_name,
             email,
             phone,
-            plan_id: id,
+            plan_id: plan_id,
             amount: plan.totalAmount,
-            currency: currency,
+            currency: activeCurrency,
             temp_id: id,
             user_id: getAuthId() || null,
           })
           .then((res) => {
             localStorage.setItem("stripdata", JSON.stringify(res.data.payment));
           })
-          .catch((err) => {
+          .catch(() => {
             setMessage("Payment succeeded but verification failed. Please contact support.");
           });
 
@@ -138,6 +163,8 @@ const StripeCheckoutForm = ({
     });
   };
 
+  const symbol = activeCurrency === "INR" ? "₹" : "$";
+
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
       <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
@@ -146,16 +173,16 @@ const StripeCheckoutForm = ({
 
       <div className="border rounded-lg p-4 bg-gray-50 mb-4">
         <p className="text-sm text-gray-600">
-          <span className="font-semibold">Total Amount:</span> {currency === 'INR' ? '₹' : '$'}{plan?.totalAmount}
+          <span className="font-semibold">Total Amount:</span> {symbol}{plan?.totalAmount}
         </p>
         <p className="text-sm text-gray-500 mt-1">
-          Currency: {currency}
+          Currency: {activeCurrency}
         </p>
       </div>
 
       <div className="space-y-4">
         <div className="p-4 bg-gray-50 border rounded-xl">
-          <PaymentElement />
+          <PaymentElement onChange={handlePaymentElementChange} />
         </div>
 
         {message && (
@@ -179,7 +206,7 @@ const StripeCheckoutForm = ({
               Processing…
             </div>
           ) : (
-            `Pay ${currency === 'INR' ? '₹' : '$'}${plan?.totalAmount}`
+            `Pay ${symbol}${plan?.totalAmount}`
           )}
         </button>
       </div>
@@ -243,6 +270,7 @@ const CheckOut = () => {
 
   const [plan, setPlan] = useState<any>(null);
   const [clientSecret, setClientSecret] = useState("");
+  const [stripeCurrency, setStripeCurrency] = useState("");
   const [loading, setLoading] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -470,26 +498,47 @@ const CheckOut = () => {
     }
   };
 
-  const handleStripePayment = async () => {
+  const handleStripePayment = async (overrideCurrency?: string) => {
     const isValid = validateForm();
     if (!isValid) return;
 
     try {
       setPaymentProcessing(true);
+      const currency = overrideCurrency || plan?.currency || "USD";
 
       const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
         amount: plan?.totalAmount,
         email: billing.email,
         plan_id: actualId,
-        currency: plan?.currency,
+        currency,
         ...(userId ? { user_id: userId } : { guest_id: actualId }),
       });
 
+      setStripeCurrency(res.data.currency || currency);
       setClientSecret(res.data.clientSecret);
       setPaymentProcessing(false);
     } catch (err) {
       console.error("Stripe Payment Intent Error:", err);
       setPaymentProcessing(false);
+    }
+  };
+
+  const handleCurrencyChange = async (newCurrency: string, country: string) => {
+    if (newCurrency === stripeCurrency) return;
+    // Recreate PaymentIntent with new currency
+    try {
+      const res = await api.post(`${endPointApi.createStripePaymentIntent}`, {
+        amount: plan?.totalAmount,
+        email: billing.email,
+        plan_id: actualId,
+        currency: newCurrency,
+        country,
+        ...(userId ? { user_id: userId } : { guest_id: actualId }),
+      });
+      setStripeCurrency(res.data.currency || newCurrency);
+      setClientSecret(res.data.clientSecret);
+    } catch (err) {
+      console.error("Currency change error:", err);
     }
   };
 
@@ -627,7 +676,18 @@ const CheckOut = () => {
                   phone={billing.phone}
                   email={billing.email}
                   plan={plan}
-                  currency={plan?.currency}
+                  currency={stripeCurrency || plan?.currency}
+                  onCurrencyChange={handleCurrencyChange}
+                  plan_id={(() => {
+                    if (!plan?.data?.length) return '';
+                    const item = plan.data[0];
+                    if (item.cart_type === 'exam_plan') return item.plan_id || '';
+                    if (item.cart_type === 'rapid_tool') return item.tool_id || '';
+                    if (item.cart_type === 'livecourses') return item.livecourse_id?._id || item.livecourse_id || '';
+                    if (item.cart_type === 'hyperspecialist') return item.hyperspecialist_id?._id || item.hyperspecialist_id || '';
+                    if (item.cart_type === 'prerecord') return item.product_id?._id || item.product_id || '';
+                    return '';
+                  })()}
                   onSuccess={() => {
                     setPaymentProcessing(true);
                     dispatch(resetCartCount());
@@ -726,7 +786,7 @@ const CheckOut = () => {
           <button
             onClick={
               billing.selectedPayment === "Stripe"
-                ? handleStripePayment
+                ? () => handleStripePayment()
                 : handleRazorpayPayment
             }
             disabled={paymentProcessing}

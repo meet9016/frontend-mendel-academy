@@ -316,7 +316,6 @@ export default function Header() {
           {/* Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-12">
             <button
-              onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/" ? "" : ""}
               `}
@@ -334,7 +333,6 @@ export default function Header() {
               <button
                 id="exam-button"
                 onClick={() => {
-                  router.push('/medicalexam');
                   setIsExamDropdownOpen(false);
                 }}
                 className={`relative ff-font font-medium text-sm group cursor-pointer
@@ -350,11 +348,12 @@ export default function Header() {
               </button>
 
               {isExamDropdownOpen && (
-                <div
-                  id="exam-dropdown"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
-                >
-                  <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
+                  <div
+                    id="exam-dropdown"
+                    className="w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
+                  >
+                    <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
                     Medical Exam Prep
                   </h3>
 
@@ -390,6 +389,7 @@ export default function Header() {
                       View All →
                     </button>
                   </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -415,11 +415,12 @@ export default function Header() {
               </button>
 
               {isPathologyDropdownOpen && (
-                <div
-                  id="pathology-dropdown"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
-                >
-                  <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
+                  <div
+                    id="pathology-dropdown"
+                    className="w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
+                  >
+                    <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
                     Mendel Pathology Programs
                   </h3>
 
@@ -534,12 +535,12 @@ export default function Header() {
                       View All Pathology Programs →
                     </button>
                   </div> */}
+                  </div>
                 </div>
               )}
             </div>
 
             <button
-              onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/aboutUs" ? "" : ""}
               `}
@@ -553,7 +554,6 @@ export default function Header() {
             </button>
 
             <button
-              onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/blog" ? "" : ""}
               `}
@@ -567,7 +567,6 @@ export default function Header() {
             </button>
 
             <button
-              onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/studentTestimonials" ? "" : ""}
               `}
@@ -652,7 +651,6 @@ export default function Header() {
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
-                  router.push("/");
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
               >
@@ -738,7 +736,6 @@ export default function Header() {
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
-                  router.push("/blog");
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
               >
@@ -748,7 +745,6 @@ export default function Header() {
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
-                  router.push("/aboutUs");
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
               >
@@ -758,7 +754,6 @@ export default function Header() {
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
-                  router.push("/studentTestimonials");
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
               >
