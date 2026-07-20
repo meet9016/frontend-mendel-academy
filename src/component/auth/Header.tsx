@@ -772,13 +772,19 @@ export default function Header() {
                 {!authToken && (
                   <>
                     <button
-                      onClick={() => router.push("/auth/login")}
+                      onClick={() => {
+                        router.push("/auth/login");
+                        setIsMenuOpen(false);
+                      }}
                       className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
                     >
                       Login
                     </button>
                     <button
-                      onClick={() => router.push("/auth/register")}
+                      onClick={() => {
+                        router.push("/auth/register");
+                        setIsMenuOpen(false);
+                      }}
                       className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
                     >
                       Sign Up
@@ -810,9 +816,9 @@ export default function Header() {
 
                 <button
                   onClick={() => {
+                    setIsMenuOpen(false);
                     if (count > 0) {
                       setIsCartOpen(true);
-                      setIsMenuOpen(false);
                       handleCartOpen();
                     }
                   }}
