@@ -316,6 +316,7 @@ export default function Header() {
           {/* Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-12">
             <button
+              onClick={() => router.push("/")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/" ? "" : ""}
               `}
@@ -541,6 +542,7 @@ export default function Header() {
             </div>
 
             <button
+              onClick={() => router.push("/aboutUs")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/aboutUs" ? "" : ""}
               `}
@@ -554,6 +556,7 @@ export default function Header() {
             </button>
 
             <button
+              onClick={() => router.push("/blog")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/blog" ? "" : ""}
               `}
@@ -567,6 +570,7 @@ export default function Header() {
             </button>
 
             <button
+              onClick={() => router.push("/studentTestimonials")}
               className={`relative ff-font font-medium text-sm group cursor-pointer
                 ${pathname === "/studentTestimonials" ? "" : ""}
               `}
@@ -650,6 +654,7 @@ export default function Header() {
             <nav className="flex flex-col gap-4">
               <button
                 onClick={() => {
+                  router.push("/");
                   setIsMenuOpen(false);
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
@@ -735,6 +740,7 @@ export default function Header() {
 
               <button
                 onClick={() => {
+                  router.push("/blog");
                   setIsMenuOpen(false);
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
@@ -744,6 +750,7 @@ export default function Header() {
 
               <button
                 onClick={() => {
+                  router.push("/aboutUs");
                   setIsMenuOpen(false);
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
@@ -753,6 +760,7 @@ export default function Header() {
 
               <button
                 onClick={() => {
+                  router.push("/studentTestimonials");
                   setIsMenuOpen(false);
                 }}
                 className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
