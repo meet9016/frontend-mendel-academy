@@ -113,7 +113,11 @@ function MainAbout() {
           <div className="bg-black text-white rounded-[1rem] p-6 sm:p-8 md:p-12 border-t-4 border-primary">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
               <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary flex items-center justify-center shrink-0">
-                <span className="text-black text-2xl sm:text-3xl ff-font-bold font-bold">KM</span>
+                <img
+                  src="/images/dr-managoli.jpg"
+                  alt="Dr. Kishor Managoli"
+                  className="w-full h-full object-cover rounded-full"
+                />
               </div>
               <div className="flex-1">
                 <p className="text-primary font-bold text-xs uppercase mb-1">Founder &amp; Chief Medical Mentor</p>
