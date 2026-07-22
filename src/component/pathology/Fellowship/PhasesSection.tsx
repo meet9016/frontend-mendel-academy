@@ -1,87 +1,154 @@
 "use client";
 
 import React, { useState } from 'react';
-const phases = [{
-  num: "01",
-  title: "Foundations",
-  duration: "Months 1-3",
-  contentTitle: "Foundations of Integrated Diagnosis",
-  contentDesc: "Re-anchor your morphologic skills in a molecular context: how H&E, IHC, IF, and flow findings frame every downstream molecular question. Introduction to the Onion Skin Technique and the 7-step clinical reasoning framework.",
-  pills: ["H&E", "IHC", "IF", "FLOW", "7-STEP REASONING"]
-}, {
-  num: "02",
-  title: "Molecular Methods",
-  duration: "Months 4-6",
-  contentTitle: "Molecular Methods & Interpretation",
-  contentDesc: "FISH, PCR, and NGS from the interpreter's chair: panel design logic, variant classification, report anatomy, quality pitfalls, and when to trust — or challenge — a molecular result.",
-  pills: ["FISH","PCR", "NGS", "VARIANT CLASSIFICATION","QC PITFALLS"]
-}, {
-  num: "03",
-  title: "Precision Oncology",
-  duration: "Months 7-9",
-  contentTitle: "Precision Oncology in Practice",
-  contentDesc: "Liquid biopsy, PGx, resistance mechanisms, and CDx/ADC biomarkers — connecting every result to therapy selection and the questions oncologists actually ask at the tumor board.",
-  pills: ["LIQUID BIOPSY"," PGx", "RESISTANCE", "CDX/ADC","THERAPY SELECTION"]
-}, {
-  num: "04",
-  title: "Leadership",
-  duration: "Months 10-12",
-  contentTitle: "Leadership & Implementation",
-  contentDesc: "Reflex testing algorithms, institutional CDx strategy, leading molecular tumor boards, mentoring your team — and a capstone case portfolio that demonstrates your new capabilities.",
-  pills: ["REFLEX ALGORITHMS", "MTB LEADERSHIP ", "CDx STRATEGY","CAPSTONE"]
-}];
+import { triggerPdfDownload } from '@/utils/downloadPdf';
+
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+
+const phases = [
+  {
+    num: "01",
+    title: "Foundations",
+    duration: "Months 1–3",
+    contentTitle: "Foundations of Integrated Diagnosis",
+    contentDesc:
+      "Re-anchor your morphologic skills in a molecular context: how H&E, IHC, IF, and flow findings frame every downstream molecular question. Introduction to the Onion Skin Technique and the 7-step clinical reasoning framework.",
+    pills: ["H&E", "IHC", "IF", "FLOW", "7-STEP REASONING"],
+  },
+  {
+    num: "02",
+    title: "Molecular Methods",
+    duration: "Months 4–6",
+    contentTitle: "Molecular Methods & Interpretation",
+    contentDesc:
+      "FISH, PCR, and NGS from the interpreter's chair: panel design logic, variant classification, report anatomy, quality pitfalls, and when to trust — or challenge — a molecular result.",
+    pills: ["FISH", "PCR", "NGS", "VARIANT CLASSIFICATION", "QC PITFALLS"],
+  },
+  {
+    num: "03",
+    title: "Precision Oncology",
+    duration: "Months 7–9",
+    contentTitle: "Precision Oncology in Practice",
+    contentDesc:
+      "Liquid biopsy, PGx, resistance mechanisms, and CDx/ADC biomarkers — connecting every result to therapy selection and the questions oncologists actually ask at the tumor board.",
+    pills: ["LIQUID BIOPSY", "PGx", "RESISTANCE", "CDx / ADC", "THERAPY SELECTION"],
+  },
+  {
+    num: "04",
+    title: "Leadership",
+    duration: "Months 10–12",
+    contentTitle: "Leadership & Implementation",
+    contentDesc:
+      "Reflex testing algorithms, institutional CDx strategy, leading molecular tumor boards, mentoring your team — and a capstone case portfolio that demonstrates your new capabilities.",
+    pills: ["REFLEX ALGORITHMS", "MTB LEADERSHIP", "CDx STRATEGY", "CAPSTONE"],
+  },
+];
+
 const PhasesSection = () => {
   const [activePhase, setActivePhase] = useState(0);
-  return <section className="bg-[#FAF8F5] py-20 px-6">
-      <div className="max-w-7xl mx-auto flex flex-col items-start">
-        <div className="max-w-5xl w-full">
-          <div className="mb-12">
-            <div className="flex items-center gap-2 mb-4">
-            <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
-            <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">
-              THE JOURNEY
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-4xl font-black text-[#1E1A29] leading-tight mb-4 ff-font-bold">
-            Twelve months. Four phases. <br />
-            One <span className="text-[#E94E8F]">transformed practice.</span>
+
+  return (
+    <section className={`${FONT} bg-[#FAF7F2] text-[#241E3D] py-[60px] md:py-[80px] px-6 relative`}>
+      <div className="max-w-[1180px] mx-auto">
+        {/* Section Head */}
+        <div className="max-w-[780px] mb-[40px]">
+          <span className={`${FONT} inline-flex items-center gap-3 text-[0.95rem] tracking-[0.18em] uppercase text-[#5C5575] mb-5 before:content-[''] before:w-[34px] before:h-[2px] before:bg-[#FFC900]`}>
+            THE JOURNEY
+          </span>
+          <h2 className={`${FONT} text-3xl md:text-5xl font-extrabold text-[#241E3D] leading-[1.08] tracking-[-0.025em]`}>
+            Twelve months. Four phases.<br />
+            One <span className="text-[#E0568F]">transformed practice.</span>
           </h2>
-          <p className="text-[#64748B] text-base md:text-lg max-w-3xl leading-relaxed ff-font">
-            A deliberate arc from morphologic foundations to molecular leadership — every phase anchored
-            in real cases and live discussion.
-          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
+        {/* Interactive Curriculum Explorer Card */}
+        <div className="bg-white border border-[#E6E0D8] rounded-[20px] overflow-hidden">
           {/* Tabs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 border-b border-gray-200">
-            {phases.map((phase, index) => <button key={index} onClick={() => setActivePhase(index)} className={`p-6 text-left transition-colors duration-200 relative ${activePhase === index ? 'bg-white' : 'bg-[#FAFAFA] hover:bg-gray-50'}`}>
-                <div className={`absolute bottom-0 left-0 w-full h-1 ${index < activePhase ? 'bg-[#E94E8F]' : index === activePhase ? 'bg-[#FFCA00]' : 'bg-transparent'}`}></div>
-                <div className="text-[#FFCA00] text-xs font-black mb-1 ff-font-bold">{phase.num}</div>
-                <div className={`text-base font-black mb-1 ff-font-bold ${activePhase === index ? 'text-[#E94E8F]' : 'text-[#1E1A29]'}`}>
-                  {phase.title}
-                </div>
-                <div className="text-gray-400 text-xs ff-font font-medium">{phase.duration}</div>
-              </button>)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+            {phases.map((phase, index) => {
+              const isActive = activePhase === index;
+              return (
+                <button
+                  key={index}
+                  onClick={() => setActivePhase(index)}
+                  className={`p-[22px_18px] text-left transition-colors duration-200 border-b border-[#E6E0D8] border-r last:border-r-0 appearance-none ${FONT} ${
+                    isActive
+                      ? 'bg-white relative after:content-[""] after:absolute after:left-0 after:right-0 after:-bottom-[1px] after:h-[3px] after:bg-[linear-gradient(90deg,#E0568F,#FFC900)] after:z-10'
+                      : 'bg-[#FAF7F2] hover:bg-white'
+                  }`}
+                >
+                  <b className={`${FONT} block text-[0.8rem] tracking-[0.08em] text-[#C79A00] mb-2`}>
+                    {phase.num}
+                  </b>
+                  <span
+                    className={`block font-extrabold text-[1.05rem] tracking-[-0.01em] ${
+                      isActive ? 'text-[#E0568F]' : 'text-[#241E3D]'
+                    }`}
+                  >
+                    {phase.title}
+                  </span>
+                  <small className={`${FONT} block text-[0.66rem] tracking-[0.06em] text-[#5C5575] mt-1`}>
+                    {phase.duration}
+                  </small>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Content */}
-          <div className="p-8 md:p-12">
-            <h3 className="text-2xl font-black text-[#1E1A29] mb-4 ff-font-bold">
-              {phases[activePhase].contentTitle}
-            </h3>
-            <p className="text-[#64748B] text-base leading-relaxed ff-font max-w-4xl mb-8">
-              {phases[activePhase].contentDesc}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {phases[activePhase].pills.map((pill, idx) => <div key={idx} className="px-3 py-1.5 rounded-full border border-gray-200 text-gray-500 text-[10px] font-bold tracking-wider uppercase ff-font-bold">
-                  {pill}
-                </div>)}
+          {/* Progress Fill Bar */}
+          <div className="h-[4px] bg-[#E6E0D8]">
+            <span
+              className="block h-full bg-[linear-gradient(90deg,#E0568F,#FFC900)] transition-all duration-[350ms] ease-in-out"
+              style={{ width: `${((activePhase + 1) / phases.length) * 100}%` }}
+            />
+          </div>
+
+          {/* Active Panel Content */}
+          <div className="p-[34px_38px]">
+            <div key={activePhase} className="transition-all duration-300">
+              <h3 className={`${FONT} text-[1.4rem] md:text-[1.5rem] font-extrabold text-[#241E3D] leading-[1.08] tracking-[-0.01em] mb-[12px]`}>
+                {phases[activePhase].contentTitle}
+              </h3>
+              <p className={`${FONT} text-[#5C5575] text-[0.98rem] leading-[1.65] max-w-[760px] mb-5`}>
+                {phases[activePhase].contentDesc}
+              </p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {phases[activePhase].pills.map((pill, idx) => (
+                  <span
+                    key={idx}
+                    className={`${FONT} text-[0.68rem] tracking-[0.06em] bg-white border border-[#E6E0D8] rounded-full px-3 py-[6px] text-[#5C5575]`}
+                  >
+                    {pill}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Bottom CTA Block */}
+        <div className="mt-[36px] text-center">
+          <p className={`${FONT} text-[#5C5575] text-[0.98rem] mb-4`}>
+            Want the full picture? Download the month-by-month roadmap — or the visual guide to every fellowship format.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => triggerPdfDownload("Mendel_Fellowship_Roadmap.pdf")}
+              className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-[#FFC900] text-[#1A1502] border-2 border-transparent transition-all duration-[180ms] hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(255,201,0,0.35)] group cursor-pointer`}
+            >
+              Download the Roadmap <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
+            </button>
+            <button
+              onClick={() => triggerPdfDownload("Mendel_Fellowship_Modules.pdf")}
+              className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-transparent text-[#241E3D] border-2 border-[#241E3D] transition-all duration-[180ms] hover:-translate-y-0.5 hover:bg-[#241E3D] hover:text-white group cursor-pointer`}
+            >
+              Fellowship Modules <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
+            </button>
+          </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default PhasesSection;

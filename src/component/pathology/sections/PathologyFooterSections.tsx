@@ -1,198 +1,172 @@
-import React from 'react';
+'use client';
 
+import React from 'react';
+ 
+const FONT =
+  "font-[-apple-system,BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
+ 
+const WHO = [
+  'Practicing Surgical Pathologists and Hematopathologists',
+  'Pathologists preparing for subspecialty boards or leadership roles',
+  'Hemato-oncologists and Medical Oncologists seeking deeper lab integration',
+  'Corporate Lab Directors and Hospital Administrators',
+  'Pharma, CRO, and Biotech biomarker/CDx strategy teams',
+  'International Medical Graduates targeting FRCPath, ABP, or NEET-SS',
+];
+ 
+const MAGNETS = [
+  {
+    meta: 'Free PDF',
+    title: 'Endometrial Biopsy Interpretation Checklist & Diagnostic Algorithm',
+    desc: 'A practical, high-yield checklist to improve diagnostic accuracy and reduce missed diagnoses in endometrial biopsies.',
+    cta: 'Download Free PDF',
+  },
+  {
+    meta: 'Free Guide',
+    title: 'Molecular Pathology Starter Kit: 10 High-Yield Interpretation Pearls',
+    desc: 'Key interpretation principles and common pitfalls in NGS, liquid biopsy, and biomarker reporting.',
+    cta: 'Download Free Guide',
+  },
+];
+ 
+const TESTIMONIALS = [
+  {
+    initials: 'FP',
+    quote: '[Placeholder — Fellowship participant quote on confidently leading molecular tumor boards after the program.]',
+    name: 'Fellowship Participant',
+    role: 'Designation, Institution',
+  },
+  {
+    initials: 'CC',
+    quote: '[Placeholder — consulting client quote on biomarker strategy or lab setup engagement.]',
+    name: 'Consulting Client',
+    role: 'Designation, Organization',
+  },
+  {
+    initials: 'IM',
+    quote: "[Placeholder — IMG quote on clearing FRCPath/ABP with Mendel's preparation methods.]",
+    name: 'IMG Board Candidate',
+    role: 'Designation, Country',
+  },
+];
+ 
+const Eyebrow = ({ children }) => (
+  <div className="flex items-center gap-3 mb-5">
+    <div className="w-[34px] h-0.5 bg-[#FFC900]" />
+    <span className={`${MONO} text-[.72rem] tracking-[.18em] uppercase text-[#5C5575]`}>{children}</span>
+  </div>
+);
 const PathologyFooterSections = () => {
   return (
-    <section className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto flex flex-col items-start">
-        <div className="max-w-5xl w-full">
-        
-        {/* AUDIENCE Section */}
-        <div className="mb-32 text-left flex flex-col items-start">
-          <div
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="w-6 h-[1px] bg-yellow-500"></div>
-            <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
-              AUDIENCE
-            </span>
+    <>
+      {/* ================= AUDIENCE ================= */}
+      <section id="clinical-research" className={`${FONT} bg-[#F3EEE6] py-24 px-6`}>
+        <div className="max-w-[1180px] mx-auto">
+          <div className="max-w-[780px] mb-[52px]">
+            <Eyebrow>Audience</Eyebrow>
+            <h2 className="text-[clamp(2rem,4.2vw,3.1rem)] font-extrabold text-[#241E3D] leading-[1.08] tracking-[-.025em]">
+              Who This Is For
+            </h2>
           </div>
-          
-          <h2
-            className="text-3xl md:text-4xl font-black text-black leading-[1.15] mb-12 ff-font-bold tracking-tight"
-          >
-            Who This Is For
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Cards */}
-            {[
-              "Practicing Surgical Pathologists and Hematopathologists",
-              "Pathologists preparing for subspecialty boards or leadership roles",
-              "Hemato-oncologists and Medical Oncologists seeking deeper lab integration",
-              "Corporate Lab Directors and Hospital Administrators",
-              "Pharma, CRO, and Biotech biomarker/CDx strategy teams",
-              "International Medical Graduates targeting FRCPath, ABP, or NEET-SS"
-            ].map((text, i) => (
-              <div 
-                key={i}
-                className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm flex items-start gap-3"
+ 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {WHO.map((text) => (
+              <div
+                key={text}
+                className="bg-white border border-[#E6E0D8] rounded-xl py-[22px] px-6 flex gap-[14px] items-start transition-all duration-200 hover:border-[#E0568F] hover:-translate-y-[3px]"
               >
-                <span className="text-[#E94E8F] text-lg leading-none">—</span>
-                <p className="text-gray-700 text-xs ff-font font-medium leading-relaxed">
-                  {text}
-                </p>
+                <span className="text-[#E0568F] font-extrabold shrink-0">→</span>
+                <p className="text-[#241E3D] text-[.97rem] font-semibold leading-[1.65]">{text}</p>
               </div>
             ))}
           </div>
         </div>
-
-        {/* FREE RESOURCES Section */}
-        <div className="mb-32 text-left flex flex-col items-start">
-          <div
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="w-6 h-[1px] bg-yellow-500"></div>
-            <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
-              FREE RESOURCES
-            </span>
+      </section>
+ 
+      {/* ================= FREE RESOURCES ================= */}
+      <section id="mini-mba" className={`${FONT} bg-[#FAF7F2] py-24 px-6`}>
+        <div className="max-w-[1180px] mx-auto">
+          <div className="max-w-[780px] mb-[52px]">
+            <Eyebrow>Free Resources</Eyebrow>
+            <h2 className="text-[clamp(2rem,4.2vw,3.1rem)] font-extrabold text-[#241E3D] leading-[1.08] tracking-[-.025em]">
+              Start with something <span className="text-[#E0568F]">free.</span>
+            </h2>
           </div>
-          
-          <h2
-            className="text-3xl md:text-4xl font-black text-black leading-[1.15] mb-12 ff-font-bold tracking-tight"
-          >
-            Start with something <span className="text-[#E94E8F]">free.</span>
-          </h2>
-
+ 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Resource 1 */}
-            <div
-              className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col"
-            >
-              <span className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">FREE PDF</span>
-              <h3 className="text-lg font-bold text-black mb-3 ff-font-bold">
-                Endometrial Biopsy Interpretation Checklist & Diagnostic Algorithm
-              </h3>
-              <p className="text-gray-600 text-xs ff-font leading-relaxed mb-8 flex-1">
-                A practical, high-yield checklist to improve diagnostic accuracy and reduce missed diagnoses in endometrial biopsies.
-              </p>
-              <div className="flex items-center gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Your email address..." 
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 text-xs outline-none focus:border-[#E94E8F] ff-font"
-                />
-                <button className="px-5 py-2.5 rounded-full bg-[#E94E8F] text-white font-bold text-[10px] hover:opacity-90 transition-opacity ff-font-bold whitespace-nowrap">
-                  Download Free PDF
-                </button>
+            {MAGNETS.map((m) => (
+              <div
+                key={m.title}
+                className="group relative flex flex-col bg-[linear-gradient(140deg,#fff,#FFFBEE)] border border-[#E6E0D8] rounded-2xl py-[34px] px-[30px] overflow-hidden transition-all duration-[350ms] hover:shadow-[0_22px_48px_rgba(36,30,61,.13)]"
+              >
+                <span className="absolute top-0 left-0 right-0 h-1 origin-left scale-x-0 bg-[linear-gradient(90deg,#E0568F,#FFC900)] transition-transform duration-[350ms] group-hover:scale-x-100" />
+ 
+                <span className={`${MONO} block text-[.7rem] tracking-[.14em] uppercase text-[#C79A00] mb-4`}>
+                  {m.meta}
+                </span>
+                <h3 className="text-[1.3rem] font-extrabold text-[#241E3D] leading-[1.08] tracking-[-.01em] mb-2.5">
+                  {m.title}
+                </h3>
+                <p className="text-[.98rem] text-[#5C5575] leading-[1.65] flex-1">{m.desc}</p>
+ 
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="mt-auto pt-6 flex gap-2.5 flex-wrap"
+                >
+                  <input
+                    type="email"
+                    required
+                    placeholder="Your email address"
+                    className={`${FONT} flex-1 min-w-[180px] bg-white border-[1.5px] border-[#E6E0D8] rounded-full px-[18px] py-[13px] text-[.95rem] outline-none focus-visible:border-[#FFC900] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-1 focus-visible:outline-[#FFC900]`}
+                  />
+                  <button
+                    type="submit"
+                    className="inline-flex items-center gap-2.5 bg-[#E0568F] hover:bg-[#B03A6C] text-white font-bold text-[.92rem] px-[22px] py-[10px] rounded-full whitespace-nowrap transition-all hover:-translate-y-0.5"
+                  >
+                    {m.cta}
+                  </button>
+                </form>
               </div>
-            </div>
-
-            {/* Resource 2 */}
-            <div
-              className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col"
-            >
-              <span className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">FREE GUIDE</span>
-              <h3 className="text-lg font-bold text-black mb-3 ff-font-bold">
-                Molecular Pathology Starter Kit: 10 High-Yield Interpretation Pearls
-              </h3>
-              <p className="text-gray-600 text-xs ff-font leading-relaxed mb-8 flex-1">
-                Key interpretation principles and common pitfalls in NGS, liquid biopsy, and biomarker reporting.
-              </p>
-              <div className="flex items-center gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Your email address..." 
-                  className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2.5 text-xs outline-none focus:border-[#E94E8F] ff-font"
-                />
-                <button className="px-5 py-2.5 rounded-full bg-[#E94E8F] text-white font-bold text-[10px] hover:opacity-90 transition-opacity ff-font-bold whitespace-nowrap">
-                  Download Free Guide
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-
-        {/* RESULTS Section */}
-        <div className="text-left flex flex-col items-start">
-          <div
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="w-6 h-[1px] bg-yellow-500"></div>
-            <span className="text-gray-500 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
-              RESULTS
-            </span>
+      </section>
+ 
+      {/* ================= RESULTS ================= */}
+      <section className={`${FONT} bg-[#F3EEE6] py-24 px-6`}>
+        <div className="max-w-[1180px] mx-auto">
+          <div className="max-w-[780px] mb-[52px]">
+            <Eyebrow>Results</Eyebrow>
+            <h2 className="text-[clamp(2rem,4.2vw,3.1rem)] font-extrabold text-[#241E3D] leading-[1.08] tracking-[-.025em]">
+              Real Results from Pathologists Worldwide
+            </h2>
           </div>
-          
-          <h2
-            className="text-3xl md:text-4xl font-black text-black leading-[1.15] mb-12 ff-font-bold tracking-tight"
-          >
-            Real Results from Pathologists<br />
-            Worldwide
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Testimonial 1 */}
-            <div
-              className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm flex flex-col"
-            >
-              <div className="text-[#E94E8F] text-4xl font-serif leading-none mb-4">"</div>
-              <p className="text-gray-700 text-sm ff-font leading-relaxed mb-8 flex-1 italic">
-                [Placeholder — Fellowship participant quote on confidently leading molecular tumor boards after the program.]
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-pink-100 text-[#E94E8F] flex items-center justify-center font-bold text-sm ff-font-bold">
-                  FP
-                </div>
-                <div>
-                  <p className="text-black text-xs font-bold ff-font-bold">Fellowship Participant</p>
-                  <p className="text-gray-400 text-[10px] ff-font">Designation, Institution</p>
+ 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t) => (
+              <div key={t.initials} className="relative flex flex-col bg-white border border-[#E6E0D8] rounded-2xl p-8">
+                <span className="absolute top-[6px] left-5 text-[4.5rem] font-extrabold leading-none text-[#F7DCE8]">
+                  &ldquo;
+                </span>
+                <p className="relative mt-[34px] mb-6 text-[1.04rem] leading-[1.6] text-[#241E3D] font-medium">
+                  {t.quote}
+                </p>
+                <div className="flex items-center gap-[14px] mt-auto">
+                  <div className="w-[50px] h-[50px] rounded-full bg-[linear-gradient(135deg,#E0568F,#4A3D7A)] text-white flex items-center justify-center font-extrabold">
+                    {t.initials}
+                  </div>
+                  <div>
+                    <b className="block text-[.95rem] text-[#241E3D]">{t.name}</b>
+                    <span className="text-[.82rem] text-[#5C5575]">{t.role}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div
-              className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm flex flex-col"
-            >
-              <div className="text-[#E94E8F] text-4xl font-serif leading-none mb-4">"</div>
-              <p className="text-gray-700 text-sm ff-font leading-relaxed mb-8 flex-1 italic">
-                [Placeholder — consulting client quote on biomarker strategy or lab setup engagement.]
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#161221] text-white flex items-center justify-center font-bold text-sm ff-font-bold">
-                  CC
-                </div>
-                <div>
-                  <p className="text-black text-xs font-bold ff-font-bold">Consulting Client</p>
-                  <p className="text-gray-400 text-[10px] ff-font">Designation, Organization</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div
-              className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm flex flex-col"
-            >
-              <div className="text-[#E94E8F] text-4xl font-serif leading-none mb-4">"</div>
-              <p className="text-gray-700 text-sm ff-font leading-relaxed mb-8 flex-1 italic">
-                [Placeholder — IMG quote on clearing FRCPath/ABP with Mendel's preparation methods.]
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center font-bold text-sm ff-font-bold">
-                  IM
-                </div>
-                <div>
-                  <p className="text-black text-xs font-bold ff-font-bold">IMG Board Candidate</p>
-                  <p className="text-gray-400 text-[10px] ff-font">Designation, Country</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-
-      </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

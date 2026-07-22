@@ -1,316 +1,232 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-const EngagementWaysSection = () => {
-  const [activeTab, setActiveTab] = useState("A");
-  const scrollToCard = (id: string) => {
-    setActiveTab(id);
-    const element = document.getElementById(`category-${id}`);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  };
-  return <section className="bg-[#FAF8F5] py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto flex flex-col items-start">
-        <div className="max-w-5xl w-full">
-        
-        {/* Header */}
-        <div className="mb-12 flex flex-col items-start">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
-            <span className="text-[#FFCA00] text-[10px] font-bold tracking-widest uppercase ff-font-bold">
+
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
+
+interface EngagementWaysSectionProps {
+  onOpenBookModal?: () => void;
+  onRequestCaseReviewModal?: () => void;
+}
+
+const EngagementWaysSection = ({ onOpenBookModal, onRequestCaseReviewModal }: EngagementWaysSectionProps) => {
+  const [activeTab, setActiveTab] = useState<'a' | 'b' | 'c' | 'd'>('a');
+
+  const services = [
+    {
+      id: 'a',
+      letter: 'A',
+      title: 'Diagnostic Excellence',
+      subtitle: 'Second opinions & specialist review',
+      forText: 'For pathologists · oncologists · patients\' care teams',
+      description: 'Expert review when a diagnosis carries real consequences.',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+          <circle cx="10.5" cy="10.5" r="6" />
+          <path d="M15 15l5 5" />
+          <path d="M8 10.5h5M10.5 8v5" />
+        </svg>
+      ),
+      list: [
+        'Surgical Pathology Second Opinions & Complex Case Consults',
+        'Molecular Pathology Specialist Interpretation & Integrated Reporting',
+        'Synoptic, medico-legally safe reporting of surgical and molecular pathology cases',
+      ],
+      buttonText: 'Request a Case Review',
+      onButtonClick: onRequestCaseReviewModal || onOpenBookModal,
+    },
+    {
+      id: 'b',
+      letter: 'B',
+      title: 'Strategic Advisory',
+      subtitle: 'Pharma · CRO · biotech',
+      forText: 'For pharma · CRO · biotech',
+      description: "A practicing pathologist's perspective on biomarker programs — the perspective most strategy decks are missing.",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+          <path d="M4 20V4M4 20h16" />
+          <rect x="7" y="12" width="3" height="5" />
+          <rect x="12" y="8" width="3" height="9" />
+          <rect x="17" y="5" width="3" height="12" />
+        </svg>
+      ),
+      list: [
+        'Biomarker Strategy, CDx Development & Companion Diagnostic Planning',
+        'PGx & Precision Oncology Strategy Consulting',
+        'Virtual Molecular Tumor Board (vMTB) Program Development',
+      ],
+      buttonText: 'Request a call',
+      onButtonClick: onOpenBookModal,
+    },
+    {
+      id: 'c',
+      letter: 'C',
+      title: 'Turnkey Molecular Diagnostics Lab Implementation',
+      subtitle: 'Turnkey molecular labs',
+      forText: 'For corporate labs · pharmaceutical companies · oncology hospitals',
+      description: 'From empty floor to first validated report — full-spectrum lab setup guidance grounded in decades of operational reality on two continents.',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+          <path d="M9 3v6L4.5 17a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L15 9V3" />
+          <path d="M8 3h8M7.5 13h9" />
+        </svg>
+      ),
+      list: [
+        'Full-spectrum lab setup consulting (IHC / PCR / Flow / FISH / NGS workflows)',
+        'Capex/Opex modeling, workflow design, regulatory guidance, and pricing strategy',
+      ],
+      buttonText: 'Plan Your Lab',
+      onButtonClick: onOpenBookModal,
+    },
+    {
+      id: 'd',
+      letter: 'D',
+      title: 'Telepathology Consulting',
+      subtitle: 'Remote expert opinion',
+      forText: 'For surgical pathologists · oncologists · hemato-oncologists · microbiologists · corporate hospitals & labs · pharma · biotech · CROs',
+      description: 'Remote access to subspecialty expertise — expert opinion and interpretation delivered digitally, structured around how you actually work.',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
+          <rect x="2.5" y="4" width="19" height="13" rx="2" />
+          <path d="M8 20h8M12 17v3" />
+          <circle cx="9" cy="10.5" r="2.4" />
+          <path d="M12.5 8.5h5M12.5 12h4" />
+        </svg>
+      ),
+      list: [
+        'Per-case expert opinion & interpretation on demand',
+        'Monthly or annual retainership for ongoing case support',
+        'Flexible engagement tiers scoped to hospitals, labs, and industry partners',
+      ],
+      buttonText: 'Request a Free Consult',
+      onButtonClick: onOpenBookModal,
+    },
+  ];
+
+  return (
+    <section id="services" className={`${FONT} bg-[#FAF8F5] py-[80px] md:py-[96px] px-6 border-b border-[#E6E0D8]`}>
+      <div className="max-w-[1180px] mx-auto">
+        {/* Section Head */}
+        <div className="mb-[32px]">
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="w-[30px] h-[3px] bg-[#FFC900] rounded-[2px]" />
+            <span className={`${MONO} text-[0.78rem] font-bold tracking-[0.16em] uppercase text-[#8B859E]`}>
               SERVICES
             </span>
-            <div className="w-6 h-0.5 bg-[#FFCA00]"></div>
           </div>
-          <motion.h2 className="text-3xl md:text-5xl font-black text-[#1E1A29] leading-tight ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            Three ways to engage
-          </motion.h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#241E3D] tracking-tight leading-tight">
+            Ways to engage
+          </h2>
         </div>
 
-        
-        {/* Highlight Stats Box */}
-        <div className="mb-16 border border-dashed border-[#FFCA00] rounded-xl p-6 text-center max-w-4xl">
-          <p className="text-[#1E1A29] text-xs md:text-sm font-medium tracking-wide ff-font">
-            22+ years leading high-volume labs (50,000+ accessions/year) • 40+ Pharma/CRO collaborations • US-India dual regulatory and operational perspective
-          </p>
-        </div>
-
-        {/* Tab Pills */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-          
-          <button onClick={() => scrollToCard('A')} className={`p-4 rounded-xl border flex items-center gap-4 transition-all duration-300 bg-white ${activeTab === 'A' ? 'border-[#E94E8F] shadow-md' : 'border-gray-200 hover:border-gray-300'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${activeTab === 'A' ? 'bg-[#E94E8F] text-white' : 'bg-gray-100 text-gray-400'}`}>A</div>
-            <div className="text-left">
-              <div className={`text-sm font-bold ff-font-bold ${activeTab === 'A' ? 'text-[#E94E8F]' : 'text-[#1E1A29]'}`}>
-                Diagnostic Excellence
-              </div>
-              <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest ff-font-bold">
-                SECOND OPINIONS & SPECIALIST REVIEW
-              </div>
-            </div>
-          </button>
-
-          <button onClick={() => scrollToCard('B')} className={`p-4 rounded-xl border flex items-center gap-4 transition-all duration-300 bg-white ${activeTab === 'B' ? 'border-[#E94E8F] shadow-md' : 'border-gray-200 hover:border-gray-300'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${activeTab === 'B' ? 'bg-[#E94E8F] text-white' : 'bg-gray-100 text-gray-400'}`}>B</div>
-            <div className="text-left">
-              <div className={`text-sm font-bold ff-font-bold ${activeTab === 'B' ? 'text-[#E94E8F]' : 'text-[#1E1A29]'}`}>
-                Strategic Advisory
-              </div>
-              <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest ff-font-bold">
-                PHARMA • CRO • BIOTECH
-              </div>
-            </div>
-          </button>
-
-          <button onClick={() => scrollToCard('C')} className={`p-4 rounded-xl border flex items-center gap-4 transition-all duration-300 bg-white ${activeTab === 'C' ? 'border-[#E94E8F] shadow-md' : 'border-gray-200 hover:border-gray-300'}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${activeTab === 'C' ? 'bg-[#E94E8F] text-white' : 'bg-gray-100 text-gray-400'}`}>C</div>
-            <div className="text-left">
-              <div className={`text-sm font-bold ff-font-bold ${activeTab === 'C' ? 'text-[#E94E8F]' : 'text-[#1E1A29]'}`}>
-                Lab Implementation
-              </div>
-              <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest ff-font-bold">
-                TURNKEY MOLECULAR LABS
-              </div>
-            </div>
-          </button>
-
-        </div>
-
-        {/* Cards Stack */}
-        <div className="flex flex-col gap-8">
-          
-          {/* Card A */}
-          <motion.div id="category-A" className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col md:flex-row gap-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#E94E8F] to-[#FFCA00]"></div>
-            
-            <div className="md:w-32 flex-shrink-0">
-              <div className="text-[#E94E8F] text-[10px] font-bold tracking-widest uppercase ff-font-bold mb-1">CATEGORY</div>
-              <div className="text-[#E94E8F] text-5xl font-black ff-font-bold">A</div>
-            </div>
-
-            <div className="flex-1">
-              <motion.div className="w-12 h-12 rounded-full bg-[#E94E8F]/10 flex items-center justify-center text-[#E94E8F] mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-              </motion.div>
-              
-              <motion.h3 className="text-2xl font-black text-[#1E1A29] mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Diagnostic Excellence</motion.h3>
-              <div className="text-[9px] text-gray-400 font-bold tracking-widest uppercase ff-font-bold mb-6">
-                FOR PATHOLOGISTS • ONCOLOGISTS • PATIENTS' CARE TEAMS
-              </div>
-
-              <motion.p className="text-[#64748B] text-sm leading-relaxed ff-font mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                Expert review when a diagnosis carries real consequence — delivered with integrated reporting that your clinical team can act on.
-              </motion.p>
-
-              <ul className="flex flex-col gap-3 mb-8">
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Surgical Pathology Second Opinions & Complex Case Consults</span>
-                </motion.li>
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Molecular Pathology Specialist Review & Integrated Reporting</span>
-                </motion.li>
-              </ul>
-
-              <button className="px-8 py-3.5 rounded-full bg-[#E94E8F] text-white font-bold text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold">
-                Request a Case Review →
+        {/* Stabs Tabs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[12px] mb-[32px]">
+          {services.map((svc) => {
+            const isActive = activeTab === svc.id;
+            return (
+              <button
+                key={svc.id}
+                onClick={() => setActiveTab(svc.id as 'a' | 'b' | 'c' | 'd')}
+                className={`flex items-center gap-[13px] p-[16px_20px] rounded-[14px] border-2 text-left transition-all duration-150 cursor-pointer ${
+                  isActive
+                    ? 'bg-white border-[#E0568F] shadow-[0_10px_26px_rgba(224,86,143,0.16)] -translate-y-0.5'
+                    : 'bg-white border-[#E6E0D8] hover:border-[#E0568F] hover:-translate-y-0.5'
+                }`}
+              >
+                <span
+                  className={`w-[38px] h-[38px] rounded-full font-extrabold text-[1.1rem] flex items-center justify-center flex-none border-2 transition-colors ${
+                    isActive
+                      ? 'bg-[#E0568F] text-white border-[#E0568F]'
+                      : 'bg-[#FAF7F2] text-[#E0568F] border-[#E6E0D8]'
+                  }`}
+                >
+                  {svc.letter}
+                </span>
+                <span className="min-w-0">
+                  <b className={`block text-[0.98rem] tracking-[-0.02em] font-bold ${isActive ? 'text-[#E0568F]' : 'text-[#241E3D]'}`}>
+                    {svc.title.split(' ')[0]} {svc.title.split(' ')[1] || ''}
+                  </b>
+                  <small className={`${MONO} block text-[0.64rem] tracking-[0.07em] uppercase text-[#5C5575] mt-0.5 truncate`}>
+                    {svc.subtitle}
+                  </small>
+                </span>
               </button>
-            </div>
-          </motion.div>
+            );
+          })}
+        </div>
 
-          {/* Card B */}
-          <motion.div id="category-B" className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col md:flex-row gap-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#FFCA00] to-[#E94E8F]"></div>
-            
-            <div className="md:w-32 flex-shrink-0">
-              <div className="text-[#E94E8F] text-[10px] font-bold tracking-widest uppercase ff-font-bold mb-1">CATEGORY</div>
-              <div className="text-[#E94E8F] text-5xl font-black ff-font-bold">B</div>
-            </div>
+        {/* Active Category Card */}
+        {services.map((svc) => {
+          if (activeTab !== svc.id) return null;
+          return (
+            <div
+              key={svc.id}
+              className="relative bg-white border border-[#E6E0D8] rounded-[20px] p-8 sm:p-11 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 animate-in fade-in zoom-in-95 duration-200"
+            >
+              {/* Left Bar Gradient */}
+              <div className="absolute top-0 left-0 bottom-0 w-[6px] bg-gradient-to-b from-[#E0568F] to-[#FFC900]" />
 
-            <div className="flex-1">
-              <motion.div className="w-12 h-12 rounded-full bg-[#E94E8F]/10 flex items-center justify-center text-[#E94E8F] mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-              </motion.div>
-              
-              <motion.h3 className="text-2xl font-black text-[#1E1A29] mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Strategic Advisory</motion.h3>
-              <div className="text-[9px] text-gray-400 font-bold tracking-widest uppercase ff-font-bold mb-6">
-                FOR PHARMA • CRO • BIOTECH
+              {/* Left Category Stamp */}
+              <div className="hidden md:flex flex-col items-start justify-start pt-1">
+                <span className={`${MONO} text-[0.74rem] tracking-[0.1em] text-[#C79A00] uppercase font-bold`}>
+                  CATEGORY
+                </span>
+                <b className="text-[2.6rem] leading-none font-extrabold text-[#E0568F] tracking-[-0.03em]">
+                  {svc.letter}
+                </b>
               </div>
 
-              <motion.p className="text-[#64748B] text-sm leading-relaxed ff-font mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                A practicing pathologist's perspective on biomarker programs — the perspective most strategy decks are missing.
-              </motion.p>
+              {/* Right Content */}
+              <div>
+                {/* Icon */}
+                <div className="w-[60px] h-[60px] rounded-[16px] bg-gradient-to-br from-[#E0568F]/15 to-white border border-[#E6E0D8] flex items-center justify-center text-[#E0568F] mb-4">
+                  {svc.icon}
+                </div>
 
-              <ul className="flex flex-col gap-3 mb-8">
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Biomarker Strategy, CDx Development & Companion Diagnostic Planning</span>
-                </motion.li>
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">RDx & Precision Oncology Strategy Consulting</span>
-                </motion.li>
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Virtual Molecular Tumor Board (vMTB) Program Development</span>
-                </motion.li>
-              </ul>
+                {/* Title */}
+                <h3 className="text-2xl sm:text-[1.55rem] font-extrabold text-[#241E3D] leading-tight mb-2">
+                  {svc.title}
+                </h3>
 
-              <button className="px-8 py-3.5 rounded-full bg-[#E94E8F] text-white font-bold text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold">
-                Discuss Your Program →
-              </button>
-            </div>
-          </motion.div>
+                {/* For Audience */}
+                <p className={`${MONO} text-[0.7rem] tracking-[0.12em] uppercase text-[#5C5575] mb-4`}>
+                  {svc.forText}
+                </p>
 
-          {/* Card C */}
-          <motion.div id="category-C" className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col md:flex-row gap-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#E94E8F] to-[#FFCA00]"></div>
-            
-            <div className="md:w-32 flex-shrink-0">
-              <div className="text-[#E94E8F] text-[10px] font-bold tracking-widest uppercase ff-font-bold mb-1">CATEGORY</div>
-              <div className="text-[#E94E8F] text-5xl font-black ff-font-bold">C</div>
-            </div>
+                {/* Subtext */}
+                <p className="text-[#5C5575] text-[1.02rem] leading-relaxed mb-4">
+                  {svc.description}
+                </p>
 
-            <div className="flex-1">
-              <motion.div className="w-12 h-12 rounded-full bg-[#E94E8F]/10 flex items-center justify-center text-[#E94E8F] mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-              </motion.div>
-              
-              <motion.h3 className="text-2xl font-black text-[#1E1A29] mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Turnkey Molecular Diagnostics Lab Implementation</motion.h3>
-              <div className="text-[9px] text-gray-400 font-bold tracking-widest uppercase ff-font-bold mb-6">
-                FOR CORPORATE LABS • PHARMACEUTICAL COMPANIES • ONCOLOGY HOSPITALS
+                {/* Bullet List */}
+                <ul className="list-none m-0 p-0 space-y-3 mb-6">
+                  {svc.list.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="relative pl-[26px] text-[0.97rem] text-[#5C5575] before:content-[''] before:absolute before:left-0 before:top-[0.55em] before:w-[13px] before:h-[3px] before:rounded-[2px] before:bg-gradient-to-r before:from-[#E0568F] before:to-[#FFC900]"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={svc.onButtonClick}
+                    className={`${FONT} inline-flex items-center gap-[10px] font-bold text-[0.95rem] px-[28px] py-[14px] rounded-full bg-[#E0568F] hover:bg-[#C84578] text-white transition-all duration-180 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(224,86,143,0.3)] cursor-pointer group`}
+                  >
+                    {svc.buttonText} <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
+                  </button>
+                </div>
               </div>
-
-              <motion.p className="text-[#64748B] text-sm leading-relaxed ff-font mb-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                From empty floor to first validated report — full-spectrum lab setup guidance grounded in decades of operational reality on two continents.
-              </motion.p>
-
-              <ul className="flex flex-col gap-3 mb-8">
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Full-spectrum lab setup consulting (IHC / FISH / Flow / NGS / workflows)</span>
-                </motion.li>
-                <motion.li className="flex gap-3 items-start" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-                once: true,
-                margin: "-50px"
-              }} transition={{
-                duration: 0.6
-              }}>
-                  <span className="text-[#E94E8F] text-lg leading-none mt-0.5">-</span>
-                  <span className="text-[#64748B] text-sm ff-font">Capex/Opex modeling, workflow design, regulatory guidance, and pricing strategy</span>
-                </motion.li>
-              </ul>
-
-              <button className="px-8 py-3.5 rounded-full bg-[#E94E8F] text-white font-bold text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold">
-                Plan Your Lab →
-              </button>
             </div>
-          </motion.div>
-
-        </div>
-        </div>
+          );
+        })}
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default EngagementWaysSection;

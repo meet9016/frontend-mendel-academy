@@ -1,167 +1,57 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
+
 const EngagementProcessSection = () => {
-  return <section className="bg-[#FAF8F5] pt-0 pb-0">
-      
-      {/* Dark Banner Process */}
-      <div className="max-w-7xl mx-auto flex flex-col items-start px-6 mb-24">
-        <div className="max-w-5xl w-full">
-          <motion.div className="bg-[#181424] rounded-3xl p-10 md:p-14 shadow-2xl relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-        once: true,
-        margin: "-50px"
-      }} transition={{
-        duration: 0.6
-      }}>
-          
+  return (
+    <section className={`${FONT} bg-[#FAF8F5] py-[40px] md:py-[60px] px-6 border-b border-[#E6E0D8]`}>
+      <div className="max-w-[1180px] mx-auto">
+        <div className="bg-[#150E28] rounded-[24px] p-8 sm:p-12 text-white shadow-xl">
           {/* Header */}
-          <div className="mb-12">
-            <motion.h2 className="text-3xl font-black text-white leading-tight mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
+          <div className="mb-8">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-2">
               How an engagement works
-            </motion.h2>
-            <motion.p className="text-[#A3A8B8] text-sm ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
+            </h2>
+            <p className="text-white/70 text-[1.02rem]">
               Simple, transparent, and scoped before any commitment.
-            </motion.p>
+            </p>
           </div>
 
-          {/* 4 Steps */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            <motion.div className="bg-[#1E1A29] rounded-2xl p-6 border border-[#2A2438]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-4">01</div>
-              <motion.h4 className="text-white text-sm font-bold mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Discovery call</motion.h4>
-              <motion.p className="text-[#A3A8B8] text-xs leading-relaxed ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                30 minutes to understand your case, program, or project — no charge, no obligation.
-              </motion.p>
-            </motion.div>
+          {/* 2 Steps Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Step 01 */}
+            <div className="bg-white/5 border border-white/10 rounded-[18px] p-6 sm:p-7">
+              <span className={`${MONO} block text-[0.78rem] font-bold tracking-[0.1em] text-[#FFC900] uppercase mb-3`}>
+                01
+              </span>
+              <h3 className="text-xl font-extrabold text-white mb-2.5">
+                Introductory call
+              </h3>
+              <p className="text-white/80 text-[0.93rem] leading-relaxed">
+                A complimentary 30-minute call to understand your case, program, or project — and to scope exactly what&apos;s needed. No charge, no obligation.
+              </p>
+            </div>
 
-            <motion.div className="bg-[#1E1A29] rounded-2xl p-6 border border-[#2A2438]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-4">02</div>
-              <motion.h4 className="text-white text-sm font-bold mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Scoped proposal</motion.h4>
-              <motion.p className="text-[#A3A8B8] text-xs leading-relaxed ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                Clear deliverables, timeline, and fee — whether it's one case or a year-long build.
-              </motion.p>
-            </motion.div>
-
-            <motion.div className="bg-[#1E1A29] rounded-2xl p-6 border border-[#2A2438]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-4">03</div>
-              <motion.h4 className="text-white text-sm font-bold mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Engagement</motion.h4>
-              <motion.p className="text-[#A3A8B8] text-xs leading-relaxed ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                Direct work with Dr. Mangoli — reviews, advisory sessions, site planning, or program design.
-              </motion.p>
-            </motion.div>
-
-            <motion.div className="bg-[#1E1A29] rounded-2xl p-6 border border-[#2A2438]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-4">04</div>
-              <motion.h4 className="text-white text-sm font-bold mb-2 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>Deliverables & follow-up</motion.h4>
-              <motion.p className="text-[#A3A8B8] text-xs leading-relaxed ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-              once: true,
-              margin: "-50px"
-            }} transition={{
-              duration: 0.6
-            }}>
-                Written reports, strategy documents, or operational plans — plus follow-up support.
-              </motion.p>
-            </motion.div>
-
-          </div>
-        </motion.div>
-        </div>
-      </div>
-
-      {/* Bottom Footer Banner */}
-      <div id="start-conversation" className="bg-[#100b16] py-24 px-6 border-t border-[#1E1A29]">
-        <div className="max-w-7xl mx-auto flex flex-col items-start">
-          <div className="max-w-5xl w-full">
-            <motion.h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              Start with a conversation.
-            </motion.h2>
-            <motion.p className="text-[#A3A8B8] text-sm md:text-base max-w-xl mb-10 ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              30 minutes. No obligation. Bring your hardest problem.
-            </motion.p>
-            <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold flex items-center gap-2">
-              Schedule a 30-Minute Discovery Call
-            </button>
+            {/* Step 02 */}
+            <div className="bg-white/5 border border-white/10 rounded-[18px] p-6 sm:p-7">
+              <span className={`${MONO} block text-[0.78rem] font-bold tracking-[0.1em] text-[#FFC900] uppercase mb-3`}>
+                02
+              </span>
+              <h3 className="text-xl font-extrabold text-white mb-2.5">
+                Scoped deliverables
+              </h3>
+              <p className="text-white/80 text-[0.93rem] leading-relaxed">
+                Direct work with Dr. Managoli against a clear, agreed fee — second-opinion reports, advisory sessions, lab plans, or program design, plus follow-up support.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-
-    </section>;
+    </section>
+  );
 };
+
 export default EngagementProcessSection;

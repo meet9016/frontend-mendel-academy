@@ -32,6 +32,8 @@ const faqs = [
   }
 ];
 
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
 const PathologyFAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -40,49 +42,53 @@ const PathologyFAQ = () => {
   };
 
   return (
-    <section id="faq" className="bg-[#fcfcfb] py-24 px-6 relative">
-      <div className="max-w-7xl mx-auto flex flex-col items-start text-left">
-        <div className="max-w-4xl w-full">
-          <div className="mb-12">
-          <div className="flex items-center justify-start gap-3 mb-4">
-            <div className="w-4 h-[1px] bg-yellow-500"></div>
-            <span className="text-gray-400 text-[9px] font-bold tracking-widest uppercase ff-font-bold">
-              FAQ
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-black text-black ff-font-bold tracking-tight">
+    <section
+      id="faq"
+      className={`${FONT} bg-[#FAF7F2] text-[#241E3D] text-[17px] leading-[1.65] antialiased py-24`}
+    >
+      <div className="max-w-[1180px] mx-auto px-6">
+
+        {/* section head */}
+        <div className="max-w-[780px] mb-[52px]">
+          <span className={`${MONO} inline-flex items-center gap-3 text-[0.72rem] tracking-[0.18em] uppercase text-[#5C5575] mb-5 before:content-[''] before:w-[34px] before:h-[2px] before:bg-[#FFC900]`}>
+            FAQ
+          </span>
+          <h2 className={`${FONT} text-[clamp(2rem,4.2vw,3.1rem)] font-extrabold leading-[1.08] tracking-[-0.025em] text-[#241E3D]`}>
             Frequently Asked Questions
           </h2>
         </div>
 
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div 
-              key={index}
-              className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm"
-            >
-              <button 
-                onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+        {/* faq list */}
+        <div className="max-w-[840px]">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div
+                key={index}
+                className={`bg-white border rounded-xl mb-3 overflow-hidden transition-colors duration-200 ${isOpen ? "border-[#E0568F]" : "border-[#E6E0D8]"
+                  }`}
               >
-                <span className="text-black text-sm font-bold ff-font-bold pr-8">
-                  {faq.question}
-                </span>
-                <span className="text-[#E94E8F] text-xl font-light leading-none">
-                  {openIndex === index ? '−' : '+'}
-                </span>
-              </button>
-              
-              {openIndex === index && (
-                <div>
-                  <div className="px-6 pb-6 text-gray-600 text-sm ff-font leading-relaxed">
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className={`${FONT} w-full text-left px-[26px] py-[22px] flex items-center justify-between gap-4 font-bold text-[17px] text-[#241E3D] focus:outline-none`}
+                >
+                  <span>{faq.question}</span>
+                  <span
+                    className={`text-[#E0568F] text-[1.6rem] font-normal leading-none flex-none transition-transform duration-200 ${isOpen ? "rotate-45" : ""
+                      }`}
+                  >
+                    +
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <p className={`${FONT} px-[26px] pb-6 text-[#5C5575] text-[0.97rem] leading-[1.65] m-0`}>
                     {faq.answer}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

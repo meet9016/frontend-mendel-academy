@@ -1,155 +1,141 @@
-"use client";
+'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
+
+const FONT =
+  "font-[-apple-system,BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
+
+const DETAILS = [
+  {
+    label: 'Format',
+    text: '100% virtual, PBL-driven live program with Virtual Molecular Tumor Boards (vMTB)',
+  },
+  {
+    label: 'Focus',
+    text: 'H&E, IHC, IF, Flow, FISH, PCR, NGS, PGx, resistance mechanisms, CDx/ADC biomarkers, therapy selection, microbiology',
+  },
+  {
+    label: 'Methodology',
+    text: 'Problem-Based Learning (PBL) + Onion Skin Technique + Mendel Chitras + 7-step clinical reasoning',
+  },
+  {
+    label: 'Designed for',
+    text: 'Surgical pathologists, hematopathologists, oncologists, hemato-oncologists, residents, and fellows',
+  },
+];
+
+const OUTCOMES = [
+  'Confidently interpret and clinically integrate complex morphologic, immunophenotypic, and molecular information using NGS, liquid biopsy, and multi-omic results to guide therapy selection',
+  'Lead or actively contribute to Molecular Tumor Boards with authority and structured reasoning',
+  'Design and implement reflex testing algorithms and companion diagnostic (CDx) strategies in your institution',
+  'Reduce diagnostic uncertainty in challenging cases using proven frameworks (Onion Skin Technique)',
+  'Mentor colleagues and build precision oncology capabilities within your team or department',
+  'Position yourself for leadership roles such as Molecular Pathology Consultant, Lab Director, or Tumor Board Lead',
+];
 
 const AdvancedPathologyHero = () => {
   return (
-    <section className="bg-[#100b16] relative pt-32 pb-24 overflow-hidden border-t border-[#2A2438]">
-      {/* Background glow */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#E94E8F]/20 via-[#100b16] to-[#100b16] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-50 pointer-events-none"></div>
+    <section id="fellowship" className={`${FONT} bg-[#150E28] relative overflow-hidden py-24 px-6`}>
+      {/* decorative glow */}
+      <div className="absolute -top-[180px] -right-[140px] w-[560px] h-[560px] rounded-full bg-[radial-gradient(circle,rgba(224,86,143,.18),transparent_70%)] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-start">
-        
-        <div className="max-w-5xl w-full flex flex-col items-start">
-          
-          {/* Top Label */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-0.5 bg-[#FFCA00]"></div>
-            <span className="text-gray-400 text-[10px] font-bold tracking-widest uppercase ff-font-bold">
-              FLAGSHIP PROGRAM
+      <div className="max-w-[1180px] mx-auto relative">
+        {/* section head */}
+        <div className="max-w-[780px] mb-[52px]">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-[34px] h-0.5 bg-[#FFC900]" />
+            <span className={`${MONO} text-[.72rem] tracking-[.18em] uppercase text-white/55`}>
+              Flagship Program
             </span>
           </div>
 
-          <div className="inline-block px-3 py-1.5 bg-[#FFCA00] text-[#1E1A29] text-[10px] font-black tracking-widest uppercase rounded-sm mb-6 shadow-[0_0_15px_rgba(255,202,0,0.3)] ff-font-bold">
-            <span className="mr-2">★</span>
-            FLAGSHIP PROGRAM • NEXT COHORT ENROLLING
-          </div>
+          <span
+            className={`${MONO} inline-block text-[.7rem] tracking-[.16em] uppercase bg-[#FFC900] text-[#1A1502] px-4 py-[7px] rounded-full mb-[18px] font-medium`}
+          >
+            ★ Flagship · Next Cohort Enrolling
+          </span>
 
-          <motion.h1 
-            className="text-3xl md:text-3xl lg:text-4xl font-black text-white leading-[1.1] mb-6 ff-font-bold"
+          <motion.h2
+            className="text-[clamp(2rem,4.2vw,3.1rem)] font-extrabold text-white leading-[1.08] tracking-[-.025em] mb-0"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            12-Month Virtual
-            Fellowship in <br />
-            <span className="text-white">Molecular Pathology</span><br />
-            <span className="text-[#fff]">Interpretation &</span><br />
-            <span className="text-white">Precision Oncology</span>
-          </motion.h1>
+            12-Month Virtual Fellowship in Molecular Pathology Interpretation & Precision Oncology
+          </motion.h2>
 
-          <motion.p 
-            className="text-[#A3A8B8] text-base md:text-lg max-w-3xl leading-relaxed ff-font mb-12"
+          <motion.p
+            className="mt-[18px] text-[1.13rem] text-white/72"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            The most comprehensive interpretation-focused program for practicing pathologists who want to lead in precision oncology — built around real cases, live tumor boards, and frameworks you'll use every day at the scope.
+            The most comprehensive interpretation-focused program for practicing pathologists who want to lead in
+            precision oncology.
           </motion.p>
-
-          {/* Grid of 4 dark cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-8">
-            <motion.div className="bg-[#1A1525] border border-[#2A2438] rounded-xl p-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">FORMAT</div>
-              <p className="text-white text-sm leading-relaxed ff-font">100% virtual, PBL-driven live program with Virtual Molecular Tumor Boards (vMTB)</p>
-            </motion.div>
-            <motion.div className="bg-[#1A1525] border border-[#2A2438] rounded-xl p-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">FOCUS</div>
-              <p className="text-white text-sm leading-relaxed ff-font">IHC, IF, Flow, FISH, PCR, NGS, PGx, resistance mechanisms, CDx/ADx biomarkers, therapy selection, microbiology</p>
-            </motion.div>
-            <motion.div className="bg-[#1A1525] border border-[#2A2438] rounded-xl p-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">METHODOLOGY</div>
-              <p className="text-white text-sm leading-relaxed ff-font">Problem-Based Learning (PBL) + Onion Skin Technique + Mendel Chitras + Clinicopathological reasoning</p>
-            </motion.div>
-            <motion.div className="bg-[#1A1525] border border-[#2A2438] rounded-xl p-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
-              <div className="text-[#FFCA00] text-[9px] font-bold tracking-widest uppercase ff-font-bold mb-3">DESIGNED FOR</div>
-              <p className="text-white text-sm leading-relaxed ff-font">Surgical pathologists, hematopathologists, oncologists, hemato-oncologists, residents, and fellows</p>
-            </motion.div>
-          </div>
-
-          {/* Large White Box with Checkmarks */}
-          <motion.div 
-            className="bg-white rounded-xl p-8 md:p-10 w-full shadow-xl mb-12"
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-              
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Confidently interpret and clinically integrate complex morphologic immunophenotypic and molecular information using NGS, liquid biopsy, and multi-omic results to guide therapy selection
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Lead or actively contribute to Molecular Tumor Boards with authority and structured reasoning
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Design and implement reflex testing algorithms and companion diagnostic (CDx) strategies in your institution
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Resolve diagnostic uncertainty in challenging cases using proven frameworks (Onion Skin Technique)
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Mentor colleagues and build precision oncology capabilities within your team or department
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-5 h-5 rounded-full bg-[#E94E8F] flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <p className="text-[#64748B] text-sm leading-relaxed ff-font">
-                  Position yourself for leadership roles such as Molecular Pathology Consultant, Lab Director, or Tumor Board Lead
-                </p>
-              </div>
-
-            </div>
-          </motion.div>
-
-          {/* Buttons */}
-          <motion.div 
-            className="flex flex-wrap items-center gap-4 w-full"
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6, delay: 0.7 }}
-          >
-            <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:bg-[#F0BE00] transition-colors ff-font-bold flex items-center gap-2">
-              Apply Now / Enroll in Next Cohort <span className="font-normal text-lg leading-none">→</span>
-            </button>
-            <button className="px-8 py-4 rounded-full border border-[#2A2438] text-white hover:bg-white/5 transition-colors font-bold text-sm tracking-wide ff-font-bold">
-              Download Full Fellowship Brochure
-            </button>
-          </motion.div>
-
         </div>
+
+        {/* detail grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[18px] mb-[42px]">
+          {DETAILS.map((d, i) => (
+            <motion.div
+              key={d.label}
+              className="bg-white/5 border border-white/10 rounded-xl px-6 py-[22px]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+            >
+              <b className={`${MONO} block text-[.7rem] tracking-[.14em] uppercase text-[#FFC900] font-medium mb-2`}>
+                {d.label}
+              </b>
+              <span className="text-[.97rem] text-white/85">{d.text}</span>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* outcomes card */}
+        <motion.div
+          className="relative bg-white rounded-2xl px-8 py-10 md:px-[42px] mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <span className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl bg-[linear-gradient(180deg,#E0568F,#FFC900)]" />
+
+          <h3 className="text-[1.45rem] font-extrabold text-[#241E3D] mb-[22px]">
+            What You Will Be Able To Do After This Program
+          </h3>
+
+          <ul className="grid grid-cols-1 md: grid-cols-2 gap-x-[30px] gap-y-4 list-none">
+            {OUTCOMES.map((o) => (
+              <li key={o} className="relative pl-8 text-[.97rem] text-[#5C5575]">
+                <span className="absolute left-0 top-px w-[21px] h-[21px] rounded-full bg-[#E0568F] flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                {o}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-wrap items-center gap-3.5"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <button className="group inline-flex items-center gap-2.5 px-[30px] py-[15px] rounded-full bg-[#FFC900] text-[#1A1502] font-bold text-base transition-all duration-[180ms] ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(255,201,0,.35)]">
+            Apply Now / Enroll in Next Cohort{' '}
+            <span className="inline-block transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
+          </button>
+          <button className="inline-flex items-center gap-2.5 px-[30px] py-[15px] rounded-full border-2 border-white/40 text-white font-bold text-base transition-all hover:border-[#FFC900] hover:text-[#FFC900] hover:-translate-y-0.5">
+            Download Full Fellowship Brochure
+          </button>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,88 +1,43 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 const DNAGraphic = () => {
   return (
-    <div className="relative w-full max-w-[400px] h-[500px]">
-      {/* Abstract DNA SVG */}
-      <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full relative z-10 drop-shadow-2xl">
-        
-        {/* Left Strand (starts Top-Left, curves Right, then Left to Mid-Left, then bulges Left to Bottom-Left) */}
-        {/* Gradient for left strand: Pink to Yellow */}
+    <div className="relative w-[min(360px,90%)] mx-auto" aria-hidden="true">
+      <svg viewBox="0 0 200 360" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto overflow-visible">
         <defs>
-          <linearGradient id="leftStrand" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E94E8F" />
-            <stop offset="30%" stopColor="#FFCA00" />
-            <stop offset="60%" stopColor="#E94E8F" />
-            <stop offset="100%" stopColor="#FFCA00" />
-          </linearGradient>
-          <linearGradient id="rightStrand" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E94E8F" />
-            <stop offset="30%" stopColor="#E94E8F" />
-            <stop offset="60%" stopColor="#FFCA00" />
-            <stop offset="100%" stopColor="#FFCA00" />
+          <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#E0568F" />
+            <stop offset="100%" stopColor="#FFC900" />
           </linearGradient>
         </defs>
 
-        {/* Top Section - Figure 8 */}
-        {/* Left Strand */}
-        <motion.path 
-          d="M 160 100 C 260 120, 260 200, 160 240" 
-          stroke="url(#leftStrand)" strokeWidth="4" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }}
-        />
-        {/* Right Strand */}
-        <motion.path 
-          d="M 240 100 C 140 120, 140 200, 240 240" 
-          stroke="url(#rightStrand)" strokeWidth="4" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, ease: "easeInOut" }}
-        />
+        {/* Strands */}
+        <g className="animate-[pulse_6s_ease-in-out_infinite]" fill="none" stroke="url(#hg)" strokeWidth="5" strokeLinecap="round">
+          <path d="M55 10 C 145 70, 145 110, 55 170 C -35 230, -35 270, 55 330" />
+          <path d="M145 10 C 55 70, 55 110, 145 170 C 235 230, 235 270, 145 330" />
+        </g>
 
-        {/* Bottom Section - Bulb */}
-        {/* Left Bulb */}
-        <motion.path 
-          d="M 160 240 C 50 300, 50 400, 160 450" 
-          stroke="url(#leftStrand)" strokeWidth="4" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 1, ease: "easeInOut" }}
-        />
-        {/* Right Bulb */}
-        <motion.path 
-          d="M 240 240 C 350 300, 350 400, 240 450" 
-          stroke="url(#rightStrand)" strokeWidth="4" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 1, ease: "easeInOut" }}
-        />
+        {/* Rungs with pulsing opacity */}
+        <g strokeLinecap="round" strokeWidth="4">
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="62" y1="34" x2="138" y2="34" stroke="#E0568F" style={{ animationDelay: '0s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="84" y1="62" x2="116" y2="62" stroke="#7A63C4" style={{ animationDelay: '.2s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="84" y1="118" x2="116" y2="118" stroke="#7A63C4" style={{ animationDelay: '.4s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="62" y1="146" x2="138" y2="146" stroke="#FFC900" style={{ animationDelay: '.6s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="62" y1="194" x2="138" y2="194" stroke="#E0568F" style={{ animationDelay: '.8s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="84" y1="222" x2="116" y2="222" stroke="#7A63C4" style={{ animationDelay: '1s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="84" y1="278" x2="116" y2="278" stroke="#7A63C4" style={{ animationDelay: '1.2s' }} />
+          <line className="origin-center animate-[pulse_3s_ease-in-out_infinite]" x1="62" y1="306" x2="138" y2="306" stroke="#FFC900" style={{ animationDelay: '1.4s' }} />
+        </g>
 
-        {/* Horizontal Rungs (Top Section) */}
-        {/* Rung 1 */}
-        <motion.line x1="170" y1="125" x2="230" y2="125" stroke="#E94E8F" strokeWidth="4" strokeLinecap="round" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.5 }} />
-        {/* Rung 2 */}
-        <motion.line x1="190" y1="160" x2="210" y2="160" stroke="#8B5CF6" strokeWidth="4" strokeLinecap="round" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.7 }} />
-        {/* Rung 3 */}
-        <motion.line x1="170" y1="215" x2="230" y2="215" stroke="#FFCA00" strokeWidth="4" strokeLinecap="round" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.9 }} />
-
-        {/* Horizontal Rungs (Bottom Bulb Section) */}
-        {/* Rung 4 (Wide, Pink) */}
-        <motion.line x1="120" y1="280" x2="280" y2="280" stroke="#E94E8F" strokeWidth="4" strokeLinecap="round" opacity="0.8" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.5 }} />
-        {/* Rung 5 (Narrow, Purple) */}
-        <motion.line x1="160" y1="320" x2="240" y2="320" stroke="#8B5CF6" strokeWidth="4" strokeLinecap="round" opacity="0.8" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.7 }} />
-        {/* Rung 6 (Narrow, Purple) */}
-        <motion.line x1="160" y1="380" x2="240" y2="380" stroke="#8B5CF6" strokeWidth="4" strokeLinecap="round" opacity="0.8" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.9 }} />
-        {/* Rung 7 (Wide, Yellow) */}
-        <motion.line x1="120" y1="420" x2="280" y2="420" stroke="#FFCA00" strokeWidth="4" strokeLinecap="round" opacity="0.8" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 2.1 }} />
-
-        {/* Nodes (White dots) */}
-        {[
-          { cx: 160, cy: 100 }, { cx: 240, cy: 100 }, // Top
-          { cx: 160, cy: 240 }, { cx: 240, cy: 240 }, // Mid
-          { cx: 160, cy: 450 }, { cx: 240, cy: 450 }  // Bottom
-        ].map((pos, idx) => (
-          <motion.circle 
-            key={idx} cx={pos.cx} cy={pos.cy} r="5" fill="white"
-            initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.3 + (idx * 0.1) }}
-            className="drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]"
-          />
-        ))}
-
+        {/* Nodes */}
+        <g fill="#fff">
+          <circle cx="55" cy="10" r="6" />
+          <circle cx="145" cy="10" r="6" />
+          <circle cx="55" cy="170" r="6" />
+          <circle cx="145" cy="170" r="6" />
+          <circle cx="55" cy="330" r="6" />
+          <circle cx="145" cy="330" r="6" />
+        </g>
       </svg>
     </div>
   );

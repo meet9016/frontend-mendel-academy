@@ -1,55 +1,74 @@
 "use client";
 import React from 'react';
+
+// --font = -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+
 const PathologyCTA = () => {
   return (
-    <section className="bg-[#100b16] py-32 px-6 relative overflow-hidden border-t border-[#1E1A29]">
-      {/* Background Graphic */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-full pointer-events-none flex items-center justify-center opacity-30">
-        <div className="absolute w-[300px] h-[300px] rounded-full border border-gray-600"></div>
-        <div className="absolute w-[500px] h-[500px] rounded-full border border-gray-700"></div>
-        <div className="absolute w-[700px] h-[700px] rounded-full border border-gray-800"></div>
-      </div>
+    <section
+      className={`${FONT} relative overflow-hidden text-center py-[120px] px-6`}
+      style={{
+        background:
+          "radial-gradient(1000px 600px at 50% 110%, #1E1540, #150E28)",
+      }}
+    >
+      {/* Background rings — matches .final::before / .final::after */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 -top-40 w-[520px] h-[520px] rounded-full pointer-events-none"
+        style={{ border: "1px solid rgba(255,201,0,0.18)" }}
+      ></div>
+      <div
+        className="absolute left-1/2 -translate-x-1/2 -top-[220px] w-[760px] h-[760px] rounded-full pointer-events-none"
+        style={{ border: "1px solid rgba(224,86,143,0.14)" }}
+      ></div>
 
-      <div className="max-w-7xl mx-auto text-left relative z-10 flex flex-col items-start">
-        
-        <p
-          className="text-gray-300 text-sm md:text-base font-serif italic mb-8 max-w-2xl"
-        >
+      <div className="max-w-[1180px] mx-auto relative z-10 flex flex-col items-center">
+
+        {/* .belief */}
+        <p className={`${FONT} max-w-[760px] mb-[30px] text-[clamp(1.15rem,2.2vw,1.5rem)] leading-[1.5] font-semibold italic text-[#F7DCE8]`}>
           Behind every complex report is a human life — and the right interpretation, delivered by skilled professionals, can change everything.
         </p>
-        
-        <h2
-          className="text-3xl md:text-5xl font-black text-white leading-[1.15] mb-6 ff-font-bold tracking-tight max-w-3xl"
-        >
-          Ready to Lead in Precision<br />Oncology & Advanced<br />Diagnostics?
+
+        {/* h2 */}
+        <h2 className={`${FONT} text-white text-[clamp(2.1rem,4.6vw,3.4rem)] font-extrabold leading-[1.08] tracking-[-0.025em] max-w-[820px] mb-[18px]`}>
+          Ready to Lead in Precision Oncology &amp; Advanced Diagnostics?
         </h2>
 
-        <p
-          className="text-gray-400 text-xs ff-font mb-12"
-        >
+        {/* .sub2 */}
+        <p className={`${FONT} text-white/70 text-[1.1rem] mb-11`}>
           Pick your path — fellowship, mastery, consulting, or community.
         </p>
 
-        <div
-          className="flex flex-wrap justify-start gap-4"
-        >
-          <button className="px-6 py-3 rounded-full bg-[#FFCA00] text-black font-bold text-[11px] hover:bg-yellow-400 transition-colors ff-font-bold tracking-wide">
-            Enroll in the Fellowship →
+        {/* .ctas */}
+        <div className="flex flex-wrap justify-center gap-3 relative">
+          <button
+            className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full border-2 border-transparent bg-[#FFC900] text-[#1A1502] transition-transform duration-150 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(255,201,0,0.35)]`}
+          >
+            Enroll in the Fellowship <span className="transition-transform duration-150">→</span>
           </button>
-          
-          <button className="px-6 py-3 rounded-full bg-[#E94E8F] text-white font-bold text-[11px] hover:opacity-90 transition-opacity ff-font-bold tracking-wide">
+
+          <button
+            className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full border-2 border-transparent bg-[#E0568F] text-white transition-transform duration-150 hover:-translate-y-0.5 hover:bg-[#B03A6C] hover:shadow-[0_12px_30px_rgba(224,86,143,0.38)]`}
+          >
             Book a Consulting Discovery Call
           </button>
-          
-          <button className="px-6 py-3 rounded-full border border-gray-600 text-gray-300 font-bold text-[11px] hover:bg-white/5 transition-colors ff-font-bold tracking-wide">
+
+          <button
+            className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-transparent text-white border-2 border-white/40 transition-transform duration-150 hover:-translate-y-0.5 hover:border-[#FFC900] hover:text-[#FFC900]`}
+          >
             Explore Mastery Courses
           </button>
-          
-          <button className="px-6 py-3 rounded-full border border-gray-600 text-gray-300 font-bold text-[11px] hover:bg-white/5 transition-colors ff-font-bold tracking-wide">
+
+          <button
+            className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-transparent text-white border-2 border-white/40 transition-transform duration-150 hover:-translate-y-0.5 hover:border-[#FFC900] hover:text-[#FFC900]`}
+          >
             Join Our WhatsApp Community
           </button>
-          
-          <button className="px-6 py-3 rounded-full border border-gray-600 text-gray-300 font-bold text-[11px] hover:bg-white/5 transition-colors ff-font-bold tracking-wide">
+
+          <button
+            className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-transparent text-white border-2 border-white/40 transition-transform duration-150 hover:-translate-y-0.5 hover:border-[#FFC900] hover:text-[#FFC900]`}
+          >
             Download Free Resources
           </button>
         </div>

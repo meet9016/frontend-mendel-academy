@@ -1,7 +1,5 @@
 import React from 'react';
-import ConsultingHeroSection from '@/component/pathology/Consulting/ConsultingHeroSection';
-import EngagementWaysSection from '@/component/pathology/Consulting/EngagementWaysSection';
-import EngagementProcessSection from '@/component/pathology/Consulting/EngagementProcessSection';
+import ConsultingClient from './ConsultingClient';
 
 export const metadata = {
   title: 'Mendel Academy | Consulting & Advisory',
@@ -11,11 +9,7 @@ export const metadata = {
 const ConsultingPage = () => {
   return (
     <main className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans">
-      <div className="flex-1">
-        <ConsultingHeroSection />
-        <EngagementWaysSection />
-        <EngagementProcessSection />
-      </div>
+      <ConsultingClient />
     </main>
   );
 };

@@ -1,104 +1,88 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
-const ConsultingHeroSection = () => {
-  return <section className="bg-[#100b16] py-24 px-6 overflow-hidden relative min-h-[600px] flex items-center border-b-2 border-[#1E1A29]">
-      {/* Background gradients */}
-      <motion.div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#E94E8F]/10 rounded-full blur-[150px] pointer-events-none translate-x-1/3 -translate-y-1/3" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-      once: true,
-      margin: "-50px"
-    }} transition={{
-      duration: 0.6
-    }}></motion.div>
-      <motion.div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] rounded-full border border-white/5 pointer-events-none" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-      once: true,
-      margin: "-50px"
-    }} transition={{
-      duration: 0.6
-    }}></motion.div>
-      
-      <div className="max-w-7xl mx-auto w-full relative z-10">
-        
-        <div className="text-left">
-          <motion.div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FFCA00] mb-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            <span className="text-[#100b16] text-[10px] font-black tracking-widest uppercase ff-font-bold">
-              CONSULTING & ADVISORY • DR. KISHOR MANGOLI, MD
-            </span>
-          </motion.div>
-          
-          <motion.h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.1] mb-6 ff-font-bold tracking-tight max-w-3xl" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            When the stakes are high, <br />
-            bring in <span className="text-[#E94E8F]">35 years of expertise.</span>
-          </motion.h1>
-          
-          <motion.p className="text-[#A3A8B8] text-base md:text-lg max-w-2xl mb-10 leading-relaxed ff-font" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-          once: true,
-          margin: "-50px"
-        }} transition={{
-          duration: 0.6
-        }}>
-            Second opinions on the cases that keep you up at night. Biomarker strategy that survives regulatory scrutiny. Molecular labs built right the first time. Beyond training — direct access to decades of high-volume diagnostic and industry experience.
-          </motion.p>
-          
-          {/* Metrics Pills */}
-          <div className="flex flex-wrap gap-4 mb-12">
-            <motion.div className="px-4 py-2 rounded-full border border-gray-700 bg-white/5 text-[10px] text-white font-bold tracking-widest uppercase ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <span className="text-[#FFCA00]">22+ yrs</span> leading high-volume labs
-            </motion.div>
-            <motion.div className="px-4 py-2 rounded-full border border-gray-700 bg-white/5 text-[10px] text-white font-bold tracking-widest uppercase ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <span className="text-[#FFCA00]">50,000+</span> accessions/year
-            </motion.div>
-            <motion.div className="px-4 py-2 rounded-full border border-gray-700 bg-white/5 text-[10px] text-white font-bold tracking-widest uppercase ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <span className="text-[#FFCA00]">40+</span> Pharma/CRO collaborations
-            </motion.div>
-            <motion.div className="px-4 py-2 rounded-full border border-gray-700 bg-white/5 text-[10px] text-white font-bold tracking-widest uppercase ff-font-bold" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{
-            once: true,
-            margin: "-50px"
-          }} transition={{
-            duration: 0.6
-          }}>
-              <span className="text-[#FFCA00]">US-India</span> dual perspective
-            </motion.div>
-          </div>
-          
-          {/* Buttons */}
-          <div className="flex flex-wrap gap-4 items-center">
-            <button className="px-8 py-4 rounded-full bg-[#FFCA00] text-[#1E1A29] font-black text-sm tracking-wide hover:opacity-90 transition-opacity ff-font-bold flex items-center gap-2">
-              Schedule a 30-Minute Discovery Call <span className="font-normal">→</span>
-            </button>
-            <button className="px-8 py-4 rounded-full border border-gray-600 text-white font-bold text-sm tracking-wide hover:bg-white/5 transition-colors ff-font-bold">
-              Explore Services
-            </button>
-          </div>
+
+const FONT = "font-['-apple-system',BlinkMacSystemFont,'SF_Pro_Display','SF_Pro_Text','Helvetica_Neue','Segoe_UI',Roboto,sans-serif]";
+const MONO = "font-['SF_Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace]";
+
+interface ConsultingHeroSectionProps {
+  onOpenBookModal?: () => void;
+}
+
+const ConsultingHeroSection = ({ onOpenBookModal }: ConsultingHeroSectionProps) => {
+  return (
+    <section className={`${FONT} relative bg-[radial-gradient(1100px_700px_at_80%_10%,#1E1540,#150E28_65%)] text-white overflow-hidden py-[84px] md:py-[92px] px-6`}>
+      {/* Decorative background circles */}
+      <div className="absolute -right-[160px] -top-[160px] w-[520px] h-[520px] rounded-full border border-[#FFC900]/20 pointer-events-none" />
+      <div className="absolute -right-[100px] -top-[100px] w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(224,86,143,0.16),transparent_70%)] pointer-events-none" />
+
+      <div className="relative max-w-[1180px] mx-auto">
+        {/* Flagchip */}
+        <span className={`${MONO} inline-block text-[0.7rem] tracking-[0.16em] uppercase bg-[#FFC900] text-[#1A1502] px-4 py-[7px] rounded-full mb-[30px] font-medium`}>
+          Consulting &amp; Advisory · Dr. Kishor Managoli, MD
+        </span>
+
+        {/* Heading */}
+        <h1 className={`${FONT} text-[clamp(2.3rem,5vw,3.7rem)] font-extrabold leading-[1.08] tracking-[-0.025em] text-white mb-[34px]`}>
+          35 years of expertise, <span className="text-[#E0568F]">when the diagnosis matters most.</span>
+        </h1>
+
+        {/* Bullet List */}
+        <ul className="list-none m-0 mb-[44px] max-w-[760px] grid grid-cols-1 sm:grid-cols-2 gap-x-[34px] gap-y-[16px]">
+          {[
+            'Molecular Diagnosis Consulting',
+            'Surgical Pathology',
+            'Second Opinions',
+            'Telepathology & Digital Pathology',
+            'Biomarker Strategy',
+            'Companion Diagnostics (CDx)',
+            'Pharmacogenomics Strategy (PGx)',
+            'Molecular Lab Business Development',
+          ].map((item, idx) => (
+            <li
+              key={idx}
+              className={`${FONT} relative pl-[30px] text-[1.16rem] text-white/90 before:content-[''] before:absolute before:left-0 before:top-[0.62em] before:w-[16px] before:h-[3px] before:rounded-[2px] before:bg-[#FFC900]`}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        {/* Fact Chips */}
+        <div className="flex flex-wrap gap-[12px] mb-[48px]">
+          <span className={`${MONO} text-[0.86rem] tracking-[0.06em] border border-white/25 rounded-full px-[18px] py-[10px] text-white/85`}>
+            <b className="text-[#FFC900] font-semibold">35+</b> yrs leading high-volume labs
+          </span>
+          <span className={`${MONO} text-[0.86rem] tracking-[0.06em] border border-white/25 rounded-full px-[18px] py-[10px] text-white/85`}>
+            <b className="text-[#FFC900] font-semibold">50,000+</b> accessions/year
+          </span>
+          <span className={`${MONO} text-[0.86rem] tracking-[0.06em] border border-white/25 rounded-full px-[18px] py-[10px] text-white/85`}>
+            <b className="text-[#FFC900] font-semibold">24 yrs</b> of Pharma/CRO experience
+          </span>
+          <span className={`${MONO} text-[0.86rem] tracking-[0.06em] border border-white/25 rounded-full px-[18px] py-[10px] text-white/85`}>
+            <b className="text-[#FFC900] font-semibold">Global</b> perspective
+          </span>
         </div>
 
+        {/* CTAs */}
+        <div className="flex flex-wrap gap-[14px]">
+          <button
+            onClick={() => {
+              if (onOpenBookModal) {
+                onOpenBookModal();
+              } else {
+                const el = document.getElementById('services');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className={`${FONT} inline-flex items-center gap-[10px] font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-[#FFC900] text-[#1A1502] transition-all duration-[180ms] hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(255,201,0,0.35)] group cursor-pointer border-2 border-transparent`}
+          >
+            Schedule a call <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
+          </button>
+        </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ConsultingHeroSection;
