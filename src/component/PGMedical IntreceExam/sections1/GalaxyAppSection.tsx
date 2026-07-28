@@ -495,7 +495,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
           )}
         </div>
 
-        <div className="flex justify-center gap-2 mb-10">
+        <div className="hidden flex justify-center gap-2 mb-10">
           {[
             { key: "iphone", label: "iPhone", icon: <svg width="10" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> },
             { key: "ipad", label: "iPad", icon: <svg width="12" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> },
@@ -516,7 +516,7 @@ const GalaxyAppSection: React.FC<GalaxyAppSectionProps> = ({ examData, loading }
           ))}
         </div>
 
-        <div className="flex justify-center gap-5 mb-16 overflow-x-auto pb-2">
+        <div className="hidden flex justify-center gap-5 mb-16 overflow-x-auto pb-2">
           {appTools.map((tool, index) => {
             const deviceVideo = (() => {
               const t = dynamicTools[index] || {};

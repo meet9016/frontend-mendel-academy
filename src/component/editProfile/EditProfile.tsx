@@ -83,20 +83,6 @@ const EditProfile = () => {
                   <span>Membership</span>
                 </div>
 
-                {/* My Product */}
-                <div
-                  onClick={() => {
-                    setActiveMenu("myProduct");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer ${activeMenu === "myProduct"
-                    ? "bg-[#fff4d6] border-l-4 border-primary text-black"
-                    : "text-gray-600 hover:bg-[#fffbf1]"
-                    }`}
-                >
-                  <FaBoxOpen />
-                  <span>My products</span>
-                </div>
 
                 {/* Profile */}
                 <div
@@ -175,7 +161,6 @@ const EditProfile = () => {
           {activeMenu === "overview" && userType === "paid" && <PayingMemberOverview />}
 
           {activeMenu === "membership" && <Membership />}
-          {activeMenu === "myProduct" && <MyProduct />}
           {activeMenu === "profile" && <Profile />}
           {activeMenu === "contactUs" && <ContactUs />}
         </div>

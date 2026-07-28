@@ -207,62 +207,7 @@ const USMLEPlan = ({ data, userCurrency, cartItems, examCategoryId, onUpdateCart
               })}
             </div>
 
-            {/* Rapid Learning Tools */}
-            <div className="mt-16">
-              <div className="text-center mb-6">
-                <h2 className="text-[24px] font-black text-gray-900 mb-2 ff-font-bold">
-                  Rapid Learning Tools
-                </h2>
-              </div>
 
-              <div className="bg-[#1c1c1c] rounded-2xl p-8">
-                <p className="text-[12px] font-black tracking-[0.05em] uppercase text-primary mb-3 text-center ff-font-bold">
-                  AVAILABLE AS INDIVIDUAL ADD-ONS
-                </p>
-                <p className="text-[13px] text-white text-center mb-8 ff-font">
-                  Already have a plan? Add specialty tools by subject — $16.99/month each.
-                </p>
-
-                <div className="relative px-3">
-                  <Sliders
-                    settings={{
-                      accessibility: true,
-                      infinite: true,
-                      speed: 500,
-                      slidesToShow: 4,
-                      slidesToScroll: 1,
-                      autoplay: true,
-                      autoplaySpeed: 3000,
-                      arrows: true,
-                      nextArrow: <NextArrow />,
-                      prevArrow: <PrevArrow />,
-                    }}
-                  >
-                    {rapidTools.map((tool, index) => (
-                      <div key={index} className="px-2">
-                        <div className="bg-white rounded-xl p-5 flex flex-col text-left h-[170px] justify-between">
-                          <h3 className="text-[13px] font-bold text-gray-900 mb-2 ff-font-bold leading-tight pr-4">{tool.tool_type}</h3>
-                          <div>
-                            <p className="text-[22px] font-black text-gray-900 mb-0.5 ff-font-bold">
-                              $ {tool.price.toFixed(2)}
-                            </p>
-                            <p className="text-[9px] text-gray-500 mb-4 ff-font">
-                              per subject / month
-                            </p>
-                            <button
-                              className="w-full py-2 rounded text-gray-900 bg-primary text-[11px] font-bold cursor-pointer ff-font-bold"
-                              style={{ backgroundColor: "#FFCA00" }}
-                            >
-                              Enroll Now
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </Sliders>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
