@@ -3,6 +3,7 @@
 import { api } from "@/utils/axiosInstance";
 import endPointApi from "@/utils/endPointApi";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
@@ -71,6 +72,12 @@ export default function Header() {
   const pathname = usePathname();
 
   // Initialize tempIdGet ONCE on mount
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsExamDropdownOpen(false);
+    setIsPathologyDropdownOpen(false);
+  }, [pathname]);
+
   useEffect(() => {
     const storedId = getTempId();
     setTempIdGet(storedId);
@@ -314,274 +321,401 @@ export default function Header() {
           </div>
 
           {/* Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-12">
+          {/* Unified Navigation (Desktop + Mobile) */}
+          <nav
+            className={`
+              ${isMenuOpen ? "flex flex-col absolute top-[80px] left-0 w-full bg-white px-4 pb-6 pt-2 border-t border-gray-200 shadow-xl z-50 overflow-y-auto max-h-[calc(100vh-80px)] gap-4" : "hidden"}
+              lg:static lg:w-auto lg:flex lg:flex-row lg:items-center lg:gap-12 lg:border-none lg:shadow-none lg:p-0 lg:overflow-visible
+            `}
+          >
             <button
-              onClick={() => router.push("/")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
+              onClick={() => {
+                router.push("/");
+                setIsMenuOpen(false);
+              }}
+              className={`relative ff-font font-medium text-sm group cursor-pointer lg:text-center text-left py-2 lg:py-0 w-full lg:w-auto hover:text-yellow-500 lg:hover:text-black
                 ${pathname === "/" ? "" : ""}
               `}
             >
               Home
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
                   ${pathname === "/" ? "w-full" : "w-0 group-hover:w-full"}
                 `}
               ></span>
             </button>
 
             {/* Exam Dropdown Menu */}
-            <div className="relative" onMouseEnter={() => setIsExamDropdownOpen(true)} onMouseLeave={() => setIsExamDropdownOpen(false)}>
+            <div
+              className="relative w-full lg:w-auto"
+              onMouseEnter={() => window.innerWidth >= 1024 && setIsExamDropdownOpen(true)}
+              onMouseLeave={() => window.innerWidth >= 1024 && setIsExamDropdownOpen(false)}
+            >
               <button
                 id="exam-button"
                 onClick={() => {
-                  setIsExamDropdownOpen(false);
+                  if (window.innerWidth < 1024) {
+                    setIsExamDropdownOpen(!isExamDropdownOpen);
+                  } else {
+                    setIsExamDropdownOpen(false);
+                  }
                 }}
-                className={`relative ff-font font-medium text-sm group cursor-pointer
+                className={`relative ff-font font-medium text-sm group cursor-pointer w-full text-left py-2 lg:py-0 hover:text-yellow-500 lg:hover:text-black
                   ${isExamActive ? "" : ""}
                 `}
               >
                 PG Medical Entrance Exams
                 <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
                     ${isExamActive ? "w-full" : "w-0 group-hover:w-full"}
                   `}
                 ></span>
               </button>
 
               {isExamDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
+                <div className="lg:absolute lg:top-full lg:left-1/2 lg:-translate-x-1/2 lg:pt-2 static w-full lg:w-auto pl-4 lg:pl-0 mt-2 lg:mt-0 z-50">
                   <div
                     id="exam-dropdown"
-                    className="w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
+                    className="w-full lg:w-[500px] lg:bg-white lg:border lg:border-gray-200 lg:rounded-xl lg:shadow-xl lg:p-4 animate-fadeIn"
                   >
-                    <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
-                    Medical Exam Prep
-                  </h3>
+                    <h3 className="text-[11px] lg:text-sm font-bold text-[#FFCA00] mb-2 lg:mb-3 text-left lg:text-center uppercase tracking-wide ff-font-bold lg:pb-2 lg:border-b lg:border-[#FFCA00] hidden lg:block">
+                      Medical Exam Prep
+                    </h3>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    {examCategories.map((category) => (
-                      <ul key={category.category_name} className="space-y-1">
-                        {category?.exams?.map((exam: any) => (
-                          <li key={exam?._id}>
-                            <button
-                              className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                              onClick={() => {
-                                const identifier = exam?.slug || exam?._id;
-                                router.push(`/services/${identifier}`);
-                                setIsExamDropdownOpen(false);
-                              }}
-                            >
-                              {exam.exam_name}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    ))}
-                  </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+                      {examCategories.map((category) => (
+                        <div key={category?.category_name} className="space-y-1 lg:space-y-1">
+                          <h4 className="text-[10px] lg:hidden font-extrabold text-gray-500 mb-1 uppercase">
+                            {category?.category_name}
+                          </h4>
+                          <ul className="space-y-1">
+                            {category?.exams?.map((exam: any) => (
+                              <li key={exam?._id}>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    const identifier = exam?.slug || exam?._id;
+                                    router.push(`/services/${identifier}`);
+                                    setIsExamDropdownOpen(false);
+                                    setIsMenuOpen(false);
+                                  }}
+                                  className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                                >
+                                  {exam.exam_name}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
 
-                  <div className="border-t border-gray-200 mt-3 pt-3 text-center">
-                    <button
-                      onClick={() => {
-                        router.push('/medicalexam')
-                        setIsExamDropdownOpen(false);
-                      }}
-                      className="ff-font-bold text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200"
-                    >
-                      View All →
-                    </button>
-                  </div>
+                    <div className="border-t border-gray-100 lg:border-gray-200 mt-2 lg:mt-3 pt-2 lg:pt-3 lg:text-center">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          router.push('/medicalexam')
+                          setIsExamDropdownOpen(false);
+                          setIsMenuOpen(false);
+                        }}
+                        className="ff-font-bold text-sm lg:text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200 w-full text-left lg:text-center block py-1"
+                      >
+                        View All Exams →
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Advanced Pathology Prep Dropdown */}
-            <div className="relative" onMouseEnter={() => setIsPathologyDropdownOpen(true)} onMouseLeave={() => setIsPathologyDropdownOpen(false)}>
+            <div
+              className="relative w-full lg:w-auto"
+              onMouseEnter={() => window.innerWidth >= 1024 && setIsPathologyDropdownOpen(true)}
+              onMouseLeave={() => window.innerWidth >= 1024 && setIsPathologyDropdownOpen(false)}
+            >
               <button
                 id="pathology-button"
                 onClick={() => {
-                  router.push('/pathology');
-                  setIsPathologyDropdownOpen(false);
+                  if (window.innerWidth < 1024) {
+                    setIsPathologyDropdownOpen(!isPathologyDropdownOpen);
+                  } else {
+                    router.push('/pathology');
+                    setIsPathologyDropdownOpen(false);
+                  }
                 }}
-                className={`relative ff-font font-medium text-sm group cursor-pointer
+                className={`relative ff-font font-medium text-sm group cursor-pointer w-full text-left py-2 lg:py-0 hover:text-yellow-500 lg:hover:text-black
                   ${isPathologyActive ? "" : ""}
                 `}
               >
                 Advanced Pathology Programs
                 <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
                     ${isPathologyActive ? "w-full" : "w-0 group-hover:w-full"}
                   `}
                 ></span>
               </button>
 
               {isPathologyDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
+                <div className="lg:absolute lg:top-full lg:left-1/2 lg:-translate-x-1/2 lg:pt-2 static w-full lg:w-auto pl-4 lg:pl-0 mt-2 lg:mt-0 z-50">
                   <div
                     id="pathology-dropdown"
-                    className="w-[500px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fadeIn"
+                    className="w-full lg:w-[500px] lg:bg-white lg:border lg:border-gray-200 lg:rounded-xl lg:shadow-xl lg:p-4 animate-fadeIn"
                   >
-                    <h3 className="text-sm font-bold text-[#FFCA00] mb-3 text-center uppercase tracking-wide ff-font-bold pb-2 border-b border-[#FFCA00]">
-                    Mendel Pathology Programs
-                  </h3>
+                    <h3 className="text-[11px] lg:text-sm font-bold text-[#FFCA00] mb-2 lg:mb-3 text-left lg:text-center uppercase tracking-wide ff-font-bold lg:pb-2 lg:border-b lg:border-[#FFCA00] hidden lg:block">
+                      Mendel Pathology Programs
+                    </h3>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <ul className="space-y-1">
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/fellowship');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Fellowship
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/mastery-courses');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Mastery Courses
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/board-prep');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Board Prep
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/consulting');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Consulting
-                        </button>
-                      </li>
-                    </ul>
-                    <ul className="space-y-1">
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/clinical-research');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Clinical Research
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/mini-mba');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Mini-Medical MBAs
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                          onClick={() => {
-                            router.push('/pathology/mastery-series');
-                            setIsPathologyDropdownOpen(false);
-                          }}
-                        >
-                          Mastery Series
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* 
-                  <div className="grid grid-cols-2 gap-6 mt-6 hidden">
-                    <div className="group cursor-pointer text-center">
-                      <button
-                        className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#FFCA00] hover:bg-yellow-50 hover:pl-3 px-2 py-2 rounded cursor-pointer transition-all duration-200"
-                        onClick={() => {
-                          router.push('/pathology/hyper-specialist');
-                          setIsPathologyDropdownOpen(false);
-                        }}
-                      >
-                        Hyper Specialist
-                      </button>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-4">
+                      <ul className="space-y-1">
+                        <li className="lg:hidden">
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Overview
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/fellowship');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Fellowship
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/mastery-courses');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Mastery Courses
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/board-prep');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Board Prep
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/consulting');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Consulting
+                          </button>
+                        </li>
+                      </ul>
+                      <ul className="space-y-1">
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/clinical-research');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Clinical Research
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/mini-mba');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Mini-Medical MBAs
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            type="button"
+                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push('/pathology/mastery-series');
+                              setIsPathologyDropdownOpen(false);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Mastery Series
+                          </button>
+                        </li>
+                      </ul>
                     </div>
-                  </div>
-                  */}
-
-                  {/* <div className="border-t border-gray-200 mt-4 pt-4 text-center">
-                    <button
-                      onClick={() => {
-                        router.push('/pathology');
-                        setIsPathologyDropdownOpen(false);
-                      }}
-                      className="ff-font-bold text-xs text-[#FFCA00] hover:text-black hover:underline transition-colors duration-200"
-                    >
-                      View All Pathology Programs →
-                    </button>
-                  </div> */}
                   </div>
                 </div>
               )}
             </div>
 
             <button
-              onClick={() => router.push("/aboutUs")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
-                ${pathname === "/aboutUs" ? "" : ""}
-              `}
-            >
-              About Us
-              <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
-                  ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
-                `}
-              ></span>
-            </button>
-
-            <button
-              onClick={() => router.push("/blog")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/blog");
+                setIsMenuOpen(false);
+              }}
+              className={`relative ff-font font-medium text-sm group cursor-pointer lg:text-center text-left py-2 lg:py-0 w-full lg:w-auto hover:text-yellow-500 lg:hover:text-black
                 ${pathname === "/blog" ? "" : ""}
               `}
             >
               Blog
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
                   ${pathname === "/blog" ? "w-full" : "w-0 group-hover:w-full"}
                 `}
               ></span>
             </button>
 
             <button
-              onClick={() => router.push("/studentTestimonials")}
-              className={`relative ff-font font-medium text-sm group cursor-pointer
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/aboutUs");
+                setIsMenuOpen(false);
+              }}
+              className={`relative ff-font font-medium text-sm group cursor-pointer lg:text-center text-left py-2 lg:py-0 w-full lg:w-auto hover:text-yellow-500 lg:hover:text-black
+                ${pathname === "/aboutUs" ? "" : ""}
+              `}
+            >
+              About Us
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
+                  ${pathname === "/aboutUs" ? "w-full" : "w-0 group-hover:w-full"}
+                `}
+              ></span>
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/studentTestimonials");
+                setIsMenuOpen(false);
+              }}
+              className={`relative ff-font font-medium text-sm group cursor-pointer lg:text-center text-left py-2 lg:py-0 w-full lg:w-auto hover:text-yellow-500 lg:hover:text-black
                 ${pathname === "/studentTestimonials" ? "" : ""}
               `}
             >
               Student Testimonials
               <span
-                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300
+                className={`absolute -bottom-1 left-0 h-0.5 bg-[#FFCA00] transition-all duration-300 hidden lg:block
                   ${pathname === "/studentTestimonials" ? "w-full" : "w-0 group-hover:w-full"}
                 `}
               ></span>
             </button>
+
+            {/* Mobile Authentication / Profile Section inside Unified Nav */}
+            <div className="lg:hidden mt-2 pt-4 border-t border-gray-200 flex flex-col gap-3">
+              {!authToken ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      router.push("/auth/login");
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font w-full"
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      router.push("/auth/register");
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font w-full"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push("/editProfile");
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium w-full"
+                >
+                  <img
+                    src={getProfilePhotoUrl()}
+                    alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                    }}
+                  />
+                  <span className="font-medium ff-font">
+                    {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
+                  </span>
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMenuOpen(false);
+                  if (count > 0) {
+                    setIsCartOpen(true);
+                    handleCartOpen();
+                  }
+                }}
+                disabled={isCartLoading}
+                className="flex ff-font items-center justify-center gap-2 py-2 w-full rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium disabled:opacity-50 mt-1"
+              >
+                <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
+                Cart ({count})
+              </button>
+            </div>
           </nav>
 
           {/* Buttons (Desktop) */}
@@ -648,193 +782,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-200">
-            <nav className="flex flex-col gap-4">
-              <button
-                onClick={() => {
-                  router.push("/");
-                  setIsMenuOpen(false);
-                }}
-                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
-              >
-                Home
-              </button>
 
-              {/* Mobile Exam Dropdown */}
-              <div className="px-4">
-                <button
-                  onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
-                  className="ff-font font-medium py-2 w-full text-left hover:text-yellow-500"
-                >
-                  PG Medical Entrance Exams
-                </button>
-                {isExamDropdownOpen && (
-                  <div className="mt-2 pl-4 space-y-3">
-                    {examCategories?.map((category) => (
-                      <div key={category?.category_name}>
-                        <h4 className="text-xs font-extrabold text-gray-500 mb-1 uppercase">
-                          {category?.category_name}
-                        </h4>
-                        <ul className="space-y-1">
-                          {category?.exams?.map((exam: any) => (
-                            <li key={exam?._id}>
-                              <button
-                                onClick={() => {
-                                  router.push(`/medicalexam/${exam?.exam_id}`);
-                                  setIsMenuOpen(false);
-                                }}
-                                className="text-gray-700 hover:text-yellow-500 text-sm py-1 w-full text-left"
-                              >
-                                {exam.exam_name}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Mobile Pathology Dropdown */}
-              <div className="px-4">
-                <button
-                  onClick={() => setIsPathologyDropdownOpen(!isPathologyDropdownOpen)}
-                  className="ff-font font-medium py-2 w-full text-left hover:text-yellow-500"
-                >
-                  Advanced Pathology Programs
-                </button>
-                {isPathologyDropdownOpen && (
-                  <div className="mt-2 pl-4 space-y-3">
-                    <button
-                      onClick={() => {
-                        router.push('/pathology/hyper-specialist');
-                        setIsMenuOpen(false);
-                        setIsPathologyDropdownOpen(false);
-                      }}
-                      className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
-                    >
-                      <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                      </svg>
-                      Hyper Specialist
-                    </button>
-                    <button
-                      onClick={() => {
-                        router.push('/pathology/mastery-series');
-                        setIsMenuOpen(false);
-                        setIsPathologyDropdownOpen(false);
-                      }}
-                      className="flex items-center gap-3 text-gray-700 hover:text-yellow-500 text-sm py-2 w-full text-left"
-                    >
-                      <svg className="w-5 h-5 text-[#FFCA00]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                      </svg>
-                      Mastery Series
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => {
-                  router.push("/blog");
-                  setIsMenuOpen(false);
-                }}
-                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
-              >
-                Blog
-              </button>
-
-              <button
-                onClick={() => {
-                  router.push("/aboutUs");
-                  setIsMenuOpen(false);
-                }}
-                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
-              >
-                About Us
-              </button>
-
-              <button
-                onClick={() => {
-                  router.push("/studentTestimonials");
-                  setIsMenuOpen(false);
-                }}
-                className="ff-font hover:text-yellow-500 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium text-left"
-              >
-                Student Testimonials
-              </button>
-
-              <hr className="border-gray-200 my-2" />
-
-              {/* Buttons (Mobile) */}
-              <div className="flex flex-col gap-3 px-4">
-                {!authToken && (
-                  <>
-                    <button
-                      onClick={() => {
-                        router.push("/auth/login");
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={() => {
-                        router.push("/auth/register");
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font"
-                    >
-                      Sign Up
-                    </button>
-                  </>
-                )}
-
-                {authToken && (
-                  <button
-                    onClick={() => {
-                      router.push("/editProfile");
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium"
-                  >
-                    <img
-                      src={getProfilePhotoUrl()}
-                      alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
-                      }}
-                    />
-                    <span className="font-medium ff-font">
-                      {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
-                    </span>
-                  </button>
-                )}
-
-                <button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    if (count > 0) {
-                      setIsCartOpen(true);
-                      handleCartOpen();
-                    }
-                  }}
-                  disabled={isCartLoading}
-                  className="flex ff-font items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium disabled:opacity-50"
-                >
-                  <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
-                  Cart ({count})
-                </button>
-              </div>
-            </nav>
-          </div>
-        )}
       </div>
 
       {isProfileOpen && (
