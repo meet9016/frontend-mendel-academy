@@ -71,19 +71,17 @@ const PhasesSection = () => {
                 <button
                   key={index}
                   onClick={() => setActivePhase(index)}
-                  className={`p-[22px_18px] text-left transition-colors duration-200 border-b border-[#E6E0D8] border-r last:border-r-0 appearance-none ${FONT} ${
-                    isActive
-                      ? 'bg-white relative after:content-[""] after:absolute after:left-0 after:right-0 after:-bottom-[1px] after:h-[3px] after:bg-[linear-gradient(90deg,#E0568F,#FFC900)] after:z-10'
-                      : 'bg-[#FAF7F2] hover:bg-white'
-                  }`}
+                  className={`p-[22px_18px] text-left transition-colors duration-200 border-b border-[#E6E0D8] border-r last:border-r-0 appearance-none ${FONT} ${isActive
+                    ? 'bg-white relative after:content-[""] after:absolute after:left-0 after:right-0 after:-bottom-[1px] after:h-[3px] after:bg-[linear-gradient(90deg,#E0568F,#FFC900)] after:z-10'
+                    : 'bg-[#FAF7F2] hover:bg-white'
+                    }`}
                 >
                   <b className={`${FONT} block text-[0.8rem] tracking-[0.08em] text-[#C79A00] mb-2`}>
                     {phase.num}
                   </b>
                   <span
-                    className={`block font-extrabold text-[1.05rem] tracking-[-0.01em] ${
-                      isActive ? 'text-[#E0568F]' : 'text-[#241E3D]'
-                    }`}
+                    className={`block font-extrabold text-[1.05rem] tracking-[-0.01em] ${isActive ? 'text-[#E0568F]' : 'text-[#241E3D]'
+                      }`}
                   >
                     {phase.title}
                   </span>
@@ -133,13 +131,18 @@ const PhasesSection = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={() => triggerPdfDownload("Mendel_Fellowship_Roadmap.pdf")}
+              onClick={() => window.open('/Mendel_Fellowship_Roadmap.pdf', '_blank')}
               className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-[#FFC900] text-[#1A1502] border-2 border-transparent transition-all duration-[180ms] hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(255,201,0,0.35)] group cursor-pointer`}
             >
               Download the Roadmap <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>
             </button>
             <button
-              onClick={() => triggerPdfDownload("Mendel_Fellowship_Modules.pdf")}
+              onClick={() => {
+                const a = document.createElement('a');
+                a.href = '/images/Fellowship_Modules.jpg';
+                a.download = 'Fellowship_Modules.jpg';
+                a.click();
+              }}
               className={`${FONT} inline-flex items-center gap-2.5 font-bold text-[1rem] px-[30px] py-[15px] rounded-full bg-transparent text-[#241E3D] border-2 border-[#241E3D] transition-all duration-[180ms] hover:-translate-y-0.5 hover:bg-[#241E3D] hover:text-white group cursor-pointer`}
             >
               Fellowship Modules <span className="transition-transform duration-[180ms] group-hover:translate-x-1">→</span>

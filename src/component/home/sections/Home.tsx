@@ -160,10 +160,13 @@ export default function Home() {
 
   // Static data for Pathology section
   const pathologyItems = [
-    "Pathology Residents",
-    "Consultant Pathologists",
-    "DNBs",
-    "Fellows",
+    { title: "Fellowship", route: "/pathology/fellowship" },
+    { title: "Mastery Courses", route: "/pathology/mastery-courses" },
+    { title: "Board Prep", route: "/pathology/board-prep" },
+    { title: "Consulting", route: "/pathology/consulting" },
+    { title: "Clinical Research", route: "/pathology/clinical-research" },
+    { title: "Mini-Medical MBAs", route: "/pathology/mini-mba" },
+    { title: "Mastery Series", route: "/pathology/mastery-series" },
   ];
 
 
@@ -251,9 +254,9 @@ export default function Home() {
             <span className="ff-font text-xl sm:text-2xl text-[#6b7280] leading-tight font-semibold">
               Personalized Medical Coaching
             </span>
-            <span className="ff-font text-base sm:text-lg text-[#6b7280]">
+            {/* <span className="ff-font text-base sm:text-lg text-[#6b7280]">
               Driven by Data, Enhanced by AI
-            </span>
+            </span> */}
           </div>
 
           <div ref={searchRef} className="w-full max-w-xl relative mb-10">
@@ -320,7 +323,7 @@ export default function Home() {
                   {loading ? (
                     <div className="p-8 text-center text-sm text-gray-500 animate-pulse">Loading exams...</div>
                   ) : (
-                    <div className="py-2 max-h-40 overflow-y-auto custom-scrollbar">
+                    <div className="py-2 max-h-60 overflow-y-auto custom-scrollbar">
                       {examBank?.map((item, idx) => (
                         <div
                           key={idx}
@@ -356,17 +359,17 @@ export default function Home() {
 
               {activeDropdown === 'pathology' && (
                 <div className="absolute top-full left-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-full sm:w-72 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 text-left animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="py-2 max-h-40 overflow-y-auto custom-scrollbar">
+                  <div className="py-2 max-h-60 overflow-y-auto custom-scrollbar">
                     {pathologyItems.map((item, idx) => (
                       <div
                         key={idx}
                         onClick={() => {
-                          router.push("/pathology");
+                          router.push(item.route);
                           setActiveDropdown(null);
                         }}
                         className="px-4 py-3 mx-2 my-1 rounded-xl hover:bg-gray-50 hover:text-[#0f172a] cursor-pointer transition-all duration-200 text-sm text-gray-600 font-medium flex items-center justify-between group"
                       >
-                        <span className="truncate pr-4">{item}</span>
+                        <span className="truncate pr-4">{item.title}</span>
                         <svg className="w-4 h-4 text-gray-300 group-hover:text-[#FFCA00] group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
                         </svg>
