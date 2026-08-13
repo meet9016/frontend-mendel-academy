@@ -45,7 +45,7 @@ const PathologyFAQ = () => {
         <div className="text-center mb-16">
           <div className="flex items-center gap-3 justify-center mb-4">
             <div className="w-[34px] h-[2px] bg-[#FFC900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#FFC900] font-black">Good to Know</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-[#D54C80] font-black">Good to Know</span>
             <div className="w-[34px] h-[2px] bg-[#FFC900]" />
           </div>
           <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">

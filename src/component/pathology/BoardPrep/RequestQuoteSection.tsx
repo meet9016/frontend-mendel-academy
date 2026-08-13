@@ -4,17 +4,17 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const downloads = [
-  { name: "FRCPath Part 1", file: "FRCPath_Part1_Curriculum.pdf" },
-  { name: "FRCPath Part 2", file: "FRCPath_Part2_Curriculum.pdf" },
-  { name: "NEET-SS Pathology", file: "NEET_SS_Pathology_Curriculum.pdf" },
-  { name: "ABPath Subspecialty", file: "ABPath_Subspecialty_Curriculum.pdf" }
+  { name: "FRCPath Part 1", file: "Mendel-FRCPath-Part-1-Curriculum.pdf", dataTrack: "b-dl-frcpath1", dataPdf: "frcpath1" },
+  { name: "FRCPath Part 2", file: "Mendel-FRCPath-Part-2-Curriculum.pdf", dataTrack: "b-dl-frcpath2", dataPdf: "frcpath2" },
+  { name: "NEET-SS Pathology", file: "Mendel-NEET-SS-Pathology-Curriculum.pdf", dataTrack: "b-dl-neetss", dataPdf: "neetss" },
+  { name: "ABPath Subspecialty", file: "Mendel-ABPath-Subspecialty-Curriculum.pdf", dataTrack: "b-dl-abpath", dataPdf: "abpath" }
 ];
 
 const priceFactors = [
   { title: "Track and specialty", desc: "slide libraries and faculty differ per specialty" },
   { title: "Target sitting date", desc: "determines programme length and revision intensity" },
   { title: "Attempt history", desc: "repeat candidates get a diagnostic and a narrower plan" },
-  { title: "Mentorship level", desc: "group teaching versus one to one case review" },
+  { title: "Mentorship level", desc: "group teaching versus one-to-one case review" },
   { title: "Cohort or Individual", desc: "institutional and group rates are quoted separately" }
 ];
 
@@ -22,7 +22,7 @@ const RequestQuoteSection = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    track: 'FRCPath Part 1',
+    track: '',
     specialty: '',
     targetSitting: '',
     attempt: 'First attempt',
@@ -35,20 +35,15 @@ const RequestQuoteSection = () => {
     setSubmitted(true);
   };
 
-  const handleDownload = (fileName: string) => {
-    // Generate simple notification or mock download trigger
-    alert(`Downloading ${fileName}...`);
-  };
-
   return (
-    <section id="request-quote" className="bg-[#FAF7F2] py-16 md:py-24 px-6 relative">
+    <section id="quote" className="bg-[#FAF7F2] py-16 md:py-24 px-6 relative">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-6 h-[2px] bg-[#FCCA29]"></div>
-            <span className="text-[#4B5564] text-xs font-meduim tracking-widest uppercase">
+            <span className="text-[#4B5564] text-xs font-medium tracking-widest uppercase">
               PRICING
             </span>
           </div>
@@ -96,15 +91,17 @@ const RequestQuoteSection = () => {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form id="quoteForm" onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
                 
                 {/* Row 1 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      FULL NAME
+                    <label htmlFor="q-name" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Full name
                     </label>
                     <input
+                      id="q-name"
+                      name="name"
                       type="text"
                       required
                       placeholder="Dr Jane Doe"
@@ -114,10 +111,12 @@ const RequestQuoteSection = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      EMAIL
+                    <label htmlFor="q-email" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Email
                     </label>
                     <input
+                      id="q-email"
+                      name="email"
                       type="email"
                       required
                       placeholder="you@hospital.org"
@@ -131,25 +130,32 @@ const RequestQuoteSection = () => {
                 {/* Row 2 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      TRACK
+                    <label htmlFor="q-track" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Track
                     </label>
                     <select
+                      id="q-track"
+                      name="track"
+                      required
                       value={formData.track}
                       onChange={(e) => setFormData({ ...formData, track: e.target.value })}
                       className="w-full bg-[#F8F6F0] border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#160B29] font-medium focus:outline-none focus:border-[#E84583] transition-colors appearance-none cursor-pointer"
                     >
+                      <option value="">Select a track</option>
                       <option value="FRCPath Part 1">FRCPath Part 1</option>
                       <option value="FRCPath Part 2">FRCPath Part 2</option>
                       <option value="NEET-SS Pathology">NEET-SS Pathology</option>
                       <option value="ABPath Subspecialty">ABPath Subspecialty</option>
+                      <option value="Not sure yet">Not sure yet</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      SPECIALTY
+                    <label htmlFor="q-spec" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Specialty
                     </label>
                     <input
+                      id="q-spec"
+                      name="specialty"
                       type="text"
                       placeholder="e.g. Histopathology"
                       value={formData.specialty}
@@ -162,10 +168,12 @@ const RequestQuoteSection = () => {
                 {/* Row 3 */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      TARGET SITTING
+                    <label htmlFor="q-sitting" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Target sitting
                     </label>
                     <input
+                      id="q-sitting"
+                      name="sitting"
                       type="text"
                       placeholder="e.g. Spring 2027"
                       value={formData.targetSitting}
@@ -174,27 +182,31 @@ const RequestQuoteSection = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                      ATTEMPT
+                    <label htmlFor="q-attempt" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                      Attempt
                     </label>
                     <select
+                      id="q-attempt"
+                      name="attempt"
                       value={formData.attempt}
                       onChange={(e) => setFormData({ ...formData, attempt: e.target.value })}
                       className="w-full bg-[#F8F6F0] border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#160B29] font-medium focus:outline-none focus:border-[#E84583] transition-colors appearance-none cursor-pointer"
                     >
                       <option value="First attempt">First attempt</option>
-                      <option value="Second attempt">Second attempt</option>
-                      <option value="Multiple attempts">Multiple attempts</option>
+                      <option value="Repeat attempt">Repeat attempt</option>
+                      <option value="Still deciding">Still deciding</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Row 4: Textarea */}
                 <div>
-                  <label className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
-                    ANYTHING ELSE WE SHOULD KNOW
+                  <label htmlFor="q-msg" className="block text-[10px] font-black tracking-wider text-gray-500 uppercase mb-2">
+                    Anything else we should know
                   </label>
                   <textarea
+                    id="q-msg"
+                    name="message"
                     rows={3}
                     placeholder="Where you are in your preparation, mentorship you want, whether you're enquiring for a group or institution."
                     value={formData.notes}
@@ -240,16 +252,19 @@ const RequestQuoteSection = () => {
 
               <div className="flex flex-col gap-3">
                 {downloads.map((dl, idx) => (
-                  <button
+                  <a
                     key={idx}
-                    onClick={() => handleDownload(dl.file)}
-                    className="w-full bg-[#160E2B] border border-[#251B3D] hover:border-[#F3A511]/50 rounded-2xl px-6 py-4.5 flex items-center justify-between text-base font-bold text-white transition-all cursor-pointer group hover:bg-[#1C1236]"
+                    href={dl.file}
+                    download
+                    data-track={dl.dataTrack}
+                    data-pdf={dl.dataPdf}
+                    className="w-full bg-[#160E2B] border border-[#251B3D] hover:border-[#F3A511]/50 rounded-2xl px-6 py-4.5 flex items-center justify-between text-base font-bold text-white transition-all cursor-pointer group hover:bg-[#1C1236] no-underline"
                   >
                     <span className="font-semibold text-white tracking-wide">{dl.name}</span>
                     <span className="text-[11px] text-[#F3A511] font-extrabold tracking-widest">
                       PDF
                     </span>
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>

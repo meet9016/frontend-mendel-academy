@@ -77,8 +77,9 @@ const CohortScopingForm = () => {
       title: "Consistent sign-out",
       desc: "Everyone works to the same criteria — less inter-observer variation and more consistent reports.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z" />
+          <path d="M9.5 12l1.8 1.8L15 10" />
         </svg>
       )
     },
@@ -86,11 +87,8 @@ const CohortScopingForm = () => {
       title: "Documented results",
       desc: "Pre- and post-cohort assessments give you a clear index for CME reporting and competency files.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M4 19V5m0 14h16M8 15l3-4 3 2 4-6" />
         </svg>
       )
     },
@@ -98,11 +96,9 @@ const CohortScopingForm = () => {
       title: "Onboard every new hire",
       desc: "Reuse the program to bring each new pathologist up to your team's standard — no repeating training every time.",
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M4 7h16M4 12h16M4 17h10" />
+          <rect x="3" y="3" width="18" height="18" rx="3" />
         </svg>
       )
     }
@@ -181,12 +177,13 @@ const CohortScopingForm = () => {
       {/* 3. Why Teams Choose Separator and Title */}
       <div className="text-center mb-12">
         <div className="flex items-center gap-3 justify-center mb-4">
-          <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#A16207] font-bold">WHY TEAMS CHOOSE MENDEL</span>
-          <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
+          <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#D54C80] font-extrabold">WHY TEAMS CHOOSE MENDEL</span>
+          <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
         </div>
-        <h2 className="text-3xl md:text-[38px] font-black tracking-tight text-[#1D172A]">
-          Built for departments, not just <span className="text-[#D54C80]">individuals.</span>
+        <h2 className="text-3xl md:text-[38px] font-black tracking-tight text-[#1D172A] max-w-xl mx-auto leading-tight">
+          Built for departments, not just <br />
+          <span className="text-[#D54C80]">individuals.</span>
         </h2>
       </div>
 
@@ -195,13 +192,13 @@ const CohortScopingForm = () => {
         {whyTeamsChoose.map((item, index) => (
           <div
             key={index}
-            className="bg-white border border-[#EBE3D8] rounded-[22px] p-8 flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-md transition duration-300"
+            className="bg-white border border-[#EBE3D8]/80 rounded-[24px] p-8 flex flex-col justify-between shadow-[0_6px_20px_rgba(0,0,0,0.015)] transition duration-300 hover:shadow-md"
           >
             <div>
-              <div className="w-[50px] h-[50px] rounded-2xl bg-[#FAF1F5] text-[#D54C80] flex items-center justify-center border border-[#F5E2EC] mb-6">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF1F5] text-[#D54C80] flex items-center justify-center mb-6">
                 {item.icon}
               </div>
-              <h4 className="font-extrabold text-[#160B29] text-[17px] mb-3">
+              <h4 className="font-extrabold text-[#1D172A] text-lg mb-3">
                 {item.title}
               </h4>
               <p className="text-gray-500 text-xs leading-relaxed">

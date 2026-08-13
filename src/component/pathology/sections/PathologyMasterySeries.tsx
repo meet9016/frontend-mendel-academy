@@ -246,10 +246,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
         </main>
       ) : null}
 
-      {showCounters ? <StatusSection /> : null}
-
-      {/* ----  EndometrialPathology  ---- */}
-      <EndometrialPathology />
+      {/* Sections removed as requested */}
 
       {/* Unified Course Section with Tabs */}
       <section className="max-w-[1380px] mx-auto px-6 md:px-8 py-12">
