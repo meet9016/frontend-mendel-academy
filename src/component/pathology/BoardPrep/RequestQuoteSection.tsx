@@ -47,8 +47,8 @@ const RequestQuoteSection = () => {
         {/* Header */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-6 h-[2px] bg-[#A16207]"></div>
-            <span className="text-[#A16207] text-xs font-black tracking-widest uppercase">
+            <div className="w-6 h-[2px] bg-[#FCCA29]"></div>
+            <span className="text-[#4B5564] text-xs font-meduim tracking-widest uppercase">
               PRICING
             </span>
           </div>
@@ -224,14 +224,17 @@ const RequestQuoteSection = () => {
           <div className="lg:col-span-5 flex flex-col gap-6">
             
             {/* Top Card: Curriculum Download */}
-            <div className="bg-[#160B29] rounded-3xl p-7 text-white shadow-md border border-[#271842]">
-              <div className="text-[10px] text-[#F9C814] font-black tracking-widest uppercase mb-2">
+            <div className="bg-[#110922] rounded-[32px] p-8 md:p-10 text-white shadow-2xl border border-[#201534] relative overflow-hidden">
+              {/* Soft purple/pink glow in top-right */}
+              <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#9A33FF] opacity-[0.18] blur-[60px] pointer-events-none rounded-full" />
+              
+              <div className="text-[10px] text-[#F3A511] font-bold tracking-[0.18em] uppercase mb-3">
                 FREE DOWNLOADS
               </div>
-              <h4 className="text-xl font-black text-white mb-2">
+              <h4 className="text-2xl md:text-[28px] font-extrabold text-white mb-3 tracking-tight">
                 Curriculum by track
               </h4>
-              <p className="text-xs text-[#A39BB5] mb-6 leading-relaxed">
+              <p className="text-sm text-[#B4ADC3] mb-8 leading-relaxed">
                 Each track has its own document — domain weightings, specialty coverage and the method behind it. No email required.
               </p>
 
@@ -240,10 +243,10 @@ const RequestQuoteSection = () => {
                   <button
                     key={idx}
                     onClick={() => handleDownload(dl.file)}
-                    className="w-full bg-[#10061E] border border-[#271842] hover:border-[#E84583]/60 rounded-xl px-5 py-3.5 flex items-center justify-between text-sm font-bold text-white transition-all cursor-pointer group"
+                    className="w-full bg-[#160E2B] border border-[#251B3D] hover:border-[#F3A511]/50 rounded-2xl px-6 py-4.5 flex items-center justify-between text-base font-bold text-white transition-all cursor-pointer group hover:bg-[#1C1236]"
                   >
-                    <span>{dl.name}</span>
-                    <span className="text-[10px] text-gray-400 font-extrabold uppercase px-2 py-0.5 rounded bg-white/5 group-hover:bg-[#E84583] group-hover:text-white transition-colors">
+                    <span className="font-semibold text-white tracking-wide">{dl.name}</span>
+                    <span className="text-[11px] text-[#F3A511] font-extrabold tracking-widest">
                       PDF
                     </span>
                   </button>
@@ -253,7 +256,7 @@ const RequestQuoteSection = () => {
 
             {/* Bottom Card: What changes your price */}
             <div className="bg-white rounded-3xl p-7 border border-gray-200/80 shadow-sm">
-              <div className="text-[10px] text-[#E84583] font-black tracking-widest uppercase mb-4">
+              <div className="text-[10px] text-[#E84583] font-medium tracking-widest uppercase mb-4">
                 WHAT CHANGES YOUR PRICE
               </div>
               
@@ -262,7 +265,7 @@ const RequestQuoteSection = () => {
                   <li key={idx} className="flex items-start gap-3 text-xs leading-relaxed">
                     <span className="w-2 h-2 rounded-full bg-[#F9C814] flex-shrink-0 mt-1.5" />
                     <span className="text-gray-700">
-                      <strong className="text-[#160B29] font-extrabold">{pf.title}</strong> — {pf.desc}
+                      <strong className="text-[#160B29] font-medium">{pf.title}</strong> — {pf.desc}
                     </span>
                   </li>
                 ))}

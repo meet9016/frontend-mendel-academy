@@ -143,7 +143,6 @@ const ExamSelectionSection = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
               
-              {/* Left Column: Title & Description */}
               <div className="lg:col-span-7 flex flex-col justify-between h-full">
                 <div>
                   <div className="text-xs font-extrabold tracking-widest text-[#A16207] uppercase mb-3">
@@ -184,7 +183,7 @@ const ExamSelectionSection = () => {
 
               {/* Right Column: Included Box */}
               <div className="lg:col-span-5 bg-[#F8F5EF] rounded-2xl p-6 md:p-8 border border-[#EBE3D8]">
-                <div className="text-xs text-[#E84583] font-black tracking-widest uppercase mb-5">
+                <div className="text-xs text-[#E84583] font-thin uppercase tracking-widest mb-5">
                   INCLUDED
                 </div>
                 

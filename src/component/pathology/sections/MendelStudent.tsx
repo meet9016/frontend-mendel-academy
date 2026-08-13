@@ -46,15 +46,15 @@ export default function MendelStudent() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <section className="bg-white py-20 border-t border-b border-gray-100 font-sans">
+    <section className="bg-[#FAF8F5] py-20 border-b border-gray-200/50 font-sans">
       <div className="max-w-[1380px] mx-auto px-6">
         
         {/* Subtitle & Title */}
         <div className="text-center mb-12">
           <div className="flex items-center gap-3 justify-center mb-4">
-            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#FFC900] font-black">Student Testimonials</span>
-            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
+            <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#A16207] font-bold">Student Testimonials</span>
+            <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
           </div>
           <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">
             What Mendel students <span className="text-[#D54C80]">say.</span>
@@ -64,15 +64,15 @@ export default function MendelStudent() {
         {/* Carousel Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {testimonials.map((t) => (
-            <div key={t.id} className="bg-[#FAF8F5] border border-[#EBE8E2] rounded-2xl p-8 relative flex flex-col justify-between shadow-sm hover:shadow-md transition duration-300">
-              <div className="absolute top-6 right-8 text-6xl text-[#D54C80]/15 font-serif pointer-events-none select-none">“</div>
+            <div key={t.id} className="bg-white border border-[#EBE3D8] rounded-[22px] p-8 relative flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-md transition duration-300">
+              <div className="absolute top-6 right-8 text-6xl text-[#D54C80]/12 font-serif pointer-events-none select-none">“</div>
               
-              <p className="text-[#1D172A] text-sm md:text-base leading-relaxed mb-8 relative z-10">
+              <p className="text-[#1D172A] text-sm md:text-[15px] leading-relaxed mb-8 relative z-10 font-normal">
                 {t.text}
               </p>
 
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full ${t.bg} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+              <div className="flex items-center gap-3 border-t border-gray-100 pt-5 mt-auto">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#EA580C] to-[#FCCA29] flex items-center justify-center text-white font-extrabold text-sm shadow-sm">
                   {t.initials}
                 </div>
                 <div>
@@ -86,13 +86,13 @@ export default function MendelStudent() {
 
         {/* Carousel Navigation */}
         <div className="flex justify-center items-center gap-4">
-          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150">
+          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150 cursor-pointer">
             <FaChevronLeft className="w-3 h-3" />
           </button>
-          <div className="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden relative">
+          <div className="h-1.5 w-24 bg-gray-200/60 rounded-full overflow-hidden relative">
             <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-gray-400 rounded-full" />
           </div>
-          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150">
+          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150 cursor-pointer">
             <FaChevronRight className="w-3 h-3" />
           </button>
         </div>

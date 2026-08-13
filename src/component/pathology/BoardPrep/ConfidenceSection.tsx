@@ -27,22 +27,23 @@ const ConfidenceSection = () => {
     <section className="bg-[#FAF7F2] pb-16 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          className="bg-[#160B29] rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl overflow-hidden text-white relative"
+          className="bg-[#110922] rounded-[32px] p-8 sm:p-10 md:p-14 shadow-2xl overflow-hidden text-white relative border border-[#201534]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           {/* Subtle Ambient Background Glow */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#E84583]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#9A33FF]/10 rounded-full blur-[100px] pointer-events-none" />
 
           {/* Header */}
-          <div className="mb-10 max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-4 tracking-tight">
+          <div className="mb-10 max-w-none">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4 tracking-tight md:whitespace-nowrap">
               Why our candidates walk in confident
             </h2>
-            <p className="text-[#A39BB5] text-sm md:text-base leading-relaxed">
-              Every track shares the same engine — the methods that make Mendel preparation different from passive video courses and question grinding.
+            <p className="text-[#B4ADC3] text-sm md:text-base leading-relaxed max-w-2xl">
+              Every track shares the same engine — the methods that make Mendel preparation
+              different from passive video courses and question grinding.
             </p>
           </div>
 
@@ -51,20 +52,20 @@ const ConfidenceSection = () => {
             {engines.map((eng, idx) => (
               <motion.div
                 key={eng.num}
-                className="bg-[#10061E] border border-[#271842] rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:bg-[#190b2e]"
+                className="bg-[#160E2B] border border-[#251B3D] hover:border-[#FCCA29]/40 rounded-2xl p-6 min-h-[160px] transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:bg-[#1C1236]"
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
-                whileHover={{ y: -6, borderColor: 'rgba(232, 69, 131, 0.6)' }}
+                whileHover={{ y: -4 }}
               >
                 <div>
-                  <div className="text-[#F9C814] text-[11px] font-black tracking-widest uppercase mb-4 flex items-center gap-1.5 group-hover:text-[#E84583] transition-colors">
+                  <div className="text-[#FCCA29] text-[10px] font-bold tracking-[0.2em] uppercase mb-5 flex items-center gap-1.5 transition-colors">
                     <span>ENGINE</span>
                     <span>·</span>
                     <span>{eng.num}</span>
                   </div>
-                  <h3 className="text-white text-base md:text-lg font-bold leading-snug group-hover:text-white transition-colors">
+                  <h3 className="text-white text-base md:text-[17px] font-semibold leading-snug tracking-wide">
                     {eng.title}
                   </h3>
                 </div>

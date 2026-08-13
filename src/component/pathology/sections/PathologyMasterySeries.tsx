@@ -145,60 +145,255 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { programs, loading } = usePrograms();
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'recorded'>('upcoming');
 
   useEffect(() => {
     dispatch(getData());
   }, [dispatch]);
 
+  const upcomingCourses = [
+    {
+      title: "Surgical Grossing Mastery™",
+      desc: "From specimen to diagnosis — a structured grossing pathway.",
+      duration: "8 weeks • Live",
+      sessions: "2 hrs/week + Q&A",
+      features: [
+        "Surgical Grossing Atlas™",
+        "Grossing Companion App™",
+        "AI Grossing Assistant (soon)"
+      ],
+      price: 7999,
+      originalPrice: 9999,
+      regularPrice: "Regular ₹9,999 • Late ₹11,999",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+        </svg>
+      )
+    },
+    {
+      title: "Diagnostic Reporting Mastery™",
+      desc: "Write reports clinicians trust — and courts respect.",
+      duration: "8 weeks • Live",
+      sessions: "2 hrs/week + workshops",
+      features: [
+        "Diagnostic Reporting Handbook™",
+        "Mendel Reporting Toolkit™",
+        "Mendel Diagnostic Intelligence™"
+      ],
+      price: 7999,
+      originalPrice: 9999,
+      regularPrice: "Regular ₹9,999 • Late ₹11,999",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+      )
+    },
+    {
+      title: "Integrated Clinico-Diagnostic Reasoning Mastery™",
+      desc: "Clinical, radiological, pathological & molecular correlation.",
+      duration: "8 weeks • Live",
+      sessions: "2 hrs/week + case confs",
+      features: [
+        "Clinico-Diagnostic Reasoning Atlas™",
+        "Case Library™",
+        "Mendel ReasonAssist™"
+      ],
+      price: 7999,
+      originalPrice: 9999,
+      regularPrice: "Regular ₹9,999 • Late ₹11,999",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+        </svg>
+      )
+    }
+  ];
+
   return (
     <>
-    {!showCounters ?  <main className="max-w-[1380px] mx-auto flex flex-col items-center justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl md:text-4xl font-bold ff-font-bold">
-            Advanced Pathology Programs
-          </h1>
-        </div>
+      {!showCounters ? (
+        <main className="max-w-[1380px] mx-auto flex flex-col items-center justify-center bg-white px-4 md:px-6 lg:px-8 py-10">
+          <div className="text-center space-y-1">
+            <h1 className="text-2xl md:text-4xl font-bold ff-font-bold">
+              Advanced Pathology Programs
+            </h1>
+          </div>
 
-        <div className="text-center mt-2 ff-font md:text-lg max-w-4xl">
-          <p>
-            Specialized training designed by pathology experts to advance your
-            diagnostic expertise and clinical knowledge.
-          </p>
-        </div>
+          <div className="text-center mt-2 ff-font md:text-lg max-w-4xl">
+            <p>
+              Specialized training designed by pathology experts to advance your
+              diagnostic expertise and clinical knowledge.
+            </p>
+          </div>
 
-        {/* ----  FEATURED LIVE  ---- */}
-        {loadings ? (
-          <FeaturedLiveSkeleton />
-        ) : (
-          <FeaturedLive
-            data={list[0]}
-            onMore={() => router.push("/subscription")}
-          />
-        )}
-      </main>:null}
+          {/* ----  FEATURED LIVE  ---- */}
+          {loadings ? (
+            <FeaturedLiveSkeleton />
+          ) : (
+            <FeaturedLive
+              data={list[0]}
+              onMore={() => router.push("/subscription")}
+            />
+          )}
+        </main>
+      ) : null}
+
       {showCounters ? <StatusSection /> : null}
+
       {/* ----  EndometrialPathology  ---- */}
       <EndometrialPathology />
 
-      {/* ----  RECORDED PROGRAM---- */}
-      <Section
-        title="Recorded Programs"
-        subtitle="Self-paced learning"
-      >
-        {loading ? (
-          <ProgramSkeleton />
-        ) : (
-          <RecordedGrid programs={programs} onCart={addToCart} router={router} />
-        )}
-      </Section>
+      {/* Unified Course Section with Tabs */}
+      <section className="max-w-[1380px] mx-auto px-6 md:px-8 py-12">
+        {/* Tab Switchers */}
+        <div className="flex flex-wrap items-center gap-3 mb-10">
+          <button
+            onClick={() => setActiveTab('upcoming')}
+            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer ${
+              activeTab === 'upcoming'
+                ? "text-[#160B29] bg-[#FFF8E6] border-[1.5px] border-[#C79A00] shadow-[0_10px_20px_rgba(199,154,0,0.12)]"
+                : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
+            }`}
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-[#C79A00]" />
+            Upcoming
+            <b className="text-xs bg-white rounded-full px-2.5 py-0.5 text-[#160B29] min-w-[22px] border border-gray-100">
+              3
+            </b>
+          </button>
 
-      {/* ----  UPCOMING PROGRAM ----- */}
-      <Section
-        title={"Upcoming Programs"}
-        subtitle="Join the waitlist and get early access"
-      >
-        {loading ? <UpcomeingProgramSkeleton /> : <UpcomingCourse />}
-      </Section>
+          <button
+            onClick={() => setActiveTab('recorded')}
+            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer ${
+              activeTab === 'recorded'
+                ? "text-[#160B29] bg-[#FAF5FF] border-[1.5px] border-[#8B5CF6] shadow-[0_10px_20px_rgba(139,92,246,0.12)]"
+                : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
+            }`}
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-[#8B5CF6]" />
+            Buy Recordings
+            <b className="text-xs bg-white rounded-full px-2.5 py-0.5 text-[#160B29] min-w-[22px] border border-gray-100">
+              {programs.length || 5}
+            </b>
+          </button>
+        </div>
+
+        {activeTab === 'upcoming' ? (
+          <div>
+            {/* Header info */}
+            <div className="mb-8">
+              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FFF8E6] text-[#B28200] border border-[#FFC900]/40 px-3 py-1 rounded-full mb-3.5">
+                ENROLLING NOW
+              </span>
+              <h2 className="text-3xl font-extrabold text-[#160B29] mb-2">Upcoming Courses</h2>
+              <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
+                New live cohorts. Small groups, direct feedback from faculty, and early-bird pricing. Seats are limited.
+              </p>
+            </div>
+
+            {/* Upcoming Course Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {upcomingCourses.map((c, i) => (
+                <div
+                  key={i}
+                  className="bg-white border border-[#EBE8E2] border-t-4 border-t-[#FCCA29] rounded-[24px] p-6 relative flex flex-col justify-between hover:shadow-xl transition-all duration-300 min-h-[580px] overflow-hidden"
+                >
+                  {/* Top Badge */}
+                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[9px] tracking-wide uppercase font-extrabold bg-[#FCCA29] text-[#1A1502] px-3 py-1 rounded-full shadow-sm">
+                    ★ Enrolling
+                  </span>
+
+                  <div>
+                    {/* Icon Container */}
+                    <div className="w-[50px] h-[50px] rounded-2xl bg-[#FAF1F5] text-[#D54C80] flex items-center justify-center border border-[#F5E2EC] mb-5 mt-1">
+                      {c.icon}
+                    </div>
+
+                    {/* Course Title & Description */}
+                    <h3 className="text-[19px] font-extrabold text-[#1D172A] leading-tight mb-2.5 pr-16">
+                      {c.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                      {c.desc}
+                    </p>
+
+                    {/* Specifications */}
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center justify-between py-2 border-b border-dashed border-gray-100 text-xs">
+                        <span className="text-gray-400 font-bold uppercase tracking-wider">DURATION</span>
+                        <span className="text-[#1D172A] font-extrabold">{c.duration}</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 border-b border-dashed border-gray-100 text-xs">
+                        <span className="text-gray-400 font-bold uppercase tracking-wider">SESSIONS</span>
+                        <span className="text-[#1D172A] font-extrabold">{c.sessions}</span>
+                      </div>
+                    </div>
+
+                    {/* Syllabus Features */}
+                    <ul className="space-y-3 mb-8">
+                      {c.features.map((feat, idx) => (
+                        <li key={idx} className="flex items-start gap-1 text-xs text-gray-500 font-medium">
+                          <span>✓ {feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    {/* Pricing */}
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-[26px] font-black text-[#1D172A]">₹{c.price.toLocaleString('en-IN')}</span>
+                      <span className="text-sm text-gray-400 line-through">₹{c.originalPrice.toLocaleString('en-IN')}</span>
+                      <span className="text-[9px] tracking-wide uppercase font-extrabold text-[#B28200] bg-[#FFF8E6] px-2 py-0.5 rounded border border-[#FFC900]/30 ml-1.5">
+                        EARLY-BIRD
+                      </span>
+                    </div>
+
+                    {/* CTA Button */}
+                    <button
+                      onClick={() => router.push(`/subscription`)}
+                      className="w-full py-3.5 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-full transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
+                    >
+                      Enroll Now →
+                    </button>
+                    <p className="text-[10px] text-gray-400 text-center mt-2.5 font-medium">
+                      {c.regularPrice}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* Header info */}
+            <div className="mb-8">
+              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FAF5FF] text-[#8B5CF6] border border-[#8B5CF6]/30 px-3 py-1 rounded-full mb-3.5">
+                SELF-PACED LEARNING
+              </span>
+              <h2 className="text-3xl font-extrabold text-[#160B29] mb-2">Recorded Programs</h2>
+              <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
+                Self-paced learning. Learn at your own speed with lifetime access to materials, case discussions, and certificates.
+              </p>
+            </div>
+
+            {/* Recorded Grid */}
+            {loading ? (
+              <ProgramSkeleton />
+            ) : (
+              <RecordedGrid programs={programs} onCart={addToCart} router={router} />
+            )}
+          </div>
+        )}
+      </section>
     </>
   );
 };
@@ -328,7 +523,7 @@ const RecordedGrid = ({
   onCart: (p: Program) => void;
   router: any;
 }) => {
-  // ✅ Helper function to get product ID
+  // Helper function to get product ID
   const getProductId = (program: Program) => {
     return program._id || program.id;
   };
@@ -356,15 +551,22 @@ const RecordedGrid = ({
           style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {programs.map((p, i) => {
-            // ✅ Get currency for each program
-            const programCurrency = p.currency || 'USD';
+            const programCurrency = p.currency || 'INR';
             const productId = getProductId(p);
+            
+            const isGI = p.title.toLowerCase().includes("endoscopic") || p.title.toLowerCase().includes("gi");
+            const badgeText = isGI 
+              ? "MOST POPULAR COURSE - 100+ ENROLLED" 
+              : "CURRICULUM ALIGNED WITH WHO 5TH ED. BLUE BOOK";
+            
+            const ratingValue = isGI ? "4.9" : "4";
+            const learnersValue = isGI ? "80+ learners" : "50+ learners";
 
             return (
               <div
                 key={productId || i}
                 onClick={() => router.push(`/pathology/${productId}`)}
-                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-3xl overflow-hidden border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-[24px] overflow-hidden border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
               >
                 <div className="relative z-10 flex flex-col h-full">
                   {/* Image Section */}
@@ -374,7 +576,7 @@ const RecordedGrid = ({
                       alt={p.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-750"
                     />
-                    <div className="absolute top-4 left-4 bg-[#FFF8E6] border border-[#FFC900]/40 text-[#B28200] font-extrabold text-[9px] tracking-wide px-3 py-1 rounded-full uppercase shadow-sm backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 bg-[#FFF8E6] border border-[#FFC900]/30 text-[#B28200] font-extrabold text-[8px] tracking-wider px-3 py-1.5 rounded-full uppercase shadow-sm backdrop-blur-sm">
                       {p.category || "Pathology"}
                     </div>
                   </div>
@@ -382,52 +584,52 @@ const RecordedGrid = ({
                   {/* Content Section */}
                   <div className="p-6 flex flex-col justify-between flex-1 bg-white">
                     <div>
-                      <h3 className="text-[17px] leading-tight font-extrabold text-[#1D172A] min-h-[48px] mb-2 line-clamp-2">
+                      {/* Title */}
+                      <h3 className="text-base leading-tight font-extrabold text-[#1D172A] min-h-[44px] mb-3 line-clamp-2">
                         {p.title}
                       </h3>
 
-                      <div className="mb-3">
-                        <div className="flex items-center gap-1.5 text-[10px] text-[#B28200] bg-[#FFF8E6] border border-[#FFC900]/30 px-2.5 py-1 rounded-md min-h-[28px] max-w-max uppercase font-bold">
+                      {/* Info Badge */}
+                      <div className="mb-3.5">
+                        <div className="flex items-center gap-1 text-[8px] text-[#B28200] bg-[#FFF8E6] border border-[#FFC900]/20 px-2.5 py-1.5 rounded-md uppercase font-bold tracking-wide">
                           <span>★</span>
-                          <span>{p.subtitle}</span>
+                          <span className="leading-none">{badgeText}</span>
                         </div>
                       </div>
 
                       {/* Rating & Learners */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between text-xs text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <span className="text-[#D54C80] text-sm">★</span>
-                            <span className="font-bold text-black">{p.rating || 4.5}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <FaUsers className="w-3.5 h-3.5 text-[#D54C80]" />
-                            <span><span className="font-bold text-black">{p.total_reviews || 100}+</span> learners</span>
-                          </div>
+                      <div className="mb-4 flex items-center justify-between text-xs font-semibold text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <span className="text-[#D54C80] text-sm">★</span>
+                          <span className="text-[#1D172A] font-extrabold">{p.rating || ratingValue}</span>
                         </div>
-                        <div className="mt-3 border-b border-gray-100"></div>
+                        <div className="flex items-center gap-1.5">
+                          <FaUsers className="w-3.5 h-3.5 text-[#D54C80]/80" />
+                          <span className="text-[#1D172A] font-bold">{p.total_reviews ? `${p.total_reviews}+ learners` : learnersValue}</span>
+                        </div>
                       </div>
+                      <div className="border-b border-gray-100 mb-4"></div>
 
                       {/* Duration & Price */}
-                      <div className="flex items-center justify-between mb-4">
-                        <p className="text-xs text-gray-500 font-semibold">
-                          {p.duration} month access
+                      <div className="flex items-center justify-between mb-5">
+                        <p className="text-xs text-gray-400 font-semibold">
+                          {p.duration || "6"} month access
                         </p>
-                        <p className="text-2xl font-black text-[#1D172A]">
+                        <p className="text-[22px] font-black text-[#1D172A]">
                           {formatCurrency(p.price, programCurrency)}
                         </p>
                       </div>
 
                       {/* Features */}
-                      <div className="flex items-center justify-between text-[10px] text-gray-400 font-bold border-t border-gray-100 pt-4 gap-2 text-center uppercase tracking-wider">
+                      <div className="flex items-center justify-between text-[8px] text-gray-400 font-bold border-t border-gray-100 pt-4 gap-1 text-center uppercase tracking-wider">
                         <div className="flex-1">
                           <span>E-certificate included</span>
                         </div>
-                        <div className="w-[1px] h-3 bg-gray-200" />
+                        <div className="w-[1px] h-3.5 bg-gray-100" />
                         <div className="flex-1">
                           <span>CV + CME friendly</span>
                         </div>
-                        <div className="w-[1px] h-3 bg-gray-200" />
+                        <div className="w-[1px] h-3.5 bg-gray-100" />
                         <div className="flex-1">
                           <span>One-time payment</span>
                         </div>
@@ -441,7 +643,7 @@ const RecordedGrid = ({
                           e.stopPropagation();
                           router.push(`/pathology/${productId}`);
                         }}
-                        className="w-full py-3 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-xl transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
+                        className="w-full py-3 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-full transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
                       >
                         Enroll Now →
                       </button>
