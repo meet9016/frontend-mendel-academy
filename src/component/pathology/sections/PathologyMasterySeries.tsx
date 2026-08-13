@@ -249,9 +249,26 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
       {/* Sections removed as requested */}
 
       {/* Unified Course Section with Tabs */}
-      <section className="max-w-[1380px] mx-auto px-6 md:px-8 py-12">
+      <section id="courses" className="max-w-[1380px] mx-auto px-6 md:px-8 py-12 font-sans">
+        
+        {/* Section Head */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#D54C80] font-extrabold">THE SERIES</span>
+            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+          </div>
+          <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A] leading-tight mb-4">
+            Two ways to learn,<br />
+            on <span className="text-[#D54C80]">your</span> timeline.
+          </h2>
+          <p className="text-gray-500 text-sm md:text-base max-w-2xl leading-relaxed">
+            Join the next live cohort, or buy the recordings of everything that's come before.
+          </p>
+        </div>
+
         {/* Tab Switchers */}
-        <div className="flex flex-wrap items-center gap-3 mb-10">
+        <div className="flex flex-wrap items-center gap-3 mb-10 mt-6">
           <button
             onClick={() => setActiveTab('upcoming')}
             className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer ${
@@ -290,7 +307,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
               <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FFF8E6] text-[#B28200] border border-[#FFC900]/40 px-3 py-1 rounded-full mb-3.5">
                 ENROLLING NOW
               </span>
-              <h2 className="text-3xl font-extrabold text-[#160B29] mb-2">Upcoming Courses</h2>
+              <h3 className="text-2xl font-extrabold text-[#160B29] mb-2">Upcoming Courses</h3>
               <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
                 New live cohorts. Small groups, direct feedback from faculty, and early-bird pricing. Seats are limited.
               </p>
@@ -301,10 +318,10 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
               {upcomingCourses.map((c, i) => (
                 <div
                   key={i}
-                  className="bg-white border border-[#EBE8E2] border-t-4 border-t-[#FCCA29] rounded-[24px] p-6 relative flex flex-col justify-between hover:shadow-xl transition-all duration-300 min-h-[580px] overflow-hidden"
+                  className="bg-white border border-[#EBE8E2] border-t-4 border-t-[#D54C80] rounded-[24px] p-6 relative flex flex-col justify-between hover:shadow-xl transition-all duration-300 min-h-[580px] overflow-hidden"
                 >
                   {/* Top Badge */}
-                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[9px] tracking-wide uppercase font-extrabold bg-[#FCCA29] text-[#1A1502] px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[9px] tracking-wide uppercase font-extrabold bg-[#FAF1F5] text-[#D54C80] px-3 py-1 rounded-full shadow-sm">
                     ★ Enrolling
                   </span>
 
@@ -349,7 +366,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
                     <div className="flex items-baseline gap-2 mb-4">
                       <span className="text-[26px] font-black text-[#1D172A]">₹{c.price.toLocaleString('en-IN')}</span>
                       <span className="text-sm text-gray-400 line-through">₹{c.originalPrice.toLocaleString('en-IN')}</span>
-                      <span className="text-[9px] tracking-wide uppercase font-extrabold text-[#B28200] bg-[#FFF8E6] px-2 py-0.5 rounded border border-[#FFC900]/30 ml-1.5">
+                      <span className="text-[9px] tracking-wide uppercase font-extrabold text-[#D54C80] bg-[#FAF1F5] px-2 py-0.5 rounded border border-[#F5E2EC] ml-1.5">
                         EARLY-BIRD
                       </span>
                     </div>
@@ -373,12 +390,12 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
           <div>
             {/* Header info */}
             <div className="mb-8">
-              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FAF5FF] text-[#8B5CF6] border border-[#8B5CF6]/30 px-3 py-1 rounded-full mb-3.5">
-                SELF-PACED LEARNING
+              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FAF1F5] text-[#D54C80] border border-[#F5E2EC] px-3.5 py-1.5 rounded-full mb-3.5">
+                Recordings
               </span>
-              <h2 className="text-3xl font-extrabold text-[#160B29] mb-2">Recorded Programs</h2>
+              <h3 className="text-2xl font-extrabold text-[#160B29] mb-2">Course Recordings — Watch Anytime</h3>
               <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
-                Self-paced learning. Learn at your own speed with lifetime access to materials, case discussions, and certificates.
+                Buy the full recorded series from our completed cohorts — one year of access to every session. <strong>Watch at your own pace, whenever suits you.</strong>
               </p>
             </div>
 

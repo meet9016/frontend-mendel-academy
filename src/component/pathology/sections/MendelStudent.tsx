@@ -159,9 +159,9 @@ export default function MendelStudent() {
         {/* Subtitle & Title */}
         <div className="text-center mb-12">
           <div className="flex items-center gap-3 justify-center mb-4">
-            <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
-            <span className="text-[10px] uppercase tracking-[0.25em] text-[#A16207] font-bold">Student Testimonials</span>
-            <div className="w-[34px] h-[2px] bg-[#FCCA29]" />
+            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#D54C80] font-bold">STUDENT TESTIMONIALS</span>
+            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
           </div>
           <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">
             What Mendel students <span className="text-[#D54C80]">say.</span>
