@@ -1,41 +1,20 @@
 import React from "react";
 import PathologyMasterySeries from "../sections/PathologyMasterySeries";
-import StatusSection from "../sections/StatusSection";
-import EndometrialPathology from "../sections/EndometrialPathology";
-import UpcomingCourse from "../sections/UpcomingCourse";
 import MendelStudent from "../sections/MendelStudent";
 import MeetYourMentor from "../sections/MeetYourMentor";
 import AdvancedPathology from "../sections/AdvancedPathology";
-import HyperspecialistSection from "../sections/HyperspecialistSection";
-import Faq from "@/component/PGMedical IntreceExam/sections/Faq";
+import PathologyFAQ from "../sections/PathologyFAQ";
+import CohortScopingForm from "../sections/CohortScopingForm";
 
 function MasterySeries() {
   return (
-    <div>
-   
-
+    <div className="bg-[#FAF8F5] min-h-screen text-[#1D172A]">
       <AdvancedPathology />
       <PathologyMasterySeries showCounters={true}/>
-
-  
-      
-      {/* --- Stats Section --- */}
-
-      {/* --- ADVANCED ENDOMETRIAL PATHOLOGY PROGRAM --- */}
-      {/* <EndometrialPathology /> */}
-
-      {/* --- PATHOLOGY MENDEL MASTERY SERIES --- */}
-      {/* <PathologyMasterySeries /> */}
-
-      {/* UPCOMING COURSE */}
-      {/* <UpcomingCourse /> */}
-
-      {/* MENDEL STUDENT */}
       <MendelStudent />
-
-      {/* MEET YOUR MENTOR */}
       <MeetYourMentor />
-         <Faq />
+      <CohortScopingForm />
+      <PathologyFAQ />
     </div>
   );
 }

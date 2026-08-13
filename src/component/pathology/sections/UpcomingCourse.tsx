@@ -87,13 +87,10 @@ const UpcomingCourse = () => {
 
                 {/* Main Card */}
                 <div
-                  className="relative h-full bg-card border-2 border-[#ffca00]/30 
-    overflow-hidden hover:shadow-none
-    transition-all duration-500 rounded-2xl
-    group-hover:border-[#fae7b2]"
+                  className="relative h-full bg-white border border-[#EBE8E2] overflow-hidden hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300 rounded-3xl"
                 >
                   {/* --- IMAGE SECTION WITH BADGES + WAVE --- */}
-                  <div className="relative h-42 overflow-hidden">
+                  <div className="relative h-44 overflow-hidden">
                     {/* Course Image */}
                     <img
                       src={
@@ -101,86 +98,55 @@ const UpcomingCourse = () => {
                         "https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
                       }
                       alt={course.title}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-125"
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                     />
 
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#ffca00]/40 via-transparent to-[#f0b100]/40 mix-blend-overlay" />
-
                     {/* --- TOP BADGES --- */}
-                    <div className="absolute top-4 left-4 flex flex-wrap gap-3">
-                      <span className="bg-white/90 ff-font-bold  text-[10px] font-bold tracking-wide px-3 py-1 rounded-full shadow-md uppercase border border-[#f0b100]/30 backdrop-blur-sm">
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-[#FFF8E6] border border-[#FFC900]/40 text-[#B28200] font-extrabold text-[9px] tracking-wide px-3 py-1 rounded-full uppercase shadow-sm backdrop-blur-sm">
                         Advanced Level
                       </span>
-                      
-                      {/* <span className="bg-[#FFCA00] ff-font-bold  text-[10px] font-bold tracking-wide px-3 py-1 rounded-full shadow-md uppercase border border-white/20">
-                        Case-Based Learning
-                      </span> */}
                     </div>
-
-                    {/* --- CURVED WAVE FIXED (NO WHITE LINE) --- */}
-                    {/* <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-                      <svg
-                        className="relative block w-full h-[60px]"
-                        viewBox="0 0 500 60"
-                        preserveAspectRatio="none"
-                      >
-                        <path
-                          d="M0,30 C150,70 350,0 500,40 L500,60 L0,60 Z"
-                          fill="white"
-                        />
-                      </svg>
-                    </div> */}
                   </div>
 
                   {/* --- CONTENT SECTION --- */}
-                  <div className="p-4 space-y-5 relative">
+                  <div className="p-6 space-y-5 relative">
                     <div>
                       {/* --- Title --- */}
-                      <div className="relative pl-4">
-                        <h3 className="text-xl ff-font-bold font-bold text-foreground  group-hover:text-primary transition-colors line-clamp-1 min-h-[1.0rem]">
+                      <div>
+                        <h3 className="text-[17px] font-extrabold text-[#1D172A] leading-tight line-clamp-1 min-h-[1.2rem]">
                           {course.title}
                         </h3>
-                        <div className="h-1 bg-gradient-to-r from-[#FFCA00] to-transparent w-0 group-hover:w-full transition-all duration-500 mt-2" />
                       </div>
 
                       {/* --- Description --- */}
-                      {/* <p className="text-sm ff-font text-muted-foreground leading-relaxed pl-4 line-clamp-3 mt-2 min-h-[4.5rem]">
-                      {course.description}
-                    </p> */}
-                      {/* --- Description (HTML Render Like CourseDes) --- */}
                       <div
-                        className="text-sm ff-font text-muted-foreground leading-relaxed pl-4 line-clamp-2 mt-2 min-h-[3.5rem]"
+                        className="text-xs text-gray-500 leading-relaxed line-clamp-2 mt-2 min-h-[3rem]"
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(course.description),
                         }}
                       />
 
                       {/* --- Info Boxes --- */}
-                      <div className="space-y-3 pl-1 mt-2">
+                      <div className="space-y-3 mt-4">
                         <div className="relative group/date">
-                          {/* <div className="absolute inset-0 bg-[#ffca00]/5 transform -skew-x-6 group-hover/date:skew-x-0 transition-transform duration-300" /> */}
-                          <div className="relative flex items-center gap-3 p-3 border-2 border-primary transition-colors duration-300">
-                            <div className="p-2 bg-[#FFCA00] ff-font-bold  rounded-full">
-                              <FaCalendarAlt className="w-4 h-4 text-white" />
+                          <div className="relative flex items-center gap-3 p-3 border border-[#EBE8E2] rounded-xl transition-colors duration-300 bg-[#FAF8F5]">
+                            <div className="w-8 h-8 rounded-lg bg-[#FAF1F5] flex items-center justify-center text-[#D54C80] border border-[#F5E2EC]">
+                              <FaCalendarAlt className="w-3.5 h-3.5" />
                             </div>
-                            <span className="text-sm ff-font-bold  font-semibold text-foreground">
+                            <span className="text-xs font-extrabold text-[#1D172A]">
                               {course.date}
                             </span>
                           </div>
                         </div>
 
                         <div className="relative group/spots">
-                          <div className="absolute inset-0 duration-300" />
-                          <div className="relative flex items-center gap-3 p-3 border-2 border-primary transition-colors duration-300">
-                            <div className="p-2 bg-[#ffca00] rounded-full">
-                              <FaUsers className="w-4 h-4 text-white" />
+                          <div className="relative flex items-center gap-3 p-3 border border-[#EBE8E2] rounded-xl transition-colors duration-300 bg-[#FAF8F5]">
+                            <div className="w-8 h-8 rounded-lg bg-[#FAF1F5] flex items-center justify-center text-[#D54C80] border border-[#F5E2EC]">
+                              <FaUsers className="w-3.5 h-3.5" />
                             </div>
-                            <span className="text-sm ff-font text-muted-foreground">
-                              <span className="font-bold ff-font-bold ">
-                                {course.waitlistCount} spots
-                              </span>{" "}
-                              on waitlist
+                            <span className="text-xs text-gray-500 font-semibold">
+                              <span className="font-extrabold text-[#1D172A]">{course.waitlistCount} spots</span> on waitlist
                             </span>
                           </div>
                         </div>
@@ -188,34 +154,15 @@ const UpcomingCourse = () => {
                     </div>
 
                     {/* --- CTA Button --- */}
-                    <div className="relative pt-0 pl-1">
-                      {/* <button
-                                                className="w-full py-3 px-6 bg-[#f0b100] hover:bg-[#ffca00] text-white font-semibold rounded-md shadow-md transition-all duration-300 flex items-center justify-center gap-3"
-                                            >
-                                                <FaBell className="w-4 h-4" />
-                                                <span className="text-base">Get Notified</span>
-                                                <FaArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                                            </button> */}
-                      <CommonButton
-                        pyClass="py-3"
-                        pxClass="px-22"
-                        fontWeight={700}
-                        fontSize={14}
+                    <div className="relative pt-2">
+                      <button
                         onClick={() => setOpenCourseDetails(!openCourseDetails)}
+                        className="w-full py-3 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-xl transition duration-200 flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-[#D54C80]/15"
                       >
-                        <div className="flex items-center gap-2 ff-font-bold w-full">
-                          {/* <FaBell className="w-4 h-4" /> */}
-                          <div className="flex gap-1">
-                            <span>Get Notified</span>
-                            <FaArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                          </div>
-                        </div>
-                      </CommonButton>
+                        Get Notified <FaArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                      </button>
                     </div>
                   </div>
-
-                  {/* Bottom Gradient Bar */}
-                  {/* <div className="h-2 bg-gradient-to-r from-[#FFCA00] via-[#f0b100] to-[#ffca00]" /> */}
                 </div>
 
                 <AnimatePresence>

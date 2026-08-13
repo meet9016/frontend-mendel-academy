@@ -15,7 +15,7 @@ const stats: Stat[] = [
 /* ----------  MAIN COMPONENT  ---------- */
 export default function StatusSection() {
   return (
-    <section className="bg-[#f9fafb] py-10">
+    <section className="bg-[#FAF8F5] py-10">
       <div className="max-w-[1380px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
         {stats.map((s, i) => (
           <motion.div
@@ -29,8 +29,8 @@ export default function StatusSection() {
             <div className="p-3 border-primary rounded-xl">
               <s.icon className="text-primary w-6 h-6" />
             </div>
-            <h3 className="text-black text-2xl font-bold ff-font-bold">{s.value}</h3>
-            <p className="text-black ff-font text-md">
+            <h3 className="text-[#1D172A] text-2xl font-extrabold">{s.value}</h3>
+            <p className="text-[#5C5575] text-md">
               {s.label} 
               {s.highlight && (
                 <>

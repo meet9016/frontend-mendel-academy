@@ -17,10 +17,10 @@ const achievements: Achievement[] = [
 /* ----------  MAIN COMPONENT  ---------- */
 export default function MeetYourMentor() {
   return (
-    <section className="relative py-10 overflow-hidden bg-[#f9fafb]">
+    <section className="relative py-20 overflow-hidden bg-[#FAF8F5]">
       {/* Decorative Elements */}
-      <div className="absolute top-10 right-10 w-72 h-72 bg-[#f0b100]/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#f0b100]/5 rounded-full blur-3xl" />
+      <div className="absolute top-10 right-10 w-72 h-72 bg-[#D54C80]/5 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#D54C80]/5 rounded-full blur-3xl" />
 
       <div className="max-w-[1380px] mx-auto px-6">
         <Header />
@@ -32,13 +32,13 @@ export default function MeetYourMentor() {
 
 /* ----------  SUB-COMPONENTS  ---------- */
 const Header = () => (
-  <div className="text-center mb-10">
+  <div className="text-center mb-12">
     <motion.h2
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="text-2xl ff-font-bold md:text-4xl font-bold mb-2"
+      className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]"
     >
       Meet Your Mentor
     </motion.h2>
@@ -57,40 +57,40 @@ const Content = ({ achievements }: { achievements: Achievement[] }) => (
 
 const ProfileCard = () => (
   <motion.div
-    initial={{ opacitx: -60 }}
-    whileInView={{ opacitx: 0 }}
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
     transition={{ duration: 0.8 }}
     viewport={{ once: true }}
     className="relative"
   >
-    <div className="relative bg-white backdrop-blur-lg rounded-[1rem] p-8 shadow-2xl border-2 border-[#f0b100]/20">
+    <div className="relative bg-white rounded-3xl p-8 border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300">
       {/* Profile Image with Geometric Frame */}
       <div className="relative mb-6">
-        <div className="relative w-48 h-48 max-w-[1380px] mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#f0b100] to-yellow-600 rounded-full animate-spin-slow opacity-20" />
+        <div className="relative w-48 h-48 mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#D54C80] to-yellow-600 rounded-full animate-spin-slow opacity-10" />
           <div className="absolute inset-2 bg-white rounded-full" />
           <img
             src="/images/11.jpg"
             alt="Dr. Kishor Managoli"
-            className="absolute inset-3 w-[168px] h-[168px] rounded-full object-cover border-4 border-[#f0b100]/30"
+            className="absolute inset-3 w-[168px] h-[168px] rounded-full object-cover border-4 border-[#D54C80]/30 shadow-sm"
           />
         </div>
         {/* Floating Badge */}
-        <div className="absolute -bottom-2 -right-2 bg-[#FACC00] text-black ff-font px-4 py-2 rounded-full shadow-lg">
-          <span className="text-sm font-bold">MD</span>
+        <div className="absolute -bottom-2 right-1/4 translate-x-12 bg-[#D54C80] text-white px-4 py-1.5 rounded-full shadow-md">
+          <span className="text-xs font-extrabold uppercase tracking-wider">MD</span>
         </div>
       </div>
 
       {/* Name and Title */}
       <div className="text-center mb-6">
-        <h3 className="text-3xl font-bold mb-2 ff-font-bold text-primary">Dr. Kishor Managoli, MD</h3>
-        <p className="text-lg ff-font-bold font-bold mb-1">Senior Surgical & Digital Pathologist</p>
-        <p className="text-md ff-font">Founder & Chief Educator, Mendel Academy</p>
+        <h3 className="text-2xl font-extrabold text-[#1D172A] mb-1">Dr. Kishor Managoli, MD</h3>
+        <p className="text-base font-extrabold text-[#D54C80] mb-1">Senior Surgical & Digital Pathologist</p>
+        <p className="text-xs text-gray-500 font-semibold">Founder & Chief Educator, Mendel Academy</p>
       </div>
 
       {/* Description */}
-      <div className="bg-white ff-font p-6 border border-primary">
-        <p className="text-center">
+      <div className="bg-[#FAF8F5] p-6 border border-[#EBE8E2] rounded-2xl">
+        <p className="text-center text-xs md:text-sm text-[#5C5575] leading-relaxed">
           Dr. Managoli is popular for providing his students a transformational experience. His mentorship is deeply interactive and case-based,
           designed to help you think critically, diagnose confidently, and connect pathology to real clinical decisions. Every session challenges
           you to engage, question, and evolve, not just as a learner, but as a future leader in diagnostics. Under his mentorship, you will build
@@ -106,8 +106,8 @@ const AchievementsList = ({ achievements }: { achievements: Achievement[] }) => 
     {achievements.map((achievement, index) => (
       <motion.div
         key={index}
-        initial={{ opacitscale: 0.95 }}
-        whileInView={{ opacitscale: 1 }}
+        initial={{ scale: 0.98, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
         transition={{ delay: index * 0.15, duration: 0.5 }}
         viewport={{ once: true }}
         className="group relative"
@@ -119,15 +119,14 @@ const AchievementsList = ({ achievements }: { achievements: Achievement[] }) => 
 );
 
 const AchievementCard = ({ icon: Icon, text }: Achievement) => (
-  <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-primary transition-all duration-500 hover:-translate-y-2">
+  <div className="relative bg-white rounded-2xl p-5 border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300">
     <div className="flex items-center gap-6">
       <div className="relative">
-        <div className="absolute inset-0 bg-[#FACC00] rounded-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
-        <div className="relative bg-[#FACC00] rounded-2xl p-4 transform group-hover:rotate-6 transition-transform duration-500">
-          <Icon className="w-8 h-8 text-white" />
+        <div className="w-14 h-14 rounded-2xl bg-[#FAF1F5] flex items-center justify-center text-[#D54C80] border border-[#F5E2EC] transform group-hover:rotate-6 transition-transform duration-300">
+          <Icon className="w-6 h-6" />
         </div>
       </div>
-      <p className="text-lg font-medium text-foreground flex-1 group-hover:text-black transition-colors">{text}</p>
+      <p className="text-base font-extrabold text-[#1D172A] flex-1 transition-colors">{text}</p>
     </div>
   </div>
 );
@@ -135,7 +134,7 @@ const AchievementCard = ({ icon: Icon, text }: Achievement) => (
 const HexBg = () => (
   <div className="absolute inset-0 flex items-center justify-center opacity-5">
     <svg width="800" height="800" viewBox="0 0 100 100" className="animate-spin-slow">
-      <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="none" stroke="#f0b100" strokeWidth="0.5" />
+      <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="none" stroke="#D54C80" strokeWidth="0.5" />
     </svg>
   </div>
 );

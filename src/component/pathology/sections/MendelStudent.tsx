@@ -1,24 +1,17 @@
-// @ts-nocheck
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaQuoteRight,
-  FaStar,
-} from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-/* ----------  TYPES  ---------- */
 type Testimonial = {
   id: number;
   name: string;
   rating: number;
   timeAgo: string;
   text: string;
+  initials: string;
+  bg: string;
 };
 
-/* ----------  DATA  ---------- */
 const testimonials: Testimonial[] = [
   {
     id: 1,
@@ -26,6 +19,8 @@ const testimonials: Testimonial[] = [
     rating: 5,
     timeAgo: "3 weeks ago",
     text: "Mendel's WHO-based tumor masterclasses made a huge difference in how I approach biopsy interpretation. The structured reporting templates and molecular marker explanations helped me understand not just what to diagnose, but why.",
+    initials: "SS",
+    bg: "bg-[#D97706]"
   },
   {
     id: 2,
@@ -33,6 +28,8 @@ const testimonials: Testimonial[] = [
     rating: 5,
     timeAgo: "1 week ago",
     text: "The sessions on esophageal lesions were incredibly enlightening. Your detailed discussions added so much value and I found them extremely useful. Thank you so much, Sir 🙏.",
+    initials: "PU",
+    bg: "bg-[#EA580C]"
   },
   {
     id: 3,
@@ -40,157 +37,66 @@ const testimonials: Testimonial[] = [
     rating: 5,
     timeAgo: "1 month ago",
     text: "I deeply appreciate the hard work and dedication you put into crafting such elaborate and useful lectures. Thank you!",
-  },
-  {
-    id: 4,
-    name: "Dr. Robert Chen",
-    rating: 5,
-    timeAgo: "3 weeks ago",
-    text: "Your ability to break down complex histomorphology into clear, clinically relevant patterns is outstanding. The systematic approach has transformed my diagnostic confidence.",
-  },
-  {
-    id: 5,
-    name: "Dr. Ananya Sharma",
-    rating: 5,
-    timeAgo: "2 weeks ago",
-    text: "The immunohistochemistry panels and algorithmic approach to difficult cases are invaluable. This is the most practical pathology teaching I've encountered.",
-  },
+    initials: "PK",
+    bg: "bg-[#0284C7]"
+  }
 ];
 
-export default function Page() {
+export default function MendelStudent() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardsPerView = 3;
-  const maxIndex = Math.max(0, testimonials.length - cardsPerView);
-
-  const handlePrevious = () => setCurrentIndex((prev) => Math.max(0, prev - 1));
-  const handleNext = () =>
-    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
 
   return (
-    <section className="relative py-12 bg-white">
-      <div className="relative max-w-[1380px] mx-auto px-6 overflow-visible">
-        <Header />
+    <section className="bg-white py-20 border-t border-b border-gray-100 font-sans">
+      <div className="max-w-[1380px] mx-auto px-6">
+        
+        {/* Subtitle & Title */}
+        <div className="text-center mb-12">
+          <div className="flex items-center gap-3 justify-center mb-4">
+            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
+            <span className="text-xs uppercase tracking-[0.2em] text-[#FFC900] font-black">Student Testimonials</span>
+            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
+          </div>
+          <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">
+            What Mendel students <span className="text-[#D54C80]">say.</span>
+          </h2>
+        </div>
 
-        <Carousel
-          testimonials={testimonials}
-          currentIndex={currentIndex}
-          maxIndex={maxIndex}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-          onDot={(i) => setCurrentIndex(i)}
-        />
+        {/* Carousel Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {testimonials.map((t) => (
+            <div key={t.id} className="bg-[#FAF8F5] border border-[#EBE8E2] rounded-2xl p-8 relative flex flex-col justify-between shadow-sm hover:shadow-md transition duration-300">
+              <div className="absolute top-6 right-8 text-6xl text-[#D54C80]/15 font-serif pointer-events-none select-none">“</div>
+              
+              <p className="text-[#1D172A] text-sm md:text-base leading-relaxed mb-8 relative z-10">
+                {t.text}
+              </p>
+
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full ${t.bg} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                  {t.initials}
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-[#1D172A]">{t.name}</h4>
+                  <p className="text-gray-400 text-xs">Mastery Series student</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Carousel Navigation */}
+        <div className="flex justify-center items-center gap-4">
+          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150">
+            <FaChevronLeft className="w-3 h-3" />
+          </button>
+          <div className="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden relative">
+            <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-gray-400 rounded-full" />
+          </div>
+          <button className="p-2 border border-gray-200 rounded-full hover:bg-gray-50 text-gray-500 transition duration-150">
+            <FaChevronRight className="w-3 h-3" />
+          </button>
+        </div>
       </div>
     </section>
   );
 }
-
-/* ---------- HEADER ---------- */
-const Header = () => (
-  <div className="text-center mb-10">
-    <motion.h2
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="text-2xl md:text-4xl font-bold"
-    >
-      What Mendel Students <br /> Say About Us
-    </motion.h2>
-  </div>
-);
-
-/* ---------- CAROUSEL ---------- */
-const Carousel = ({
-  testimonials,
-  currentIndex,
-  maxIndex,
-  onPrevious,
-  onNext,
-  onDot,
-}: any) => (
-  <div className="relative">
-    <Arrow
-      onClick={onPrevious}
-      disabled={currentIndex === 0}
-      icon={FaChevronLeft}
-      left
-    />
-    <Arrow
-      onClick={onNext}
-      disabled={currentIndex >= maxIndex}
-      icon={FaChevronRight}
-    />
-
-    <div className="overflow-x-hidden overflow-y-visible px-6 pt-12">
-      <motion.div
-        className="flex gap-6"
-        animate={{
-          x: `-${currentIndex * 33.333}%`,
-        }}
-        transition={{ duration: 0.5 }}
-      >
-        {testimonials.map((t: Testimonial) => (
-          <TestimonialCard key={t.id} {...t} />
-        ))}
-      </motion.div>
-    </div>
-
-    <div className="flex justify-center gap-2 mt-6">
-      {[...Array(maxIndex + 1)].map((_, i) => (
-        <Dot key={i} active={i === currentIndex} onClick={() => onDot(i)} />
-      ))}
-    </div>
-  </div>
-);
-
-/* ---------- ARROW ---------- */
-const Arrow = ({
-  onClick,
-  disabled,
-  icon: Icon,
-  left,
-}: any) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`absolute top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-md border transition ${
-      left ? "left-0 -translate-x-1/2" : "right-0 translate-x-1/2"
-    } ${disabled && "opacity-40"}`}
-  >
-    <Icon />
-  </button>
-);
-
-/* ---------- CARD ---------- */
-const TestimonialCard = ({ name, rating, timeAgo, text }: Testimonial) => (
-  <div className="min-w-[calc(33.333%-1rem)] relative bg-white border border-[#f0b100] rounded-2xl p-6 pt-12 shadow-md hover:shadow-xl transition duration-300">
-    
-    {/* Quote FIXED */}
-    <div className="absolute -top-5 left-6 w-10 h-10 bg-[#f0b100] rounded-full flex items-center justify-center shadow-md">
-      <FaQuoteRight className="text-white text-sm" />
-    </div>
-
-    <h3 className="text-lg font-semibold mb-2">{name}</h3>
-
-    <div className="flex items-center gap-2 mb-3">
-      {[...Array(rating)].map((_, i) => (
-        <FaStar key={i} className="text-[#f0b100]" />
-      ))}
-      <span className="text-sm text-gray-500">{timeAgo}</span>
-    </div>
-
-    <p className="text-sm text-gray-600 leading-relaxed line-clamp-5">
-      {text}
-    </p>
-  </div>
-);
-
-/* ---------- DOT ---------- */
-const Dot = ({ active, onClick }: any) => (
-  <button
-    onClick={onClick}
-    className={`h-2 rounded-full transition-all ${
-      active ? "w-6 bg-[#f0b100]" : "w-2 bg-gray-300"
-    }`}
-  />
-);

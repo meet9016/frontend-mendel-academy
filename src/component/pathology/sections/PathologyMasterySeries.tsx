@@ -5,6 +5,8 @@ import {
   FaArrowRight,
   FaAward,
   FaChevronDown,
+  FaChevronLeft,
+  FaChevronRight,
   FaClock,
   FaMoneyBillWave,
   FaRegStar,
@@ -342,9 +344,9 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: -350, behavior: "smooth" })
           }
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-black p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
         >
-          <FaChevronDown className="rotate-90 w-5 h-5" />
+          <FaChevronLeft className="w-5 h-5 text-black" />
         </button>
 
         {/* Scrollable Container */}
@@ -358,29 +360,21 @@ const RecordedGrid = ({
             const programCurrency = p.currency || 'USD';
             const productId = getProductId(p);
 
-            // ✅ Debug log to check IDs
-            if (!productId) {
-              console.warn("Program missing ID:", p);
-            }
-
             return (
               <div
                 key={productId || i}
                 onClick={() => router.push(`/pathology/${productId}`)}
-                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-2xl overflow-hidden border border-primary transition-all duration-500 cursor-pointer"
+                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-3xl overflow-hidden border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
               >
-                {/* Glow Border on Hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#f0b100]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity" />
-
                 <div className="relative z-10 flex flex-col h-full">
                   {/* Image Section */}
-                  <div className="relative h-42 w-full overflow-hidden">
+                  <div className="relative h-44 w-full overflow-hidden">
                     <img
                       src={p?.image || "https://st2.depositphotos.com/1000434/11667/i/450/depositphotos_116673844-stock-photo-amoeba-on-blue-background.jpg"}
                       alt={p.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-750"
                     />
-                    <div className="absolute top-4 left-4 bg-white/80 text-black ff-font-bold  text-xs font-semibold px-3 py-1 border border-[#f0b100]/30 rounded-full backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 bg-[#FFF8E6] border border-[#FFC900]/40 text-[#B28200] font-extrabold text-[9px] tracking-wide px-3 py-1 rounded-full uppercase shadow-sm backdrop-blur-sm">
                       {p.category || "Pathology"}
                     </div>
                   </div>
@@ -388,75 +382,69 @@ const RecordedGrid = ({
                   {/* Content Section */}
                   <div className="p-6 flex flex-col justify-between flex-1 bg-white">
                     <div>
-                      <h3 className="text-lg leading-tight ff-font-bold min-h-[48px] mb-2 line-clamp-2">
+                      <h3 className="text-[17px] leading-tight font-extrabold text-[#1D172A] min-h-[48px] mb-2 line-clamp-2">
                         {p.title}
                       </h3>
 
                       <div className="mb-3">
-                        <p className="text-sm text-black ff-font mb-2 line-clamp-2 min-h-[40px]">
-                          {p.subtitle}
-                        </p>
-
-                        <div className="border-b border-[#f0b100]/20"></div>
+                        <div className="flex items-center gap-1.5 text-[10px] text-[#B28200] bg-[#FFF8E6] border border-[#FFC900]/30 px-2.5 py-1 rounded-md min-h-[28px] max-w-max uppercase font-bold">
+                          <span>★</span>
+                          <span>{p.subtitle}</span>
+                        </div>
                       </div>
 
                       {/* Rating & Learners */}
-                      <div className="mb-3">
-                        <div className="flex items-center justify-between text-sm text-black whitespace-nowrap">
-                          <div className="flex items-center gap-2 text-primary">
-                            <FaRegStar className="w-4 h-4" />
-                            <span className="font-medium ff-font text-black">
-                              {p.rating || 4.5}
-                            </span>
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between text-xs text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[#D54C80] text-sm">★</span>
+                            <span className="font-bold text-black">{p.rating || 4.5}</span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <FaUsers className="w-4 h-4 text-primary" />
-                            <span className="text-black ff-font">
-                              {p.total_reviews || 100}+ learners
-                            </span>
+                          <div className="flex items-center gap-1.5">
+                            <FaUsers className="w-3.5 h-3.5 text-[#D54C80]" />
+                            <span><span className="font-bold text-black">{p.total_reviews || 100}+</span> learners</span>
                           </div>
                         </div>
-                        <div className="mt-3 border-b border-[#f0b100]/20"></div>
+                        <div className="mt-3 border-b border-gray-100"></div>
                       </div>
 
                       {/* Duration & Price */}
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-sm text-black ff-font">
+                      <div className="flex items-center justify-between mb-4">
+                        <p className="text-xs text-gray-500 font-semibold">
                           {p.duration} month access
                         </p>
-                        <p className="text-2xl font-bold ff-font-bold  text-black">
+                        <p className="text-2xl font-black text-[#1D172A]">
                           {formatCurrency(p.price, programCurrency)}
                         </p>
                       </div>
 
                       {/* Features */}
-                      <div className="flex items-center justify-between text-xs text-black mt-3 gap-3 border-t border-[#f0b100]/20 pt-3">
-                        <div className="flex-1 text-center">
-                          <span className="ff-font">E-certificate included</span>
+                      <div className="flex items-center justify-between text-[10px] text-gray-400 font-bold border-t border-gray-100 pt-4 gap-2 text-center uppercase tracking-wider">
+                        <div className="flex-1">
+                          <span>E-certificate included</span>
                         </div>
-                        <div className="flex-1 text-center">
-                          <span className="ff-font">CV + CME friendly</span>
+                        <div className="w-[1px] h-3 bg-gray-200" />
+                        <div className="flex-1">
+                          <span>CV + CME friendly</span>
                         </div>
-                        <div className="flex-1 text-center">
-                          <span className="ff-font">One-time payment</span>
+                        <div className="w-[1px] h-3 bg-gray-200" />
+                        <div className="flex-1">
+                          <span>One-time payment</span>
                         </div>
                       </div>
                     </div>
+
                     {/* Buttons */}
-                    <div className="flex flex-col gap-3 mt-3">
-                      <CommonButton
-                        pyClass="py-0"
-                        pxClass="px-2"
-                        fontWeight={700}
-                        fontSize={14}
+                    <div className="mt-6">
+                      <button
                         onClick={(e: any) => {
                           e.stopPropagation();
-                          // onCart(p);
                           router.push(`/pathology/${productId}`);
                         }}
+                        className="w-full py-3 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-xl transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
                       >
-                        Enroll Now
-                      </CommonButton>
+                        Enroll Now →
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -472,9 +460,9 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: 350, behavior: "smooth" })
           }
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 border border-[#f0b100]/40 text-primary p-3 rounded-full shadow-md hover:bg-[#fff7db] transition"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-black p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
         >
-          <FaChevronDown className="-rotate-90 w-5 h-5" />
+          <FaChevronRight className="w-5 h-5 text-black" />
         </button>
       </div>
     </>
