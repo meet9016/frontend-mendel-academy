@@ -247,22 +247,21 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
       ) : null}
 
       {/* Sections removed as requested */}
-
       {/* Unified Course Section with Tabs */}
-      <section id="courses" className="max-w-[1380px] mx-auto px-6 md:px-8 py-12 font-sans">
+      <section id="courses" className="max-w-[1180px] mx-auto px-6 md:px-8 py-[56px] font-sans bg-[#FAF7F2]">
         
         {/* Section Head */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#D54C80] font-extrabold">THE SERIES</span>
-            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
+            <span className="text-[11px] uppercase tracking-[0.18em] text-[#E0568F] font-bold">THE SERIES</span>
+            <div className="w-[34px] h-[2px] bg-[#FFC900]" />
           </div>
-          <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A] leading-tight mb-4">
+          <h2 className="text-3xl md:text-[2.6rem] font-extrabold tracking-tight text-[#241E3D] leading-[1.08] mb-4">
             Two ways to learn,<br />
-            on <span className="text-[#D54C80]">your</span> timeline.
+            on <span className="text-[#E0568F]">your</span> timeline.
           </h2>
-          <p className="text-gray-500 text-sm md:text-base max-w-2xl leading-relaxed">
+          <p className="text-[#5C5575] text-[1.08rem] max-w-2xl leading-[1.6]">
             Join the next live cohort, or buy the recordings of everything that's come before.
           </p>
         </div>
@@ -271,30 +270,30 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
         <div className="flex flex-wrap items-center gap-3 mb-10 mt-6">
           <button
             onClick={() => setActiveTab('upcoming')}
-            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer border ${
               activeTab === 'upcoming'
-                ? "text-[#160B29] bg-[#FFF8E6] border-[1.5px] border-[#C79A00] shadow-[0_10px_20px_rgba(199,154,0,0.12)]"
-                : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
+                ? "text-[#241E3D] bg-[#FFF8E3] border-[#C79A00] shadow-[0_10px_24px_rgba(36,30,61,0.1)]"
+                : "text-[#241E3D] bg-white border-[#E6E0D8] hover:bg-gray-50"
             }`}
           >
             <span className="w-2.5 h-2.5 rounded-full bg-[#C79A00]" />
             Upcoming
-            <b className="text-xs bg-white rounded-full px-2.5 py-0.5 text-[#160B29] min-w-[22px] border border-gray-100">
+            <b className="text-xs bg-[#FAF7F2] rounded-full px-2.5 py-0.5 text-[#5C5575] min-w-[22px] border border-[#E6E0D8]">
               3
             </b>
           </button>
 
           <button
             onClick={() => setActiveTab('recorded')}
-            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2.5 font-bold text-sm rounded-full px-5 py-[11px] transition-all cursor-pointer border ${
               activeTab === 'recorded'
-                ? "text-[#160B29] bg-[#FAF5FF] border-[1.5px] border-[#8B5CF6] shadow-[0_10px_20px_rgba(139,92,246,0.12)]"
-                : "text-gray-600 bg-white border border-gray-200 hover:bg-gray-50"
+                ? "text-[#241E3D] bg-[#F3EFFA] border-[#4A3D7A] shadow-[0_10px_24px_rgba(36,30,61,0.1)]"
+                : "text-[#241E3D] bg-white border-[#E6E0D8] hover:bg-gray-50"
             }`}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-[#8B5CF6]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#4A3D7A]" />
             Buy Recordings
-            <b className="text-xs bg-white rounded-full px-2.5 py-0.5 text-[#160B29] min-w-[22px] border border-gray-100">
+            <b className="text-xs bg-[#FAF7F2] rounded-full px-2.5 py-0.5 text-[#5C5575] min-w-[22px] border border-[#E6E0D8]">
               {programs.length || 5}
             </b>
           </button>
@@ -304,11 +303,11 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
           <div>
             {/* Header info */}
             <div className="mb-8">
-              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FFF8E6] text-[#B28200] border border-[#FFC900]/40 px-3 py-1 rounded-full mb-3.5">
+              <span className="inline-block text-[0.74rem] tracking-[0.08em] font-medium bg-[#FFF3CC] text-[#C79A00] px-[16px] py-[7px] rounded-full mb-3.5 border border-[#FFC900]/40 font-sans uppercase">
                 ENROLLING NOW
               </span>
-              <h3 className="text-2xl font-extrabold text-[#160B29] mb-2">Upcoming Courses</h3>
-              <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
+              <h3 className="text-2xl font-extrabold text-[#241E3D] mb-2">Upcoming Courses</h3>
+              <p className="text-[#5C5575] text-sm max-w-2xl leading-relaxed">
                 New live cohorts. Small groups, direct feedback from faculty, and early-bird pricing. Seats are limited.
               </p>
             </div>
@@ -318,44 +317,45 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
               {upcomingCourses.map((c, i) => (
                 <div
                   key={i}
-                  className="bg-white border border-[#EBE8E2] border-t-4 border-t-[#D54C80] rounded-[24px] p-6 relative flex flex-col justify-between hover:shadow-xl transition-all duration-300 min-h-[580px] overflow-hidden"
+                  className="bg-white border border-[#E6E0D8] border-t-4 border-t-[#FFC900] rounded-[20px] p-8 relative flex flex-col justify-between hover:shadow-xl transition-all duration-300 min-h-[580px] overflow-hidden"
                 >
                   {/* Top Badge */}
-                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[9px] tracking-wide uppercase font-extrabold bg-[#FAF1F5] text-[#D54C80] px-3 py-1 rounded-full shadow-sm">
+                  <span className="absolute top-4 right-4 inline-flex items-center gap-1 text-[0.64rem] tracking-[0.1em] uppercase font-bold bg-[#FFC900] text-[#1A1502] px-3 py-1 rounded-full shadow-sm">
                     ★ Enrolling
                   </span>
 
                   <div>
                     {/* Icon Container */}
-                    <div className="w-[50px] h-[50px] rounded-2xl bg-[#FAF1F5] text-[#D54C80] flex items-center justify-center border border-[#F5E2EC] mb-5 mt-1">
+                    <div className="w-[64px] h-[64px] rounded-[16px] bg-[#F7DCE8] text-[#E0568F] flex items-center justify-center border border-[#E6E0D8] mb-5 mt-1">
                       {c.icon}
                     </div>
 
                     {/* Course Title & Description */}
-                    <h3 className="text-[19px] font-extrabold text-[#1D172A] leading-tight mb-2.5 pr-16">
+                    <h3 className="text-[1.3rem] font-bold text-[#241E3D] leading-tight mb-2.5 pr-16">
                       {c.title}
                     </h3>
-                    <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                    <p className="text-[0.93rem] text-[#5C5575] leading-[1.55] mb-6">
                       {c.desc}
                     </p>
 
                     {/* Specifications */}
                     <div className="space-y-3 mb-6">
-                      <div className="flex items-center justify-between py-2 border-b border-dashed border-gray-100 text-xs">
-                        <span className="text-gray-400 font-bold uppercase tracking-wider">DURATION</span>
-                        <span className="text-[#1D172A] font-extrabold">{c.duration}</span>
+                      <div className="flex items-center justify-between py-2 border-b border-dashed border-[#E6E0D8] text-xs">
+                        <span className="text-[#5C5575] font-bold uppercase tracking-wider">DURATION</span>
+                        <span className="text-[#241E3D] font-extrabold">{c.duration}</span>
                       </div>
-                      <div className="flex items-center justify-between py-2 border-b border-dashed border-gray-100 text-xs">
-                        <span className="text-gray-400 font-bold uppercase tracking-wider">SESSIONS</span>
-                        <span className="text-[#1D172A] font-extrabold">{c.sessions}</span>
+                      <div className="flex items-center justify-between py-2 border-b border-dashed border-[#E6E0D8] text-xs">
+                        <span className="text-[#5C5575] font-bold uppercase tracking-wider">SESSIONS</span>
+                        <span className="text-[#241E3D] font-extrabold">{c.sessions}</span>
                       </div>
                     </div>
 
                     {/* Syllabus Features */}
                     <ul className="space-y-3 mb-8">
                       {c.features.map((feat, idx) => (
-                        <li key={idx} className="flex items-start gap-1 text-xs text-gray-500 font-medium">
-                          <span>✓ {feat}</span>
+                        <li key={idx} className="flex items-start gap-1 text-[0.93rem] text-[#5C5575] font-medium pl-6 relative">
+                          <span className="absolute left-0 top-[0.55em] w-3 h-[3px] rounded-full bg-gradient-to-r from-[#E0568F] to-[#FFC900]" />
+                          <span>{feat}</span>
                         </li>
                       ))}
                     </ul>
@@ -363,10 +363,10 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
 
                   <div>
                     {/* Pricing */}
-                    <div className="flex items-baseline gap-2 mb-4">
-                      <span className="text-[26px] font-black text-[#1D172A]">₹{c.price.toLocaleString('en-IN')}</span>
-                      <span className="text-sm text-gray-400 line-through">₹{c.originalPrice.toLocaleString('en-IN')}</span>
-                      <span className="text-[9px] tracking-wide uppercase font-extrabold text-[#D54C80] bg-[#FAF1F5] px-2 py-0.5 rounded border border-[#F5E2EC] ml-1.5">
+                    <div className="flex items-baseline gap-2 mb-4 flex-wrap">
+                      <span className="text-[1.85rem] font-extrabold text-[#241E3D]">₹{c.price.toLocaleString('en-IN')}</span>
+                      <span className="text-sm text-[#5C5575] line-through">₹{c.originalPrice.toLocaleString('en-IN')}</span>
+                      <span className="text-[0.66rem] tracking-[0.08em] uppercase font-bold text-[#C79A00] bg-[#FFF3CC] px-2.5 py-0.5 rounded-full ml-1.5">
                         EARLY-BIRD
                       </span>
                     </div>
@@ -374,7 +374,7 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
                     {/* CTA Button */}
                     <button
                       onClick={() => router.push(`/subscription`)}
-                      className="w-full py-3.5 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-full transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
+                      className="w-full py-[15px] bg-[#E0568F] hover:bg-[#B03A6C] text-white font-bold text-[1rem] rounded-full transition duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#E0568F]/15"
                     >
                       Enroll Now →
                     </button>
@@ -390,11 +390,11 @@ const PathologyMasterySeries = ({ showCounters = false }: { showCounters?: boole
           <div>
             {/* Header info */}
             <div className="mb-8">
-              <span className="inline-flex items-center gap-1.5 text-[9px] tracking-wider uppercase font-bold bg-[#FAF1F5] text-[#D54C80] border border-[#F5E2EC] px-3.5 py-1.5 rounded-full mb-3.5">
+              <span className="inline-flex items-center gap-1.5 text-[0.72rem] tracking-[0.14em] uppercase font-bold bg-[#EBE6F5] text-[#4A3D7A] border border-[#E6E0D8] px-3.5 py-1.5 rounded-full mb-3.5">
                 Recordings
               </span>
-              <h3 className="text-2xl font-extrabold text-[#160B29] mb-2">Course Recordings — Watch Anytime</h3>
-              <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
+              <h3 className="text-2xl font-extrabold text-[#241E3D] mb-2">Course Recordings — Watch Anytime</h3>
+              <p className="text-[#5C5575] text-sm max-w-2xl leading-relaxed">
                 Buy the full recorded series from our completed cohorts — one year of access to every session. <strong>Watch at your own pace, whenever suits you.</strong>
               </p>
             </div>
@@ -553,15 +553,15 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: -350, behavior: "smooth" })
           }
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-black p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-[#241E3D] p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
         >
-          <FaChevronLeft className="w-5 h-5 text-black" />
+          <FaChevronLeft className="w-5 h-5" />
         </button>
 
         {/* Scrollable Container */}
         <div
           id="courseScroll"
-          className="flex gap-8 overflow-x-auto scroll-smooth"
+          className="flex gap-8 overflow-x-auto scroll-smooth py-4"
           style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {programs.map((p, i) => {
@@ -580,7 +580,7 @@ const RecordedGrid = ({
               <div
                 key={productId || i}
                 onClick={() => router.push(`/pathology/${productId}`)}
-                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-[24px] overflow-hidden border border-[#EBE8E2] hover:border-[#FFCA00] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                className="w-[320px] flex-shrink-0 scroll-snap-align-start group relative bg-white rounded-[18px] overflow-hidden border border-[#E6E0D8] hover:border-[#FFC900] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
               >
                 <div className="relative z-10 flex flex-col h-full">
                   {/* Image Section */}
@@ -590,7 +590,7 @@ const RecordedGrid = ({
                       alt={p.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-750"
                     />
-                    <div className="absolute top-4 left-4 bg-[#FFF8E6] border border-[#FFC900]/30 text-[#B28200] font-extrabold text-[8px] tracking-wider px-3 py-1.5 rounded-full uppercase shadow-sm backdrop-blur-sm">
+                    <div className="absolute top-4 left-4 bg-[#FFF8E3] border border-[#FFC900]/30 text-[#C79A00] font-bold text-[8px] tracking-wider px-3 py-1.5 rounded-full uppercase shadow-sm backdrop-blur-sm">
                       {p.category || "Pathology"}
                     </div>
                   </div>
@@ -599,37 +599,37 @@ const RecordedGrid = ({
                   <div className="p-6 flex flex-col justify-between flex-1 bg-white">
                     <div>
                       {/* Title */}
-                      <h3 className="text-base leading-tight font-extrabold text-[#1D172A] min-h-[44px] mb-3 line-clamp-2">
+                      <h3 className="text-base leading-tight font-extrabold text-[#241E3D] min-h-[44px] mb-3 line-clamp-2">
                         {p.title}
                       </h3>
 
                       {/* Info Badge */}
                       <div className="mb-3.5">
-                        <div className="flex items-center gap-1 text-[8px] text-[#B28200] bg-[#FFF8E6] border border-[#FFC900]/20 px-2.5 py-1.5 rounded-md uppercase font-bold tracking-wide">
+                        <div className="flex items-center gap-1 text-[8px] text-[#C79A00] bg-[#FFF8E3] border border-[#FFC900]/20 px-2.5 py-1.5 rounded-md uppercase font-bold tracking-wide">
                           <span>★</span>
                           <span className="leading-none">{badgeText}</span>
                         </div>
                       </div>
 
                       {/* Rating & Learners */}
-                      <div className="mb-4 flex items-center justify-between text-xs font-semibold text-gray-500">
+                      <div className="mb-4 flex items-center justify-between text-xs font-semibold text-[#5C5575]">
                         <div className="flex items-center gap-1">
-                          <span className="text-[#D54C80] text-sm">★</span>
-                          <span className="text-[#1D172A] font-extrabold">{p.rating || ratingValue}</span>
+                          <span className="text-[#E0568F] text-sm">★</span>
+                          <span className="text-[#241E3D] font-extrabold">{p.rating || ratingValue}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <FaUsers className="w-3.5 h-3.5 text-[#D54C80]/80" />
-                          <span className="text-[#1D172A] font-bold">{p.total_reviews ? `${p.total_reviews}+ learners` : learnersValue}</span>
+                          <FaUsers className="w-3.5 h-3.5 text-[#E0568F]/80" />
+                          <span className="text-[#241E3D] font-bold">{p.total_reviews ? `${p.total_reviews}+ learners` : learnersValue}</span>
                         </div>
                       </div>
-                      <div className="border-b border-gray-100 mb-4"></div>
+                      <div className="border-b border-[#E6E0D8] mb-4"></div>
 
                       {/* Duration & Price */}
                       <div className="flex items-center justify-between mb-5">
-                        <p className="text-xs text-gray-400 font-semibold">
+                        <p className="text-xs text-[#5C5575] font-semibold">
                           {p.duration || "6"} month access
                         </p>
-                        <p className="text-[22px] font-black text-[#1D172A]">
+                        <p className="text-[22px] font-black text-[#241E3D]">
                           {formatCurrency(p.price, programCurrency)}
                         </p>
                       </div>
@@ -657,7 +657,7 @@ const RecordedGrid = ({
                           e.stopPropagation();
                           router.push(`/pathology/${productId}`);
                         }}
-                        className="w-full py-3 bg-[#D54C80] hover:bg-[#b83b6b] text-white font-extrabold text-sm rounded-full transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#D54C80]/15"
+                        className="w-full py-3 bg-[#E0568F] hover:bg-[#B03A6C] text-white font-bold text-sm rounded-full transition duration-200 flex items-center justify-center gap-1 cursor-pointer shadow-md shadow-[#E0568F]/15"
                       >
                         Enroll Now →
                       </button>
@@ -676,9 +676,9 @@ const RecordedGrid = ({
               .getElementById("courseScroll")
               ?.scrollBy({ left: 350, behavior: "smooth" })
           }
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-black p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white border border-[#FFC900]/40 text-[#241E3D] p-3 rounded-full shadow-md hover:bg-[#fff7db] transition cursor-pointer"
         >
-          <FaChevronRight className="w-5 h-5 text-black" />
+          <FaChevronRight className="w-5 h-5" />
         </button>
       </div>
     </>

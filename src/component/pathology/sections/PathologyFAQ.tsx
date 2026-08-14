@@ -13,7 +13,7 @@ export type FaqItem = {
 };
 
 const PathologyFAQ = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0); // First open by default
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,39 +38,39 @@ const PathologyFAQ = () => {
   };
 
   return (
-    <section className="py-20 bg-[#FAF8F5] border-t border-[#EBE8E2] font-sans">
-      <div className="max-w-4xl mx-auto px-6">
-        
+    <section className="py-[56px] bg-[#FAF7F2] font-sans">
+      <div className="max-w-[820px] mx-auto px-6">
+
         {/* Subtitle & Title */}
-        <div className="text-center mb-16">
-          <div className="flex items-center gap-3 justify-center mb-4">
+        <div className="text-center mb-[50px]">
+          <div className="flex items-center gap-3 justify-center mb-5">
             <div className="w-[34px] h-[2px] bg-[#FFC900]" />
-            <span className="text-xs uppercase tracking-[0.2em] text-[#D54C80] font-black">Good to Know</span>
+            <span className="text-[11px] uppercase tracking-[0.18em] text-[#E0568F] font-bold">Good to Know</span>
             <div className="w-[34px] h-[2px] bg-[#FFC900]" />
           </div>
-          <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">
-            Frequently asked <span className="text-[#D54C80]">questions.</span>
+          <h2 className="text-3xl md:text-[2.6rem] font-extrabold tracking-tight text-[#241E3D] leading-tight">
+            Frequently asked <span className="text-[#E0568F]">questions.</span>
           </h2>
         </div>
 
         {/* Accordion List */}
-        <div className="border-t border-[#EBE8E2] divide-y divide-[#EBE8E2]">
+        <div className="border-t border-[#E6E0D8] divide-y divide-[#E6E0D8]">
           {loading ? (
             <FaqSkeleton />
           ) : (
             faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
-                <div key={faq.id} className="py-6">
+                <div key={faq.id} className="border-b border-[#E6E0D8]">
                   <button
                     onClick={() => toggleFaq(index)}
-                    className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer group"
+                    className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer py-[22px] pr-10 relative group"
                   >
-                    <span className="text-base font-extrabold text-[#1D172A] group-hover:text-[#D54C80] transition duration-150 pr-4">
+                    <span className="text-[1.05rem] font-bold text-[#241E3D] group-hover:text-[#E0568F] transition duration-150">
                       {faq.title}
                     </span>
-                    <span className="text-2xl text-[#D54C80] font-light leading-none select-none pl-4">
-                      {isOpen ? '—' : '+'}
+                    <span className="absolute right-[6px] top-1/2 -translate-y-1/2 text-[1.5rem] text-[#E0568F] font-normal leading-none select-none">
+                      {isOpen ? '–' : '+'}
                     </span>
                   </button>
 
@@ -81,12 +81,20 @@ const PathologyFAQ = () => {
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
+                        className="overflow-hidden bg-[#FAF7F2]"
                       >
-                        <div 
-                          className="mt-4 text-[#5C5575] text-sm md:text-base leading-relaxed pr-8"
+                        <div
+                          className="pb-[22px] text-[#5C5575] text-[0.97rem] leading-[1.65] bg-[#FAF7F2] faq-description-container"
                           dangerouslySetInnerHTML={{
-                            __html: faq.description
+                            __html: `<style>
+                              .faq-description-container, 
+                              .faq-description-container p, 
+                              .faq-description-container span,
+                              .faq-description-container div {
+                                background-color: transparent !important;
+                                background: transparent !important;
+                              } 
+                            </style>` + faq.description
                               .replace(/&lt;/g, "<")
                               .replace(/&gt;/g, ">")
                               .replace(/&amp;/g, "&")

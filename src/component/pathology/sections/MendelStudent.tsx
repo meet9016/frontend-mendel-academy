@@ -153,18 +153,18 @@ export default function MendelStudent() {
   const progressPercent = ((startIndex + cardsPerPage) / testimonials.length) * 100;
 
   return (
-    <section id="testimonials" className="bg-[#FAF8F5] py-20 border-b border-gray-200/50 font-sans select-none overflow-hidden">
-      <div className="max-w-[1380px] mx-auto px-6">
+    <section id="testimonials" className="bg-[#FAF7F2] py-[56px] border-b border-[#E6E0D8] font-sans select-none overflow-hidden">
+      <div className="max-w-[1180px] mx-auto px-6">
         
         {/* Subtitle & Title */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-[44px]">
           <div className="flex items-center gap-3 justify-center mb-4">
-            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
-            <span className="text-[10px] uppercase tracking-[0.25em] text-[#D54C80] font-bold">STUDENT TESTIMONIALS</span>
-            <div className="w-[34px] h-[1.5px] bg-[#FCCA29]" />
+            <div className="w-[34px] h-[1.5px] bg-[#FFC900]" />
+            <span className="text-[11px] uppercase tracking-[0.18em] text-[#E0568F] font-bold">Student Testimonials</span>
+            <div className="w-[34px] h-[1.5px] bg-[#FFC900]" />
           </div>
-          <h2 className="text-3xl md:text-[40px] font-black tracking-tight text-[#1D172A]">
-            What Mendel students <span className="text-[#D54C80]">say.</span>
+          <h2 className="text-3xl md:text-[2.6rem] font-extrabold tracking-tight text-[#241E3D]">
+            What Mendel students <span className="text-[#E0568F]">say.</span>
           </h2>
         </div>
 
@@ -173,7 +173,7 @@ export default function MendelStudent() {
           {/* Previous Button */}
           <button
             onClick={handlePrev}
-            className="hidden sm:flex p-3.5 border border-gray-200 rounded-full bg-white hover:bg-gray-50 text-gray-600 hover:text-black transition duration-150 cursor-pointer shadow-sm z-10"
+            className="hidden sm:flex p-3.5 border border-[#E6E0D8] rounded-full bg-white hover:bg-gray-50 text-[#241E3D] transition duration-150 cursor-pointer shadow-sm z-10"
             aria-label="Previous testimonials"
           >
             <FaChevronLeft className="w-4 h-4" />
@@ -193,19 +193,19 @@ export default function MendelStudent() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
                     onClick={() => setSelectedTestimonial(t)}
-                    className="bg-white border border-[#EBE3D8] rounded-[22px] p-8 relative flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-lg transition duration-300 cursor-pointer group min-h-[250px]"
+                    className="bg-white border border-[#E6E0D8] rounded-[18px] p-8 relative flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-lg transition duration-300 cursor-pointer group min-h-[250px]"
                   >
                     {/* Floating Quote Mark */}
-                    <div className="absolute top-6 right-8 text-6xl text-[#D54C80]/15 font-serif pointer-events-none select-none">
+                    <div className="absolute top-4 right-5 text-6xl text-[#F7DCE8] font-serif pointer-events-none select-none">
                       “
                     </div>
 
-                    <p className="text-[#1D172A] text-sm md:text-[15px] leading-relaxed mb-6 font-normal line-clamp-4 pr-4">
+                    <p className="text-[#241E3D] text-[0.95rem] leading-[1.58] mb-6 font-normal line-clamp-4 pr-4">
                       {t.text}
                     </p>
 
-                    <div className="flex items-center gap-3 border-t border-gray-100 pt-5 mt-auto">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#EA580C] to-[#FCCA29] flex items-center justify-center text-white font-extrabold text-sm shadow-sm flex-shrink-0">
+                    <div className="flex items-center gap-3 border-t border-[#E6E0D8] pt-4 mt-auto">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#E0568F] to-[#FFC900] flex items-center justify-center text-white font-extrabold text-sm shadow-sm flex-shrink-0">
                         {t.initials === "“" ? (
                           <span className="text-xl font-serif leading-none pb-0.5">“</span>
                         ) : (
@@ -213,8 +213,8 @@ export default function MendelStudent() {
                         )}
                       </div>
                       <div className="overflow-hidden">
-                        <h4 className="font-bold text-sm text-[#1D172A] truncate">{t.name}</h4>
-                        <p className="text-gray-400 text-xs truncate">{t.role}</p>
+                        <h4 className="font-extrabold text-[0.94rem] text-[#241E3D] truncate">{t.name}</h4>
+                        <p className="text-[#5C5575] text-[0.78rem] truncate">{t.role}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -226,7 +226,7 @@ export default function MendelStudent() {
           {/* Next Button */}
           <button
             onClick={handleNext}
-            className="hidden sm:flex p-3.5 border border-gray-200 rounded-full bg-white hover:bg-gray-50 text-gray-600 hover:text-black transition duration-150 cursor-pointer shadow-sm z-10"
+            className="hidden sm:flex p-3.5 border border-[#E6E0D8] rounded-full bg-white hover:bg-gray-50 text-[#241E3D] transition duration-150 cursor-pointer shadow-sm z-10"
             aria-label="Next testimonials"
           >
             <FaChevronRight className="w-4 h-4" />
