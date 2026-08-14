@@ -254,7 +254,7 @@ const RequestQuoteSection = () => {
                 {downloads.map((dl, idx) => (
                   <a
                     key={idx}
-                    href={dl.file}
+                    href={`/${dl.file}`}
                     download
                     data-track={dl.dataTrack}
                     data-pdf={dl.dataPdf}

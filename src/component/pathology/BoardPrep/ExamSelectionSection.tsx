@@ -167,17 +167,29 @@ const ExamSelectionSection = () => {
                     {selectedExam.btnText} <span className="font-normal">→</span>
                   </button>
                   
-                  <a
-                    href="#request-quote"
-                    className="px-7 py-3.5 rounded-full border border-gray-800 text-gray-900 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2.5 cursor-pointer"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
-                    </svg>
-                    Curriculum PDF
-                  </a>
+                  {(() => {
+                    const fileMap: Record<string, string> = {
+                      frcpath1: "Mendel-FRCPath-Part-1-Curriculum.pdf",
+                      frcpath2: "Mendel-FRCPath-Part-2-Curriculum.pdf",
+                      neetss: "Mendel-NEET-SS-Pathology-Curriculum.pdf",
+                      abpath: "Mendel-ABPath-Subspecialty-Curriculum.pdf"
+                    };
+                    const filename = fileMap[selectedExam.id] || "Mendel-FRCPath-Part-1-Curriculum.pdf";
+                    return (
+                      <a
+                        href={`/${filename}`}
+                        download
+                        className="px-7 py-3.5 rounded-full border border-gray-800 text-gray-900 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2.5 cursor-pointer bg-transparent no-underline"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Curriculum PDF
+                      </a>
+                    );
+                  })()}
                 </div>
               </div>
 

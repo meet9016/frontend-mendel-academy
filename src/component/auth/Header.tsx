@@ -498,20 +498,7 @@ export default function Header() {
                             Fellowship
                           </button>
                         </li>
-                        <li>
-                          <button
-                            type="button"
-                            className="w-full text-left text-sm ff-font text-gray-700 hover:text-[#E94E8F] hover:bg-pink-50 lg:px-2 py-1.5 lg:py-2 rounded cursor-pointer transition-all duration-200 block"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              router.push('/pathology/mastery-courses');
-                              setIsPathologyDropdownOpen(false);
-                              setIsMenuOpen(false);
-                            }}
-                          >
-                            Mastery Courses
-                          </button>
-                        </li>
+                 
                         <li>
                           <button
                             type="button"
