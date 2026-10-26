@@ -1,10 +1,10 @@
 "use client";
 
 import { FaStar } from "react-icons/fa";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiMenu } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 
-const NewuserOverview = () => {
+const NewuserOverview = ({ onOpenSidebar }: { onOpenSidebar?: () => void }) => {
     return (
         <div className="space-y-6">
 
@@ -49,10 +49,17 @@ const NewuserOverview = () => {
             {/* ================= HEADER ================= */}
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
 
-                <div>
-                    <p className="text-[10px] sm:text-[11px] tracking-widest text-gray-500 ff-font mb-1">
-                        ACCOUNT
-                    </p>
+                <div className="w-full sm:w-auto">
+                    <div className="flex items-center justify-between sm:block mb-1">
+                        <p className="text-[10px] sm:text-[11px] tracking-widest text-gray-500 ff-font">
+                            ACCOUNT
+                        </p>
+                        {/* Mobile Edit Profile Button (level with Account on the right) */}
+                        <button className="sm:hidden flex cursor-pointer items-center gap-1.5 border border-gray-300 ff-font px-3 py-1.5 rounded-lg text-xs font-medium shrink-0">
+                            <FiEdit2 className="text-[12px]" />
+                            Edit profile
+                        </button>
+                    </div>
 
                     <h1 className="text-2xl sm:text-[34px] font-bold ff-font-bold mb-1">
                         Welcome back, Gargi.
@@ -63,7 +70,8 @@ const NewuserOverview = () => {
                     </p>
                 </div>
 
-                <button className="px-4 py-2 border border-gray-300 cursor-pointer rounded-lg text-sm ff-font flex items-center justify-center gap-2 w-full sm:w-auto">
+                {/* Desktop Edit Profile Button */}
+                <button className="hidden sm:flex px-4 py-2 border border-gray-300 cursor-pointer rounded-lg text-sm ff-font items-center justify-center gap-2 shrink-0">
                     <FiEdit2 className="text-[14px]" />
                     Edit profile
                 </button>

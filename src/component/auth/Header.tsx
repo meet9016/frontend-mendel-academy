@@ -311,12 +311,12 @@ export default function Header() {
           {/* Logo */}
           <div
             onClick={() => router.push("/")}
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center gap-2 cursor-pointer h-full max-h-20"
           >
             <img
               src={"../../../images/main logo.png"}
               alt="Mendel Academy Logo"
-              className="w-40 h-40 object-contain"
+              className="w-36 sm:w-40 h-12 sm:h-14 object-contain"
             />
           </div>
 

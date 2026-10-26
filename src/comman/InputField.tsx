@@ -23,7 +23,7 @@ const InputField: React.FC<InputFieldProps> = ({
     <div className="relative flex flex-col">
       <div className="relative">
         {icon && (
-          <span className="absolute left-4 top-1/2 -translate-y-1/2">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
             {icon}
           </span>
         )}
@@ -37,7 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({
           required
           className={`w-full ${
             icon ? "pl-12" : "pl-4"
-          } pr-4 py-3 md:py-4 rounded-md bg-white border text-gray-800 
+          } pr-4 py-3 md:py-4 text-sm sm:text-base rounded-xl bg-white border text-gray-800 
           placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all duration-200
           ${
             error

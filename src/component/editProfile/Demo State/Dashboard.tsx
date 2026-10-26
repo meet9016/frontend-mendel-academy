@@ -377,13 +377,13 @@ return <ProfileSkeleton />;
 }
 
 return (
-<div className="min-h-screen bg-gray-100 p-6">
-<div className="max-w-[1380px] mx-auto space-y-8">
+<div className="min-h-screen bg-gray-100 p-0 sm:p-6">
+<div className="max-w-[1380px] mx-auto space-y-6 sm:space-y-8">
 {/* Student Profile Card */}
-<div className="bg-white rounded-2xl shadow-md p-8 flex flex-col lg:flex-row items-start lg:items-center gap-8">
-<div className="relative">
+<div className="bg-white rounded-2xl shadow-md p-5 sm:p-6 lg:p-8 flex flex-col lg:flex-row items-start lg:items-center gap-6 sm:gap-8">
+<div className="relative shrink-0">
 <div
-className="w-28 h-28 rounded-2xl overflow-hidden ring-4 ring-[#FFCA00] cursor-pointer hover:opacity-90 transition-opacity"
+className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden ring-4 ring-[#FFCA00] cursor-pointer hover:opacity-90 transition-opacity"
 onClick={() => hasProfilePhoto() && setShowPhotoPreview(true)}
 >
 <img
@@ -398,15 +398,15 @@ e.currentTarget.src = `https://ui-avatars.com/api/?name=${profileData?.user?.fir
 <button
 onClick={() => fileInputRef.current?.click()}
 disabled={uploading}
-className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#FFCA00] rounded-lg flex items-center justify-center hover:bg-[#f5c000] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+className="absolute -bottom-2 -right-2 w-9 h-9 sm:w-10 sm:h-10 bg-[#FFCA00] rounded-lg flex items-center justify-center hover:bg-[#f5c000] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
 title={hasProfilePhoto() ? "Edit photo" : "Upload photo"}
 >
 {uploading ? (
 <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
 ) : hasProfilePhoto() ? (
-<FaEdit className="w-5 h-5 text-black" />
+<FaEdit className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
 ) : (
-<FaCamera className="w-5 h-5 text-black" />
+<FaCamera className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
 )}
 </button>
 <input
@@ -418,22 +418,22 @@ className="hidden"
 />
 </div>
 
-<div className="flex-1">
+<div className="flex-1 w-full min-w-0">
 {isEditMode ? (
 <div className="space-y-4">
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
 <input
 type="text"
 value={editFormData.first_name}
 onChange={(e) => setEditFormData({ ...editFormData, first_name: e.target.value })}
-className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font"
+className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font text-sm sm:text-base"
 placeholder="First Name"
 />
 <input
 type="text"
 value={editFormData.last_name}
 onChange={(e) => setEditFormData({ ...editFormData, last_name: e.target.value })}
-className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font"
+className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font text-sm sm:text-base"
 placeholder="Last Name"
 />
 </div>
@@ -441,26 +441,26 @@ placeholder="Last Name"
 type="email"
 value={editFormData.email}
 onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font text-sm sm:text-base"
 placeholder="Email"
 />
 <input
 type="tel"
 value={editFormData.phone}
 onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
-className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ffca00] ff-font text-sm sm:text-base"
 placeholder="Phone Number"
 />
-<div className="flex gap-3">
+<div className="flex flex-wrap gap-2.5 sm:gap-3">
 <button
 onClick={handleEditSubmit}
-className="bg-[#ffca00] text-black font-semibold ff-font-bold px-6 py-2 rounded-lg hover:bg-[#f5c000] transition-all"
+className="bg-[#ffca00] text-black font-semibold ff-font-bold px-5 sm:px-6 py-2 rounded-lg hover:bg-[#f5c000] transition-all text-sm sm:text-base"
 >
 Save Changes
 </button>
 <button
 onClick={() => setIsEditMode(false)}
-className="bg-gray-200 text-gray-700 font-semibold ff-font px-6 py-2 rounded-lg hover:bg-gray-300 transition-all"
+className="bg-gray-200 text-gray-700 font-semibold ff-font px-5 sm:px-6 py-2 rounded-lg hover:bg-gray-300 transition-all text-sm sm:text-base"
 >
 Cancel
 </button>
@@ -468,60 +468,62 @@ Cancel
 </div>
 ) : (
 <>
-<div className="flex items-center gap-3 mb-1">
-<h1 className="text-3xl font-bold ff-font-bold">
+<div className="flex items-center gap-2 sm:gap-3 mb-1">
+<h1 className="text-2xl sm:text-3xl font-bold ff-font-bold break-words">
 {profileData?.user?.first_name} {profileData?.user?.last_name}
 </h1>
 <button
 onClick={() => setIsEditMode(true)}
-className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
 >
-<FaEdit className="w-5 h-5 text-gray-600" />
+<FaEdit className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
 </button>
 </div>
-<p className="ff-font text-sm mb-4 text-gray-600">Student Profile</p>
+<p className="ff-font text-xs sm:text-sm mb-4 text-gray-600">Student Profile</p>
 
 {/* Show active QBank pro plan if exists */}
 {profileData?.cart?.payBill?.some((p: any) => p.cart_type === "qbank_plan") && (
-<div className="mb-4 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold ff-font flex items-center gap-2">
-<FaCheckCircle className="w-3 h-3" />
+<div className="mb-4 inline-flex flex-wrap bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold ff-font items-center gap-2">
+<FaCheckCircle className="w-3 h-3 shrink-0" />
+<span>
 Currently active in {" "}
 {profileData.cart.payBill.filter((p: any) => p.cart_type === "qbank_plan")[0]?.qbank_plan_details?.name || "QBank Pro"} Plan
+</span>
 </div>
 )}
 
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
-<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center">
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3 min-w-0">
+<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center shrink-0">
 <MdEmail className="w-5 h-5 text-primary" />
 </div>
-<div>
+<div className="min-w-0 flex-1">
 <p className="text-xs ff-font text-gray-500">Email</p>
-<p className="text-sm font-medium text-gray-800 ff-font">
+<p className="text-sm font-medium text-gray-800 ff-font break-all">
 {profileData?.user?.email}
 </p>
 </div>
 </div>
 
-<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
-<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center">
+<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3 min-w-0">
+<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center shrink-0">
 <MdPhone className="w-5 h-5 text-primary" />
 </div>
-<div>
+<div className="min-w-0 flex-1">
 <p className="text-xs ff-font text-gray-500">Phone</p>
-<p className="text-sm font-medium ff-font-bold">
+<p className="text-sm font-medium ff-font-bold break-all">
 {profileData?.user?.phone || "Not provided"}
 </p>
 </div>
 </div>
 
-<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
-<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center">
+<div className="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3 min-w-0">
+<div className="w-10 h-10 rounded-lg bg-[#fff9df] flex items-center justify-center shrink-0">
 <MdCalendarToday className="w-5 h-5 text-primary" />
 </div>
-<div>
+<div className="min-w-0 flex-1">
 <p className="text-xs ff-font text-gray-500">Member Since</p>
-<p className="text-sm font-medium ff-font-bold">
+<p className="text-sm font-medium ff-font-bold break-all">
 {new Date(profileData?.user?.createdAt).toLocaleDateString("en-IN", {
 month: "short",
 year: "numeric",
@@ -536,67 +538,67 @@ year: "numeric",
 </div>
 
 {/* Stats Cards */}
-<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
 {stats.map((stat, index) => (
 <div
 key={index}
-className="bg-white rounded-2xl shadow-md p-5 flex flex-col items-start hover:shadow-lg transition-shadow"
+className="bg-white rounded-2xl shadow-md p-3.5 sm:p-5 flex flex-col items-start hover:shadow-lg transition-shadow"
 >
-<div className={`p-2 rounded-lg mb-3 ${stat.color}`}>
-<stat.icon className="w-6 h-6" />
+<div className={`p-2 rounded-lg mb-2 sm:mb-3 ${stat.color}`}>
+<stat.icon className="w-5 h-5 sm:w-6 sm:h-6" />
 </div>
-<p className="text-2xl font-bold ff-font-bold">{stat.value}</p>
-<p className="text-sm ff-font text-gray-500">{stat.label}</p>
+<p className="text-xl sm:text-2xl font-bold ff-font-bold">{stat.value}</p>
+<p className="text-xs sm:text-sm ff-font text-gray-500">{stat.label}</p>
 </div>
 ))}
 </div>
 
 {/* Dashboard Overview */}
-<div className="flex items-center gap-4">
-<h2 className="text-2xl font-bold ff-font-bold">
+<div className="flex items-center gap-3 sm:gap-4">
+<h2 className="text-xl sm:text-2xl font-bold ff-font-bold">
 Dashboard Overview
 </h2>
 <div className="flex-1 h-px bg-gray-300"></div>
 </div>
 
 {/* Three Column Grid */}
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
 {/* Cart */}
-<div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-<div className="flex items-center gap-3 mb-6">
+<div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 hover:shadow-lg transition">
+<div className="flex items-center gap-3 mb-4 sm:mb-6">
 <div className="p-2 rounded-lg bg-[#fff9df] text-primary">
 <FaGraduationCap className="w-5 h-5" />
 </div>
 <div>
-<h3 className="text-lg font-bold ff-font-bold">Cart</h3>
+<h3 className="text-base sm:text-lg font-bold ff-font-bold">Cart</h3>
 <p className="text-xs ff-font text-gray-500">
 {profileData?.cart?.addToCartItem?.length || 0} items
 </p>
 </div>
 </div>
-<div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+<div className="space-y-3 sm:space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
 {profileData?.cart?.addToCartItem?.length > 0 ? (
 profileData.cart.addToCartItem.map((c: any) => (
 <div
 key={c._id}
-className={`p-4 rounded-xl border-2 ${isExpiringSoon(c.expiresOn)
+className={`p-3.5 sm:p-4 rounded-xl border-2 ${isExpiringSoon(c.expiresOn)
 ? "border-red-300 bg-red-50"
 : "border-gray-200 bg-gray-50"
 }`}
 >
-<div className="flex justify-between items-start mb-3">
-<div>
-<p className="font-bold ff-font-bold">
+<div className="flex justify-between items-start gap-2 mb-2 sm:mb-3">
+<div className="min-w-0 flex-1">
+<p className="font-bold ff-font-bold text-sm sm:text-base break-words">
 {c.category_name}
 </p>
 </div>
-<span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#FFCA00]">
+<span className="px-2.5 sm:px-3 py-1 rounded-full text-xs font-semibold bg-[#FFCA00] shrink-0">
 ₹{c.total_price || c.price}
 </span>
 </div>
 {isExpiringSoon(c.expiresOn) && (
 <p className="text-xs ff-font text-red-600 font-semibold mt-2 flex items-center gap-1">
-<FaExclamationTriangle className="w-4 h-4" /> Expires Soon
+<FaExclamationTriangle className="w-4 h-4 shrink-0" /> Expires Soon
 – Renew Now!
 </p>
 )}
@@ -609,13 +611,13 @@ className={`p-4 rounded-xl border-2 ${isExpiringSoon(c.expiresOn)
 </div>
 
 {/* Book Purchases */}
-<div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-<div className="flex items-center gap-3 mb-6">
+<div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 hover:shadow-lg transition">
+<div className="flex items-center gap-3 mb-4 sm:mb-6">
 <div className="p-2 rounded-lg bg-[#fff9df] text-primary">
 <FaBook className="w-5 h-5" />
 </div>
 <div>
-<h3 className="text-lg font-bold ff-font-bold">
+<h3 className="text-base sm:text-lg font-bold ff-font-bold">
 Purchases List
 </h3>
 <p className="text-xs ff-font text-gray-500">
@@ -623,16 +625,16 @@ Purchases List
 </p>
 </div>
 </div>
-<div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+<div className="space-y-3 sm:space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
 {profileData?.cart?.payBill?.length > 0 ? (
 profileData.cart.payBill.map((book: any) => (
 <div
 key={book._id}
-className="flex items-center justify-between p-3 border-l-4 border-[#FFCA00] bg-gray-50 cursor-pointer hover:bg-[#fff9df] transition rounded"
+className="flex items-center justify-between p-3 border-l-4 border-[#FFCA00] bg-gray-50 cursor-pointer hover:bg-[#fff9df] transition rounded gap-2"
 >
-<div>
-<p className="ff-font-bold">{book.category_name}</p>
-<p className="text-sm ff-font text-gray-500">
+<div className="min-w-0 flex-1">
+<p className="ff-font-bold text-sm sm:text-base break-words">{book.category_name}</p>
+<p className="text-xs sm:text-sm ff-font text-gray-500">
 Purchased:{" "}
 {new Date(book.createdAt).toLocaleDateString("en-IN", {
 day: "numeric",
@@ -641,7 +643,7 @@ year: "numeric",
 })}
 </p>
 </div>
-<FiExternalLink className="w-4 h-4 text-gray-500" />
+<FiExternalLink className="w-4 h-4 text-gray-500 shrink-0" />
 </div>
 ))
 ) : (
@@ -651,17 +653,17 @@ year: "numeric",
 </div>
 
 {/* Payment History */}
-<div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-<div className="flex items-center justify-between gap-3 mb-6">
-<div className="flex items-center gap-3">
-<div className="p-2 rounded-lg bg-[#fff9df] text-primary">
+<div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 hover:shadow-lg transition">
+<div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+<div className="flex items-center gap-3 min-w-0">
+<div className="p-2 rounded-lg bg-[#fff9df] text-primary shrink-0">
 <FaCreditCard className="w-5 h-5" />
 </div>
-<div>
-<h3 className="text-lg font-bold ff-font-bold">
+<div className="min-w-0">
+<h3 className="text-base sm:text-lg font-bold ff-font-bold">
 Payment History
 </h3>
-<p className="text-xs ff-font text-gray-500">
+<p className="text-xs ff-font text-gray-500 truncate">
 {profileData?.payment?.filter((p: any) =>
 p.payment_status?.toLowerCase() === 'paid' ||
 p.payment_status?.toLowerCase() === 'succeeded'
@@ -677,14 +679,14 @@ p.payment_status?.toLowerCase() === 'succeeded'
 <button
 onClick={downloadUserPayments}
 disabled={uploading}
-className="bg-[#ffca00] px-4 py-2 rounded-md text-sm font-medium ff-font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-[#ffca00]/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+className="bg-[#ffca00] px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium ff-font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer hover:bg-[#ffca00]/90 transition disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
 >
 {uploading ? 'Downloading...' : 'Download'}
 </button>
 )}
 </div>
 
-<div className="space-y-4 max-h-[480px] overflow-y-auto custom-scrollbar">
+<div className="space-y-3 sm:space-y-4 max-h-[480px] overflow-y-auto custom-scrollbar">
 {profileData?.payment?.filter((p: any) =>
 p.payment_status?.toLowerCase() === 'paid' ||
 p.payment_status?.toLowerCase() === 'succeeded'
@@ -697,14 +699,14 @@ p.payment_status?.toLowerCase() === 'succeeded'
 .map((p: any) => (
 <div
 key={p._id}
-className="flex items-center justify-between p-3 bg-[#fff9df] rounded-xl"
+className="flex items-center justify-between p-3 bg-[#fff9df] rounded-xl gap-2"
 >
-<div className="flex items-center gap-3 flex-1">
-<div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+<div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
+<div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0">
 <FaCheckCircle className="w-4 h-4 text-green-600" />
 </div>
 <div className="min-w-0 flex-1">
-<p className="text-sm ff-font text-gray-500">
+<p className="text-xs sm:text-sm ff-font text-gray-500">
 {new Date(p.createdAt).toLocaleDateString("en-IN", {
 day: "numeric",
 month: "short",
@@ -715,13 +717,13 @@ year: "numeric",
 {p.payment_status}
 </p>
 {p.payment_method && (
-<p className="text-xs text-gray-500 ff-font capitalize">
+<p className="text-xs text-gray-500 ff-font capitalize truncate">
 via {p.payment_method}
 </p>
 )}
 </div>
 </div>
-<p className="text-lg font-bold ff-font-bold whitespace-nowrap ml-2">
+<p className="text-base sm:text-lg font-bold ff-font-bold whitespace-nowrap ml-2 shrink-0">
 {p.currency === 'INR' ? '₹' : '$'}{p.amount.toLocaleString("en-IN")}
 </p>
 </div>
@@ -764,11 +766,11 @@ className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 rounded-fu
 </button>
 
 {/* User info header */}
-<div className="absolute -top-20 left-0 text-white">
-<h3 className="text-2xl font-bold ff-font-bold mb-1">
+<div className="absolute -top-16 sm:-top-20 left-0 text-white">
+<h3 className="text-xl sm:text-2xl font-bold ff-font-bold mb-0.5 sm:mb-1">
 {profileData?.user?.first_name} {profileData?.user?.last_name}
 </h3>
-<p className="text-sm text-gray-300 ff-font">Profile Photo</p>
+<p className="text-xs sm:text-sm text-gray-300 ff-font">Profile Photo</p>
 </div>
 
 {/* Image container with proper aspect ratio */}
@@ -776,34 +778,34 @@ className="absolute -top-14 right-0 p-3 bg-white/10 hover:bg-white/20 rounded-fu
 <img
 src={getProfilePhotoUrl()}
 alt="Profile Preview"
-className="w-full h-auto max-h-[80vh] object-contain"
+className="w-full h-auto max-h-[70vh] sm:max-h-[80vh] object-contain"
 onError={(e) => {
 e.currentTarget.src = `https://ui-avatars.com/api/?name=${profileData?.user?.first_name}+${profileData?.user?.last_name}&background=ffca00&color=000&size=600`;
 }}
 />
 
 {/* Decorative corner borders */}
-<div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-[#ffca00] rounded-tl-lg"></div>
-<div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-[#ffca00] rounded-tr-lg"></div>
-<div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-[#ffca00] rounded-bl-lg"></div>
-<div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-[#ffca00] rounded-br-lg"></div>
+<div className="absolute top-4 left-4 w-8 h-8 sm:w-12 sm:h-12 border-t-4 border-l-4 border-[#ffca00] rounded-tl-lg"></div>
+<div className="absolute top-4 right-4 w-8 h-8 sm:w-12 sm:h-12 border-t-4 border-r-4 border-[#ffca00] rounded-tr-lg"></div>
+<div className="absolute bottom-4 left-4 w-8 h-8 sm:w-12 sm:h-12 border-b-4 border-l-4 border-[#ffca00] rounded-bl-lg"></div>
+<div className="absolute bottom-4 right-4 w-8 h-8 sm:w-12 sm:h-12 border-b-4 border-r-4 border-[#ffca00] rounded-br-lg"></div>
 </div>
 
 {/* Action buttons */}
-<div className="flex items-center justify-center gap-4 mt-6">
+<div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
 <button
 onClick={() => {
 setShowPhotoPreview(false);
 fileInputRef.current?.click();
 }}
-className="bg-[#ffca00] text-black font-semibold ff-font-bold px-6 py-3 rounded-lg hover:bg-[#f5c000] transition-all flex items-center gap-2"
+className="bg-[#ffca00] text-black font-semibold ff-font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#f5c000] transition-all flex items-center gap-2 text-sm sm:text-base"
 >
 <FaEdit className="w-4 h-4" />
 Change Photo
 </button>
 <button
 onClick={() => setShowPhotoPreview(false)}
-className="bg-white/10 text-white font-semibold ff-font px-6 py-3 rounded-lg hover:bg-white/20 transition-all backdrop-blur-sm"
+className="bg-white/10 text-white font-semibold ff-font px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-white/20 transition-all backdrop-blur-sm text-sm sm:text-base"
 >
 Close
 </button>
@@ -942,11 +944,11 @@ Click and drag to position • Use zoom controls to resize
 
 <canvas ref={canvasRef} className="hidden" />
 
-<div className="flex gap-3">
+<div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
 <button
 onClick={handleCropImage}
 disabled={uploading}
-className="flex-1 bg-[#ffca00] text-black font-semibold ff-font-bold px-6 py-3 rounded-lg hover:bg-[#f5c000] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+className="flex-1 bg-[#ffca00] text-black font-semibold ff-font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#f5c000] transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
 >
 {uploading ? (
 <span className="flex items-center justify-center gap-2">
@@ -964,7 +966,7 @@ setSelectedImage(null);
 setIsDragging(false);
 }}
 disabled={uploading}
-className="px-6 py-3 bg-gray-200 text-gray-700 font-semibold ff-font rounded-lg hover:bg-gray-300 transition-all disabled:opacity-50"
+className="px-5 sm:px-6 py-2.5 sm:py-3 bg-gray-200 text-gray-700 font-semibold ff-font rounded-lg hover:bg-gray-300 transition-all disabled:opacity-50 text-sm sm:text-base"
 >
 Cancel
 </button>

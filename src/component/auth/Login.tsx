@@ -45,7 +45,7 @@ export default function Login() {
     }
     api
       .post(endPointApi.login, formData)
-      .then((res) => {  
+      .then((res) => {
         saveToken(res.data.token.access);
         saveUserId(res.data.user._id);
         SuccessToast(res.data.message || "User login successfully!");
@@ -60,13 +60,13 @@ export default function Login() {
       initial={{ x: 0, opacity: 1 }}
       animate={startAnimation ? { x: "-100%", opacity: 0 } : { x: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeInOut" }}
-      className="min-h-screen w-full flex overflow-hidden bg-white"
+      className="w-full flex flex-col lg:flex-row items-center lg:items-stretch justify-center overflow-hidden bg-white lg:min-h-screen py-4 sm:py-6 lg:py-0"
     >
       {/* ----------  RIGHT PANEL: LOGIN FORM  ---------- */}
-      <div className="w-full lg:w-1/2 bg-white relative flex items-center justify-center p-10">
-        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-10 border border-primary">
+      <div className="w-full lg:w-1/2 bg-white relative flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="w-full max-w-xl bg-white rounded-3xl shadow-sm p-6 sm:p-8 md:p-10 border-2 border-primary">
           <Header />
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
             <InputField
               name="email"
               placeholder="Email*"
@@ -84,21 +84,21 @@ export default function Login() {
             />
             <Checkbox onForgotPassword={() => { setStartAnimation(true); setTimeout(() => router.push("/auth/forgot-password"), 700); }} />
             <CommonButton
-              className="bg-black text-white hover:bg-black hover:text-[#ffca00]"
-              pyClass="py-4"
-              pxClass="px-52"
+              className="w-full bg-black text-white hover:bg-black hover:text-[#ffca00] text-sm sm:text-base md:text-[18px] rounded-xl flex items-center justify-center gap-2"
+              size="xxl"
+              pyClass="py-2.5 sm:py-3"
               fontWeight={700}
-              fontSize={18}
               onClick={handleSubmit}
             >
-              Continue
+              <span>Continue</span>
+              <FaArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 inline-block" />
             </CommonButton>
 
           </form>
           <SocialRow />
-          <p className="text-center text-sm ff-font pt-2">
+          <p className="text-center text-sm ff-font pt-3.5 sm:pt-4 text-gray-800">
             Don't have an account?{" "}
-            <a href="/auth/register" className="ff-font-bold font-semibold hover:underline">
+            <a href="/auth/register" className="text-[#ffca00] ff-font-bold font-bold hover:underline ml-1">
               Sign up
             </a>
           </p>
@@ -135,9 +135,9 @@ export default function Login() {
 
 /* ----------  ATOMIC COMPONENTS  ---------- */
 const Header = () => (
-  <div className="text-center mb-6 md:mb-8">
-    <h2 className="text-2xl md:text-4xl font-bold ff-font-bold mb-2">Log In here!</h2>
-    <p className="ff-font text-sm md:text-base">Please enter your details to login</p>
+  <div className="text-center mb-5 md:mb-8">
+    <h2 className="text-3xl md:text-4xl font-bold ff-font-bold mb-2 text-[#1a1a1a]">Log In here!</h2>
+    <p className="ff-font text-sm md:text-base text-gray-500">Please enter your details to login</p>
   </div>
 );
 
@@ -162,7 +162,7 @@ const PasswordField = ({ value, onChange, error, show, toggle }: {
     <button
       type="button"
       onClick={toggle}
-      className="absolute right-4 top-5 text-gray-600 cursor-pointer hover:text-gray-800 transition-colors"
+      className={`absolute right-4 ${error ? "top-[23px] -translate-y-1/2" : "top-1/2 -translate-y-1/2"} text-gray-500 cursor-pointer hover:text-gray-700 transition-colors`}
     >
       {show ? <FiEye className="w-5 h-5" /> : <FiEyeOff className="w-5 h-5" />}
     </button>
@@ -170,22 +170,22 @@ const PasswordField = ({ value, onChange, error, show, toggle }: {
 );
 
 const Checkbox = ({ onForgotPassword }: { onForgotPassword: () => void }) => (
-  <div className="flex items-center justify-between text-sm">
+  <div className="flex items-center justify-between text-sm py-0.5">
     <div className="flex items-center space-x-2">
       <input
         type="checkbox"
         id="remember"
         required
-        className="w-4 h-4 rounded border-gray-400 cursor-pointer accent-[#ffca00]"
+        className="w-4 h-4 rounded border-gray-300 cursor-pointer accent-[#ffca00]"
       />
-      <label htmlFor="remember" className="ff-font cursor-pointer select-none">
+      <label htmlFor="remember" className="ff-font text-sm text-gray-800 cursor-pointer select-none">
         Remember me
       </label>
     </div>
     <button
       type="button"
       onClick={onForgotPassword}
-      className="ff-font-bold hover:text-gray-800 transition-colors cursor-pointer"
+      className="ff-font text-sm text-gray-800 hover:text-black hover:underline transition-colors cursor-pointer font-medium"
     >
       Forgot Password?
     </button>
@@ -193,10 +193,10 @@ const Checkbox = ({ onForgotPassword }: { onForgotPassword: () => void }) => (
 );
 
 const SocialRow = () => (
-  <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">
-    <SocialButton icon={<FcGoogle className="w-7 h-7" />} label="Google" />
-    <SocialButton icon={<FaApple className="w-7 h-7" />} label="Apple" />
-    <SocialButton icon={<CiMail className="w-7 h-7 text-gray-700" />} label="Email" />
+  <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-4">
+    <SocialButton icon={<FcGoogle className="w-5 h-5 shrink-0" />} label="Google" />
+    <SocialButton icon={<FaApple className="w-5 h-5 shrink-0 text-black" />} label="Apple" />
+    <SocialButton icon={<CiMail className="w-5 h-5 text-gray-700 shrink-0" />} label="Email" />
   </div>
 );
 
@@ -204,9 +204,9 @@ const SocialButton = ({ icon, label, onClick }: Social) => (
   <button
     type="button"
     onClick={onClick}
-    className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 rounded-lg bg-white border border-gray-300 text-gray-800 font-medium hover:bg-gray-100 hover:shadow-md hover:scale-105 transition-all duration-300 ease-in-out"
+    className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 md:py-4 px-2 sm:px-3 rounded-xl bg-white border border-gray-200 text-gray-800 text-sm md:text-base font-medium hover:bg-gray-50 hover:shadow-sm transition-all duration-200 cursor-pointer"
   >
     {icon}
-    <span>{label}</span>
+    <span className="truncate">{label}</span>
   </button>
 );

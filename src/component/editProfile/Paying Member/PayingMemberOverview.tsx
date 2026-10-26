@@ -15,9 +15,10 @@ import {
     FiTarget,
     FiRefreshCw,
     FiLock,
-    FiEdit3
+    FiEdit3,
+    FiMenu
 } from "react-icons/fi";
-const PayingMemberOverview = () => {
+const PayingMemberOverview = ({ onOpenSidebar }: { onOpenSidebar?: () => void }) => {
     const router = useRouter();
     const products = [
         { title: "Step 1 — Immunology", progress: 68, info: "68% complete", subInfo: "142 questions remaining", status: "ACTIVE", icon: <FiTarget size={20} /> },
@@ -69,8 +70,8 @@ const PayingMemberOverview = () => {
                     {/* Right side: Buttons */}
                     <div className="flex gap-3 w-full md:w-auto shrink-0">
                         <button
-                        onClick={() => router.push('/flash-card')}
-                        className="flex-1 md:flex-none cursor-pointer flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
+                            onClick={() => router.push('/flash-card')}
+                            className="flex-1 md:flex-none cursor-pointer flex ff-font items-center justify-center gap-2 px-6 py-2.5 border border-gray-600 rounded-lg text-sm  hover:bg-white/5 transition-all">
                             <FiPlay size={14} className="fill-current" /> Go to app
                         </button>
 
@@ -78,20 +79,28 @@ const PayingMemberOverview = () => {
                 </div>
 
                 {/* ================= HEADER ================= */}
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 pb-8 border-b border-gray-200">
-                    <div>
-                        <p className="text-[12px] font-bold text-[#6b6b66] uppercase ff-font-bold  mb-2">
-                            Account
-                        </p>
-                        <h1 className="text-[34px] font-bold ff-font-bold tracking-tight text-[#1a1a1a]">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 sm:gap-4 pb-6 sm:pb-8 border-b border-gray-200">
+                    <div className="w-full sm:w-auto">
+                        <div className="flex items-center justify-between sm:block mb-2">
+                            <p className="text-[12px] font-bold text-[#6b6b66] uppercase ff-font-bold">
+                                Account
+                            </p>
+                            {/* Mobile Edit Profile Button (level with Account on the right) */}
+                            <button className="sm:hidden flex cursor-pointer items-center gap-1.5 border border-gray-300 ff-font-bold px-3 py-1.5 rounded-lg text-xs font-medium shrink-0">
+                                <FiEdit2 size={12} />
+                                Edit profile
+                            </button>
+                        </div>
+                        <h1 className="text-2xl sm:text-[34px] font-bold ff-font-bold tracking-tight text-[#1a1a1a]">
                             Welcome back, Gargi.
                         </h1>
-                        <p className="text-[14px] ff-font text-[#6b6b66]">
+                        <p className="text-xs sm:text-[14px] ff-font text-[#6b6b66]">
                             Here's what's happening with your studies today.
                         </p>
                     </div>
 
-                    <button className="flex cursor-pointer items-center gap-2 border border-gray-300  ff-font-bold px-4 py-2 rounded-lg text-sm font-medium w-fit sm:w-auto">
+                    {/* Desktop Edit Profile Button */}
+                    <button className="hidden sm:flex cursor-pointer items-center gap-2 border border-gray-300 ff-font-bold px-4 py-2 rounded-lg text-sm font-medium shrink-0">
                         <FiEdit2 size={14} />
                         Edit profile
                     </button>
@@ -109,23 +118,23 @@ const PayingMemberOverview = () => {
 
 
                     {/* Card */}
-                    <div className="bg-white rounded-2xl p-8 flex flex-col md:flex-row justify-between items-center border border-gray-200 relative overflow-hidden">
+                    <div className="bg-white rounded-2xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center border border-gray-200 relative overflow-hidden">
 
                         <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary"></div>
 
-                        <div className="absolute -right-10 -top-10 w-48 h-48 bg-[#FFF9E5] rounded-full opacity-60 z-0"></div>
+                        <div className="absolute -right-10 -top-10 w-48 h-48 bg-[#FFF9E5] rounded-full opacity-60 z-0 pointer-events-none"></div>
 
-                        <div className="relative z-10 space-y-1">
-                            <div className="inline-flex items-center gap-2 bg-black text-primary text-[10px] font-semibold px-3 py-1.5 rounded uppercase tracking-wider">
+                        <div className="relative z-10 w-full md:w-auto space-y-2 md:space-y-2">
+                            <div className="inline-flex items-center gap-2 bg-black text-primary text-[10px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded uppercase tracking-wider">
                                 <span className="w-1.5 h-1.5 bg-primary rounded-full "></span>
                                 Member since April 2024
                             </div>
 
-                            <h2 className="text-[22px] font-semibold ff-font-bold text-[#1a1a1a]">
+                            <h2 className="text-[19px] sm:text-[22px] md:text-[22px] font-semibold ff-font-bold text-[#1a1a1a] leading-tight">
                                 USMLE Step 1 + Step 2 — Annual
                             </h2>
 
-                            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 font-medium">
+                            <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1 text-xs sm:text-sm md:text-sm text-gray-500 font-medium">
                                 <span>Active subscription</span>
                                 <span className="text-gray-300">•</span>
                                 <span>Renews April 12, 2026</span>
@@ -135,20 +144,19 @@ const PayingMemberOverview = () => {
                         </div>
 
                         {/* Right Content */}
-                        <div className="relative z-10 text-center md:text-right mt-8 md:mt-0 flex flex-col items-center md:items-end">
-                            <div className="flex flex-col items-center md:items-end">
+                        <div className="relative z-10 w-full md:w-auto text-left md:text-right mt-5 md:mt-0 pt-4 md:pt-0 border-t border-gray-100 md:border-t-0 flex flex-row items-center justify-between md:flex-col md:items-end">
+                            <div className="flex flex-col items-start md:items-end">
                                 <div className="flex items-start">
-
-                                    <span className="text-[20px] font-bold  text-[#1a1a1a]">
+                                    <span className="text-[20px] font-bold text-[#1a1a1a]">
                                         $249
                                     </span>
                                 </div>
-                                <p className="text-sm text-gray-500 font-medium mt-1 tracking-wide">
+                                <p className="text-xs sm:text-sm md:text-sm text-gray-500 font-medium mt-0.5 md:mt-1 tracking-wide">
                                     per year
                                 </p>
                             </div>
 
-                            <button className="flex items-center cursor-pointer gap-2 bg-white border border-gray-200 px-4 py-2 mt-5 rounded-lg text-sm  ff-font-bold ">
+                            <button className="flex items-center cursor-pointer gap-2 bg-white border border-gray-200 px-3.5 sm:px-4 py-2 md:mt-5 rounded-lg text-xs sm:text-sm md:text-sm ff-font-bold shrink-0 hover:bg-gray-50 transition-colors">
                                 Manage membership
                                 <span>→</span>
                             </button>

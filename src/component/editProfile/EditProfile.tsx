@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { FaArrowLeft, FaBoxOpen, FaHome, FaUser } from "react-icons/fa";
-import { FiCreditCard } from "react-icons/fi";
+import { FiCreditCard, FiMenu } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 
 import OntrialOverview from "./On Trial/OntrialOverview";
@@ -45,6 +45,7 @@ const EditProfile = () => {
               {/* Back */}
               <div className="px-5 py-6 border-b border-gray-200">
                 <div
+                  onClick={() => setSidebarOpen(false)}
                   className="flex text-[13px] items-center gap-2 text-md text-gray-600 cursor-pointer">
                   <FaArrowLeft />
                   <span>Back to Mendel</span>
@@ -139,30 +140,37 @@ const EditProfile = () => {
         )}
 
         {/* ================= CONTENT ================= */}
-        <div className="flex-1 w-full p-4 lg:p-8 space-y-6">
+        <div className="flex-1 w-full p-3 sm:p-4 lg:p-8">
 
-          {/* Hamburger (VISIBLE till 1023px including 768) */}
+          {/* Top Mobile Menu Toggle (< 1024px) */}
           {userType !== "dashboard" && (
-            <div className="lg:hidden">
+            <div className="lg:hidden flex items-center justify-start mb-2.5">
               <button
-                onClick={() => setSidebarOpen(true)}
-                className="p-2 bg-white border rounded-lg shadow-sm"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSidebarOpen(true);
+                }}
+                className="w-9 h-9 bg-white border border-gray-200 rounded-lg shadow-2xs flex items-center justify-center text-gray-700 hover:text-black hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
+                aria-label="Open sidebar"
               >
-                ☰
+                <FiMenu className="w-4 h-4 text-gray-800" />
               </button>
             </div>
           )}
 
-          {/* Render */}
-          {userType === "dashboard" && <Dashboard />}
+          <div className="space-y-4 sm:space-y-6">
+            {/* Render */}
+            {userType === "dashboard" && <Dashboard />}
 
-          {activeMenu === "overview" && userType === "new" && <NewuserOverview />}
-          {activeMenu === "overview" && userType === "trial" && <OntrialOverview />}
-          {activeMenu === "overview" && userType === "paid" && <PayingMemberOverview />}
+            {activeMenu === "overview" && userType === "new" && <NewuserOverview />}
+            {activeMenu === "overview" && userType === "trial" && <OntrialOverview />}
+            {activeMenu === "overview" && userType === "paid" && <PayingMemberOverview />}
 
-          {activeMenu === "membership" && <Membership />}
-          {activeMenu === "profile" && <Profile />}
-          {activeMenu === "contactUs" && <ContactUs />}
+            {activeMenu === "membership" && <Membership />}
+            {activeMenu === "profile" && <Profile />}
+            {activeMenu === "contactUs" && <ContactUs />}
+          </div>
         </div>
       </div>
 

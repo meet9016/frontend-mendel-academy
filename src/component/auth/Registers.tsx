@@ -105,7 +105,7 @@ export default function Registers() {
       initial={{ x: 0, opacity: 1 }}
       animate={startAnimation ? { x: "100%", opacity: 0 } : { x: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeInOut" }}
-      className="min-h-screen w-full flex overflow-hidden bg-white"
+      className="w-full flex flex-col lg:flex-row items-center lg:items-stretch justify-center overflow-hidden bg-white lg:min-h-screen py-4 sm:py-6 lg:py-0"
     >
       {/* ----------  LEFT PANEL: SIGN-UP PROMPT  ---------- */}
       <div
@@ -128,31 +128,30 @@ export default function Registers() {
       </div>
 
       {/* ----------  RIGHT PANEL: SIGN-UP FORM  ---------- */}
-      <div className="w-full lg:w-1/2 bg-white relative flex items-center justify-center p-10 md:p-12">
-        <div className="w-full max-w-xl bg-white/70 backdrop-blur-xl rounded-3xl shadow-lg p-8 md:p-10 relative z-10 border border-primary">
+      <div className="w-full lg:w-1/2 bg-white relative flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="w-full max-w-xl bg-white rounded-3xl shadow-sm p-6 sm:p-8 md:p-10 relative z-10 border-2 border-primary">
           <Header />
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
             <NameFields formData={formData} errors={errors} onChange={handleChange} />
             <EmailField value={formData.email} error={errors.email} onChange={handleChange} />
             <PhoneField value={formData.phone} error={errors.phone} onChange={handleChange} />
             <PasswordField value={formData.password} error={errors.password} onChange={handleChange} show={showPassword} toggle={() => setShowPassword((v) => !v)} />
             <TermsCheckbox />
             <CommonButton
-              className="bg-black text-white hover:bg-black hover:text-[#ffca00]"
-              pyClass="py-4"
-              pxClass="px-45"
+              className="w-full bg-black text-white hover:bg-black hover:text-[#ffca00] text-sm sm:text-base md:text-[18px] rounded-xl flex items-center justify-center gap-2"
+              size="xxl"
+              pyClass="py-2.5 sm:py-3"
               fontWeight={700}
-              fontSize={18}
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Creating account..." : "Create account"}
+              <span>{isSubmitting ? "Creating account..." : "Create account"}</span>
             </CommonButton>
           </form>
           <SocialRow />
-          <p className="text-center text-sm ff-font pt-2">
+          <p className="text-center text-sm ff-font pt-3.5 sm:pt-4 text-gray-800">
             Already have an account?{" "}
-            <a href="/auth/login" className="ff-font-bold font-semibold hover:underline">
+            <a href="/auth/login" className="text-[#ffca00] ff-font-bold font-bold hover:underline ml-1">
               Sign in
             </a>
           </p>
@@ -164,9 +163,9 @@ export default function Registers() {
 
 /* ----------  ATOMIC COMPONENTS  ---------- */
 const Header = () => (
-  <div className="text-center mb-8">
-    <h4 className="text-3xl md:text-4xl font-bold ff-font-bold tracking-tight">Sign up for an account</h4>
-    <p className="ff-font text-sm md:text-base mt-1">Please enter your details to sign up</p>
+  <div className="text-center mb-5 md:mb-8">
+    <h4 className="text-2xl sm:text-3xl md:text-4xl font-bold ff-font-bold tracking-tight text-[#1a1a1a]">Sign up for an account</h4>
+    <p className="ff-font text-sm md:text-base mt-1 text-gray-500">Please enter your details to sign up</p>
   </div>
 );
 
@@ -175,7 +174,7 @@ const NameFields = ({ formData, errors, onChange }: {
   errors: Partial<{ firstName: string; lastName: string }>;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
     <InputField
       name="firstName"
       placeholder="First name*"
@@ -245,7 +244,7 @@ const PasswordField = ({ value, error, onChange, show, toggle }: {
     <button
       type="button"
       onClick={toggle}
-      className="absolute right-4 top-5 text-gray-500 cursor-pointer hover:text-black transition"
+      className={`absolute right-4 ${error ? "top-3.5 md:top-4" : "top-3.5 md:top-5"} text-gray-500 cursor-pointer hover:text-black transition`}
     >
       {show ? <FiEye className="w-5 h-5" /> : <FiEyeOff className="w-5 h-5" />}
     </button>
@@ -253,24 +252,24 @@ const PasswordField = ({ value, error, onChange, show, toggle }: {
 );
 
 const TermsCheckbox = () => (
-  <div className="flex items-start space-x-3 text-sm">
+  <div className="flex items-start space-x-2.5 sm:space-x-3 text-xs sm:text-sm">
     <input
       id="terms"
       type="checkbox"
       required
-      className="mt-1 w-4 h-4 rounded border-gray-400 cursor-pointer accent-[#ffca00]"
+      className="mt-0.5 sm:mt-1 w-4 h-4 shrink-0 rounded border-gray-400 cursor-pointer accent-[#ffca00]"
     />
-    <label htmlFor="terms" className="mt-1 cursor-pointer ff-font leading-tight">
+    <label htmlFor="terms" className="cursor-pointer ff-font leading-tight text-gray-700">
       I agree to Mendel Academy's <a href="#" className="underline font-bold ff-font-bold">Terms of Service</a> & <a href="#" className="underline font-bold ff-font-bold">Privacy Policy</a>.
     </label>
   </div>
 );
 
 const SocialRow = () => (
-  <div className="flex flex-wrap md:flex-nowrap gap-3 pt-3">
-    <SocialButton icon={<FcGoogle className="w-7 h-7" />} label="Google" />
-    <SocialButton icon={<FaApple className="w-7 h-7" />} label="Apple" />
-    <SocialButton icon={<CiMail className="w-7 h-7 text-gray-700" />} label="Email" />
+  <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-4">
+    <SocialButton icon={<FcGoogle className="w-5 h-5 shrink-0" />} label="Google" />
+    <SocialButton icon={<FaApple className="w-5 h-5 shrink-0 text-black" />} label="Apple" />
+    <SocialButton icon={<CiMail className="w-5 h-5 text-gray-700 shrink-0" />} label="Email" />
   </div>
 );
 
@@ -278,9 +277,9 @@ const SocialButton = ({ icon, label, onClick }: Social) => (
   <button
     type="button"
     onClick={onClick}
-    className="flex-1 flex items-center justify-center gap-3 py-3 md:py-4 rounded-lg bg-white border border-gray-300 text-gray-800 font-medium hover:bg-gray-100 hover:shadow-md hover:scale-105 transition-all duration-300 ease-in-out"
+    className="w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 md:py-4 px-2 sm:px-3 rounded-xl bg-white border border-gray-200 text-gray-800 text-sm md:text-base font-medium hover:bg-gray-50 hover:shadow-sm transition-all duration-200 cursor-pointer"
   >
     {icon}
-    <span>{label}</span>
+    <span className="truncate">{label}</span>
   </button>
 );
