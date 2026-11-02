@@ -148,6 +148,22 @@ export default function Header() {
     }
   }, [isInitialized, userId, tempIdGet]);
 
+  // Listen for openCart and refreshCart global events
+  useEffect(() => {
+    const handleOpenCart = () => {
+      handleCartOpen();
+    };
+    const handleRefreshCart = () => {
+      getCountCartItems();
+    };
+    window.addEventListener("openCart", handleOpenCart);
+    window.addEventListener("refreshCart", handleRefreshCart);
+    return () => {
+      window.removeEventListener("openCart", handleOpenCart);
+      window.removeEventListener("refreshCart", handleRefreshCart);
+    };
+  }, [userId, tempIdGet]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;

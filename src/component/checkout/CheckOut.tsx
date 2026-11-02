@@ -55,6 +55,14 @@ const formatDuration = (item: any) => {
     return `${monthValue} Month${monthValue !== 1 ? 's' : ''}`;
   }
 
+  if (item.cart_type === 'elite_mentorship') {
+    return item.mentorship_details?.included_services || 'Live Mentorship';
+  }
+
+  if (item.cart_type === 'tsunami') {
+    return 'Comprehensive Access';
+  }
+
   const duration = item.duration;
   const durationValue = parseInt(duration) || 0;
 
@@ -440,6 +448,10 @@ const CheckOut = () => {
               plan_id = firstItem.hyperspecialist_id?._id || firstItem.hyperspecialist_id || '';
             } else if (firstItem.cart_type === 'prerecord') {
               plan_id = firstItem.product_id?._id || firstItem.product_id || '';
+            } else if (firstItem.cart_type === 'elite_mentorship') {
+              plan_id = firstItem.mentorship_id || '';
+            } else if (firstItem.cart_type === 'tsunami') {
+              plan_id = firstItem.exam_category_id?._id || firstItem.exam_category_id || '';
             }
           }
           
@@ -686,6 +698,8 @@ const CheckOut = () => {
                     if (item.cart_type === 'livecourses') return item.livecourse_id?._id || item.livecourse_id || '';
                     if (item.cart_type === 'hyperspecialist') return item.hyperspecialist_id?._id || item.hyperspecialist_id || '';
                     if (item.cart_type === 'prerecord') return item.product_id?._id || item.product_id || '';
+                    if (item.cart_type === 'elite_mentorship') return item.mentorship_id || '';
+                    if (item.cart_type === 'tsunami') return item.exam_category_id?._id || item.exam_category_id || '';
                     return '';
                   })()}
                   onSuccess={() => {
@@ -721,7 +735,7 @@ const CheckOut = () => {
 
                 <div className="flex-1">
                   <p className="font-semibold text-sm">
-                    {item.product_id?.title || item.category_name}
+                    {item.mentorship_details?.name || item.tsunami_details?.name || item.product_id?.title || item.category_name}
                   </p>
 
                   <p className="text-xs text-gray-500 mt-1">

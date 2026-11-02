@@ -82,6 +82,12 @@ const formatDuration = (item: any) => {
     // LiveCourses duration is stored as string like "8 weeks"
     return item.duration || item.livecourse_id?.duration || 'Duration not specified';
   }
+  else if (item.cart_type === 'elite_mentorship') {
+    return item.mentorship_details?.included_services || 'Live Mentorship';
+  }
+  else if (item.cart_type === 'tsunami') {
+    return item.tsunami_details?.description || 'Tsunami Program';
+  }
   else {
     const duration = item.duration;
     const durationValue = Number(duration);
@@ -127,6 +133,10 @@ const getProductUrl = (item: any) => {
       return `/subscription`; 
   }
 
+  if (item.cart_type === 'elite_mentorship' || item.cart_type === 'tsunami') {
+      return `/services/usmle-step-1`;
+  }
+
   return null;
 };
 
@@ -168,6 +178,20 @@ const getCartItemTitles = (item: any) => {
     return {
       primary: moduleTitle || courseTitle || 'Live Course Module',
       secondary: moduleTitle ? courseTitle : null
+    };
+  }
+
+  if (item.cart_type === 'elite_mentorship') {
+    return {
+      primary: item.mentorship_details?.name || 'Elite Mentorship',
+      secondary: item.category_name || null
+    };
+  }
+
+  if (item.cart_type === 'tsunami') {
+    return {
+      primary: item.tsunami_details?.name || 'Tsunami Program',
+      secondary: item.category_name || null
     };
   }
 

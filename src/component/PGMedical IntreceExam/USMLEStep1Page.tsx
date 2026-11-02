@@ -1,7 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { api } from "@/utils/axiosInstance";
+import endPointApi from "@/utils/endPointApi";
+import { getAuthId } from "@/utils/tokenManager";
+import { getTempId } from "@/utils/helper";
+import { store } from "@/redux/store";
+import { setCartCount } from "@/redux/cartSlice";
+import { ErrorToast, InfoToast, SuccessToast } from "@/comman/Toastify";
 import {
   FaPlay,
   FaTimes,
@@ -16,127 +23,358 @@ import {
 } from "react-icons/fi";
 import { HiOutlineSparkles } from "react-icons/hi2";
 
+const DEFAULT_TOOLS = [
+  {
+    title: "Mendel QBank",
+    desc: "Tutor and exam modes, custom blocks, and Understand the why after every question.",
+    tag: "CORE QUESTION BANK"
+  },
+  {
+    title: "Mendel Chitras",
+    desc: "853 illustrated one-page visual summaries covering pathophysiology to memory hacks.",
+    tag: "VISUAL MEMORY"
+  },
+  {
+    title: "Mendel Flashcards",
+    desc: "Spaced repetition that schedules reviews for you based on mastery curve.",
+    tag: "SPACED REPETITION"
+  },
+  {
+    title: "Mendel Study Notes",
+    desc: "2,300+ concise notes organized systematically by organ system and discipline.",
+    tag: "HIGH YIELD NOTES"
+  },
+  {
+    title: "Rapid Recall",
+    desc: "High-yield diagnostic and pharmacology tables engineered for last-minute review.",
+    tag: "LAST MINUTE DRILLS"
+  },
+  {
+    title: "Fast Facts",
+    desc: "Clinical mnemonics that explain the core mechanism, not just abbreviate words.",
+    tag: "SMART MNEMONICS"
+  },
+];
+
+const DEFAULT_PLANS = [
+  {
+    duration: "1 month",
+    price: "$309",
+    pm: "$309 / mo",
+    popular: false,
+    badge: null,
+    desc: "Last-mile intensive practice.",
+  },
+  {
+    duration: "3 months",
+    price: "$429",
+    pm: "≈ $143 / mo",
+    popular: false,
+    badge: null,
+    desc: "Organ system mastery cycle.",
+  },
+  {
+    duration: "6 months",
+    price: "$449",
+    pm: "≈ $75 / mo",
+    popular: false,
+    badge: null,
+    desc: "Extended pre-dedicated prep.",
+  },
+  {
+    duration: "12 months",
+    price: "$499",
+    pm: "≈ $42 / mo",
+    popular: true,
+    badge: "BEST VALUE",
+    desc: "Complete 365-day board foundation.",
+  },
+  {
+    duration: "24 months",
+    price: "$699",
+    pm: "≈ $29 / mo",
+    popular: false,
+    badge: null,
+    desc: "Day 1 preclinical to board exam.",
+  },
+];
+
+const DEFAULT_FAQS = [
+  {
+    q: "Is USMLE Step 1 pass/fail?",
+    a: "Yes. USMLE Step 1 has reported pass/fail outcomes only since January 26, 2022. Step 2 CK and Step 3 still report a three-digit score. Mendel Academy’s Self-Assessments estimate how ready you are to pass with statistical confidence intervals."
+  },
+  {
+    q: "What is the Mendel Academy USMLE Step 1 program?",
+    a: "It is a concept-first USMLE Step 1 prep program delivered in the Mendel Galaxy app. It includes a QBank, Mendel Chitras, flashcards, study notes, Rapid Recall and Fast Facts, plus analytics and NBME-style Self-Assessments."
+  },
+  {
+    q: "How much does Mendel Academy Step 1 prep cost?",
+    a: "App plans range from $309 for 1 month to $699 for 24 months; the 12-month plan is $499. Every plan includes all six study tools and three Self-Assessments in total. Live Step 1 mentorship is $1,199 and includes one year of app access."
+  },
+  {
+    q: "How many Self-Assessments are included?",
+    a: "Self-Assessment 1 is free for everyone, with no purchase needed. Every Mendel Galaxy app plan adds Self-Assessments 2 and 3, so plan members get three in total. Self-Assessment 4 is available separately. Each is an NBME-style, exam-paced test of 280 questions with a predicted score and percentile."
+  },
+  {
+    q: "What is Understand the why in the Mendel QBank?",
+    a: "Understand the why is the explanation after every Mendel QBank question. Triage paraphrases the question down to what it is really asking, Core Mechanism explains the science, Peel the Reasoning reveals the logic one clue at a time down to the core principle, and The Trap breaks down the dangerous distractors and how to duck them. It closes with the educational objective, the question writer’s intent and a Mendel Hack to remember it."
+  },
+  {
+    q: "What is a Mendel Chitra?",
+    a: "A Mendel Chitra is a hand-illustrated, one-page visual summary of a medical topic, covering definition, pathophysiology, presentation, workup, management and memory hacks."
+  },
+  {
+    q: "Is Mendel Academy good for IMGs and DO students?",
+    a: "Yes. The program is specifically built for preclinical MD students, international medical graduates (IMGs) and DO students taking USMLE Step 1."
+  },
+  {
+    q: "Which devices does the Mendel Galaxy app work on?",
+    a: "The Mendel Galaxy app works on iPhone, iPad and on the web from any desktop or laptop."
+  }
+];
+
 export default function USMLEStep1Page() {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [dynamicData, setDynamicData] = useState<any>(null);
+  const [dynamicPlans, setDynamicPlans] = useState<any[]>([]);
+  const [categoryId, setCategoryId] = useState<string>("6985b8b5d437d2fd889564e1");
+  const [loadingKey, setLoadingKey] = useState<string | null>(null);
 
-  const tools = [
-    {
-      title: "Mendel QBank",
-      desc: "Tutor and exam modes, custom blocks, and Understand the why after every question.",
-      icon: <FiTarget className="w-5 h-5 text-black" />,
-      tag: "CORE QUESTION BANK"
-    },
-    {
-      title: "Mendel Chitras",
-      desc: "853 illustrated one-page visual summaries covering pathophysiology to memory hacks.",
-      icon: <FiLayers className="w-5 h-5 text-black" />,
-      tag: "VISUAL MEMORY"
-    },
-    {
-      title: "Mendel Flashcards",
-      desc: "Spaced repetition that schedules reviews for you based on mastery curve.",
-      icon: <FiZap className="w-5 h-5 text-black" />,
-      tag: "SPACED REPETITION"
-    },
-    {
-      title: "Mendel Study Notes",
-      desc: "2,300+ concise notes organized systematically by organ system and discipline.",
-      icon: <FiBookOpen className="w-5 h-5 text-black" />,
-      tag: "HIGH YIELD NOTES"
-    },
-    {
-      title: "Rapid Recall",
-      desc: "High-yield diagnostic and pharmacology tables engineered for last-minute review.",
-      icon: <FiClock className="w-5 h-5 text-black" />,
-      tag: "LAST MINUTE DRILLS"
-    },
-    {
-      title: "Fast Facts",
-      desc: "Clinical mnemonics that explain the core mechanism, not just abbreviate words.",
-      icon: <HiOutlineSparkles className="w-5 h-5 text-black" />,
-      tag: "SMART MNEMONICS"
-    },
-  ];
+  useEffect(() => {
+    const fetchStep1Content = async () => {
+      try {
+        const res = await api.get(`${endPointApi.getMedicalById}/usmle-step-1`);
+        if (res.data) {
+          if (res.data._id) {
+            setCategoryId(res.data._id);
+          }
+          if (res.data.usmle_step1_detail && typeof res.data.usmle_step1_detail === "object") {
+            setDynamicData(res.data.usmle_step1_detail);
+          }
+          if (Array.isArray(res.data.choose_plan_list) && res.data.choose_plan_list.length > 0) {
+            setDynamicPlans(res.data.choose_plan_list);
+          }
+        }
+      } catch (err) {
+        console.error("Could not fetch dynamic USMLE Step 1 content:", err);
+      }
+    };
+    fetchStep1Content();
+  }, []);
 
-  const plans = [
-    {
-      duration: "1 month",
-      price: "$309",
-      pm: "$309 / mo",
-      popular: false,
-      badge: null,
-      desc: "Last-mile intensive practice.",
-    },
-    {
-      duration: "3 months",
-      price: "$429",
-      pm: "≈ $143 / mo",
-      popular: false,
-      badge: null,
-      desc: "Organ system mastery cycle.",
-    },
-    {
-      duration: "6 months",
-      price: "$449",
-      pm: "≈ $75 / mo",
-      popular: false,
-      badge: null,
-      desc: "Extended pre-dedicated prep.",
-    },
-    {
-      duration: "12 months",
-      price: "$499",
-      pm: "≈ $42 / mo",
-      popular: true,
-      badge: "BEST VALUE",
-      desc: "Complete 365-day board foundation.",
-    },
-    {
-      duration: "24 months",
-      price: "$699",
-      pm: "≈ $29 / mo",
-      popular: false,
-      badge: null,
-      desc: "Day 1 preclinical to board exam.",
-    },
-  ];
+  const handleChoosePlan = async (p: any, idx: number) => {
+    const key = `plan-${idx}`;
+    try {
+      setLoadingKey(key);
+      const userId = getAuthId();
+      const tempId = getTempId();
+      const planId = p._id || p.duration;
 
-  const faqs = [
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: categoryId,
+        plan_id: planId,
+        bucket_type: true,
+      };
+
+      const res = await api.post(`${endPointApi.postAddExamPlanToCart}`, body);
+      if (res.data?.success) {
+        if (res.data.alreadyInCart) {
+          InfoToast(res.data.message || "Plan already in cart");
+        } else {
+          SuccessToast(res.data.message || "Plan added to cart successfully!");
+        }
+
+        const identifier = userId || tempId;
+        if (identifier) {
+          try {
+            const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+            if (countRes.data?.count !== undefined) {
+              store.dispatch(setCartCount(countRes.data.count));
+            }
+          } catch (e) {
+            console.error("Error refreshing cart count:", e);
+          }
+        }
+
+        window.dispatchEvent(new Event("openCart"));
+      } else {
+        ErrorToast(res.data?.message || "Failed to add plan to cart");
+      }
+    } catch (error: any) {
+      console.error("Error adding plan to cart:", error);
+      ErrorToast(error?.response?.data?.message || "Failed to add plan to cart");
+    } finally {
+      setLoadingKey(null);
+    }
+  };
+
+  const handleEnrollMentorship = async (item: { id: string; name: string; price?: string; subtitle?: string }, key: string) => {
+    try {
+      setLoadingKey(key);
+      const userId = getAuthId();
+      const tempId = getTempId();
+      const priceNum = parseFloat(String(item.price || '').replace(/[^0-9.]/g, '')) || 0;
+
+      const body = {
+        ...(userId ? { user_id: userId } : { temp_id: tempId }),
+        exam_category_id: categoryId,
+        mentorship_id: item.id || item.name,
+        name: item.name,
+        subtitle: item.subtitle,
+        price_usd: priceNum,
+        bucket_type: true,
+      };
+
+      const res = await api.post(`${endPointApi.postAddEliteMentorshipToCart}`, body);
+      if (res.data?.success) {
+        if (res.data.alreadyInCart) {
+          InfoToast(res.data.message || "Item already in cart");
+        } else {
+          SuccessToast(res.data.message || "Item added to cart successfully!");
+        }
+
+        const identifier = userId || tempId;
+        if (identifier) {
+          try {
+            const countRes = await api.get(`${endPointApi.cartCount}/${identifier}`);
+            if (countRes.data?.count !== undefined) {
+              store.dispatch(setCartCount(countRes.data.count));
+            }
+          } catch (e) {
+            console.error("Error refreshing cart count:", e);
+          }
+        }
+
+        window.dispatchEvent(new Event("openCart"));
+      } else {
+        ErrorToast(res.data?.message || "Failed to add to cart");
+      }
+    } catch (error: any) {
+      console.error("Error adding mentorship to cart:", error);
+      ErrorToast(error?.response?.data?.message || "Failed to add to cart");
+    } finally {
+      setLoadingKey(null);
+    }
+  };
+
+  // Section data helpers with defaults
+  const hero = dynamicData?.hero || {};
+  const tour = dynamicData?.tour || {};
+  const ready = dynamicData?.ready || {};
+  const pricing = dynamicData?.pricing || {};
+  const mentorship = dynamicData?.mentorship || {};
+  const testimonials = dynamicData?.testimonials?.list || [
     {
-      q: "Is USMLE Step 1 pass/fail?",
-      a: "Yes. USMLE Step 1 has reported pass/fail outcomes only since January 26, 2022. Step 2 CK and Step 3 still report a three-digit score. Mendel Academy’s Self-Assessments estimate how ready you are to pass with statistical confidence intervals."
+      quote: "“The Chitras changed how I think about disease mechanisms. I stopped memorizing and started understanding.”",
+      author: "Riaa S.",
+      credential: "Matched Internal Medicine"
     },
     {
-      q: "What is the Mendel Academy USMLE Step 1 program?",
-      a: "It is a concept-first USMLE Step 1 prep program delivered in the Mendel Galaxy app. It includes a QBank, Mendel Chitras, flashcards, study notes, Rapid Recall and Fast Facts, plus analytics and NBME-style Self-Assessments."
+      quote: "“As an IMG, I needed a structured approach. The explanations teach you to think, not just recall.”",
+      author: "Arjun M.",
+      credential: "IMG · Matched Neurology"
     },
     {
-      q: "How much does Mendel Academy Step 1 prep cost?",
-      a: "App plans range from $309 for 1 month to $699 for 24 months; the 12-month plan is $499. Every plan includes all six study tools and three Self-Assessments in total. Live Step 1 mentorship is $1,199 and includes one year of app access."
-    },
-    {
-      q: "How many Self-Assessments are included?",
-      a: "Self-Assessment 1 is free for everyone, with no purchase needed. Every Mendel Galaxy app plan adds Self-Assessments 2 and 3, so plan members get three in total. Self-Assessment 4 is available separately. Each is an NBME-style, exam-paced test of 280 questions with a predicted score and percentile."
-    },
-    {
-      q: "What is Understand the why in the Mendel QBank?",
-      a: "Understand the why is the explanation after every Mendel QBank question. Triage paraphrases the question down to what it is really asking, Core Mechanism explains the science, Peel the Reasoning reveals the logic one clue at a time down to the core principle, and The Trap breaks down the dangerous distractors and how to duck them. It closes with the educational objective, the question writer’s intent and a Mendel Hack to remember it."
-    },
-    {
-      q: "What is a Mendel Chitra?",
-      a: "A Mendel Chitra is a hand-illustrated, one-page visual summary of a medical topic, covering definition, pathophysiology, presentation, workup, management and memory hacks."
-    },
-    {
-      q: "Is Mendel Academy good for IMGs and DO students?",
-      a: "Yes. The program is specifically built for preclinical MD students, international medical graduates (IMGs) and DO students taking USMLE Step 1."
-    },
-    {
-      q: "Which devices does the Mendel Galaxy app work on?",
-      a: "The Mendel Galaxy app works on iPhone, iPad and on the web from any desktop or laptop."
+      quote: "“Dr. Managoli’s mentorship rebuilt my approach. Rapid Recall saved me the week before the exam.”",
+      author: "Priya K.",
+      credential: "Matched Psychiatry"
     }
   ];
+  const faqs = dynamicData?.faqs?.list || DEFAULT_FAQS;
+  const cta = dynamicData?.cta || {};
+  const rawTools = dynamicData?.tools?.list || DEFAULT_TOOLS;
+
+  const toolIcons = [
+    <FiTarget key="1" className="w-5 h-5 text-black" />,
+    <FiLayers key="2" className="w-5 h-5 text-black" />,
+    <FiZap key="3" className="w-5 h-5 text-black" />,
+    <FiBookOpen key="4" className="w-5 h-5 text-black" />,
+    <FiClock key="5" className="w-5 h-5 text-black" />,
+    <HiOutlineSparkles key="6" className="w-5 h-5 text-black" />
+  ];
+
+  const tools = rawTools.map((t: any, idx: number) => ({
+    ...t,
+    icon: toolIcons[idx % toolIcons.length]
+  }));
+
+  // Plans computation
+  const plans = (dynamicData?.pricing?.plans && dynamicData.pricing.plans.length > 0)
+    ? dynamicData.pricing.plans.map((p: any) => {
+        const monthNum = parseInt(String(p.duration).replace(/\D/g, ''), 10);
+        const matchedDbPlan = dynamicPlans.find((dp: any) => dp.plan_month === monthNum);
+        return {
+          ...p,
+          _id: matchedDbPlan?._id || p._id
+        };
+      })
+    : (dynamicPlans && dynamicPlans.length > 0)
+      ? dynamicPlans.map((p: any) => ({
+          _id: p._id,
+          duration: `${p.plan_month} month${p.plan_month > 1 ? 's' : ''}`,
+          price: p.plan_pricing_dollar ? `$${p.plan_pricing_dollar}` : `$${p.plan_pricing_inr || 0}`,
+          pm: p.plan_pricing_dollar ? `≈ $${Math.round(p.plan_pricing_dollar / (p.plan_month || 1))} / mo` : '',
+          popular: Boolean(p.most_popular),
+          badge: p.most_popular ? "BEST VALUE" : null,
+          desc: p.plan_title || (p.plan_month === 12 ? "Complete 365-day board foundation." : p.plan_month === 1 ? "Last-mile intensive practice." : `${p.plan_month}-month board preparation.`),
+        }))
+      : DEFAULT_PLANS;
+
+  const otherCourses = mentorship.other_courses || [
+    { name: "USMLE Step 2 CK", badge: "Popular", price: "$1,499", link: "/auth/register?mentorship=step-2-ck" },
+    { name: "USMLE Step 3", badge: "", price: "$899", link: "/auth/register?mentorship=step-3" },
+    { name: "COMLEX 1", badge: "", price: "$1,199", link: "/auth/register?mentorship=comlex-1" },
+    { name: "Shelf exams", badge: "/ per exam", price: "$299", link: "/auth/register?mentorship=shelf" }
+  ];
+
+  const bundles = mentorship.bundles || [
+    {
+      tag: "Bundle",
+      name: "Tsunami Bundle",
+      subtitle: "Step 1 + Step 2 CK live mentorship",
+      price: "$2,235",
+      link: "/auth/register?bundle=tsunami"
+    },
+    {
+      tag: "Bundle · Boards to Match",
+      name: "Full Match Bundle",
+      subtitle: "Step 1 + Step 2 CK + Step 3 complete pathway",
+      price: "$2,995",
+      link: "/auth/register?bundle=full-match"
+    }
+  ];
+
+  const featuredMentorship = mentorship.featured || {
+    badge: "THIS PAGE’S EXAM",
+    name: "USMLE Step 1 Mentorship",
+    subtitle: "High-yield group mentorship with Dr. Managoli",
+    price: "$1,199",
+    features: [
+      "Live virtual group classes",
+      "Concept-first, visual teaching",
+      "1-year Mendel Galaxy app access included"
+    ],
+    btn_text: "Enroll in Step 1 Mentorship",
+    btn_link: "/auth/register?mentorship=usmle-step-1"
+  };
+
+  // Split headline to highlight word if present
+  const heroTitle = hero.title || "Step 1, simplified.";
+  const heroHighlight = hero.highlight || "simplified.";
+  const heroParts = heroTitle.includes(heroHighlight)
+    ? heroTitle.split(heroHighlight)
+    : [heroTitle, ""];
+
+  // Split tour headline to highlight word if present
+  const tourTitle = tour.title || "Practice it. Understand the why. Track it.";
+  const tourHighlight = tour.title_highlight || "the why";
+  const tourParts = tourTitle.includes(tourHighlight)
+    ? tourTitle.split(tourHighlight)
+    : [tourTitle, ""];
 
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#1A1915] ff-font">
@@ -163,23 +401,25 @@ export default function USMLEStep1Page() {
           {/* Left Column: Copy */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3 py-1 rounded-full mb-4 ff-font-bold">
-              USMLE STEP 1 PREP
+              {hero.eyebrow || "USMLE STEP 1 PREP"}
             </span>
 
             <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-black tracking-tight text-gray-950 leading-[1.08] mb-5 ff-font-bold">
-              Step 1, <span className="text-primary">simplified.</span>
+              {heroParts[0]}
+              {heroHighlight && <span className="text-primary">{heroHighlight}</span>}
+              {heroParts[1]}
             </h1>
 
             <p className="text-base sm:text-lg lg:text-[19px] text-gray-600 leading-relaxed mb-8 max-w-xl ff-font">
-              QBank, illustrated Chitras, flashcards and notes in one app, with analytics that tell you when you’re ready.
+              {hero.subtitle || "QBank, illustrated Chitras, flashcards and notes in one app, with analytics that tell you when you’re ready."}
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-6">
               <Link
-                href="/auth/register?offer=self-assessment"
+                href={hero.trial_btn_link || "/auth/register?offer=self-assessment"}
                 className="bg-primary hover:bg-[#F0BF00] text-black font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl shadow-xs transition-all text-center flex items-center justify-center gap-2 hover:-translate-y-0.5 ff-font-bold"
               >
-                <span>Try a free Self-Assessment</span>
+                <span>{hero.trial_btn_text || "Try a free Self-Assessment"}</span>
                 <FaArrowRight className="w-3.5 h-3.5" />
               </Link>
 
@@ -190,12 +430,12 @@ export default function USMLEStep1Page() {
                 <div className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black">
                   <FaPlay className="w-2 h-2 ml-0.5 text-black" />
                 </div>
-                <span>Watch the app tour</span>
+                <span>{hero.tour_btn_text || "Watch the app tour"}</span>
               </a>
             </div>
 
             <p className="text-xs sm:text-sm text-gray-500 font-medium ff-font">
-              For MD students, DO students and IMGs · iPhone, iPad and web
+              {hero.meta_text || "For MD students, DO students and IMGs · iPhone, iPad and web"}
             </p>
           </div>
 
@@ -221,22 +461,22 @@ export default function USMLEStep1Page() {
                 {/* Header Greeting */}
                 <div>
                   <h3 className="text-xl sm:text-2xl font-black text-gray-900 ff-font-bold tracking-tight">
-                    Good morning
+                    {hero.mockup_greeting || "Good morning"}
                   </h3>
                   <div className="text-xs text-gray-500 font-medium mt-0.5 flex items-center gap-1.5 ff-font">
-                    <span>USMLE Step 1</span>
+                    <span>{hero.mockup_exam_badge || "USMLE Step 1"}</span>
                     <span>·</span>
-                    <span className="text-[#9A7300] font-bold ff-font-bold">109 days left</span>
+                    <span className="text-[#9A7300] font-bold ff-font-bold">{hero.mockup_days_left || "109 days left"}</span>
                   </div>
                 </div>
 
                 {/* Tile 1: Stuck at learning */}
                 <div className="bg-white border border-gray-200 rounded-2xl p-3.5 shadow-2xs flex flex-col gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded w-max ff-font-bold">
-                    Stuck at learning
+                    {hero.mockup_tile1_tag || "Stuck at learning"}
                   </span>
                   <p className="text-sm font-bold text-gray-900 ff-font-bold">
-                    Musculoskeletal &amp; Skin
+                    {hero.mockup_tile1_title || "Musculoskeletal & Skin"}
                   </p>
                   <div className="flex gap-1 h-1.5 w-full my-0.5">
                     <span className="flex-[3] bg-emerald-500 rounded-full" />
@@ -247,7 +487,7 @@ export default function USMLEStep1Page() {
                     href="/auth/register"
                     className="bg-primary hover:bg-[#F0BF00] text-black font-bold text-xs py-2 rounded-xl text-center transition-colors block mt-0.5 ff-font-bold"
                   >
-                    Start 7 questions
+                    {hero.mockup_tile1_btn || "Start 7 questions"}
                   </Link>
                 </div>
 
@@ -295,10 +535,12 @@ export default function USMLEStep1Page() {
 
           <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
             <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-white border border-[#EADB96] px-3.5 py-1 rounded-full mb-3 shadow-2xs ff-font-bold">
-              A LOOK INSIDE · 3-MINUTE TOUR
+              {tour.eyebrow || "A LOOK INSIDE · 3-MINUTE TOUR"}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight ff-font-bold">
-              Practice it. Understand <span className="text-primary">the why</span>. Track it.
+              {tourParts[0]}
+              {tourHighlight && <span className="text-primary">{tourHighlight}</span>}
+              {tourParts[1]}
             </h2>
           </div>
 
@@ -311,26 +553,26 @@ export default function USMLEStep1Page() {
               {/* Phone 1: QBank Tutor */}
               <div className="bg-[#FAF9F5] border border-gray-200 rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col h-full">
                 <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2 ff-font-bold">
-                  <span className="bg-gray-200/70 px-2 py-0.5 rounded text-gray-700">Pharmacology · Tutor</span>
-                  <span className="text-gray-400">Step 1</span>
+                  <span className="bg-gray-200/70 px-2 py-0.5 rounded text-gray-700">{tour.phone1_tag || "Pharmacology · Tutor"}</span>
+                  <span className="text-gray-400">{tour.phone1_badge || "Step 1"}</span>
                 </div>
 
                 <p className="text-xs sm:text-[13px] text-gray-800 font-medium leading-relaxed mb-3 ff-font">
-                  A patient with type 1 diabetes has poor post-meal control on regular insulin and is switched to a rapid-acting analog. What explains its faster peak?
+                  {tour.phone1_question || "A patient with type 1 diabetes has poor post-meal control on regular insulin and is switched to a rapid-acting analog. What explains its faster peak?"}
                 </p>
 
                 <div className="space-y-1.5 mb-4 ff-font">
                   <div className="border border-gray-200 bg-white rounded-lg p-2 text-xs text-gray-600">
-                    A. Shifted isoelectric point
+                    {tour.phone1_option_a || "A. Shifted isoelectric point"}
                   </div>
                   <div className="border border-gray-200 bg-white rounded-lg p-2 text-xs text-gray-600">
-                    B. Added fatty acid chain
+                    {tour.phone1_option_b || "B. Added fatty acid chain"}
                   </div>
                   <div className="border border-gray-200 bg-white rounded-lg p-2 text-xs text-gray-600">
-                    C. Protamine added for crystals
+                    {tour.phone1_option_c || "C. Protamine added for crystals"}
                   </div>
                   <div className="border-2 border-emerald-500 bg-emerald-50 rounded-lg p-2 text-xs font-bold text-emerald-950 flex items-center justify-between ff-font-bold">
-                    <span>D. Altered B-chain C-terminus</span>
+                    <span>{tour.phone1_option_d || "D. Altered B-chain C-terminus"}</span>
                     <span className="text-emerald-700">✓</span>
                   </div>
                 </div>
@@ -350,11 +592,11 @@ export default function USMLEStep1Page() {
                 </div>
 
                 <p className="text-[11px] text-center text-gray-700 leading-snug mb-3 ff-font">
-                  Post-meal spikes on regular insulin → rapid analog → why the fast peak?
+                  {tour.phone2_triage || "Post-meal spikes on regular insulin → rapid analog → why the fast peak?"}
                 </p>
 
                 <div className="bg-[#FFF8DF] border border-[#F5DE88] rounded-xl p-2.5 mb-3 text-xs font-bold text-gray-900 leading-snug ff-font-bold">
-                  <span className="text-[#9A7300] mr-1">✓</span> Altered B-chain C-terminus prevents hexamers
+                  <span className="text-[#9A7300] mr-1">✓</span> {tour.phone2_mechanism || "Altered B-chain C-terminus prevents hexamers"}
                 </div>
 
                 <div className="text-center mb-1.5">
@@ -366,19 +608,19 @@ export default function USMLEStep1Page() {
                 <div className="space-y-1 text-[11px] text-gray-700 mb-3 ff-font">
                   <div className="flex items-start gap-1.5">
                     <b className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[10px] shrink-0 font-bold text-black ff-font-bold">1</b>
-                    <span>Clinical: needs a fast post-meal peak</span>
+                    <span>{tour.phone2_step1 || "Clinical: needs a fast post-meal peak"}</span>
                   </div>
                   <div className="flex items-start gap-1.5">
                     <b className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[10px] shrink-0 font-bold text-black ff-font-bold">2</b>
-                    <span>Drug: lispro, aspart, glulisine</span>
+                    <span>{tour.phone2_step2 || "Drug: lispro, aspart, glulisine"}</span>
                   </div>
                   <div className="flex items-start gap-1.5">
                     <b className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[10px] shrink-0 font-bold text-black ff-font-bold">3</b>
-                    <span>Kinetics: regular insulin forms hexamers</span>
+                    <span>{tour.phone2_step3 || "Kinetics: regular insulin forms hexamers"}</span>
                   </div>
                   <div className="flex items-start gap-1.5">
                     <b className="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[10px] shrink-0 font-bold text-black ff-font-bold">4</b>
-                    <span>Mechanism: B-chain swap blocks hexamers</span>
+                    <span>{tour.phone2_step4 || "Mechanism: B-chain swap blocks hexamers"}</span>
                   </div>
                 </div>
 
@@ -387,7 +629,7 @@ export default function USMLEStep1Page() {
                     MENDEL HACK
                   </span>
                   <p className="text-[11px] text-gray-800 ff-font">
-                    “Lispro swaps LYSine and PROline.”
+                    {tour.phone2_hack || "“Lispro swaps LYSine and PROline.”"}
                   </p>
                 </div>
               </div>
@@ -399,9 +641,9 @@ export default function USMLEStep1Page() {
                 </div>
 
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-3xl sm:text-4xl font-black text-gray-900 ff-font-bold">58%</span>
+                  <span className="text-3xl sm:text-4xl font-black text-gray-900 ff-font-bold">{tour.phone3_accuracy || "58%"}</span>
                   <span className="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full ff-font-bold">
-                    ↗ +11 pts
+                    ↗ {tour.phone3_trend || "+11 pts"}
                   </span>
                 </div>
 
@@ -473,10 +715,10 @@ export default function USMLEStep1Page() {
                 </button>
                 <div>
                   <h4 className="text-base font-bold text-gray-900 ff-font-bold">
-                    Watch the 3-minute app tour
+                    {tour.card_title || "Watch the 3-minute app tour"}
                   </h4>
                   <p className="text-xs text-gray-500 ff-font">
-                    See QBank, Chitras, Flashcards and Self-Assessments in action.
+                    {tour.card_subtitle || "See QBank, Chitras, Flashcards and Self-Assessments in action."}
                   </p>
                 </div>
               </div>
@@ -486,7 +728,7 @@ export default function USMLEStep1Page() {
                 onClick={() => setShowVideoModal(true)}
                 className="bg-black hover:bg-gray-800 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all cursor-pointer whitespace-nowrap ff-font-bold"
               >
-                Play video tour
+                {tour.card_btn_text || "Play video tour"}
               </button>
             </div>
 
@@ -499,19 +741,19 @@ export default function USMLEStep1Page() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div className="max-w-xl">
             <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3 py-1 rounded-full mb-3 ff-font-bold">
-              WHAT’S INCLUDED
+              {dynamicData?.tools?.eyebrow || "WHAT’S INCLUDED"}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight ff-font-bold">
-              Six study tools. One subscription.
+              {dynamicData?.tools?.title || "Six study tools. One subscription."}
             </h2>
           </div>
           <p className="text-sm sm:text-base text-gray-600 max-w-sm ff-font">
-            Everything you need for comprehensive preclinical mastery and high-confidence board preparation.
+            {dynamicData?.tools?.subtitle || "Everything you need for comprehensive preclinical mastery and high-confidence board preparation."}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((t, idx) => (
+          {tools.map((t: any, idx: number) => (
             <div
               key={idx}
               className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-7 shadow-2xs hover:shadow-md hover:border-primary transition-all flex flex-col justify-between group"
@@ -549,21 +791,21 @@ export default function USMLEStep1Page() {
         <div className="bg-gradient-to-r from-[#FFF9E6] via-[#FFFDF5] to-[#FFF4CC] border-2 border-primary/50 rounded-3xl p-8 sm:p-12 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="max-w-2xl">
             <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#9A7300] bg-white/80 border border-[#E9DA97] px-3 py-1 rounded-full mb-3 inline-block ff-font-bold">
-              PREDICTED READINESS
+              {ready.badge || "PREDICTED READINESS"}
             </span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-3 ff-font-bold">
-              Know if you’re ready to pass.
+              {ready.title || "Know if you’re ready to pass."}
             </h2>
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed ff-font">
-              Step 1 is pass/fail. Our NBME-style Self-Assessments give you a predicted score and percentile, so you know how far above the line you are. Your first one is free, and every plan adds two more.
+              {ready.description || "Step 1 is pass/fail. Our NBME-style Self-Assessments give you a predicted score and percentile, so you know how far above the line you are. Your first one is free, and every plan adds two more."}
             </p>
           </div>
 
           <Link
-            href="/auth/register?offer=trial"
+            href={ready.btn_link || "/auth/register?offer=trial"}
             className="bg-primary hover:bg-[#F0BF00] text-black font-bold text-sm sm:text-base px-8 py-4 rounded-xl shadow-sm transition-all hover:scale-105 whitespace-nowrap text-center shrink-0 ff-font-bold"
           >
-            Start 5-day free trial
+            {ready.btn_text || "Start 5-day free trial"}
           </Link>
         </div>
       </section>
@@ -574,19 +816,19 @@ export default function USMLEStep1Page() {
 
           <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
             <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3 py-1 rounded-full mb-3 ff-font-bold">
-              PRICING
+              {pricing.eyebrow || "PRICING"}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight mb-3 ff-font-bold">
-              Every tool, every plan.
+              {pricing.title || "Every tool, every plan."}
             </h2>
             <p className="text-sm sm:text-base text-gray-600 ff-font">
-              All six study tools and 3 Self-Assessments with every plan. Longer plans cost less per month.
+              {pricing.subtitle || "All six study tools and 3 Self-Assessments with every plan. Longer plans cost less per month."}
             </p>
           </div>
 
           {/* 5 Plans Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {plans.map((p, idx) => (
+            {plans.map((p: any, idx: number) => (
               <div
                 key={idx}
                 className={`bg-white rounded-3xl p-6 flex flex-col text-center transition-all duration-200 shadow-2xs relative ${p.popular
@@ -616,21 +858,23 @@ export default function USMLEStep1Page() {
                   {p.desc}
                 </p>
 
-                <Link
-                  href={`/auth/register?plan=${p.duration.replace(" ", "-")}`}
-                  className={`w-full py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all text-center ff-font-bold ${p.popular
+                <button
+                  type="button"
+                  onClick={() => handleChoosePlan(p, idx)}
+                  disabled={loadingKey === `plan-${idx}`}
+                  className={`w-full py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all text-center ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${p.popular
                     ? "bg-primary hover:bg-[#F0BF00] text-black shadow-xs"
                     : "bg-gray-100 hover:bg-black hover:text-white text-gray-900"
                     }`}
                 >
-                  Choose
-                </Link>
+                  {loadingKey === `plan-${idx}` ? "Adding..." : "Choose"}
+                </button>
               </div>
             ))}
           </div>
 
           <p className="text-center text-xs text-gray-400 mt-8 ff-font">
-            All prices in USD. Immediate access upon enrollment. Cancel anytime.
+            {pricing.disclaimer || "All prices in USD. Immediate access upon enrollment. Cancel anytime."}
           </p>
 
         </div>
@@ -642,13 +886,13 @@ export default function USMLEStep1Page() {
 
           <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
             <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-white border border-[#EADB96] px-3.5 py-1 rounded-full mb-3 shadow-2xs ff-font-bold">
-              LIVE MENTORSHIP
+              {mentorship.eyebrow || "LIVE MENTORSHIP"}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight mb-3 ff-font-bold">
-              Prefer to learn live?
+              {mentorship.title || "Prefer to learn live?"}
             </h2>
             <p className="text-sm sm:text-base text-gray-600 ff-font">
-              Physician-led coaching with Dr. Kishore Managoli, MD. Every course includes one year of the Mendel Galaxy app free.
+              {mentorship.subtitle || "Physician-led coaching with Dr. Kishore Managoli, MD. Every course includes one year of the Mendel Galaxy app free."}
             </p>
           </div>
 
@@ -657,43 +901,55 @@ export default function USMLEStep1Page() {
             {/* Featured Left Card */}
             <div className="lg:col-span-5 bg-gradient-to-b from-[#FFFDF0] to-white border-2 border-primary rounded-3xl p-8 sm:p-9 flex flex-col justify-between shadow-md relative">
               <span className="text-[10px] font-bold uppercase tracking-wider text-black bg-primary px-3 py-1 rounded-full w-max mb-4 ff-font-bold">
-                THIS PAGE’S EXAM
+                {featuredMentorship.badge || "THIS PAGE’S EXAM"}
               </span>
 
               <div>
                 <h3 className="text-2xl font-black text-gray-950 ff-font-bold mb-1">
-                  USMLE Step 1 Mentorship
+                  {featuredMentorship.name || "USMLE Step 1 Mentorship"}
                 </h3>
                 <p className="text-xs text-gray-500 mb-4 ff-font">
-                  High-yield group mentorship with Dr. Managoli
+                  {featuredMentorship.subtitle || "High-yield group mentorship with Dr. Managoli"}
                 </p>
 
                 <div className="text-4xl sm:text-5xl font-black text-gray-950 ff-font-bold mb-6">
-                  $1,199
+                  {featuredMentorship.price || "$1,199"}
                 </div>
 
                 <ul className="space-y-3 text-sm text-gray-700 mb-8 ff-font">
-                  <li className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black text-xs font-bold shrink-0 ff-font-bold">✓</span>
-                    <span>Live virtual group classes</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black text-xs font-bold shrink-0 ff-font-bold">✓</span>
-                    <span>Concept-first, visual teaching</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black text-xs font-bold shrink-0 ff-font-bold">✓</span>
-                    <span>1-year Mendel Galaxy app access included</span>
-                  </li>
+                  {(featuredMentorship.features || [
+                    "Live virtual group classes",
+                    "Concept-first, visual teaching",
+                    "1-year Mendel Galaxy app access included"
+                  ]).map((feat: string, fIdx: number) => (
+                    <li key={fIdx} className="flex items-center gap-2.5">
+                      <span className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black text-xs font-bold shrink-0 ff-font-bold">✓</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              <Link
-                href="/auth/register?mentorship=usmle-step-1"
-                className="w-full bg-primary hover:bg-[#F0BF00] text-black font-bold py-3.5 rounded-xl shadow-xs text-center transition-all text-sm ff-font-bold"
+              <button
+                type="button"
+                onClick={() =>
+                  handleEnrollMentorship(
+                    {
+                      id: "usmle-step-1",
+                      name: featuredMentorship.name || "USMLE Step 1 Mentorship",
+                      price: featuredMentorship.price || "$1,199",
+                      subtitle: featuredMentorship.subtitle || "High-yield group mentorship with Dr. Managoli"
+                    },
+                    "featured"
+                  )
+                }
+                disabled={loadingKey === "featured"}
+                className="w-full bg-primary hover:bg-[#F0BF00] text-black font-bold py-3.5 rounded-xl shadow-xs text-center transition-all text-sm ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Enroll in Step 1 Mentorship
-              </Link>
+                {loadingKey === "featured"
+                  ? "Adding..."
+                  : featuredMentorship.btn_text || "Enroll in Step 1 Mentorship"}
+              </button>
             </div>
 
             {/* Right Side: Courses & Bundles */}
@@ -706,83 +962,91 @@ export default function USMLEStep1Page() {
                 </h4>
 
                 <div className="divide-y divide-gray-100">
-                  <div className="py-3 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-gray-900 ff-font-bold">USMLE Step 2 CK</span>
-                      <span className="text-[10px] font-bold bg-[#FFF2C2] text-[#9A7300] px-2 py-0.5 rounded-full ff-font-bold">Popular</span>
+                  {otherCourses.map((oc: any, ocIdx: number) => (
+                    <div key={ocIdx} className="py-3 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-gray-900 ff-font-bold">{oc.name}</span>
+                        {oc.badge && (
+                          <span className="text-[10px] font-bold bg-[#FFF2C2] text-[#9A7300] px-2 py-0.5 rounded-full ff-font-bold">
+                            {oc.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-black text-sm text-gray-900 ff-font-bold">{oc.price}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const courseSlug = oc.link?.includes("mentorship=")
+                              ? oc.link.split("mentorship=")[1]
+                              : oc.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                            handleEnrollMentorship(
+                              {
+                                id: courseSlug || oc.name,
+                                name: oc.name,
+                                price: oc.price,
+                                subtitle: oc.badge || "Live Mentorship Course"
+                              },
+                              `other-${ocIdx}`
+                            );
+                          }}
+                          disabled={loadingKey === `other-${ocIdx}`}
+                          className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3 py-1.5 rounded-lg transition-colors ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          {loadingKey === `other-${ocIdx}` ? "Adding..." : "Enroll"}
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-sm text-gray-900 ff-font-bold">$1,499</span>
-                      <Link href="/auth/register?mentorship=step-2-ck" className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3 py-1.5 rounded-lg transition-colors ff-font-bold">
-                        Enroll
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="py-3 flex items-center justify-between gap-4">
-                    <span className="font-bold text-sm text-gray-900 ff-font-bold">USMLE Step 3</span>
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-sm text-gray-900 ff-font-bold">$899</span>
-                      <Link href="/auth/register?mentorship=step-3" className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3 py-1.5 rounded-lg transition-colors ff-font-bold">
-                        Enroll
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="py-3 flex items-center justify-between gap-4">
-                    <span className="font-bold text-sm text-gray-900 ff-font-bold">COMLEX 1</span>
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-sm text-gray-900 ff-font-bold">$1,199</span>
-                      <Link href="/auth/register?mentorship=comlex-1" className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3 py-1.5 rounded-lg transition-colors ff-font-bold">
-                        Enroll
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="py-3 flex items-center justify-between gap-4">
-                    <div className="flex items-baseline gap-1">
-                      <span className="font-bold text-sm text-gray-900 ff-font-bold">Shelf exams</span>
-                      <span className="text-[11px] text-gray-400 ff-font">/ per exam</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-black text-sm text-gray-900 ff-font-bold">$299</span>
-                      <Link href="/auth/register?mentorship=shelf" className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3 py-1.5 rounded-lg transition-colors ff-font-bold">
-                        Enroll
-                      </Link>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
               {/* Bundles */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
-                <div className="bg-white border border-gray-200 rounded-3xl p-5 shadow-2xs flex flex-col justify-between">
-                  <div>
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 ff-font-bold">Bundle</span>
-                    <h4 className="text-base font-bold text-gray-900 mt-1 ff-font-bold">Tsunami Bundle</h4>
-                    <p className="text-xs text-gray-500 mt-0.5 ff-font">Step 1 + Step 2 CK live mentorship</p>
+                {bundles.map((bd: any, bdIdx: number) => (
+                  <div
+                    key={bdIdx}
+                    className={`bg-white rounded-3xl p-5 shadow-2xs flex flex-col justify-between ${
+                      bdIdx === 1 ? "border-2 border-primary" : "border border-gray-200"
+                    }`}
+                  >
+                    <div>
+                      <span className={`text-[9px] font-bold uppercase tracking-wider ff-font-bold ${bdIdx === 1 ? "text-[#9A7300]" : "text-gray-400"}`}>
+                        {bd.tag || "Bundle"}
+                      </span>
+                      <h4 className="text-base font-bold text-gray-900 mt-1 ff-font-bold">{bd.name}</h4>
+                      <p className="text-xs text-gray-500 mt-0.5 ff-font">{bd.subtitle}</p>
+                    </div>
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                      <span className="text-xl font-black text-gray-900 ff-font-bold">{bd.price}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const bundleSlug = bd.link?.includes("bundle=")
+                            ? bd.link.split("bundle=")[1]
+                            : bd.name?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                          handleEnrollMentorship(
+                            {
+                              id: bundleSlug || bd.name,
+                              name: bd.name,
+                              price: bd.price,
+                              subtitle: bd.subtitle || bd.tag || "Live Mentorship Bundle"
+                            },
+                            `bundle-${bdIdx}`
+                          );
+                        }}
+                        disabled={loadingKey === `bundle-${bdIdx}`}
+                        className={`text-xs font-bold px-3.5 py-2 rounded-xl transition-colors ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${
+                          bdIdx === 1
+                            ? "bg-primary hover:bg-[#F0BF00] text-black"
+                            : "bg-gray-100 hover:bg-black hover:text-white"
+                        }`}
+                      >
+                        {loadingKey === `bundle-${bdIdx}` ? "Adding..." : "Enroll"}
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-                    <span className="text-xl font-black text-gray-900 ff-font-bold">$2,235</span>
-                    <Link href="/auth/register?bundle=tsunami" className="text-xs font-bold bg-gray-100 hover:bg-black hover:text-white px-3.5 py-2 rounded-xl transition-colors ff-font-bold">
-                      Enroll
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="bg-white border-2 border-primary rounded-3xl p-5 shadow-2xs flex flex-col justify-between">
-                  <div>
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-[#9A7300] ff-font-bold">Bundle · Boards to Match</span>
-                    <h4 className="text-base font-bold text-gray-900 mt-1 ff-font-bold">Full Match Bundle</h4>
-                    <p className="text-xs text-gray-500 mt-0.5 ff-font">Step 1 + Step 2 CK + Step 3 complete pathway</p>
-                  </div>
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-                    <span className="text-xl font-black text-gray-900 ff-font-bold">$2,995</span>
-                    <Link href="/auth/register?bundle=full-match" className="text-xs font-bold bg-primary hover:bg-[#F0BF00] text-black px-3.5 py-2 rounded-xl transition-colors ff-font-bold">
-                      Enroll
-                    </Link>
-                  </div>
-                </div>
+                ))}
               </div>
 
             </div>
@@ -793,10 +1057,10 @@ export default function USMLEStep1Page() {
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xs">
             <div>
               <h4 className="text-lg font-bold text-gray-900 ff-font-bold mb-1">
-                Designer 1:1 mentoring
+                {mentorship.one_on_one_title || "Designer 1:1 mentoring"}
               </h4>
               <p className="text-sm text-gray-600 ff-font">
-                A personal roadmap built around your clinical strengths, diagnostic speed, and subject weaknesses.
+                {mentorship.one_on_one_desc || "A personal roadmap built around your clinical strengths, diagnostic speed, and subject weaknesses."}
               </p>
             </div>
             <button
@@ -804,7 +1068,7 @@ export default function USMLEStep1Page() {
               onClick={() => setShowContactModal(true)}
               className="bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-black text-gray-900 font-bold text-xs sm:text-sm px-6 py-3 rounded-xl transition-all whitespace-nowrap cursor-pointer shrink-0 ff-font-bold"
             >
-              Contact us for details
+              {mentorship.one_on_one_btn || "Contact us for details"}
             </button>
           </div>
 
@@ -815,43 +1079,25 @@ export default function USMLEStep1Page() {
       <section className="max-w-[1140px] mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
           <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3 py-1 rounded-full mb-3 ff-font-bold">
-            STUDENT STORIES
+            {dynamicData?.testimonials?.eyebrow || "STUDENT STORIES"}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight ff-font-bold">
-            Real scores. Real matches.
+            {dynamicData?.testimonials?.title || "Real scores. Real matches."}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white border border-gray-200 rounded-3xl p-7 shadow-2xs flex flex-col justify-between">
-            <blockquote className="text-base sm:text-lg text-gray-800 leading-relaxed mb-6 ff-font">
-              “The Chitras changed how I think about disease mechanisms. I stopped memorizing and started understanding.”
-            </blockquote>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="text-sm font-bold text-gray-900 ff-font-bold">Riaa S.</p>
-              <p className="text-xs text-gray-500 ff-font">Matched Internal Medicine</p>
+          {testimonials.map((item: any, idx: number) => (
+            <div key={idx} className="bg-white border border-gray-200 rounded-3xl p-7 shadow-2xs flex flex-col justify-between">
+              <blockquote className="text-base sm:text-lg text-gray-800 leading-relaxed mb-6 ff-font">
+                {item.quote}
+              </blockquote>
+              <div className="pt-4 border-t border-gray-100">
+                <p className="text-sm font-bold text-gray-900 ff-font-bold">{item.author}</p>
+                <p className="text-xs text-gray-500 ff-font">{item.credential}</p>
+              </div>
             </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-3xl p-7 shadow-2xs flex flex-col justify-between">
-            <blockquote className="text-base sm:text-lg text-gray-800 leading-relaxed mb-6 ff-font">
-              “As an IMG, I needed a structured approach. The explanations teach you to think, not just recall.”
-            </blockquote>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="text-sm font-bold text-gray-900 ff-font-bold">Arjun M.</p>
-              <p className="text-xs text-gray-500 ff-font">IMG · Matched Neurology</p>
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-3xl p-7 shadow-2xs flex flex-col justify-between">
-            <blockquote className="text-base sm:text-lg text-gray-800 leading-relaxed mb-6 ff-font">
-              “Dr. Managoli’s mentorship rebuilt my approach. Rapid Recall saved me the week before the exam.”
-            </blockquote>
-            <div className="pt-4 border-t border-gray-100">
-              <p className="text-sm font-bold text-gray-900 ff-font-bold">Priya K.</p>
-              <p className="text-xs text-gray-500 ff-font">Matched Psychiatry</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -861,10 +1107,10 @@ export default function USMLEStep1Page() {
 
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-gray-950 tracking-tight leading-tight mb-3 ff-font-bold">
-              Questions, answered.
+              {dynamicData?.faqs?.title || "Questions, answered."}
             </h2>
             <p className="text-sm sm:text-base text-gray-600 ff-font">
-              Still deciding?{" "}
+              {dynamicData?.faqs?.subtitle || "Still deciding? "}
               <a href="#tour" className="text-[#9A7300] font-bold hover:underline ff-font-bold">
                 Watch the app tour first →
               </a>
@@ -873,7 +1119,7 @@ export default function USMLEStep1Page() {
 
           {/* FAQ Accordions */}
           <div className="space-y-3">
-            {faqs.map((faq, idx) => {
+            {faqs.map((faq: any, idx: number) => {
               const isOpen = openFaq === idx;
               return (
                 <div
@@ -904,7 +1150,7 @@ export default function USMLEStep1Page() {
           </div>
 
           <p className="text-center text-xs text-gray-400 mt-10 ff-font">
-            Last updated October 30, 2026 · Mendel Academy, founded by Dr. Kishore Managoli, MD
+            {dynamicData?.faqs?.footer_text || "Last updated October 30, 2026 · Mendel Academy, founded by Dr. Kishore Managoli, MD"}
           </p>
 
         </div>
@@ -914,14 +1160,14 @@ export default function USMLEStep1Page() {
       <section className="max-w-[1140px] mx-auto px-4 sm:px-6 pb-20">
         <div className="bg-primary text-black rounded-3xl p-8 sm:p-14 text-center shadow-lg flex flex-col items-center gap-6">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight ff-font-bold max-w-2xl">
-            Simplify your Step 1 prep today.
+            {cta.title || "Simplify your Step 1 prep today."}
           </h2>
 
           <Link
-            href="/auth/register?offer=self-assessment"
+            href={cta.btn_link || "/auth/register?offer=self-assessment"}
             className="bg-black hover:bg-gray-900 text-white font-bold text-sm sm:text-base px-8 py-4 rounded-xl shadow-md transition-all hover:scale-105 ff-font-bold"
           >
-            Try a free Self-Assessment
+            {cta.btn_text || "Try a free Self-Assessment"}
           </Link>
         </div>
       </section>
@@ -948,7 +1194,7 @@ export default function USMLEStep1Page() {
             <div className="aspect-video w-full rounded-2xl bg-gray-900 overflow-hidden flex items-center justify-center relative">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"
+                src={tour.video_url || "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1"}
                 title="Mendel Galaxy App Tour"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
