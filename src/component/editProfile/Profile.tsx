@@ -7,7 +7,7 @@ import { FaCamera, FaFire } from 'react-icons/fa';
 import { FiCamera, FiMenu } from 'react-icons/fi';
 import { HiOutlineFire } from 'react-icons/hi';
 
-const Profile = ({ onOpenSidebar }) => {
+const Profile = ({ onOpenSidebar }: { onOpenSidebar?: () => void }) => {
 
     const timezones = [
         "Pacific Time (UTC−8)",

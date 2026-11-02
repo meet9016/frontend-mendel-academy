@@ -19,6 +19,7 @@ import Hero from "./sections/Hero";
 import WhatIsProgram from "./sections1/WhatIsProgram";
 import GalaxyAppSection from "./sections1/GalaxyAppSection";
 import TestimonialsSection from "./sections1/TestimonialsSection";
+import USMLEStep1Page from "./USMLEStep1Page";
 
 function PgMedicalEntranceExams() {
   const { id } = useParams();
@@ -103,6 +104,10 @@ function PgMedicalEntranceExams() {
       fetchSubjectData();
     }
   }, [examData]);
+
+  if (isUSMLEStep1) {
+    return <USMLEStep1Page />;
+  }
 
   // Hero section content based on exam type
 
