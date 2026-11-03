@@ -19,7 +19,9 @@ import {
   FiTarget,
   FiLayers,
   FiBookOpen,
-  FiZap
+  FiZap,
+  FiChevronLeft,
+  FiChevronRight
 } from "react-icons/fi";
 import { HiOutlineSparkles } from "react-icons/hi2";
 
@@ -54,6 +56,37 @@ const DEFAULT_TOOLS = [
     desc: "Clinical mnemonics that explain the core mechanism, not just abbreviate words.",
     tag: "SMART MNEMONICS"
   },
+];
+
+const DEFAULT_HERO_SCREENS = [
+  {
+    id: "qbanks",
+    title: "Mendel QBanks",
+    subtitle: "Suggested Next & Practice Questions",
+    image: "/images/app-screens/step1-qbanks.jpg",
+    alt: "Mendel QBanks app screen with suggested next questions and progress metrics"
+  },
+  {
+    id: "library",
+    title: "Mendel Library",
+    subtitle: "2.3k Notes & 853 Illustrated Chitras",
+    image: "/images/app-screens/step1-library.jpg",
+    alt: "Mendel Library app screen with study notes and pathology chitras"
+  },
+  {
+    id: "chitra",
+    title: "Mendel Chitras",
+    subtitle: "Visual Pathogenesis & Clinical Journey",
+    image: "/images/app-screens/step1-chitra.jpg",
+    alt: "Mendel Chitra visual summary diagram for colorectal cancer pathogenesis"
+  },
+  {
+    id: "assessments",
+    title: "Self-Assessments",
+    subtitle: "Predicted Step 1 Score & Cohort Curve",
+    image: "/images/app-screens/step1-assessments.jpg",
+    alt: "Mendel Self-Assessment result screen with predicted score and cohort bell curve"
+  }
 ];
 
 const DEFAULT_PLANS = [
@@ -263,6 +296,49 @@ export default function USMLEStep1Page() {
 
   // Section data helpers with defaults
   const hero = dynamicData?.hero || {};
+
+  // Hero Phone Showcase Slider State (matching 3-phone carousel)
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [isHeroHovered, setIsHeroHovered] = useState(false);
+  const [heroTouchStartX, setHeroTouchStartX] = useState<number | null>(null);
+
+  const heroScreens = (dynamicData?.hero?.screens && dynamicData.hero.screens.length > 0)
+    ? dynamicData.hero.screens
+    : DEFAULT_HERO_SCREENS;
+
+  const handleHeroPrev = () => {
+    setCurrentHeroIndex((prev) => (prev - 1 + heroScreens.length) % heroScreens.length);
+  };
+
+  const handleHeroNext = () => {
+    setCurrentHeroIndex((prev) => (prev + 1) % heroScreens.length);
+  };
+
+  useEffect(() => {
+    if (isHeroHovered) return;
+    const interval = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroScreens.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isHeroHovered, heroScreens.length]);
+
+  const handleHeroTouchStart = (e: React.TouchEvent) => {
+    setIsHeroHovered(true);
+    setHeroTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleHeroTouchEnd = (e: React.TouchEvent) => {
+    if (heroTouchStartX !== null) {
+      const diff = heroTouchStartX - e.changedTouches[0].clientX;
+      if (diff > 45) {
+        handleHeroNext();
+      } else if (diff < -45) {
+        handleHeroPrev();
+      }
+    }
+    setHeroTouchStartX(null);
+    setTimeout(() => setIsHeroHovered(false), 2000);
+  };
   const tour = dynamicData?.tour || {};
   const ready = dynamicData?.ready || {};
   const pricing = dynamicData?.pricing || {};
@@ -305,23 +381,23 @@ export default function USMLEStep1Page() {
   // Plans computation
   const plans = (dynamicData?.pricing?.plans && dynamicData.pricing.plans.length > 0)
     ? dynamicData.pricing.plans.map((p: any) => {
-        const monthNum = parseInt(String(p.duration).replace(/\D/g, ''), 10);
-        const matchedDbPlan = dynamicPlans.find((dp: any) => dp.plan_month === monthNum);
-        return {
-          ...p,
-          _id: matchedDbPlan?._id || p._id
-        };
-      })
+      const monthNum = parseInt(String(p.duration).replace(/\D/g, ''), 10);
+      const matchedDbPlan = dynamicPlans.find((dp: any) => dp.plan_month === monthNum);
+      return {
+        ...p,
+        _id: matchedDbPlan?._id || p._id
+      };
+    })
     : (dynamicPlans && dynamicPlans.length > 0)
       ? dynamicPlans.map((p: any) => ({
-          _id: p._id,
-          duration: `${p.plan_month} month${p.plan_month > 1 ? 's' : ''}`,
-          price: p.plan_pricing_dollar ? `$${p.plan_pricing_dollar}` : `$${p.plan_pricing_inr || 0}`,
-          pm: p.plan_pricing_dollar ? `≈ $${Math.round(p.plan_pricing_dollar / (p.plan_month || 1))} / mo` : '',
-          popular: Boolean(p.most_popular),
-          badge: p.most_popular ? "BEST VALUE" : null,
-          desc: p.plan_title || (p.plan_month === 12 ? "Complete 365-day board foundation." : p.plan_month === 1 ? "Last-mile intensive practice." : `${p.plan_month}-month board preparation.`),
-        }))
+        _id: p._id,
+        duration: `${p.plan_month} month${p.plan_month > 1 ? 's' : ''}`,
+        price: p.plan_pricing_dollar ? `$${p.plan_pricing_dollar}` : `$${p.plan_pricing_inr || 0}`,
+        pm: p.plan_pricing_dollar ? `≈ $${Math.round(p.plan_pricing_dollar / (p.plan_month || 1))} / mo` : '',
+        popular: Boolean(p.most_popular),
+        badge: p.most_popular ? "BEST VALUE" : null,
+        desc: p.plan_title || (p.plan_month === 12 ? "Complete 365-day board foundation." : p.plan_month === 1 ? "Last-mile intensive practice." : `${p.plan_month}-month board preparation.`),
+      }))
       : DEFAULT_PLANS;
 
   const otherCourses = mentorship.other_courses || [
@@ -395,137 +471,199 @@ export default function USMLEStep1Page() {
       </nav>
 
       {/* ================= HERO SECTION ================= */}
-      <section className="max-w-[1140px] mx-auto px-4 sm:px-6 pt-8 pb-16 sm:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-4 sm:pt-8 pb-14 sm:pb-20">
+        {/* Centered Top Header */}
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+          <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3.5 py-1.5 rounded-full mb-3 sm:mb-4 ff-font-bold shadow-2xs">
+            {hero.eyebrow || "USMLE STEP 1 PREP"}
+          </span>
 
-          {/* Left Column: Copy */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <span className="inline-block text-[11px] sm:text-xs font-bold tracking-[0.16em] uppercase text-[#9A7300] bg-[#FFF2C2] px-3 py-1 rounded-full mb-4 ff-font-bold">
-              {hero.eyebrow || "USMLE STEP 1 PREP"}
-            </span>
+          <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-black tracking-tight text-gray-950 leading-[1.1] mb-4 sm:mb-5 ff-font-bold break-words">
+            {heroParts[0]}
+            {heroHighlight && <span className="text-primary">{heroHighlight}</span>}
+            {heroParts[1]}
+          </h1>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-black tracking-tight text-gray-950 leading-[1.08] mb-5 ff-font-bold">
-              {heroParts[0]}
-              {heroHighlight && <span className="text-primary">{heroHighlight}</span>}
-              {heroParts[1]}
-            </h1>
+          <p className="text-sm sm:text-lg lg:text-[19px] text-gray-600 leading-relaxed mb-6 sm:mb-8 max-w-2xl mx-auto ff-font px-2">
+            {hero.subtitle || "QBank, illustrated Chitras, flashcards and notes in one app, with analytics that tell you when you’re ready."}
+          </p>
 
-            <p className="text-base sm:text-lg lg:text-[19px] text-gray-600 leading-relaxed mb-8 max-w-xl ff-font">
-              {hero.subtitle || "QBank, illustrated Chitras, flashcards and notes in one app, with analytics that tell you when you’re ready."}
-            </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mb-4">
+            <Link
+              href={hero.trial_btn_link || "/auth/register?offer=self-assessment"}
+              className="w-full sm:w-auto bg-primary hover:bg-[#F0BF00] text-black font-bold text-sm sm:text-base px-7 py-3.5 rounded-xl shadow-xs transition-all text-center flex items-center justify-center gap-2 hover:-translate-y-0.5 ff-font-bold whitespace-nowrap"
+            >
+              <span>{hero.trial_btn_text || "Try a free Self-Assessment"}</span>
+              <FaArrowRight className="w-3.5 h-3.5" />
+            </Link>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-6">
-              <Link
-                href={hero.trial_btn_link || "/auth/register?offer=self-assessment"}
-                className="bg-primary hover:bg-[#F0BF00] text-black font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl shadow-xs transition-all text-center flex items-center justify-center gap-2 hover:-translate-y-0.5 ff-font-bold"
-              >
-                <span>{hero.trial_btn_text || "Try a free Self-Assessment"}</span>
-                <FaArrowRight className="w-3.5 h-3.5" />
-              </Link>
-
-              <a
-                href="#tour"
-                className="bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-black text-gray-800 hover:text-black font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all text-center flex items-center justify-center gap-2.5 shadow-2xs ff-font-bold"
-              >
-                <div className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black">
-                  <FaPlay className="w-2 h-2 ml-0.5 text-black" />
-                </div>
-                <span>{hero.tour_btn_text || "Watch the app tour"}</span>
-              </a>
-            </div>
-
-            <p className="text-xs sm:text-sm text-gray-500 font-medium ff-font">
-              {hero.meta_text || "For MD students, DO students and IMGs · iPhone, iPad and web"}
-            </p>
+            <a
+              href="#tour"
+              className="w-full sm:w-auto bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-black text-gray-800 hover:text-black font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl transition-all text-center flex items-center justify-center gap-2.5 shadow-2xs ff-font-bold whitespace-nowrap"
+            >
+              <div className="w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-black">
+                <FaPlay className="w-2 h-2 ml-0.5 text-black" />
+              </div>
+              <span>{hero.tour_btn_text || "Watch the app tour"}</span>
+            </a>
           </div>
 
-          {/* Right Column: Hero Art (Phone Mockup in Light Theme) */}
-          <div className="lg:col-span-5 flex justify-center relative">
-            {/* Ambient Background Glow */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-4 sm:-inset-10 rounded-full bg-primary/20 blur-3xl -z-10 opacity-70 pointer-events-none"
-            />
+          <p className="text-xs sm:text-sm text-gray-500 font-medium ff-font">
+            {hero.meta_text || "For MD students, DO students and IMGs · iPhone, iPad and web"}
+          </p>
+        </div>
 
-            {/* Phone Shell */}
-            <div className="relative w-[300px] sm:w-[320px] bg-white rounded-[44px] p-3 shadow-2xl border-4 border-gray-900 ring-8 ring-black/5">
+        {/* 3-Phone Showcase Slider (Matching Image 5) */}
+        <div className="relative max-w-[1020px] mx-auto">
+          {/* Ambient Glow */}
+          <div
+            aria-hidden="true"
+            className="absolute -inset-4 sm:-inset-10 rounded-full bg-primary/20 blur-3xl -z-10 opacity-70 pointer-events-none"
+          />
 
-              {/* Dynamic Island / Speaker */}
-              <div className="w-24 h-4 bg-gray-900 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-gray-950/70 border border-gray-800" />
-              </div>
+          {/* Showcase Card Frame */}
+          <div
+            className="relative w-full border border-gray-200/90 rounded-[28px] sm:rounded-[40px] p-3 sm:p-5 lg:p-6 shadow-sm backdrop-blur-xs select-none"
+            onMouseEnter={() => setIsHeroHovered(true)}
+            onMouseLeave={() => setIsHeroHovered(false)}
+            onTouchStart={handleHeroTouchStart}
+            onTouchEnd={handleHeroTouchEnd}
+          >
+            {/* Stage Container */}
+            <div className="relative w-full h-[460px] xs:h-[500px] sm:h-[560px] md:h-[590px] overflow-hidden flex items-center justify-center">
 
-              {/* Screen Content */}
-              <div className="bg-[#FAF9F5] rounded-[32px] p-4 sm:p-5 flex flex-col gap-3.5 text-left border border-gray-200/60">
+              {/* Left Arrow Button */}
+              <button
+                type="button"
+                onClick={handleHeroPrev}
+                aria-label="Previous screen"
+                className="absolute left-1 sm:left-3 lg:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-gray-50 text-gray-800 hover:text-black shadow-md hover:shadow-xl border border-gray-200/90 flex items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95"
+              >
+                <FiChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
 
-                {/* Header Greeting */}
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-gray-900 ff-font-bold tracking-tight">
-                    {hero.mockup_greeting || "Good morning"}
-                  </h3>
-                  <div className="text-xs text-gray-500 font-medium mt-0.5 flex items-center gap-1.5 ff-font">
-                    <span>{hero.mockup_exam_badge || "USMLE Step 1"}</span>
-                    <span>·</span>
-                    <span className="text-[#9A7300] font-bold ff-font-bold">{hero.mockup_days_left || "109 days left"}</span>
-                  </div>
-                </div>
+              {/* Right Arrow Button */}
+              <button
+                type="button"
+                onClick={handleHeroNext}
+                aria-label="Next screen"
+                className="absolute right-1 sm:right-3 lg:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-gray-50 text-gray-800 hover:text-black shadow-md hover:shadow-xl border border-gray-200/90 flex items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95"
+              >
+                <FiChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
 
-                {/* Tile 1: Stuck at learning */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-3.5 shadow-2xs flex flex-col gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded w-max ff-font-bold">
-                    {hero.mockup_tile1_tag || "Stuck at learning"}
-                  </span>
-                  <p className="text-sm font-bold text-gray-900 ff-font-bold">
-                    {hero.mockup_tile1_title || "Musculoskeletal & Skin"}
-                  </p>
-                  <div className="flex gap-1 h-1.5 w-full my-0.5">
-                    <span className="flex-[3] bg-emerald-500 rounded-full" />
-                    <span className="flex-[3] bg-amber-500 rounded-full" />
-                    <span className="flex-[4] bg-primary rounded-full" />
-                  </div>
-                  <Link
-                    href="/auth/register"
-                    className="bg-primary hover:bg-[#F0BF00] text-black font-bold text-xs py-2 rounded-xl text-center transition-colors block mt-0.5 ff-font-bold"
+              {/* 3 Phones Display */}
+              {heroScreens.map((screen: any, index: number) => {
+                const total = heroScreens.length;
+                const offset = (index - currentHeroIndex + total) % total;
+
+                const isCenter = offset === 0;
+                const isRight = offset === 1;
+                const isLeft = offset === total - 1;
+
+                let style: React.CSSProperties = {
+                  transition: "transform 500ms cubic-bezier(0.25, 1, 0.5, 1), opacity 500ms ease, filter 500ms ease",
+                };
+
+                if (isCenter) {
+                  style = {
+                    ...style,
+                    transform: "translate(-50%, -50%) scale(1)",
+                    zIndex: 20,
+                    opacity: 1,
+                    pointerEvents: "auto",
+                    filter: "drop-shadow(0 25px 40px rgba(0,0,0,0.30))",
+                  };
+                } else if (isRight) {
+                  style = {
+                    ...style,
+                    transform: "translate(calc(-50% + clamp(90px, 23vw, 220px)), -50%) scale(0.86)",
+                    zIndex: 10,
+                    opacity: 0.82,
+                    cursor: "pointer",
+                    pointerEvents: "auto",
+                    filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.16))",
+                  };
+                } else if (isLeft) {
+                  style = {
+                    ...style,
+                    transform: "translate(calc(-50% - clamp(90px, 23vw, 220px)), -50%) scale(0.86)",
+                    zIndex: 10,
+                    opacity: 0.82,
+                    cursor: "pointer",
+                    pointerEvents: "auto",
+                    filter: "drop-shadow(0 15px 25px rgba(0,0,0,0.16))",
+                  };
+                } else {
+                  style = {
+                    ...style,
+                    transform: "translate(-50%, -50%) scale(0.7)",
+                    zIndex: 0,
+                    opacity: 0,
+                    pointerEvents: "none",
+                  };
+                }
+
+                return (
+                  <div
+                    key={screen.id}
+                    className="absolute top-1/2 left-1/2 w-[200px] xs:w-[220px] sm:w-[245px] md:w-[255px] aspect-[471/1024] select-none"
+                    style={style}
+                    onClick={() => {
+                      if (isRight) handleHeroNext();
+                      else if (isLeft) handleHeroPrev();
+                    }}
+                    title={isRight ? `Next: ${screen.title}` : isLeft ? `Previous: ${screen.title}` : screen.title}
                   >
-                    {hero.mockup_tile1_btn || "Start 7 questions"}
-                  </Link>
-                </div>
-
-                {/* Tile 2: Self-Assessment */}
-                <div className="bg-gradient-to-br from-teal-50 to-emerald-50 border border-teal-200 rounded-2xl p-3.5 shadow-2xs flex flex-col gap-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-white/70 px-2 py-0.5 rounded w-max ff-font-bold">
-                    Self-Assessment
-                  </span>
-                  <p className="text-sm font-bold text-gray-900 ff-font-bold">
-                    Are you ready to pass?
-                  </p>
-                  <p className="text-[11px] text-gray-600 leading-snug ff-font">
-                    280 questions · exam-paced · first one free
-                  </p>
-                </div>
-
-                {/* Tile 3: Weekly Tracker */}
-                <div className="bg-white border border-gray-200 rounded-2xl p-3.5 shadow-2xs">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 ff-font-bold">
-                    <span>This week</span>
-                    <span className="text-emerald-700 font-bold">2 of 7 days</span>
+                    {/* Realistic iPhone Bezel / Frame */}
+                    <div className="relative w-full h-full bg-[#18181A] rounded-[34px] sm:rounded-[42px] p-2 sm:p-2.5 border-[3px] border-[#2C2C32] ring-1 ring-black/40 shadow-2xl flex flex-col">
+                      {/* Screen Image (status bar already included in screenshot) */}
+                      <div className="relative w-full h-full rounded-[26px] sm:rounded-[34px] overflow-hidden bg-black">
+                        <img
+                          src={screen.image}
+                          alt={screen.alt || screen.title}
+                          className="w-full h-full object-cover object-top select-none pointer-events-none"
+                          draggable={false}
+                        />
+                        {/* Subtle screen gloss highlight */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-7 gap-1.5">
-                    <span className="h-5 rounded-md bg-gray-200/80" />
-                    <span className="h-5 rounded-md bg-emerald-500" />
-                    <span className="h-5 rounded-md bg-emerald-700" />
-                    <span className="h-5 rounded-md bg-white border-2 border-primary ring-1 ring-primary/40" />
-                    <span className="h-5 rounded-md bg-gray-100" />
-                    <span className="h-5 rounded-md bg-gray-100" />
-                    <span className="h-5 rounded-md bg-gray-100" />
-                  </div>
-                </div>
+                );
+              })}
+            </div>
 
+            {/* Bottom Pagination & Subtitle */}
+            <div className="flex flex-col items-center gap-2 mt-3 select-none">
+              {/* Dots matching Image 5 */}
+              <div className="flex items-center justify-center gap-2">
+                {heroScreens.map((s: any, idx: number) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setCurrentHeroIndex(idx)}
+                    aria-label={`Jump to ${s.title}`}
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${idx === currentHeroIndex
+                        ? "w-8 h-2.5 bg-[#2563EB] shadow-xs"
+                        : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
+                      }`}
+                  />
+                ))}
+              </div>
+
+              {/* Caption Title */}
+              <div className="text-center">
+                <span className="text-sm font-bold text-gray-900 ff-font-bold">
+                  {heroScreens[currentHeroIndex].title}
+                </span>
+                <span className="text-xs text-gray-500 font-medium ml-1.5 ff-font hidden sm:inline">
+                  — {heroScreens[currentHeroIndex].subtitle}
+                </span>
               </div>
             </div>
 
           </div>
-
         </div>
       </section>
 
@@ -1006,9 +1144,8 @@ export default function USMLEStep1Page() {
                 {bundles.map((bd: any, bdIdx: number) => (
                   <div
                     key={bdIdx}
-                    className={`bg-white rounded-3xl p-5 shadow-2xs flex flex-col justify-between ${
-                      bdIdx === 1 ? "border-2 border-primary" : "border border-gray-200"
-                    }`}
+                    className={`bg-white rounded-3xl p-5 shadow-2xs flex flex-col justify-between ${bdIdx === 1 ? "border-2 border-primary" : "border border-gray-200"
+                      }`}
                   >
                     <div>
                       <span className={`text-[9px] font-bold uppercase tracking-wider ff-font-bold ${bdIdx === 1 ? "text-[#9A7300]" : "text-gray-400"}`}>
@@ -1036,11 +1173,10 @@ export default function USMLEStep1Page() {
                           );
                         }}
                         disabled={loadingKey === `bundle-${bdIdx}`}
-                        className={`text-xs font-bold px-3.5 py-2 rounded-xl transition-colors ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${
-                          bdIdx === 1
+                        className={`text-xs font-bold px-3.5 py-2 rounded-xl transition-colors ff-font-bold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${bdIdx === 1
                             ? "bg-primary hover:bg-[#F0BF00] text-black"
                             : "bg-gray-100 hover:bg-black hover:text-white"
-                        }`}
+                          }`}
                       >
                         {loadingKey === `bundle-${bdIdx}` ? "Adding..." : "Enroll"}
                       </button>

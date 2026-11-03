@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaArrowLeft, FaHome, FaUser } from "react-icons/fa";
 import { FiCreditCard } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
@@ -18,6 +18,35 @@ const EditProfile = () => {
   const [userType, setUserType] = useState("dashboard");
   const [activeMenu, setActiveMenu] = useState("overview");
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlTab = new URLSearchParams(window.location.search).get("tab");
+      if (urlTab && ["overview", "membership", "profile", "contactUs"].includes(urlTab)) {
+        setActiveMenu(urlTab);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleTabChange = (e: any) => {
+      if (e?.detail && ["overview", "membership", "profile", "contactUs"].includes(e.detail)) {
+        setActiveMenu(e.detail);
+      }
+    };
+    window.addEventListener("editProfileTabChange", handleTabChange);
+    return () => {
+      window.removeEventListener("editProfileTabChange", handleTabChange);
+    };
+  }, []);
+
+  const handleTabSelect = (tabId: string) => {
+    setActiveMenu(tabId);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `/editProfile?tab=${tabId}`);
+      window.dispatchEvent(new CustomEvent("editProfileTabChange", { detail: tabId }));
+    }
+  };
+
   const menuItems = [
     { id: "overview", label: "Overview", icon: FaHome },
     { id: "membership", label: "Membership", icon: FiCreditCard },
@@ -30,7 +59,7 @@ const EditProfile = () => {
       <div className="max-w-[1380px] mx-auto flex">
 
         {/* ================= DESKTOP SIDEBAR ================= */}
-        {userType !== "dashboard" && (
+        {(userType !== "dashboard" || activeMenu !== "overview") && (
           <aside className="hidden lg:flex lg:flex-col lg:w-[260px] lg:shrink-0 bg-white border-r border-gray-200 min-h-screen">
             {/* Back */}
             <div className="px-5 py-6 border-b border-gray-200">
@@ -51,7 +80,7 @@ const EditProfile = () => {
                 return (
                   <div
                     key={item.id}
-                    onClick={() => setActiveMenu(item.id)}
+                    onClick={() => handleTabSelect(item.id)}
                     className={`flex ff-font text-[14px] items-center gap-3 px-5 py-[10px] cursor-pointer transition-colors ${
                       isActive
                         ? "bg-[#fff4d6] border-l-4 border-primary text-black font-semibold"
@@ -90,43 +119,9 @@ const EditProfile = () => {
         {/* ================= CONTENT ================= */}
         <div className="flex-1 w-full p-3 sm:p-4 lg:p-8">
 
-          {/* ================= MOBILE 4-ITEM NAVIGATION (ONE LINE) ================= */}
-          {userType !== "dashboard" && (
-            <div className="lg:hidden mb-4 sm:mb-6">
-              <div className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-1 sm:p-1.5 shadow-2xs">
-                <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
-                  {menuItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeMenu === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => setActiveMenu(item.id)}
-                        className={`flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-2.5 px-1 sm:px-2 rounded-lg sm:rounded-xl text-[11px] sm:text-[13px] ff-font font-medium transition-all duration-150 cursor-pointer whitespace-nowrap select-none ${
-                          isActive
-                            ? "bg-primary text-black font-bold shadow-xs"
-                            : "text-gray-600 hover:text-black hover:bg-gray-100"
-                        }`}
-                        title={item.label}
-                      >
-                        <Icon
-                          className={`text-[12px] sm:text-[14px] shrink-0 ${
-                            isActive ? "text-black" : "text-gray-500"
-                          }`}
-                        />
-                        <span className="truncate">{item.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-
           <div className="space-y-4 sm:space-y-6">
             {/* Render */}
-            {userType === "dashboard" && <Dashboard />}
+            {activeMenu === "overview" && userType === "dashboard" && <Dashboard />}
 
             {activeMenu === "overview" && userType === "new" && <NewuserOverview />}
             {activeMenu === "overview" && userType === "trial" && <OntrialOverview />}
@@ -148,7 +143,7 @@ const EditProfile = () => {
             key={type}
             onClick={() => {
               setUserType(type);
-              setActiveMenu("overview");
+              handleTabSelect("overview");
             }}
             className={`px-4 py-2 cursor-pointer rounded-xl text-sm ${userType === type
               ? "bg-yellow-400 text-black"

@@ -7,10 +7,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
-import { FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
+import { FiCreditCard, FiMenu, FiShoppingCart, FiTrash2, FiX } from "react-icons/fi";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaHome, FaUser } from "react-icons/fa";
 import { FaNoteSticky, FaRightFromBracket } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
 import MyCart from "../mycart/MyCart";
 import { clearAuthId, clearToken, getAuthId } from "@/utils/tokenManager";
 import { useDispatch, useSelector } from "react-redux";
@@ -70,6 +71,50 @@ export default function Header() {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const isEditProfilePage =
+    pathname === "/editProfile" ||
+    pathname === "/editProfile/" ||
+    pathname?.startsWith("/editProfile");
+
+  const [activeProfileTab, setActiveProfileTab] = useState<string>("overview");
+
+  const profileNavTabs = [
+    { id: "overview", label: "Overview", icon: FaHome },
+    { id: "membership", label: "Membership", icon: FiCreditCard },
+    { id: "profile", label: "Profile", icon: FaUser },
+    { id: "contactUs", label: "Contact us", icon: MdEmail },
+  ];
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlTab = new URLSearchParams(window.location.search).get("tab");
+      if (urlTab && ["overview", "membership", "profile", "contactUs"].includes(urlTab)) {
+        setActiveProfileTab(urlTab);
+      }
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleTabChange = (e: any) => {
+      if (e?.detail && ["overview", "membership", "profile", "contactUs"].includes(e.detail)) {
+        setActiveProfileTab(e.detail);
+      }
+    };
+    window.addEventListener("editProfileTabChange", handleTabChange);
+    return () => {
+      window.removeEventListener("editProfileTabChange", handleTabChange);
+    };
+  }, []);
+
+  const handleProfileTabClick = (tabId: string) => {
+    setActiveProfileTab(tabId);
+    setIsMenuOpen(false);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `/editProfile?tab=${tabId}`);
+      window.dispatchEvent(new CustomEvent("editProfileTabChange", { detail: tabId }));
+    }
+  };
 
   // Initialize tempIdGet ONCE on mount
   useEffect(() => {
@@ -344,6 +389,70 @@ export default function Header() {
               lg:static lg:w-auto lg:flex lg:flex-row lg:items-center lg:gap-12 lg:border-none lg:shadow-none lg:p-0 lg:overflow-visible
             `}
           >
+            {/* On /editProfile mobile view: Back to Home + 4 Profile Tabs */}
+            {isEditProfilePage && (
+              <div className="lg:hidden flex flex-col w-full py-1 space-y-1">
+                {/* 1. Back to Home */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    router.push("/");
+                  }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold ff-font text-gray-700 hover:text-black hover:bg-gray-100 transition-colors w-full text-left border-b border-gray-100 pb-3 mb-1 cursor-pointer"
+                >
+                  <FaArrowLeft className="text-gray-500 text-sm" />
+                  <span>Back to Home</span>
+                </button>
+
+                {/* 2-5. 4 Profile Tabs */}
+                {profileNavTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeProfileTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => handleProfileTabClick(tab.id)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm ff-font transition-all w-full text-left cursor-pointer ${
+                        isActive
+                          ? "bg-[#fff4d6] text-black font-bold border-l-4 border-[#FFCA00] shadow-2xs"
+                          : "text-gray-600 hover:text-black hover:bg-gray-50 font-medium"
+                      }`}
+                    >
+                      <Icon className={`text-base ${isActive ? "text-black" : "text-gray-500"}`} />
+                      <span className="flex-1">{tab.label}</span>
+                      {isActive && (
+                        <span className="w-2 h-2 rounded-full bg-[#FFCA00]" />
+                      )}
+                    </button>
+                  );
+                })}
+
+                {authToken && (
+                  <div className="pt-3 mt-3 border-t border-gray-200">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold ff-font text-red-600 hover:bg-red-50 transition-colors w-full text-left cursor-pointer"
+                    >
+                      <FaRightFromBracket className="text-red-500 text-sm" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Standard website links: on desktop always visible, on mobile only when NOT on /editProfile */}
+            <div
+              className={`${
+                isEditProfilePage ? "hidden lg:flex" : "flex flex-col lg:flex-row"
+              } lg:items-center lg:gap-12 w-full lg:w-auto gap-4`}
+            >
             <button
               onClick={() => {
                 router.push("/");
@@ -663,75 +772,78 @@ export default function Header() {
                 `}
               ></span>
             </button>
+            </div>
 
-            {/* Mobile Authentication / Profile Section inside Unified Nav */}
-            <div className="lg:hidden mt-2 pt-4 border-t border-gray-200 flex flex-col gap-3">
-              {!authToken ? (
-                <>
+            {/* Mobile Authentication / Profile Section inside Unified Nav (only when NOT on editProfile) */}
+            {!isEditProfilePage && (
+              <div className="lg:hidden mt-2 pt-4 border-t border-gray-200 flex flex-col gap-3">
+                {!authToken ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push("/auth/login");
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font w-full"
+                    >
+                      Login
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push("/auth/register");
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font w-full"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
                   <button
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      router.push("/auth/login");
+                      router.push("/editProfile");
                       setIsMenuOpen(false);
                     }}
-                    className="flex items-center justify-center gap-2 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium ff-font w-full"
+                    className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium w-full"
                   >
-                    Login
+                    <img
+                      src={getProfilePhotoUrl()}
+                      alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
+                      }}
+                    />
+                    <span className="font-medium ff-font">
+                      {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
+                    </span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      router.push("/auth/register");
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center justify-center gap-2 py-2 rounded-md bg-yellow-500 text-white font-semibold hover:bg-yellow-600 ff-font w-full"
-                  >
-                    Sign Up
-                  </button>
-                </>
-              ) : (
+                )}
+
                 <button
                   type="button"
                   onClick={(e) => {
                     e.preventDefault();
-                    router.push("/editProfile");
                     setIsMenuOpen(false);
+                    if (count > 0) {
+                      setIsCartOpen(true);
+                      handleCartOpen();
+                    }
                   }}
-                  className="flex items-center gap-3 py-2 px-4 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium w-full"
+                  disabled={isCartLoading}
+                  className="flex ff-font items-center justify-center gap-2 py-2 w-full rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium disabled:opacity-50 mt-1"
                 >
-                  <img
-                    src={getProfilePhotoUrl()}
-                    alt={userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : "User"}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-300"
-                    onError={(e) => {
-                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile?.first_name || 'User')}+${encodeURIComponent(userProfile?.last_name || '')}&background=ffca00&color=000&size=200`;
-                    }}
-                  />
-                  <span className="font-medium ff-font">
-                    {userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : 'My Profile'}
-                  </span>
+                  <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
+                  Cart ({count})
                 </button>
-              )}
-
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsMenuOpen(false);
-                  if (count > 0) {
-                    setIsCartOpen(true);
-                    handleCartOpen();
-                  }
-                }}
-                disabled={isCartLoading}
-                className="flex ff-font items-center justify-center gap-2 py-2 w-full rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium disabled:opacity-50 mt-1"
-              >
-                <FiShoppingCart className={`w-5 h-5 ${isCartLoading ? 'animate-pulse' : ''}`} />
-                Cart ({count})
-              </button>
-            </div>
+              </div>
+            )}
           </nav>
 
           {/* Buttons (Desktop) */}

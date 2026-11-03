@@ -42,8 +42,16 @@ export const formatCurrency = (amount: number, currency: string) => {
   return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase() }).format(amount / 100);
 };
 
-export const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(new Date(iso));
+export const formatDate = (iso: string) => {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return new Intl.DateTimeFormat("en-IN", { dateStyle: "long" }).format(d);
+  } catch (e) {
+    return "";
+  }
+};
 
 export const copyToClip = (text: string) => navigator.clipboard.writeText(text);
 

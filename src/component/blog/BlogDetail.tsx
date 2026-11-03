@@ -12,7 +12,9 @@ import { FiCalendar, FiClock, FiTag } from "react-icons/fi";
 import { useParams } from "next/navigation";
 import endPointApi from "@/utils/endPointApi";
 import { api } from "@/utils/axiosInstance";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import DOMPurify from "isomorphic-dompurify";
+import he from "he";
 import { BlogDetailSkeleton } from "../Skeletons";
 import { formatDate } from "@/utils/helper";
 
@@ -113,10 +115,8 @@ const Article = ({ blog }: { blog: Blog }) => (
 const Card = ({ blog }: { blog: Blog }) => (
   <motion.div
     className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-16"
-    initial={{ y: 50, opacity: 0 }}
-    whileInView={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.8, ease: "easeOut" }}
-    viewport={{ once: true }}
+    initial={{ opacity: 1, y: 0 }}
+    animate={{ opacity: 1, y: 0 }}
   >
     <Tag exam={blog?.exam_name} />
     <Title title={blog?.title} />
@@ -183,54 +183,66 @@ const Author = ({ blog }: { blog: Blog }) => (
 const MainContent = ({ blog }: { blog: Blog }) => (
   <motion.article
     className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-16"
-    initial={{ y: 80, opacity: 0 }}
-    whileInView={{ y: 0, opacity: 1 }}
-    transition={{ duration: 1, ease: "easeOut" }}
-    viewport={{ once: true }}
+    initial={{ opacity: 1, y: 0 }}
+    animate={{ opacity: 1, y: 0 }}
   >
     <Prose blog={blog}/>
     <Share />
   </motion.article>
 );
 
-const Prose = ({ blog }: { blog: Blog }) => (
-  <div className="prose max-w-none prose-p:ff-font prose-headings:ff-font">
-    <motion.h2
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-    >
-      {/* Why Choose Mendel Academy? */}
-    </motion.h2>
-    {blog?.long_description ? (
-      <div
-        dangerouslySetInnerHTML={{ __html: blog.long_description }}
-      />
-    ) : (
-      <p>No content available.</p>
-    )}
-    {/* <p>
-      Mendel Academy combines AI-powered personalization with expert mentoring
-      to create the most effective medical entrance exam preparation experience.
-    </p>
-    <h2>Comprehensive Coverage</h2>
-    <p>
-      Prepare for NEET PG, USMLE, PLAB, and more with a single adaptive platform
-      tailored to your learning style.
-    </p>
-    <h2>AI-Powered Personalization</h2>
-    <p>
-      The platform identifies your strengths and weaknesses to focus study time
-      efficiently, improving your retention and confidence.
-    </p>
-    <h2>Expert Faculty & Support</h2>
-    <p>
-      Our experienced medical educators and toppers guide you with strategies,
-      live sessions, and peer discussions.
-    </p> */}
-  </div>
-);
+const Prose = ({ blog }: { blog: Blog }) => {
+  const cleanContent = useMemo(() => {
+    let raw = blog?.long_description || blog?.description || "";
+    if (!raw) return "";
+
+    // Decode HTML entities if escaped (e.g. &lt;table&gt;)
+    if (raw.includes("&lt;") || raw.includes("&gt;")) {
+      try {
+        raw = he.decode(raw);
+        if (raw.includes("&lt;") || raw.includes("&gt;")) {
+          raw = he.decode(raw);
+        }
+      } catch (e) {
+        console.error("Decode error", e);
+      }
+    }
+
+    try {
+      if (DOMPurify && typeof DOMPurify.sanitize === "function") {
+        return DOMPurify.sanitize(raw, {
+          ADD_TAGS: ["figure", "table", "tbody", "thead", "tfoot", "tr", "td", "th", "colgroup", "col", "p", "div", "span", "b", "strong", "i", "em", "u", "s", "sub", "sup", "code", "pre", "blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "hr", "br", "img", "a"],
+          ADD_ATTR: ["class", "style", "data-row", "colspan", "rowspan", "target", "rel", "href", "src", "alt", "width", "height"],
+        });
+      }
+    } catch (e) {
+      console.warn("DOMPurify sanitize warning:", e);
+    }
+
+    return raw;
+  }, [blog?.long_description, blog?.description]);
+
+  return (
+    <div className="prose max-w-none prose-p:ff-font prose-headings:ff-font">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        {/* Why Choose Mendel Academy? */}
+      </motion.h2>
+      {cleanContent ? (
+        <div
+          className="blog-content overflow-x-auto w-full my-6"
+          dangerouslySetInnerHTML={{ __html: cleanContent }}
+        />
+      ) : (
+        <p>No content available.</p>
+      )}
+    </div>
+  );
+};
 
 const Share = () => (
   <motion.div

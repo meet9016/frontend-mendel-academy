@@ -242,3 +242,280 @@ html.hydrated [role="button"] {
 .usmle-border-gray {
   border-color: var(--usmle-gray-border);
 }
+
+
+/* ==========================================================================
+   Rich Text & Blog HTML Table Styles
+   ========================================================================== */
+
+.blog-content,
+.rich-text-content,
+.prose {
+  color: #374151;
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+/* Table container styling */
+.blog-content table,
+.rich-text-content table,
+.prose table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 1.5rem 0 !important;
+  font-size: 0.95rem;
+  text-align: left;
+  display: table !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.blog-content th,
+.blog-content td,
+.rich-text-content th,
+.rich-text-content td,
+.prose table th,
+.prose table td {
+  border: 1px solid #cbd5e1 !important;
+  padding: 12px 16px !important;
+  vertical-align: top;
+  min-width: 80px;
+  box-sizing: border-box;
+}
+
+/* Header Row / First Row of Table */
+.blog-content thead th,
+.blog-content thead td,
+.blog-content tbody tr:first-child td,
+.rich-text-content thead th,
+.rich-text-content thead td,
+.rich-text-content tbody tr:first-child td,
+.prose table thead th,
+.prose table thead td,
+.prose table tbody tr:first-child td {
+  background-color: #f8fafc !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+/* Row hover highlight */
+.blog-content tbody tr:hover,
+.rich-text-content tbody tr:hover,
+.prose table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Empty cells with <br> keep their height */
+.blog-content td:empty::before,
+.rich-text-content td:empty::before,
+.prose table td:empty::before {
+  content: "\00a0";
+}
+
+/* Quill text alignment classes */
+.blog-content .ql-align-center,
+.rich-text-content .ql-align-center,
+.prose .ql-align-center {
+  text-align: center;
+}
+.blog-content .ql-align-right,
+.rich-text-content .ql-align-right,
+.prose .ql-align-right {
+  text-align: right;
+}
+.blog-content .ql-align-justify,
+.rich-text-content .ql-align-justify,
+.prose .ql-align-justify {
+  text-align: justify;
+}
+
+/* Quill font sizes */
+.blog-content .ql-size-small,
+.rich-text-content .ql-size-small,
+.prose .ql-size-small {
+  font-size: 0.85em;
+}
+.blog-content .ql-size-large,
+.rich-text-content .ql-size-large,
+.prose .ql-size-large {
+  font-size: 1.35em;
+}
+.blog-content .ql-size-huge,
+.rich-text-content .ql-size-huge,
+.prose .ql-size-huge {
+  font-size: 1.75em;
+}
+
+/* Quill font families */
+.blog-content .ql-font-serif,
+.rich-text-content .ql-font-serif,
+.prose .ql-font-serif {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+.blog-content .ql-font-monospace,
+.rich-text-content .ql-font-monospace,
+.prose .ql-font-monospace {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Blockquotes, Lists, Images */
+.blog-content blockquote,
+.rich-text-content blockquote {
+  border-left: 4px solid #FFCA00;
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.blog-content ul,
+.rich-text-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-content ol,
+.rich-text-content ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-content img,
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.25rem auto;
+}
+
+/* ==========================================================================
+   CKEditor 5 figure.table and Generic Table Support
+   ========================================================================== */
+.blog-content figure.table,
+.rich-text-content figure.table,
+.prose figure.table,
+figure.table {
+  width: 100% !important;
+  margin: 1.5rem 0 !important;
+  overflow-x: auto !important;
+  display: block !important;
+}
+
+.blog-content figure.table table,
+.rich-text-content figure.table table,
+.prose figure.table table,
+figure.table table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  display: table !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.blog-content figure.table td,
+.blog-content figure.table th,
+figure.table td,
+figure.table th {
+  border: 1px solid #cbd5e1 !important;
+  padding: 10px 14px !important;
+  vertical-align: top;
+  min-width: 60px;
+  box-sizing: border-box;
+}
+
+.blog-content figure.table tr:first-child td,
+.blog-content figure.table tr:first-child th,
+figure.table tr:first-child td,
+figure.table tr:first-child th {
+  background-color: #f8fafc !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+
+/* ==========================================================================
+   Comprehensive Table Styling (CKEditor 5 & Quill)
+   ========================================================================== */
+
+figure.table,
+.blog-content figure.table,
+.ck-content figure.table {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 1.5rem 0 !important;
+  display: block !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+figure.table table,
+.blog-content table,
+.blog-content figure.table table,
+.rich-text-content table,
+.prose table {
+  width: 100% !important;
+  min-width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  margin: 0 !important;
+  display: table !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+figure.table table td,
+figure.table table th,
+figure.table td,
+figure.table th,
+.blog-content table td,
+.blog-content table th,
+.blog-content td,
+.blog-content th,
+.rich-text-content td,
+.rich-text-content th,
+.prose table td,
+.prose table th {
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: #cbd5e1 !important;
+  padding: 12px 16px !important;
+  vertical-align: top !important;
+  min-width: 70px !important;
+  box-sizing: border-box !important;
+  text-align: left;
+}
+
+/* First Row Header Highlight */
+figure.table table tr:first-child td,
+figure.table table tr:first-child th,
+figure.table tr:first-child td,
+figure.table tr:first-child th,
+.blog-content table tr:first-child td,
+.blog-content table tr:first-child th,
+.blog-content tr:first-child td,
+.blog-content tr:first-child th,
+.blog-content thead th,
+.blog-content thead td,
+.prose table thead th,
+.prose table thead td {
+  background-color: #f8fafc !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+/* Hover Row Highlight */
+figure.table table tbody tr:hover,
+.blog-content tbody tr:hover {
+  background-color: rgba(248, 250, 252, 0.7);
+}
